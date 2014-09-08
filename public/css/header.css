@@ -1,0 +1,54 @@
+/*
+ * header.css
+ */
+
+.header {
+    position: relative;
+
+    height: 60px;
+    width: 100%;
+
+    background: #4A4A4A;
+    float: left;
+}
+
+.header-logo {
+    position: absolute;
+
+    width: 55px;
+    height: 44px;
+
+    margin-top: -22px;
+    top: 50%;
+    left: 20px;
+}
+
+.header-title {
+    position: relative;
+    display: inline;
+
+    left: 100px;
+    top: 12px;
+
+    color: #4A90E2;
+}
+
+.header-mainNav {
+    position: absolute;
+
+    right: 105px; /* 35 + 50 + 20 */
+    top: 5px;
+
+    background: blue;
+}
+
+.header-profilePic {
+
+    position: absolute;
+    width: 50px;
+    height: 50px;
+
+    top: 5px;
+    right: 35px;
+
+}
