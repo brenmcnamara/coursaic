@@ -1,3 +1,4 @@
 node_modules/*
 .jshintrc
 .jshintignore
+.DS_Store
