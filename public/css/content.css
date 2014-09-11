@@ -1,7 +1,13 @@
 /**
  * content.css
+ *
+ * Styling for root elements in the content
+ * tag.
  */
 
+/* -------------------- *\
+     General Styling
+\* -------------------- */
 
 .content-filler {
    float: left;
@@ -48,6 +54,10 @@
     top: 11px;
 }
 
+/* -------------------- *\
+       Large Screen
+\* -------------------- */
+
 @media only screen and (min-width: 800px) {
 
     .content-filler {
@@ -71,10 +81,12 @@
         width: 30px;
         height: 30px;
     }
-
-
-
+    
 }
+
+/* -------------------- *\
+       Small Screen
+\* -------------------- */
 
 @media only screen and (max-width: 800px) {
 

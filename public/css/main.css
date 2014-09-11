@@ -1,14 +1,13 @@
 /*
  * main.css
+ *
+ * General CSS styling.
  */
+
+/* -------------------- *\
+     General Styling
+\* -------------------- */
 
 body {
     font-family: "Helvetica Neue", Helvetica, Verdana;
-}
-
-.main {
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
 }

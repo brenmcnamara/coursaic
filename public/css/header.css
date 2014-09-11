@@ -1,6 +1,13 @@
 /*
  * header.css
+ *
+ * All the styling for the header.
  */
+
+
+/* -------------------- *\
+     General Styling
+\* -------------------- */
 
 .header {
     position: fixed;
@@ -44,6 +51,10 @@
 
     cursor: pointer;
 }
+
+/* -------------------- *\
+      Large Screen
+\* -------------------- */
 
 @media only screen and (min-width: 800px) {
     
@@ -99,6 +110,10 @@
     }
 
 }
+
+/* -------------------- *\
+       Small Screen
+\* -------------------- */
 
 @media only screen and (max-width: 800px) {
     
