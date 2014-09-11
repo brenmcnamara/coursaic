@@ -7,18 +7,9 @@
 
     height: 60px;
     width: 100%;
-
-    background: #4A4A4A;
 }
 
-.header-offset {
-    position: relative;
-    
-    height: 60px; /* same as header */
-    width: 100%; /* same as header */
 
-    float: left;
-}
 
 .header-logo {
     position: absolute;
@@ -55,6 +46,14 @@
 }
 
 @media only screen and (min-width: 800px) {
+    
+    .header {
+        background: rgba(42, 42, 42, .6);
+    }
+    
+    .header-offset {
+        display: none;
+    }
 
     .header-mainNavPointer {
         display: none;
@@ -102,14 +101,28 @@
 }
 
 @media only screen and (max-width: 800px) {
+    
+    .header {
+        background: #4A4A4A;
+    }
+
+    .header-offset {
+        position: relative;
+        display: block;
+
+        height: 60px; /* same as header */
+        width: 100%; /* same as header */
+
+        float: left;
+    }
 
     .header-mainNavPointer {
         position: absolute;
 
         display: block;
         
-        top: 45px;
-        right: 85px;
+        top: 27px;
+        right: 18px;
 
         border-top: solid #EEE 8px;
         border-left: solid transparent 6px;
@@ -120,13 +133,15 @@
     .header-mainNav {
         position: absolute;
 
-        top: 63px;
-        right: 85px;
+        top: 60px;
+        right: 15px;
+
+        width: 100px;
 
         font-size: 14px;
         padding: 10px;
         background: #DDD;
-        border-radius: 2px;
+        
     }
 
     .header-mainNav:not([selected]) {
