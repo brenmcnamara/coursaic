@@ -1,0 +1,23 @@
+/**
+ * content.css
+ */
+
+ .content-filler {
+    float: left;
+    width: 100%;
+ }
+
+@media only screen and (min-width: 800px) {
+
+    .content-filler {
+        height: 275px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+
+    .content-filler {
+        height: 150px;
+    }
+
+ }

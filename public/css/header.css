@@ -130,7 +130,6 @@
     }
 
     .header-mainNav:not([selected]) {
-        transition: opacity .2s;
         opacity: 0;
     }
 
