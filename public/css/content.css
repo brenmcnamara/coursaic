@@ -9,12 +9,12 @@
      General Styling
 \* -------------------- */
 
-.content-filler {
+.content__filler {
    float: left;
    width: 100%;
 }
 
-.content-searchWrapper {
+.content__search {
     position: relative;
 
     width: 100%;
@@ -25,7 +25,7 @@
     height: 80px;
 }
 
-.content-search {
+.main-search {
     position: relative;
 
     margin-top: -25px;
@@ -35,7 +35,7 @@
     left: 50%;
 }
 
-.content-searchBar {
+.main-search__input {
     position: relative;
 
     top: 5px;
@@ -47,7 +47,7 @@
 
 }
 
-.content-searchButton {
+.main-search__submit {
     position: relative;
     
 
@@ -60,22 +60,22 @@
 
 @media only screen and (min-width: 800px) {
 
-    .content-filler {
+    .content__filler {
         height: 325px;
     }
 
-    .content-search {
+    .main-search {
         width: 650px;
         margin-left: -325px;
     }
 
-    .content-searchBar {
+    .main-search__input {
         width: 550px;
 
         font-size: 20px;
     }
 
-    .content-searchButton {
+    .main-search__submit {
         margin-left: 30px;
 
         width: 30px;
@@ -90,23 +90,23 @@
 
 @media only screen and (max-width: 800px) {
 
-    .content-filler {
+    .content__filler {
         display: none;
     }
 
-    .content-search {
+    .main-search {
         width: 380px;
         margin-left: -190px;
     }
 
-    .content-searchBar {
+    .main-search__input {
         margin-left: 15px;
         width: 300px;
 
         font-size: 14px;
     }
 
-    .content-searchButton {
+    .main-search__submit {
         margin-left: 10px;
 
         width: 20px;

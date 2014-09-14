@@ -18,7 +18,7 @@
 
 
 
-.header-logo {
+.header__logo {
     position: absolute;
 
     width: 55px;
@@ -29,7 +29,7 @@
     left: 20px;
 }
 
-.header-title {
+.header__title {
     position: relative;
     display: inline;
 
@@ -40,7 +40,7 @@
     color: #4A90E2;
 }
 
-.header-profilePic {
+.header__profile-pic {
 
     position: absolute;
     width: 50px;
@@ -66,11 +66,11 @@
         display: none;
     }
 
-    .header-mainNavPointer {
+    .main-nav-pointer {
         display: none;
     }
 
-    .header-mainNav {
+    .main-nav {
         position: absolute;
 
         right: 105px; /* 35 + 50 + 20 */
@@ -78,7 +78,9 @@
         height: 50px;
     }
 
-    .header-mainNav-item {
+    .main-nav__item,
+    .main-nav__item--clickable,
+    .main-nav__item--unclickable {
         float: left;
         line-height: 50px;
 
@@ -88,16 +90,16 @@
         font-weight: medium;
     }
 
-    .header-mainNav-clickable {
+    .main-nav__item--clickable {
         color: #F5A623;
         cursor: pointer;
     }
 
-    .header-mainNav-unclickable {
+    .main-nav__item--unclickable {
         color: white;
     }
 
-    .header-mainNav-wall {
+    .main-nav__break {
         float: right;
 
         margin-left: 20px; /* This should be the same as margin-left of mainNav-item */
@@ -131,7 +133,7 @@
         float: left;
     }
 
-    .header-mainNavPointer {
+    .main-nav-pointer {
         position: absolute;
 
         display: block;
@@ -145,7 +147,7 @@
 
     }
 
-    .header-mainNav {
+    .main-nav {
         position: absolute;
 
         top: 60px;
@@ -159,20 +161,20 @@
         
     }
 
-    .header-mainNav:not([selected]) {
+    .main-nav:not([selected]) {
         opacity: 0;
     }
 
-    .header-mainNav[selected] {
+    .main-nav[selected] {
         transition: opacity .2s;
         opacity: 1;
     }
 
-    .header-mainNav-unclickable {
+    .main-nav__item--unclickable {
         display: none;
     }
 
-    .header-mainNav-wall {
+    .main-nav__break {
         display: none;
     }
 

@@ -18,37 +18,42 @@
 <body>
     <div class="main">
         <header class="header">
-            <img class="header-logo" src="./img/logo-dark.png" />
-            <h1 class="header-title">Coursaic</h1>
-            <div class="header-mainNavPointer"></div>
-            <nav class="header-mainNav">
-                <div class="header-mainNav-item header-mainNav-clickable">
+            <img class="header__logo" src="./img/logo-dark.png" />
+            <h1 class="header__title">Coursaic</h1>
+            <div class="main-nav-pointer"></div>
+            <nav class="main-nav">
+                <div class="main-nav__item--clickable">
                     Logout
-                    <div class="header-mainNav-wall"></div>
+                    <div class="main-nav__break"></div>
                 </div>
 
-                <div class="header-mainNav-item header-mainNav-unclickable">
+                <div class="main-nav__item--unclickable">
                     Welcome, Brendan
                 </div>
 
             </nav>
-            <img class="header-profilePic" src="./img/profilePic.png" />
+            <img class="header__profile-pic" src="./img/profilePic.png" />
 
         </header>
         <!-- use to move all other elements down from under the header -->
         <div class="header-offset"></div>
 
         <div class="content">
-            <img class="content-filler" src="./img/homeFiller.png" />
+            <img class="content__filler" src="./img/homeFiller.png" />
         </div>
 
-        <div class="content-searchWrapper">
-            <div class="content-search">
+        <div class="content__search">
+            <div class="main-search">
+                <input type="text"
+                       placeholder="Search for Vanderbilt Courses..."
+                       class="main-search__input" />
 
-                <input type="text" placeholder="Search for Vanderbilt Courses..." class="content-searchBar" />
-                <img class="content-searchButton" src="./img/icons/search.png" />
-
+                <img class="main-search__submit" src="./img/icons/search.png" />
             </div>
+        </div>
+
+        <div class="content__main">
+
         </div>
 
     </div>
