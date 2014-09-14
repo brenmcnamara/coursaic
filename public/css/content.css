@@ -54,6 +54,30 @@
     top: 11px;
 }
 
+.content__main {
+    display: flex;
+    margin-bottom: 40px;
+
+    width: 100%;
+
+    float: left;
+    flex-direction: row;
+}
+
+.content__main__nav {
+    position: relative;
+
+    width: 200px;
+    background: red;
+}
+
+.content__main__courses {
+    position: relative;
+
+    flex-grow: 1;
+    background: green;
+}
+
 /* -------------------- *\
        Large Screen
 \* -------------------- */
