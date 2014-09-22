@@ -1,0 +1,150 @@
+/**
+ * course.details.css
+ */
+
+.dashboard {
+    position: relative;
+
+    float: left;
+
+    height: 150px;
+    width: 100%;
+
+    background: rgb(238, 238, 238);
+}
+
+.dashboard__course-logistics {
+    position: absolute;
+
+    left: 320px;
+    bottom: 10px;
+
+    padding: 0;
+    margin: 0;
+}
+
+ul.dashboard__course-logistics {
+    list-style: none;
+}
+
+.dashboard__course-logistics__item {
+    font-size: 16px;
+    color: #999;
+
+    font-weight: bold;
+}
+
+.dashboard__course-logistics__item:not(:nth-of-type(1)) {
+    margin-top: 10px;
+}
+
+.dashboard__profile-grid {
+    position: absolute;
+
+    left: 520px;
+    top: 30px;
+}
+
+/* TODO: Move this somewhere else */
+.profile-grid {
+
+}
+
+.profile-grid__row__item {
+    float: left;
+}
+
+/* TODO: Move this somewhere else */
+.profile-pic--square {
+    width: 50px;
+    height: 50px;
+}
+
+.member-count--square {
+    width: 50px;
+    height: 50px;
+
+    background: rgb(216, 216, 216);
+    color: #999;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    text-align: center;
+    line-height: 50px;
+
+}
+
+/* TODO: Move this somewhere else -- and all course-info classes*/
+.course-info {
+    position: absolute;
+
+    top: 85px;
+    left: 0px;
+
+    width: 300px;
+    height: 175px;
+
+    background: white;
+
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 2px 3px 3px .5px #999;
+}
+
+.course-info__banner {
+    float: left;
+    width: 20px;
+    height: 100%;
+}
+
+.course-info__code {
+    margin: 10px 15px 0px 40px;
+
+    font-size: 30px;
+    font-weight: medium;
+}
+
+.course-info__name,
+.course-info__field {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.course-info__name {
+    margin: 7px 15px 0px 40px;
+    color: #999;
+}
+
+.course-info__field {
+    margin: 4px 15px 0px 40px;
+    color: #444;
+}
+
+.course-info__field__key {
+    color: #999;
+}
+
+.course-info__creator-profile {
+    margin-top: 10px;
+    left: 35px;
+}
+
+.course-info__creator-info {
+    position: absolute;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #444;
+    margin: 0;
+    top: 120px;
+    left: 95px;
+
+    width: 180px;
+}
+
+.course-info__creator-info__name {
+    color: #4A90E2;
+}
+
