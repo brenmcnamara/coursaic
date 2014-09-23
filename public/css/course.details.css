@@ -148,3 +148,32 @@ ul.dashboard__course-logistics {
     color: #4A90E2;
 }
 
+/* TODO: Combine this with home page flex box break */
+
+.body {
+    position: relative;
+    top: 75px;
+    border: solid red;
+    display: flex;
+    flex-direction: row;
+}
+
+.body__nav {
+    border: solid blue;
+    min-width: 200px;
+    width: 200px;
+}
+
+.body__content {
+    border: solid green;
+    flex-grow: 1;
+}
+
+.body__content__title {
+    margin-left: 70px;
+
+    font-size: 40px;
+    /* TODO: consistent coloring */
+    color: #444;
+}
+
