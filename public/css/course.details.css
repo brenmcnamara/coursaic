@@ -144,9 +144,9 @@ ul.dashboard__course-logistics {
 .body {
     position: relative;
     top: 75px;
-    border: solid red;
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .body__nav {
@@ -171,13 +171,27 @@ ul.dashboard__course-logistics {
     float: left;
 }
 
+
+.exam__creator-info::after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+    display: block;
+    width: 0px;
+    height: 0px;
+}
+
 .exam__creator-info {
+
     margin: 5px 10px 0px 70px;
-    line-height: 56px; /* height of the image */
 }
 
 .exam__creator-info__text {
-    margin-left: 10px;
+    display: inline-block;
+    margin-left: 5px;
+    /* Note: This is dependent on the height of the picture */
+    margin-top: 15px;
+
 }
 
 /* TODO: Move this to widgets */
