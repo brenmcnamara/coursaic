@@ -160,11 +160,21 @@ ul.dashboard__course-logistics {
     flex-grow: 1;
 }
 
+.body__content__wrapper {
+    margin: 0 20px 0 70px;
+}
+
 .body__content__title {
-    margin: 20px 10px 0px 70px;
+    margin: 15px 0px 0px 0px;
+    margin-top: 15px;
+
     font-size: 40px;
     /* TODO: consistent coloring */
     color: #444;
+}
+
+.exam {
+    margin-top: 5px;
 }
 
 .exam__creator-info__pic {
@@ -181,10 +191,7 @@ ul.dashboard__course-logistics {
     height: 0px;
 }
 
-.exam__creator-info {
-
-    margin: 5px 10px 0px 70px;
-}
+.exam__creator-info { }
 
 .exam__creator-info__text {
     display: inline-block;
@@ -194,7 +201,11 @@ ul.dashboard__course-logistics {
 
 }
 
-/* TODO: Move this to widgets */
+.exam__my-questions {
+    margin: 40px 0px 0px 0px;
+}
+
+/* TODO: Move this to widgets -- text.css */
 
 .text--aside {
     color: #999;
@@ -207,6 +218,13 @@ ul.dashboard__course-logistics {
     color: #444;
     /* TODO: Remove hard font-size for em */
     font-size: 14px;
+}
+
+.text--section {
+    font-weight: bold;
+    color: #444;
+    /* TODO: Remove hard font-size for em */
+    font-size: 20px;
 }
 
 
