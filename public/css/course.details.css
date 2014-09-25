@@ -135,6 +135,7 @@ ul.dashboard__course-logistics {
     width: 180px;
 }
 
+/* TODO: Change this to text--user-name or maybe make this some button */
 .user-name {
     color: #4A90E2;
 }
@@ -203,6 +204,62 @@ ul.dashboard__course-logistics {
 
 .exam__my-questions {
     margin: 40px 0px 0px 0px;
+}
+
+.question-list {
+    margin: 20px 0px;
+    padding: 0;
+
+    /* Don't hard-code this */
+    font-size: 14px;
+}
+
+ul.question-list {
+    list-style: none;
+}
+
+.question {
+    position: relative;
+
+
+}
+
+.question:not(:last-child) {
+    margin: 5px 20px 30px 20px;
+}
+
+.question:last-child {
+    margin: 5px 20px 50px 20px;
+}
+
+.question__ask {
+    margin: 0px 100px 0px 0px;
+}
+
+/* TODO: Move multi-choice to widgets */
+ul.multi-choice {
+    list-style: upper-alpha;
+}
+
+.multi-choice {
+    margin: 0 10px 0 50px;
+    padding: 0;
+}
+
+
+.multi-choice__item,
+.multi-choice__item--correct {
+    margin: 5px 0px;
+
+}
+
+.multi-choice__item--correct {
+    color: #4A90E2
+}
+
+.question__explain {
+    margin: 20px 10px 10px 10px;
+    font-weight: bold;
 }
 
 /* TODO: Move this to widgets -- text.css */
