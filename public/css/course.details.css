@@ -66,7 +66,7 @@ ul.dashboard__course-logistics {
 
     background: rgb(216, 216, 216);
     color: #999;
-
+    /* TODO: Remove hard font-size */
     font-size: 20px;
     font-weight: bold;
 
@@ -112,17 +112,12 @@ ul.dashboard__course-logistics {
 }
 
 .course-info__name {
-    margin: 7px 15px 0px 40px;
-    color: #999;
+    margin: 7px 15px 0px 40px; 
 }
 
 .course-info__field {
     margin: 4px 15px 0px 40px;
     color: #444;
-}
-
-.course-info__field__key {
-    color: #999;
 }
 
 .course-info__creator-profile {
@@ -133,10 +128,6 @@ ul.dashboard__course-logistics {
 .course-info__creator-info {
     position: absolute;
 
-    font-size: 14px;
-    font-weight: bold;
-
-    color: #444;
     margin: 0;
     top: 120px;
     left: 95px;
@@ -144,7 +135,7 @@ ul.dashboard__course-logistics {
     width: 180px;
 }
 
-.course-info__creator-info__name {
+.user-name {
     color: #4A90E2;
 }
 
@@ -170,10 +161,38 @@ ul.dashboard__course-logistics {
 }
 
 .body__content__title {
-    margin-left: 70px;
-
+    margin: 20px 10px 0px 70px;
     font-size: 40px;
     /* TODO: consistent coloring */
     color: #444;
 }
+
+.exam__creator-info__pic {
+    float: left;
+}
+
+.exam__creator-info {
+    margin: 5px 10px 0px 70px;
+    line-height: 56px; /* height of the image */
+}
+
+.exam__creator-info__text {
+    margin-left: 10px;
+}
+
+/* TODO: Move this to widgets */
+
+.text--aside {
+    color: #999;
+    /* TODO: Remove hard font-size for em */
+    font-size: 14px;
+}
+
+.text--normal {
+    font-weight: bold;
+    color: #444;
+    /* TODO: Remove hard font-size for em */
+    font-size: 14px;
+}
+
 
