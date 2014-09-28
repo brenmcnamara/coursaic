@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>CS 101</title>
+    
+    <!-- Third-Party Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="./css/normalize.css" />
+
+    <!-- My Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <link rel="stylesheet" type="text/css" href="./css/header.css" />
+    <link rel="stylesheet" type="text/css" href="./css/course.details.css" />
+    <link rel="stylesheet" type="text/css" href="./css/profile.css" />
+
+</head>
+
+<body>
+    <div class="main">
+        <header class="header--fill">
+            <img class="header__logo" src="./img/logo-dark.png" />
+            <h1 class="header__title">Coursaic</h1>
+            <div class="main-nav-pointer"></div>
+            <nav class="main-nav">
+                <div class="main-nav__item--clickable">
+                    Logout
+                    <div class="main-nav__break"></div>
+                </div>
+
+                <div class="main-nav__item--unclickable">
+                    Welcome, Brendan
+                </div>
+
+            </nav>
+            <img class="header__profile-pic" src="./img/profilePic.png" />
+        </header>
+    </div>
+
+    <div class="header-offset--fill"></div>
+
+    <div class="dashboard">
+        <ul class="dashboard__course-logistics">
+            <li class="dashboard__course-logistics__item">2 exams</li>
+            <li class="dashboard__course-logistics__item">12 people enrolled</li>
+        </ul>
+
+        <div class="dashboard__profile-grid profile-grid" style="min-width:150px">
+            <div class="profile-grid__row">
+                <img class="profile-grid__row__item profile-pic--square"
+                     src="./img/temp/bunny-profile.png" />
+                <img class="profile-grid__row__item profile-pic--square"
+                     src="./img/temp/frat-profile.png" />
+                <img class="profile-grid__row__item profile-pic--square"
+                     src="./img/temp/dog-profile.png" />
+            </div>
+            <div class="profile-grid__row">
+                <img class="profile-grid__row__item profile-pic--square"
+                     src="./img/temp/monkey-profile.png" />
+                <img class="profile-grid__row__item profile-pic--square"
+                     src="./img/temp/tiger-profile.png" />
+                <div class="profile-grid__row__item member-count--square">+7</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="course-info">
+        <div class="course-info__banner" style="background: rgb(208, 2, 27);"></div>
+        <h1 class="course-info__code">CS 101</h1>
+        <p class="course-info__name text--normal">Introduction to Computer Science</p>
+        <p class="course-info__field">
+            <span class="course-info__field__key text--aside">Field:</span>
+            <span class="course-info__field__value text--normal">Computer Science</span>
+        </p>
+
+        <div class="user-profile-pic course-info__creator-profile">
+            <img src="./img/temp/monkey-profile.png" />
+        </div>
+        <div class="course-info__creator-info text--normal">Course created by
+            <span class="user-name">Monkey Joe</span> on Sept. 20, 2013.
+        </div>
+    </div>
+
+    <!-- TODO: Better name for this class -->
+    <div class="body">
+        <div class="body__nav"></div>
+        <div class="body__content">
+            <div class="body__content__wrapper">
+                <h1 class="body__content__title">Exam 1</h1>
+                <div class="exam">
+                    <div class="exam__creator-info">
+                        <div class="exam__creator-info__pic">
+                            <div class="user-profile-pic">
+                                <img src="./img/temp/frat-profile.png" />
+                            </div>
+                        </div>
+                        
+                        <span class="exam__creator-info__text text--normal">
+                            Exam created by <span class="user-name">Frat Star</span> on Sept. 22, 2013.
+                        </span>
+                    </div>
+                    <div class="exam__my-questions">
+                        <div class="exam__my-questions__title text--section">My Questions</div>
+                        <ul class="exam__my-questions__question-list question-list">
+                            <li class="question">
+                                <img class="question__icon--edit" src="./img/icons/edit.png" />
+                                <img class="question__icon--delete" src="./img/icons/delete.png" />
+                                <div class="question__content">
+                                    <div class="question__ask">What is the capital of California?</div>
+                                    <ul class="question__multi-choice multi-choice">
+                                        <li class="multi-choice__item">Canada. This is a really long question and there is a lot of text here. I'm going to keep on typing.</li>
+                                        <li class="multi-choice__item">Hawaii</li>
+                                        <li class="multi-choice__item--correct">Sacramento</li>
+                                        <li class="multi-choice__item">Boise</li>
+                                    </ul>
+                                </div>
+                                <div class="question__explain">
+                                    Explanation: California is the captial of Sacramento.
+                                </div>
+
+                            </li>
+                             <li class="question">
+                                <img class="question__icon--edit" src="./img/icons/edit.png" />
+                                <img class="question__icon--delete" src="./img/icons/delete.png" />
+                                <div class="question__content">
+                                    <div class="question__ask">
+                                        A farmer has 3 apples. He gives 2 to his buddy and buys 6 more at the store.  How many apples does the farmer have now?
+                                    </div>
+
+                                    <ul class="question__multi-choice multi-choice">
+                                        <li class="multi-choice__item">4</li>
+                                        <li class="multi-choice__item">9</li>
+                                        <li class="multi-choice__item--correct">7</li>
+                                        <li class="multi-choice__item">1</li>
+                                    </ul>
+                                </div>
+
+                                <div class="question__explain">
+                                    Explanation: 3 - 2 + 6 = 7.
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

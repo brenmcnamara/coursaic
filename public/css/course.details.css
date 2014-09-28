@@ -1,0 +1,307 @@
+/**
+ * course.details.css
+ */
+
+.dashboard {
+    position: relative;
+
+    float: left;
+
+    height: 150px;
+    width: 100%;
+
+    background: rgb(238, 238, 238);
+}
+
+.dashboard__course-logistics {
+    position: absolute;
+
+    left: 320px;
+    bottom: 10px;
+
+    padding: 0;
+    margin: 0;
+}
+
+ul.dashboard__course-logistics {
+    list-style: none;
+}
+
+.dashboard__course-logistics__item {
+    font-size: 16px;
+    color: #999;
+
+    font-weight: bold;
+}
+
+.dashboard__course-logistics__item:not(:nth-of-type(1)) {
+    margin-top: 10px;
+}
+
+.dashboard__profile-grid {
+    position: absolute;
+
+    left: 520px;
+    top: 30px;
+}
+
+/* TODO: Move this somewhere else */
+.profile-grid {
+
+}
+
+.profile-grid__row__item {
+    float: left;
+}
+
+/* TODO: Move this somewhere else */
+.profile-pic--square {
+    width: 50px;
+    height: 50px;
+}
+
+.member-count--square {
+    width: 50px;
+    height: 50px;
+
+    background: rgb(216, 216, 216);
+    color: #999;
+    /* TODO: Remove hard font-size */
+    font-size: 20px;
+    font-weight: bold;
+
+    text-align: center;
+    line-height: 50px;
+
+}
+
+/* TODO: Move this somewhere else -- and all course-info classes*/
+.course-info {
+    position: absolute;
+
+    top: 85px;
+    left: 0px;
+
+    width: 300px;
+    height: 175px;
+
+    background: white;
+
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 2px 3px 3px .5px #999;
+}
+
+.course-info__banner {
+    float: left;
+    width: 20px;
+    height: 100%;
+}
+
+.course-info__code {
+    margin: 10px 15px 0px 40px;
+
+    font-size: 30px;
+    font-weight: medium;
+}
+
+.course-info__name,
+.course-info__field {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.course-info__name {
+    margin: 7px 15px 0px 40px; 
+}
+
+.course-info__field {
+    margin: 4px 15px 0px 40px;
+    color: #444;
+}
+
+.course-info__creator-profile {
+    margin-top: 10px;
+    left: 35px;
+}
+
+.course-info__creator-info {
+    position: absolute;
+
+    margin: 0;
+    top: 120px;
+    left: 95px;
+
+    width: 180px;
+}
+
+/* TODO: Change this to text--user-name or maybe make this some button */
+.user-name {
+    color: #4A90E2;
+}
+
+/* TODO: Combine this with home page flex box break */
+
+.body {
+    position: relative;
+    top: 75px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.body__nav {
+    border: solid blue;
+    min-width: 200px;
+    width: 200px;
+}
+
+.body__content {
+    border: solid green;
+    flex-grow: 1;
+}
+
+.body__content__wrapper {
+    margin: 0 20px 0 70px;
+}
+
+.body__content__title {
+    margin: 15px 0px 0px 0px;
+    margin-top: 15px;
+
+    font-size: 40px;
+    /* TODO: consistent coloring */
+    color: #444;
+}
+
+.exam {
+    margin-top: 5px;
+}
+
+.exam__creator-info__pic {
+    float: left;
+}
+
+
+.exam__creator-info::after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+    display: block;
+    width: 0px;
+    height: 0px;
+}
+
+.exam__creator-info { }
+
+.exam__creator-info__text {
+    display: inline-block;
+    margin-left: 5px;
+    /* Note: This is dependent on the height of the picture */
+    margin-top: 15px;
+
+}
+
+.exam__my-questions {
+    margin: 40px 0px 0px 0px;
+}
+
+/* TODO: Move this to CSS */
+.question-list {
+    margin: 20px 0px;
+    padding: 0;
+
+    /* Don't hard-code this */
+    font-size: 14px;
+}
+
+ul.question-list {
+    list-style: none;
+}
+
+.question {
+    position: relative;
+}
+
+.question:not(:last-child) {
+    margin: 5px 20px 30px 0px;
+}
+
+.question:last-child {
+    margin: 5px 20px 50px 0px;
+}
+
+.question__ask {
+    vertical-align: middle;
+}
+
+/* Note: Icons are laid out with assumption
+ * that there will be exactly 2 icons */
+.question__icon--delete,
+.question__icon--edit {
+    cursor: pointer;
+    position: absolute;
+
+}
+
+.question__icon--edit {
+    left: 5px;
+}
+
+.question__icon--delete {
+    left: 35px;
+}
+
+.question__content {
+    margin: 0px 20px 0px 70px;
+}
+
+/* TODO: Move multi-choice to widgets */
+ul.multi-choice {
+    list-style: upper-alpha;
+}
+
+.multi-choice {
+    margin: 0 80px 0 50px;
+    padding: 0;
+}
+
+
+.multi-choice__item,
+.multi-choice__item--correct {
+    margin: 10px 0px;
+
+}
+
+.multi-choice__item--correct {
+    color: #4A90E2
+}
+
+.question__explain {
+    margin: 20px 10px 10px 10px;
+    font-weight: bold;
+}
+
+/* TODO: Move this to widgets -- text.css */
+
+.text--aside {
+    color: #999;
+    /* TODO: Remove hard font-size for em */
+    font-size: 14px;
+}
+
+.text--normal {
+    font-weight: bold;
+    color: #444;
+    /* TODO: Remove hard font-size for em */
+    font-size: 14px;
+}
+
+.text--section {
+    font-weight: bold;
+    color: #444;
+    /* TODO: Remove hard font-size for em */
+    font-size: 20px;
+}
+
+

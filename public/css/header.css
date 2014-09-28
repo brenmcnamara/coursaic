@@ -9,7 +9,7 @@
      General Styling
 \* -------------------- */
 
-.header {
+.header, .header--fill {
     position: fixed;
 
     height: 60px;
@@ -18,7 +18,15 @@
     z-index: 2;
 }
 
+.header-offset, 
+.header-offset--fill {
+    position: relative;
 
+    height: 60px; /* same as header */
+    width: 100%; /* same as header */
+
+    float: left;
+}
 
 .header__logo {
     position: absolute;
@@ -62,6 +70,10 @@
     
     .header {
         background: rgba(42, 42, 42, .6);
+    }
+
+    .header--fill {
+        background: rgba(42, 42, 42, 1);
     }
     
     .header-offset {

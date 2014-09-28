@@ -1,0 +1,30 @@
+/**
+ * profile.css
+ */
+
+.user-profile-pic {
+    position: relative;
+
+    width: 56px;
+    height: 56px;
+
+    background: #DDD;
+
+    border-radius: 28px;
+}
+
+.user-profile-pic > img {
+   /* aspect ratio 1:1 */
+
+   position: absolute;
+
+   top: 3px;
+   left: 3px;
+
+   width: 50px;
+   height: 50px;
+
+   border-radius: 25px;
+
+
+}
