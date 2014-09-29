@@ -5,58 +5,13 @@
  * the website
  */
 
-/* -------------------- *\
-       Text Styling
-\* -------------------- */
-
-/* This section contains all
- * the styling for text in these
- * widgets
- */
-
-
-/* HEADER TEXT */
-
-.course-info__header {
-    font-size: 1.25em;
-    font-weight: bold;
-}
-
-/* LARGE TEXT */
-
-
-/* LINK TEXT */
-
-.my-courses .category__list > li {
-   font-size: 1em;
-   color: #4A90E2;
-}
-
-/* WEIGHTED TEXT */
-
-.main-options__item__text,
-.course-info__body__text {
-    /* TODO: Don't make this a hard font */
-    font-size: .875em;
-    color: #444;
-    font-weight: bold;
-}
-
-/* ASIDE TEXT */
-
-.course-info__footer {
-    font-size: .875em;
-    color: #777;
-    font-weight: bold;
-}
-
 /* UNIQUE TEXT */
 
 /* This is for text styling
  * on an individual basis
  */
 
-.my-courses .category__title {
+.my-courses .category__titlet {
     font-size: 1em;
     color: #999;
     /* Don't hard code this */
