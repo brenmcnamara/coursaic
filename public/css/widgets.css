@@ -27,7 +27,7 @@
 
 /* LINK TEXT */
 
-.my-courses__list > li {
+.my-courses .category__list > li {
    font-size: 1em;
    color: #4A90E2;
 }
@@ -56,7 +56,7 @@
  * on an individual basis
  */
 
-.my-courses__title {
+.my-courses .category__title {
     font-size: 1em;
     color: #999;
     /* Don't hard code this */
@@ -123,29 +123,40 @@ ul.main-options {
 
 }
 
-/* MY COURSES */
+/* CATEGORY */
 
-/* List of Courses that
- * the user has enrolled in
+/* Used to categorize
+ * a list of items
  */
 
-ul.my-courses__list {
+
+ul.category__list {
     list-style: none;
 }
 
-.my-courses__list {
+.category__list {
     margin: 0 0 0 20px;
     padding: 0;
 }
 
-.my-courses__list > li {
+.category__list > li {
     margin: 10px 0 0 0;
     cursor: pointer;
 }
 
-.my-courses__list > li:hover {
+/* MY COURSES */
+
+.my-courses .category__list > li {
+    cursor: pointer;
+}
+
+.my-courses .category__list > li:hover {
     text-decoration: underline;
 }
+
+/* List of Courses that
+ * the user has enrolled in
+ */
 
 /* Course-Info is the box containing
  * some relevant information about a
