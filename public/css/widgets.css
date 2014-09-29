@@ -1,0 +1,196 @@
+/**
+ * widgets.css
+ *
+ * Styling for widgets used across
+ * the website
+ */
+
+/* -------------------- *\
+       Text Styling
+\* -------------------- */
+
+/* This section contains all
+ * the styling for text in these
+ * widgets
+ */
+
+
+/* HEADER TEXT */
+
+.course-info__header {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+/* LARGE TEXT */
+
+
+/* LINK TEXT */
+
+.my-courses__list > li {
+   font-size: 1em;
+   color: #4A90E2;
+}
+
+/* WEIGHTED TEXT */
+
+.main-options__item__text,
+.course-info__body__text {
+    /* TODO: Don't make this a hard font */
+    font-size: .875em;
+    color: #444;
+    font-weight: bold;
+}
+
+/* ASIDE TEXT */
+
+.course-info__footer {
+    font-size: .875em;
+    color: #777;
+    font-weight: bold;
+}
+
+/* UNIQUE TEXT */
+
+/* This is for text styling
+ * on an individual basis
+ */
+
+.my-courses__title {
+    font-size: 1em;
+    color: #999;
+    /* Don't hard code this */
+    font-weight: bold;
+}
+
+/* -------------------- *\
+         Widgets
+\* -------------------- */
+
+/* SHARED STYLING */
+
+.main-options,
+.my-courses {
+    margin: 30px 20px 0 20px;
+}
+
+/* The dividing line between
+ * other elements
+ */
+.divide {
+    background: #F5A623;
+    height: 2px;
+    width: 80%;
+    margin: 20px auto;
+}
+
+
+/* MAIN OPTIONS */
+
+/*
+ * Main actions that the user
+ * can take.
+ */
+
+ul.main-options {
+    list-style: none;
+}
+
+.main-options {
+    padding: 0;
+}
+
+.main-options__item {
+    position: relative;
+    height: 35px;
+    margin: 0px 0px 4px 0px;
+}
+
+.main-options__item__icon {
+    /* Note that height and margin
+     * should be specified inline for each
+     * image
+     */
+    position: absolute;
+    top: 50%;
+
+}
+
+.main-options__item__text {
+    line-height: 35px;
+    margin-left: 45px;
+
+
+}
+
+/* MY COURSES */
+
+/* List of Courses that
+ * the user has enrolled in
+ */
+
+ul.my-courses__list {
+    list-style: none;
+}
+
+.my-courses__list {
+    margin: 0 0 0 20px;
+    padding: 0;
+}
+
+.my-courses__list > li {
+    margin: 10px 0 0 0;
+    cursor: pointer;
+}
+
+.my-courses__list > li:hover {
+    text-decoration: underline;
+}
+
+/* Course-Info is the box containing
+ * some relevant information about a
+ * course.
+ */
+
+.course-info {
+    border: solid #979797 1px;
+    float: left;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 2px;
+
+    height: 150px;
+    min-height: 150px;
+    width: 200px;
+    min-width: 200px;
+}
+
+.course-info__header {
+    height: 40px;
+    min-height: 40px;
+    line-height: 40px;
+
+    text-align: center;
+    color: white;
+    font-weight: normal;
+}
+
+.course-info__body {
+    flex-grow: 1;
+}
+
+.course-info__body__text {
+    margin: 8px 10px;
+    /* TODO: Handle text overflow with elipsis */
+}
+
+.course-info__footer {
+    height: 30px;
+    min-height: 30px;
+    line-height: 30px;
+
+    background: #D8D8D8;
+    padding-left: 15px;
+}

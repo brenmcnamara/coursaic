@@ -64,6 +64,12 @@
     flex-direction: row;
 }
 
+
+/* TODO: Better name than content__main__nav 
+ *
+ * Can confuse with main-nav, and this is not the
+ * main-nav
+ */
 .content__main__nav {
     position: relative;
 
@@ -71,102 +77,15 @@
     min-width: 200px;
 }
 
-/* TODO: Move this to widgets */
-
-.main-options,
-.my-courses {
-    margin: 30px 20px 0 20px;
-}
-
-ul.main-options {
-    list-style: none;
-}
-
-.main-options {
-    padding: 0;
-}
-
-.main-options__item {
-    position: relative;
-    height: 35px;
-    margin: 0px 0px 4px 0px;
-}
-
-.main-options__item__icon {
-    /* Note that height and margin
-     * should be specified inline for each
-     * image
-     */
-    position: absolute;
-    top: 50%;
-
-}
-
-.main-options__item__text {
-    line-height: 35px;
-    margin-left: 45px;
-    /* TODO: Abstract out the font and text stuff */
-    /* TODO: Don't make this a hard font */
-    font-size: 14px;
-    color: #444;
-    font-weight: bold;
-}
-
-/* TODO: Better name than content__main__nav 
- *
- * Can confuse with main-nav, and this is not the
- * main-nav
- */
-
-/* TODO: Move this to widgets */
-
-.divide {
-    background: #F5A623;
-    height: 2px;
-    width: 80%;
-    margin: 20px auto;
-}
+/* -------------------- *\
+      Course Search
+\* -------------------- */
 
 .content__main__courses {
     position: relative;
 
     flex-grow: 1;
 }
-
-/* TODO: Move this to widgets */
-
-.my-courses {
-
-}
-
-.my-courses__title {
-    color: #999;
-    /* Don't hard code this */
-    font-weight: bold;
-}
-
-ul.my-courses__list {
-    list-style: none;
-}
-
-.my-courses__list {
-    margin: 0 0 0 20px;
-    padding: 0;
-}
-
-.my-courses__list > li {
-    color: #4A90E2;
-    margin: 10px 0 0 0;
-    cursor: pointer;
-}
-
-.my-courses__list > li:hover {
-    text-decoration: underline;
-}
-
-/* -------------------- *\
-      Course Search
-\* -------------------- */
 
 .content__main__courses__grid {
     position: relative;
@@ -190,55 +109,6 @@ ul.my-courses__list {
 .content__main__courses__grid__course {
     margin: 0px 15px 15px 0px;
 
-}
-
-.course-info {
-    border: solid #979797 1px;
-    float: left;
-
-    display: flex;
-    flex-direction: column;
-
-    border-radius: 2px;
-
-    height: 150px;
-    min-height: 150px;
-    width: 200px;
-    min-width: 200px;
-}
-
-.course-info__header {
-    height: 40px;
-    min-height: 40px;
-
-    line-height: 40px;
-    text-align: center;
-    color: white;
-
-    font-size: 20px;
-}
-
-.course-info__body {
-    flex-grow: 1;
-}
-
-.course-info__body__text {
-    margin: 8px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #4A4A4A;
-}
-
-.course-info__footer {
-    height: 30px;
-    min-height: 30px;
-    line-height: 30px;
-
-    background: #D8D8D8;
-
-    font-size: 14px;
-    text-indent: 15px;
-    font-weight: bold;
 }
 
 /* -------------------- *\
