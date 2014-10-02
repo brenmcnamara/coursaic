@@ -101,6 +101,10 @@ ul.category__list {
 
 /* MY COURSES */
 
+/* List of Courses that
+ * the user has enrolled in
+ */
+
 .my-courses .category__list > li {
     cursor: pointer;
 }
@@ -109,9 +113,11 @@ ul.category__list {
     text-decoration: underline;
 }
 
-/* List of Courses that
- * the user has enrolled in
- */
+
+
+/* -------------------- *\
+        Course-Info
+\* -------------------- */
 
 /* Course-Info is the box containing
  * some relevant information about a
@@ -126,15 +132,16 @@ ul.category__list {
     flex-direction: column;
 
     border-radius: 2px;
+}
 
-    height: 150px;
-    min-height: 150px;
-    width: 200px;
-    min-width: 200px;
+
+.course-info__body {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 .course-info__header {
-    height: 40px;
     min-height: 40px;
     line-height: 40px;
 
@@ -143,20 +150,62 @@ ul.category__list {
     font-weight: normal;
 }
 
-.course-info__body {
-    flex-grow: 1;
-}
-
-.course-info__body__text {
-    margin: 8px 10px;
-    /* TODO: Handle text overflow with elipsis */
-}
-
 .course-info__footer {
-    height: 30px;
-    min-height: 30px;
-    line-height: 30px;
-
     background: #D8D8D8;
-    padding-left: 15px;
+    padding-left: 5%;
+}
+
+/* Course Info for Large Screens */
+
+@media only screen and (min-width: 800px) {
+    .course-info {
+        min-height: 150px;
+        height: 150px;
+        width: 200px;
+        min-width: 200px;
+    }
+
+    .course-info__header {
+        min-height: 40px;
+        max-height: 100px;
+        line-height: 40px;
+    }
+
+    .course-info__body__text {
+        /* NOTE: Text truncating will have
+         * to be done in javascript code */
+         margin: 8px 10px;
+    }
+
+    .course-info__footer {
+        min-height: 30px;
+        line-height: 30px;
+    }
+
+}
+
+/* Course Info for Small Screens */
+
+@media only screen and (max-width: 800px) {
+    .course-info {
+        min-height: 100px;
+        max-height: 100px;
+
+        width: 120px;
+        min-width: 120px;
+    }
+
+    .course-info__header {
+        min-height: 30px;
+        line-height: 30px;
+    }
+
+    .course-info__body__text {
+        margin: 5px 8px;
+    }
+
+    .course-info__footer {
+        min-height: 20px;
+        line-height: 20px;
+    }
 }
