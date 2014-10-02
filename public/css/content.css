@@ -61,7 +61,7 @@
     width: 100%;
 
     float: left;
-    flex-direction: row;
+    
 }
 
 
@@ -72,9 +72,6 @@
  */
 .content__main__nav {
     position: relative;
-
-    width: 200px;
-    min-width: 200px;
 }
 
 /* -------------------- *\
@@ -89,7 +86,6 @@
 
 .content__main__courses__grid {
     position: relative;
-    margin: 30px 70px 0px 70px;
     padding: 0;
 }
 
@@ -117,10 +113,23 @@
 
 @media only screen and (min-width: 800px) {
 
+    .content__main {
+        flex-direction: row;
+    }
+
     .content__filler {
         height: 325px;
     }
 
+    .content__main__nav {
+        width: 200px;
+        min-width: 200px;
+    }
+
+    .content__main__courses__grid {
+        margin: 30px 70px 0px 70px;
+    }
+    
     .main-search {
         width: 650px;
         margin-left: -325px;
@@ -147,6 +156,10 @@
 
 @media only screen and (max-width: 800px) {
 
+    .content__main {
+        flex-direction: column;
+    }
+
     .content__filler {
         display: none;
     }
@@ -168,6 +181,10 @@
 
         width: 20px;
         height: 20px;
+    }
+
+    .content__main__courses__grid {
+        margin: 30px 20px 0px 20px;
     }
 
  }
