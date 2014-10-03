@@ -85,25 +85,13 @@
 }
 
 .content__main__courses__grid {
+    float: left;
     position: relative;
     padding: 0;
 }
 
-.content__main__courses__grid:after {
-    /* style here is used to make
-     * sure that the grid
-     * wraps all the course info */
-
-    content: ".";
-    visibility: hidden;
-
-    display: block;
-    clear: left;
-
-}
-
 .content__main__courses__grid__course {
-    margin: 0px 15px 15px 0px;
+    margin: 0px 10px 10px 0px;
 
 }
 
