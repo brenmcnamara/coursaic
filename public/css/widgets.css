@@ -129,7 +129,10 @@ ul.category__list {
     float: left;
 
     display: flex;
+    display: -webkit-flex;
+
     flex-direction: column;
+    -webkit-flex-direction: column;
 
     border-radius: 2px;
 }
@@ -137,7 +140,10 @@ ul.category__list {
 
 .course-info__body {
     position: relative;
+
+    -webkit-flex-grow: 1;
     flex-grow: 1;
+    
     overflow: hidden;
 }
 
