@@ -10,7 +10,6 @@
 \* -------------------- */
 
 .home-image {
-   float: left;
    width: 100%;
 }
 
@@ -20,13 +19,12 @@
     width: 100%;
     height: 50px;
 
-    float: left;
     width: 100%;
     height: 80px;
 }
 
 .home-content {
-    margin-bottom: 40px;
+    margin: 20px 0 40px 0;
 }
 
 /* -------------------- *\
@@ -42,7 +40,6 @@
 
 /* TODO: Don't need separate style for home-content__coures__grid */
 .home-content__courses__grid {
-    float: left;
     position: relative;
     padding: 0;
 }
