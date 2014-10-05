@@ -2,12 +2,14 @@
  * course.details.css
  */
 
+.course-content {
+    margin: 70px 0 30px 0;
+}
+
 /* TODO: Setup a min width for the dashboard and content layout */
 
 .dashboard {
     position: relative;
-
-    float: left;
 
     height: 150px;
     width: 100%;
@@ -140,40 +142,6 @@ ul.dashboard__course-logistics {
 /* TODO: Change this to text--user-name or maybe make this some button */
 .user-name {
     color: #4A90E2;
-}
-
-/* TODO: Combine this with home page flex box break */
-
-.body {
-    position: relative;
-    top: 75px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.body__nav {
-    border: solid blue;
-    min-width: 200px;
-    width: 200px;
-}
-
-.body__content {
-    border: solid green;
-    flex-grow: 1;
-}
-
-.body__content__wrapper {
-    margin: 0 20px 0 70px;
-}
-
-.body__content__title {
-    margin: 15px 0px 0px 0px;
-    margin-top: 15px;
-
-    font-size: 40px;
-    /* TODO: consistent coloring */
-    color: #444;
 }
 
 .exam {

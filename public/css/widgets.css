@@ -54,6 +54,19 @@
     position: relative;
 }
 
+.content__body__wrapper {
+    margin: 0 20px 0 70px;
+}
+
+.content__body__title {
+    margin: 15px 0px 0px 0px;
+    margin-top: 15px;
+
+    font-size: 40px;
+    /* TODO: consistent coloring */
+    color: #444;
+}
+
 @media only screen and (min-width: 800px) {
 
     .content {
