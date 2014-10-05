@@ -2,6 +2,8 @@
  * course.details.css
  */
 
+/* TODO: Setup a min width for the dashboard and content layout */
+
 .dashboard {
     position: relative;
 
@@ -75,8 +77,8 @@ ul.dashboard__course-logistics {
 
 }
 
-/* TODO: Move this somewhere else -- and all course-info classes*/
-.course-info {
+/* TODO: Move this somewhere else -- and all course-summary classes*/
+.course-summary {
     position: absolute;
 
     top: 85px;
@@ -92,40 +94,40 @@ ul.dashboard__course-logistics {
     box-shadow: 2px 3px 3px .5px #999;
 }
 
-.course-info__banner {
+.course-summary__banner {
     float: left;
     width: 20px;
     height: 100%;
 }
 
-.course-info__code {
+.course-summary__code {
     margin: 10px 15px 0px 40px;
 
     font-size: 30px;
     font-weight: medium;
 }
 
-.course-info__name,
-.course-info__field {
+.course-summary__name,
+.course-summary__field {
     font-size: 14px;
     font-weight: bold;
 }
 
-.course-info__name {
+.course-summary__name {
     margin: 7px 15px 0px 40px; 
 }
 
-.course-info__field {
+.course-summary__field {
     margin: 4px 15px 0px 40px;
     color: #444;
 }
 
-.course-info__creator-profile {
+.course-summary__creator-profile {
     margin-top: 10px;
     left: 35px;
 }
 
-.course-info__creator-info {
+.course-summary__creator-info {
     position: absolute;
 
     margin: 0;
