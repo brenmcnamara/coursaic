@@ -38,14 +38,9 @@
     flex-grow: 1;
 }
 
-/* TODO: Don't need separate style for home-content__coures__grid */
-.home-content__courses__grid {
+.course__grid {
     position: relative;
     padding: 0;
-}
-
-.home-content__courses__grid__course {
-    margin: 0px 10px 10px 0px;
 }
 
 /* -------------------- *\
@@ -58,7 +53,7 @@
         height: 325px;
     }
 
-    .home-content__courses__grid {
+    .course-grid {
         margin: 30px 70px 0px 70px;
     }
     
@@ -74,8 +69,8 @@
         display: none;
     }
 
-    .home-content__courses__grid {
-        margin: 30px 20px 0px 20px;
+    .course-grid {
+        margin: 30px 20px 0 20px;
     }
 
  }

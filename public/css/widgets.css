@@ -241,6 +241,8 @@ ul.category__list {
  */
 
 .course-info {
+     margin: 0px 10px 10px 0px;
+
     border: solid #979797 1px;
     float: left;
 
@@ -280,9 +282,11 @@ ul.category__list {
 /* Course Info for Large Screens */
 
 @media only screen and (min-width: 800px) {
+
     .course-info {
         min-height: 150px;
         height: 150px;
+
         width: 200px;
         min-width: 200px;
     }
@@ -309,6 +313,7 @@ ul.category__list {
 /* Course Info for Small Screens */
 
 @media only screen and (max-width: 800px) {
+
     .course-info {
         min-height: 100px;
         max-height: 100px;
