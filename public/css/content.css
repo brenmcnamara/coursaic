@@ -25,36 +25,6 @@
     height: 80px;
 }
 
-/* TODO: Move main-search to widgets */
-.search {
-    position: relative;
-
-    margin-top: -25px;
-    height: 50px;
-
-    top: 50%;
-    left: 50%;
-}
-
-.search__input {
-    position: relative;
-
-    top: 5px;
-    height: 30px;
-    padding-left: 5px;
-
-    border: solid #AAA 1px;
-    border-radius: 4px;
-
-}
-
-.search__submit {
-    position: relative;
-    
-
-    top: 11px;
-}
-
 .home-content {
     margin-bottom: 40px;
 }
@@ -70,6 +40,7 @@
     flex-grow: 1;
 }
 
+/* TODO: Don't need separate style for home-content__coures__grid */
 .home-content__courses__grid {
     float: left;
     position: relative;
@@ -78,7 +49,6 @@
 
 .home-content__courses__grid__course {
     margin: 0px 10px 10px 0px;
-
 }
 
 /* -------------------- *\
@@ -95,24 +65,6 @@
         margin: 30px 70px 0px 70px;
     }
     
-    .search {
-        width: 650px;
-        margin-left: -325px;
-    }
-
-    .search__input {
-        width: 550px;
-
-        font-size: 20px;
-    }
-
-    .search__submit {
-        margin-left: 30px;
-
-        width: 30px;
-        height: 30px;
-    }
-    
 }
 
 /* -------------------- *\
@@ -123,25 +75,6 @@
 
     .home-image {
         display: none;
-    }
-
-    .search {
-        width: 380px;
-        margin-left: -190px;
-    }
-
-    .search__input {
-        margin-left: 15px;
-        width: 300px;
-
-        font-size: 14px;
-    }
-
-    .search__submit {
-        margin-left: 10px;
-
-        width: 20px;
-        height: 20px;
     }
 
     .home-content__courses__grid {
