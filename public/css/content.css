@@ -9,12 +9,12 @@
      General Styling
 \* -------------------- */
 
-.content__filler {
+.home-image {
    float: left;
    width: 100%;
 }
 
-.content__search {
+.home-search {
     position: relative;
 
     width: 100%;
@@ -25,6 +25,7 @@
     height: 80px;
 }
 
+/* TODO: Move main-search to widgets */
 .main-search {
     position: relative;
 
@@ -54,7 +55,7 @@
     top: 11px;
 }
 
-.content__main {
+.content {
     display: flex;
     display: -webkit-flex;
 
@@ -72,7 +73,7 @@
  * Can confuse with main-nav, and this is not the
  * main-nav
  */
-.content__main__nav {
+.content__nav {
     position: relative;
 }
 
@@ -80,20 +81,20 @@
       Course Search
 \* -------------------- */
 
-.content__main__courses {
+.content__courses {
     position: relative;
 
     -webkit-flex-grow: 1;
     flex-grow: 1;
 }
 
-.content__main__courses__grid {
+.content__courses__grid {
     float: left;
     position: relative;
     padding: 0;
 }
 
-.content__main__courses__grid__course {
+.content__courses__grid__course {
     margin: 0px 10px 10px 0px;
 
 }
@@ -104,7 +105,7 @@
 
 @media only screen and (min-width: 800px) {
 
-    .content__main {
+    .content {
         -webkit-flex-direction: row;
         flex-direction: row;
     }
@@ -113,12 +114,12 @@
         height: 325px;
     }
 
-    .content__main__nav {
+    .content__nav {
         width: 200px;
         min-width: 200px;
     }
 
-    .content__main__courses__grid {
+    .content__courses__grid {
         margin: 30px 70px 0px 70px;
     }
     
@@ -148,7 +149,7 @@
 
 @media only screen and (max-width: 800px) {
 
-    .content__main {
+    .content {
         -webkit-flex-direction: column;
         flex-direction: column;
     }
@@ -176,7 +177,7 @@
         height: 20px;
     }
 
-    .content__main__courses__grid {
+    .content__courses__grid {
         margin: 30px 20px 0px 20px;
     }
 
