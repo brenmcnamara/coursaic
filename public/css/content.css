@@ -26,7 +26,7 @@
 }
 
 /* TODO: Move main-search to widgets */
-.main-search {
+.search {
     position: relative;
 
     margin-top: -25px;
@@ -36,7 +36,7 @@
     left: 50%;
 }
 
-.main-search__input {
+.search__input {
     position: relative;
 
     top: 5px;
@@ -48,7 +48,7 @@
 
 }
 
-.main-search__submit {
+.search__submit {
     position: relative;
     
 
@@ -95,18 +95,18 @@
         margin: 30px 70px 0px 70px;
     }
     
-    .main-search {
+    .search {
         width: 650px;
         margin-left: -325px;
     }
 
-    .main-search__input {
+    .search__input {
         width: 550px;
 
         font-size: 20px;
     }
 
-    .main-search__submit {
+    .search__submit {
         margin-left: 30px;
 
         width: 30px;
@@ -125,19 +125,19 @@
         display: none;
     }
 
-    .main-search {
+    .search {
         width: 380px;
         margin-left: -190px;
     }
 
-    .main-search__input {
+    .search__input {
         margin-left: 15px;
         width: 300px;
 
         font-size: 14px;
     }
 
-    .main-search__submit {
+    .search__submit {
         margin-left: 10px;
 
         width: 20px;
