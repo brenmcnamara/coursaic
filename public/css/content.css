@@ -55,46 +55,28 @@
     top: 11px;
 }
 
-.content {
-    display: flex;
-    display: -webkit-flex;
-
+.home-content {
     margin-bottom: 40px;
-
-    width: 100%;
-
-    float: left;
-    
-}
-
-
-/* TODO: Better name than content__main__nav 
- *
- * Can confuse with main-nav, and this is not the
- * main-nav
- */
-.content__nav {
-    position: relative;
 }
 
 /* -------------------- *\
       Course Search
 \* -------------------- */
 
-.content__courses {
+.home-content__courses {
     position: relative;
 
     -webkit-flex-grow: 1;
     flex-grow: 1;
 }
 
-.content__courses__grid {
+.home-content__courses__grid {
     float: left;
     position: relative;
     padding: 0;
 }
 
-.content__courses__grid__course {
+.home-content__courses__grid__course {
     margin: 0px 10px 10px 0px;
 
 }
@@ -105,21 +87,11 @@
 
 @media only screen and (min-width: 800px) {
 
-    .content {
-        -webkit-flex-direction: row;
-        flex-direction: row;
-    }
-
-    .content__filler {
+    .home-image {
         height: 325px;
     }
 
-    .content__nav {
-        width: 200px;
-        min-width: 200px;
-    }
-
-    .content__courses__grid {
+    .home-content__courses__grid {
         margin: 30px 70px 0px 70px;
     }
     
@@ -149,12 +121,7 @@
 
 @media only screen and (max-width: 800px) {
 
-    .content {
-        -webkit-flex-direction: column;
-        flex-direction: column;
-    }
-
-    .content__filler {
+    .home-image {
         display: none;
     }
 
@@ -177,7 +144,7 @@
         height: 20px;
     }
 
-    .content__courses__grid {
+    .home-content__courses__grid {
         margin: 30px 20px 0px 20px;
     }
 

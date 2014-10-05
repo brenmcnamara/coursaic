@@ -39,8 +39,49 @@
     margin: 20px auto;
 }
 
+/* -------------------- *\
+         Content
+\* -------------------- */
 
-/* MAIN OPTIONS */
+.content {
+    display: flex;
+    display: -webkit-flex;
+
+    width: 100%;
+
+    float: left;
+}
+
+.content__nav {
+    position: relative;
+}
+
+@media only screen and (min-width: 800px) {
+
+    .content {
+        -webkit-flex-direction: row;
+        flex-direction: row;
+    }
+    
+    .content__nav {
+        width: 200px;
+        min-width: 200px;
+    }
+
+}
+
+@media only screen and (max-width: 800px) {
+
+    .content {
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+
+}
+
+/* -------------------- *\
+       Main-Options
+\* -------------------- */
 
 /*
  * Main actions that the user
