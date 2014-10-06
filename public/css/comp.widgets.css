@@ -161,12 +161,17 @@ ul.main-options {
     margin-left: 45px;
 }
 
-/* CATEGORY */
+/* -------------------- *\
+        Category
+\* -------------------- */
 
 /* Used to categorize
  * a list of items
  */
 
+.category {
+    position: relative;
+}
 
 ul.category__list {
     list-style: none;
@@ -182,7 +187,9 @@ ul.category__list {
     cursor: pointer;
 }
 
-/* MY COURSES */
+/* -------------------- *\
+        My-Courses
+\* -------------------- */
 
 /* List of Courses that
  * the user has enrolled in
@@ -196,7 +203,25 @@ ul.category__list {
     text-decoration: underline;
 }
 
+/* -------------------- *\
+         Exam-List
+\* -------------------- */
 
+.exam-list {
+    /* TODO: put this margin somewhere better */
+    margin: 20px 20px 20px 20px;
+}
+
+.exam-list__selection-bar {
+    position: absolute;
+    height: 22px;
+    width: 3px;
+    left: 0px;
+}
+
+.exam-list .category__list > li:hover {
+    text-decoration: underline;
+}
 
 /* -------------------- *\
         Course-Info

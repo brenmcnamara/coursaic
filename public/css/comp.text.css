@@ -37,3 +37,17 @@
     font-weight: bold;
     font-size: .875em;
 }
+
+/* OTHER TEXT STYLING */
+
+.exam-list > .category__title {
+    /* TODO: Should be the same as for my-courses */
+    font-size: 1em;
+    color: #999;
+    font-weight: bold;
+}
+
+.exam-list li {
+    color: #4A90E2;
+    font-size: 1em;
+}
