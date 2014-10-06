@@ -11,6 +11,7 @@
 
 .home-image {
    width: 100%;
+   height: 325px;
 }
 
 .home-search {
@@ -38,39 +39,12 @@
     flex-grow: 1;
 }
 
+/* TODO: Rename this, similar to course-grid and very confusing */
 .course__grid {
     position: relative;
     padding: 0;
 }
 
-/* -------------------- *\
-       Large Screen
-\* -------------------- */
-
-@media only screen and (min-width: 800px) {
-
-    .home-image {
-        height: 325px;
-    }
-
-    .course-grid {
-        margin: 30px 70px 0px 70px;
-    }
-    
+.course-grid {
+    margin: 30px 70px 0px 70px;
 }
-
-/* -------------------- *\
-       Small Screen
-\* -------------------- */
-
-@media only screen and (max-width: 800px) {
-
-    .home-image {
-        display: none;
-    }
-
-    .course-grid {
-        margin: 30px 20px 0 20px;
-    }
-
- }

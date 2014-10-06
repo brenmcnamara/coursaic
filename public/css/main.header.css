@@ -13,12 +13,24 @@
     position: fixed;
 
     height: 60px;
+    min-width: 800px;
     width: 100%;
 
     z-index: 2;
 }
 
-.header-offset, 
+.header {
+    background: rgba(42, 42, 42, .6);
+}
+
+.header--fill {
+    background: rgba(42, 42, 42, 1);
+}
+
+.header-offset {
+    display: none;
+}
+
 .header-offset--fill {
     position: relative;
 
@@ -54,132 +66,45 @@
     right: 35px;
 }
 
-/* -------------------- *\
-      Large Screen
-\* -------------------- */
+/* TODO: Move these to widgets? */
+.main-nav {
+    position: absolute;
 
-@media only screen and (min-width: 800px) {
-    
-    .header {
-        background: rgba(42, 42, 42, .6);
-    }
-
-    .header--fill {
-        background: rgba(42, 42, 42, 1);
-    }
-    
-    .header-offset {
-        display: none;
-    }
-
-    .main-nav-pointer {
-        display: none;
-    }
-
-    .main-nav {
-        position: absolute;
-
-        right: 105px; /* 35 + 50 + 20 */
-        top: 5px;
-        height: 50px;
-    }
-
-    .main-nav__item,
-    .main-nav__item--clickable,
-    .main-nav__item--unclickable {
-        float: left;
-        line-height: 50px;
-
-        margin-left: 20px;
-
-        font-size: 20px;
-        font-weight: medium;
-    }
-
-    .main-nav__item--clickable {
-        color: #F5A623;
-        cursor: pointer;
-    }
-
-    .main-nav__item--unclickable {
-        color: white;
-    }
-
-    .main-nav__break {
-        float: right;
-
-        margin-left: 20px; /* This should be the same as margin-left of mainNav-item */
-
-        margin-top: 5px; /* (totalheight(50) - height(30)) / 2 */
-        width: 3px;
-        height: 40px;
-
-        background: white;
-    }
-
+    right: 105px; /* 35 + 50 + 20 */
+    top: 5px;
+    height: 50px;
 }
 
-/* -------------------- *\
-       Small Screen
-\* -------------------- */
+.main-nav__item,
+.main-nav__item--clickable,
+.main-nav__item--unclickable {
+    float: left;
+    line-height: 50px;
 
-@media only screen and (max-width: 800px) {
-    
-    .header {
-        background: #4A4A4A;
-    }
+    margin-left: 20px;
 
-    .header-offset {
-        position: relative;
-        display: block;
-
-        height: 60px;
-        width: 100%;
-    }
-
-    .main-nav-pointer {
-        position: absolute;
-
-        display: block;
-        
-        top: 27px;
-        right: 18px;
-
-        border-top: solid #EEE 8px;
-        border-left: solid transparent 6px;
-        border-right: solid transparent 6px;
-
-    }
-
-    .main-nav {
-        position: absolute;
-
-        top: 60px;
-        right: 15px;
-
-        width: 100px;
-
-        font-size: 14px;
-        padding: 10px;
-        background: #DDD;
-        
-    }
-
-    .main-nav:not([selected]) {
-        opacity: 0;
-    }
-
-    .main-nav[selected] {
-        transition: opacity .2s;
-        opacity: 1;
-    }
-
-    .main-nav__item--unclickable {
-        display: none;
-    }
-
-    .main-nav__break {
-        display: none;
-    }
-
+    font-size: 20px;
+    font-weight: medium;
 }
+
+.main-nav__item--clickable {
+    color: #F5A623;
+    cursor: pointer;
+}
+
+.main-nav__item--unclickable {
+    color: white;
+}
+
+.main-nav__break {
+    float: right;
+
+    margin-left: 20px; /* This should be the same as margin-left of mainNav-item */
+
+    margin-top: 5px; /* (totalheight(50) - height(30)) / 2 */
+    width: 3px;
+    height: 40px;
+
+    background: white;
+}
+
