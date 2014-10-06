@@ -49,15 +49,9 @@
 }
 
 .header__profile-pic {
-
     position: absolute;
-    width: 50px;
-    height: 50px;
-
     top: 5px;
     right: 35px;
-
-    cursor: pointer;
 }
 
 /* -------------------- *\
