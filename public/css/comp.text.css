@@ -12,6 +12,7 @@
 
 .course-info__header {
     font-weight: bold;
+    font-size: 1.25em;
 }
 
 /* LINK TEXT */
@@ -26,6 +27,7 @@
 .course-info__body__text {
     color: #444;
     font-weight: bold;
+    font-size: .875em;
 }
 
 /* ASIDE TEXT */
@@ -33,45 +35,5 @@
 .course-info__footer {
     color: #777;
     font-weight: bold;
+    font-size: .875em;
 }
-
-@media only screen and (min-width: 800px) {
-
-    /* LARGE TEXT */
-    .course-info__header {
-        font-size: 1.25em;
-    }
-
-    /* NORMAL TEXT */
-
-    .main-options__item__text,
-    .course-info__body__text {
-        font-size: .875em;
-    }
-
-    /* ASIDE TEXT */
-    .course-info__footer {
-        font-size: .875em;
-    }
-}
-
-
-@media only screen and (max-width: 800px) {
-
-    /* LARGE TEXT */
-    .course-info__header {
-        font-size: 1em;
-    }
-
-    /* NORMAL TEXT */
-    .main-options__item__text,
-    .course-info__body__text {
-        font-size: .75em;
-    }
-
-    /* ASIDE TEXT */
-    .course-info__footer {
-        font-size: .75em;
-    }
-}
-
