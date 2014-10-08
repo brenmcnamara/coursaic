@@ -25,30 +25,29 @@
 
     <!-- My Scripts -->
 
+    <!-- Views -->
+    <script type="text/jsx" src="./views/header.js"></script>
+
+    <!-- Initialization -->
+    <script type="text/javascript">
+        // Setup global namespaces.
+        var View = {};
+    </script>
+    
+    <script type="text/jsx">
+        /** @jsx React.DOM */
+
+        React.renderComponent(
+            <View.Header />,
+            document.getElementsByClassName('main')[0]
+        );
+    </script>
+
 </head>
 
 <body>
     <div class="main">
-        <header class="header">
-            <img class="header__logo" src="./img/logo-dark.png" />
-            <h1 class="header__title">Coursaic</h1>
-            <nav class="main-nav">
-                <div class="main-nav__item--clickable">
-                    Logout
-                    <div class="main-nav__break"></div>
-                </div>
-
-                <div class="main-nav__item--unclickable">
-                    Welcome, Brendan
-                </div>
-            </nav>
-            <div class="profile-pic--circle header__profile-pic">
-                <img src="./img/profilePic.png" />
-            </div>
-        </header>
-        <!-- use to move all other elements down from under the header -->
-        <div class="header-offset"></div>
-
+        <div className="header-offset"></div>
         <div class="home-image"></div>
 
         <div class="home-search">
