@@ -7,7 +7,9 @@
     min-width: 800px;
 }
 
-/* TODO: Setup a min width for the dashboard and content layout */
+/* -------------------- *\
+        Dashboard
+\* -------------------- */
 
 .dashboard {
     position: relative;
@@ -51,10 +53,9 @@ ul.dashboard__course-logistics {
     top: 30px;
 }
 
-/* TODO: Change this to text--user-name or maybe make this some button */
-.user-name {
-    color: #4A90E2;
-}
+/* -------------------- *\
+          Exam
+\* -------------------- */
 
 .exam {
     margin-top: 5px;
@@ -63,7 +64,6 @@ ul.dashboard__course-logistics {
 .exam__creator-info__pic {
     float: left;
 }
-
 
 .exam__creator-info::after {
     content: '.';
@@ -88,7 +88,10 @@ ul.dashboard__course-logistics {
     margin: 40px 0px 0px 0px;
 }
 
-/* TODO: Move this to CSS */
+/* -------------------- *\
+      Question-list
+\* -------------------- */
+
 .question-list {
     margin: 20px 0px;
     padding: 0;
@@ -100,6 +103,10 @@ ul.dashboard__course-logistics {
 ul.question-list {
     list-style: none;
 }
+
+/* -------------------- *\
+         Question
+\* -------------------- */
 
 .question {
     position: relative;
@@ -138,7 +145,10 @@ ul.question-list {
     margin: 0px 20px 0px 70px;
 }
 
-/* TODO: Move multi-choice to widgets */
+/* -------------------- *\
+       Multi-Choice
+\* -------------------- */
+
 ul.multi-choice {
     list-style: upper-alpha;
 }
