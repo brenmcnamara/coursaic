@@ -39,12 +39,6 @@
     flex-grow: 1;
 }
 
-/* TODO: Rename this, similar to course-grid and very confusing */
-.course__grid {
-    position: relative;
-    padding: 0;
-}
-
 .course-grid {
     margin: 30px 70px 0px 70px;
 }
