@@ -379,6 +379,7 @@ ul.profile-grid {
       Course-Summary
 \* -------------------- */
 
+/* TODO: font sizes should be using em */
 .course-summary {
     position: absolute;
 

@@ -163,27 +163,3 @@ ul.multi-choice {
     margin: 20px 10px 10px 10px;
     font-weight: bold;
 }
-
-/* TODO: Move this to widgets -- text.css */
-
-.text--aside {
-    color: #999;
-    /* TODO: Remove hard font-size for em */
-    font-size: 14px;
-}
-
-.text--normal {
-    font-weight: bold;
-    color: #444;
-    /* TODO: Remove hard font-size for em */
-    font-size: 14px;
-}
-
-.text--section {
-    font-weight: bold;
-    color: #444;
-    /* TODO: Remove hard font-size for em */
-    font-size: 20px;
-}
-
-
