@@ -53,7 +53,15 @@ ul.dashboard__course-logistics {
 
 /* TODO: Move this somewhere else */
 .profile-grid {
+    padding: 0;
+    margin: 0;
 
+    display: block;
+    width: 150px; /* width of 3 pics */
+}
+
+ul.profile-grid {
+    list-style: none;
 }
 
 .profile-grid__row__item {
