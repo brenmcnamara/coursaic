@@ -6,7 +6,7 @@
 
 
 /* -------------------- *\
-     General Styling
+          Header
 \* -------------------- */
 
 .header, .header--fill {
@@ -24,7 +24,7 @@
 }
 
 .header--fill {
-    background: rgba(42, 42, 42, 1);
+    background-color: rgba(42, 42, 42, 1);
 }
 
 .header-offset {
@@ -65,6 +65,10 @@
     top: 5px;
     right: 35px;
 }
+
+/* -------------------- *\
+        Main-Nav
+\* -------------------- */
 
 .main-nav {
     position: absolute;

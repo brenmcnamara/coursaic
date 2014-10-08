@@ -10,8 +10,14 @@
 \* -------------------- */
 
 .home-image {
+   display: block;
+   position: relative;
    width: 100%;
    height: 325px;
+   /* Note: This will probably not look good
+      for screens with more than 1400 px width
+    */
+   background-image: url('../img/homeFiller.png');
 }
 
 .home-search {
