@@ -15,14 +15,6 @@
     min-width: 800px;
 }
 
-/* TODO: Move this to text.css */
-.my-courses .category__title {
-    font-size: 1em;
-    color: #999;
-    /* Don't hard code this */
-    font-weight: bold;
-}
-
 /* -------------------- *\
          Widgets
 \* -------------------- */
@@ -76,6 +68,12 @@
     font-size: 40px;
     /* TODO: consistent coloring */
     color: #444;
+}
+
+/* styling for any category elements
+   inside of the nav */
+.content__nav > .category {
+    margin: 30px 20px 20px 20px;
 }
 
 /* -------------------- *\
@@ -206,11 +204,6 @@ ul.category__list {
 /* -------------------- *\
          Exam-List
 \* -------------------- */
-
-.exam-list {
-    /* TODO: put this margin somewhere better */
-    margin: 20px 20px 20px 20px;
-}
 
 .exam-list__selection-bar {
     position: absolute;

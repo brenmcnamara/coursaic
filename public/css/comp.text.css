@@ -15,12 +15,6 @@
     font-size: 1.25em;
 }
 
-/* LINK TEXT */
-
-.my-courses .category__list > li {
-   color: #4A90E2;
-}
-
 /* WEIGHTED TEXT */
 
 .main-options__item__text,
@@ -38,16 +32,18 @@
     font-size: .875em;
 }
 
-/* OTHER TEXT STYLING */
+/* -------------------- *\
+         Category
+\* -------------------- */
 
-.exam-list > .category__title {
-    /* TODO: Should be the same as for my-courses */
+.category__title {
     font-size: 1em;
     color: #999;
+    /* Don't hard code this */
     font-weight: bold;
 }
 
-.exam-list li {
-    color: #4A90E2;
+.category__list > li {
     font-size: 1em;
+    color: #4A90E2;
 }
