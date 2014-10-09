@@ -26,6 +26,7 @@
     <!-- My Scripts -->
 
     <!-- Views -->
+    <script type="text/jsx" src="./views/widgets.js"></script>
     <script type="text/jsx" src="./views/header.js"></script>
     <script type="text/jsx" src="./views/home.js"></script>
 
@@ -39,7 +40,7 @@
         /** @jsx React.DOM */
 
         React.renderComponent(
-            <View.Root_Home />,
+            <View.Home_Root />,
             document.getElementsByTagName('body')[0]
         );
     </script>
@@ -47,188 +48,7 @@
 </head>
 
 <body>
-    <div class="main">
-        <div class="home-image"></div>
-
-        <div class="home-search">
-            <div class="search">
-                <input type="text"
-                       placeholder="Search for Vanderbilt Courses..."
-                       class="search__input" />
-
-                <img class="search__submit" src="./img/icons/search.png" />
-            </div>
-        </div>
-
-        <div class="home-content content">
-            <div class="content__nav">
-                <!-- TODO: rename main-options -->
-                <ul class="main-options">
-                    <li class="main-options__item">
-                        <img src="./img/icons/book.png"
-                             style="height: 30px; margin: -15px 0px 0px 9px;"
-                             class="main-options__item__icon" />
-                        <div class="main-options__item__text">Create Course</div>
-                    </li>
-
-                    <li class="main-options__item">
-                        <img src="./img/icons/group.png"
-                             style="height: 28px; margin: -14px 0 0 0;"
-                             class="main-options__item__icon" />
-
-                        <div class="main-options__item__text">Invite Friends</div>
-                    </li>
-
-                    <li class="main-options__item">
-                        <img src="./img/icons/building.png"
-                             style="height: 28px; margin: -14px 0 0 6px;" 
-                             class="main-options__item__icon" />
-
-                        <div class="main-options__item__text">Change School</div>
-                    </li>
-                </ul>
-
-                <div class="divide"></div>
-
-                <section class="category my-courses">
-                    <div class="category__title">My Courses</div>
-                    <ul class="category__list">
-                        <li>CS 101</li>
-                        <li>CS 201</li>
-                        <li>MATH 247</li>
-                        <li>ENGL 210A</li>
-                    </ul>
-                </section>
-            </div>
-
-            <div class="home-content__courses">
-                <!-- TODO: turn this into a list -->
-                <div class="course-grid">
-                    <!-- TODO: Change these to list-items -->
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science but there is a bit more text here than before.</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science with some more text over here.</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science and a lot more text after this statemnt to see if it resized how I think it should.</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science. This is a good amount longer, I wonder how this one will resize.</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                    <div class="home-content__courses__grid__course course-info">
-                        <header class="course-info__header" style="background: #417505">CS 101</header>
-                        <div class="course-info__body">
-                            <div class="course-info__body__text">Introduction to Computer Science</div>
-                        </div>
-                        <footer class="course-info__footer">12 enrolled</footer>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+    <!-- HTML dynamically added via React js -->
 </body>
 
 </html>
