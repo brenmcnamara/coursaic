@@ -13,6 +13,11 @@
  *  - View namespace
  */
 
+/**
+ * Header
+ *
+ * The header for any page.
+ */
 View.Header = React.createClass({
     render: function() {
         return (
@@ -36,3 +41,20 @@ View.Header = React.createClass({
         );
     }
 });
+
+
+/**
+ * Header_Fill
+ *
+ * The filler that helps move elements outside
+ * of the header down so they are not hidden
+ * by the header.
+ */
+View.Header_Fill = React.createClass({
+    render: function() {
+        return (
+            <div className="header-offset"></div>
+        );
+    }
+});
+

@@ -27,6 +27,7 @@
 
     <!-- Views -->
     <script type="text/jsx" src="./views/header.js"></script>
+    <script type="text/jsx" src="./views/home.js"></script>
 
     <!-- Initialization -->
     <script type="text/javascript">
@@ -38,8 +39,8 @@
         /** @jsx React.DOM */
 
         React.renderComponent(
-            <View.Header />,
-            document.getElementsByClassName('main')[0]
+            <View.Root_Home />,
+            document.getElementsByTagName('body')[0]
         );
     </script>
 
@@ -47,7 +48,6 @@
 
 <body>
     <div class="main">
-        <div className="header-offset"></div>
         <div class="home-image"></div>
 
         <div class="home-search">
