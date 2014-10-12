@@ -64,11 +64,11 @@
                             user.save();
 
                             // Render after all the data has been fetched.
-                            View.render('home');
+                            Dispatcher.dispatch(Action("didLoad", {page: "home"}));
                         });
                     }
                     else {
-                        View.render('home');
+                        Dispatcher.dispatch(Action("didLoad", {page: "home"}));
                     }
 
                 },

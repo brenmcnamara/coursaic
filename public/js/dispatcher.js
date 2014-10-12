@@ -9,6 +9,8 @@
          maxlen:100
 */
 
+/*global Action, React */
+
 /**
  * The dispatcher that manages
  * traffic-control for actions.
@@ -66,7 +68,26 @@ var Dispatcher = (function() {
 
 
     dispatch = function(action) {
-        // TODO: Implement me!
+        // TODO: dispatcher should not directly touch
+        // react js. Should dispatch directly to stores.
+        // Change this to use stores to update the page.
+
+        if (stateMap.locked) {
+            throw new Error("Action is already propogating. Cannot call another action.");
+        }
+        stateMap.locked = true;
+
+        if (action.getName() === "didLoad") {
+            // Expecting this parameter to have
+            // a parameter specifying the page to
+            // render.
+            View.render(action.getParams().page);
+
+        }
+        // Not an action that is recognized.
+        // Reset the state before creating any error.
+        stateMap.locked = false;
+        throw new Error("Unrecognized action: " + action.getName());
     };
 
 
