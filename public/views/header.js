@@ -19,7 +19,10 @@
  * The header for any page.
  */
 View.Header = React.createClass({
+    
     render: function() {
+        var user = Parse.User.current();
+
         return (
             <header className="header">
                 <img className="header__logo" src="./img/logo-dark.png" />
@@ -31,15 +34,17 @@ View.Header = React.createClass({
                 </div>
 
                 <div className="main-nav__item--unclickable">
-                    Welcome, Brendan
+                    Welcome, {user.get('firstName')}
                 </div>
                 </nav>
                 <div className="profile-pic--circle header__profile-pic">
-                    <img src="./img/profilePic.png" />
+                    <img src= {user.get('photoUrl')} />
                 </div>
             </header>
         );
     }
+
+
 });
 
 
@@ -51,10 +56,13 @@ View.Header = React.createClass({
  * by the header.
  */
 View.Header_Fill = React.createClass({
+    
     render: function() {
         return (
             <div className="header-offset"></div>
         );
     }
+
+
 });
 

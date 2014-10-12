@@ -9,6 +9,7 @@
 
 /*
  * Dependencies:
+ *  - Parse
  *  - React
  *  - View namespace
  *  - Components in header.js
