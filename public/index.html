@@ -32,24 +32,10 @@
     <script type="text/javascript" src="./js/dispatcher.js"></script>
 
     <!-- Views -->
+    <script type="text/javascript" src="./views/main.js"></script>
     <script type="text/jsx" src="./views/widgets.js"></script>
     <script type="text/jsx" src="./views/header.js"></script>
     <script type="text/jsx" src="./views/home.js"></script>
-
-    <!-- Initialization -->
-    <script type="text/javascript">
-        // Setup global namespaces.
-        var View = {};
-    </script>
-    
-    <script type="text/jsx">
-        /** @jsx React.DOM */
-
-        React.renderComponent(
-            <View.Home_Root />,
-            document.getElementsByTagName('body')[0]
-        );
-    </script>
 
 </head>
 
@@ -68,10 +54,21 @@
             Parse.FacebookUtils.logIn(null, {
                 success: function(user) {
                     if (!user.existed()) {
-                      alert("User signed up and logged in through Facebook!");
-                    } else {
-                      alert("User logged in through Facebook!");
+                        // Get the user data from facebook.
+                        FB.api('/me', {fields: 'first_name,last_name,picture.type(square)'}, function(response) {
+                            user.set('firstName', response.first_name);
+                            user.set('lastName', response.last_name);
+                            user.set('photoUrl', response.picture.data.url)
+                            user.save();
+
+                            // Render after all the data has been fetched.
+                            View.render('home');
+                        });
                     }
+                    else {
+                        View.render('home');
+                    }
+
                 },
                 error: function(user, error) {
                     alert("User cancelled the Facebook login or did not fully authorize.");
