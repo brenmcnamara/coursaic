@@ -20,19 +20,6 @@ var Dispatcher = (function() {
     /* DECLARATION */
 
     /**
-     * Registers a store with the
-     * dispatcher, so that the store
-     * will get updated whenever an
-     * action is passed through the dispatcher.
-     *
-     * @method register
-     * @param store {Store, Array} The store object
-     * (or array of store objects) to register for
-     * actions.
-     */
-    var register,
-
-    /**
      * Dispatch an action through to the stores.
      *
      * @method dispatch
@@ -43,13 +30,13 @@ var Dispatcher = (function() {
      * already propogating an event. Only
      * one event can be dispatched at a time.
      */
-        dispatch,
+    var dispatch,
 
     /**
      * Contains all the state for the dispatcher.
      *
      * @private
-     * @property
+     * @property stateMap
      * @type Object
      */
         stateMap = {
@@ -62,11 +49,6 @@ var Dispatcher = (function() {
 
     /* IMPLEMENTATION */
 
-    register = function(store) {
-        // TODO: Implement me!
-    };
-
-
     dispatch = function(action) {
         // TODO: dispatcher should not directly touch
         // react js. Should dispatch directly to stores.
@@ -78,20 +60,21 @@ var Dispatcher = (function() {
         stateMap.locked = true;
 
         if (action.getName() === "didLoad") {
-            // Expecting this parameter to have
-            // a parameter specifying the page to
-            // render.
-            View.render(action.getParams().page);
-
+            // Login the user.
+            Store.Users.login();
         }
-        // Not an action that is recognized.
-        // Reset the state before creating any error.
+        else {
+            // Not an action that is recognized.
+            // Reset the state before creating any error.
+            stateMap.locked = false;
+            throw new Error("Unrecognized action: " + action.getName());
+        }
+        // Done with dispatching, so unlock.
         stateMap.locked = false;
-        throw new Error("Unrecognized action: " + action.getName());
     };
 
 
-    return {register: register, dispatch: dispatch};
+    return {dispatch: dispatch};
 
 }());
 

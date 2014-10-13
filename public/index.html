@@ -45,39 +45,14 @@
         Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
         window.fbAsyncInit = function() {
             Parse.FacebookUtils.init({ // this line replaces FB.init({
-                appId      : '275409559335896', // Facebook App ID
-                status     : true, // check Facebook Login status
-                cookie     : true, // enable cookies to allow Parse to access the session
-                xfbml      : true,
-                version    : 'v2.1'
+                    appId      : '275409559335896', // Facebook App ID
+                    status     : true, // check Facebook Login status
+                    cookie     : true, // enable cookies to allow Parse to access the session
+                    xfbml      : true,
+                    version    : 'v2.1'
             });
-            Parse.FacebookUtils.logIn(null, {
-                success: function(user) {
-                    if (!user.existed()) {
-                        // Get the user data from facebook.
-                        // Note: This information might change. Current implementation
-                        // assumes this never changes.
-                        FB.api('/me', {fields: 'first_name,last_name,picture.type(square)'}, function(response) {
-                            user.set('firstName', response.first_name);
-                            user.set('lastName', response.last_name);
-                            user.set('photoUrl', response.picture.data.url)
-                            user.save();
-
-                            // Render after all the data has been fetched.
-                            Dispatcher.dispatch(Action("didLoad", {page: "home"}));
-                        });
-                    }
-                    else {
-                        Dispatcher.dispatch(Action("didLoad", {page: "home"}));
-                    }
-
-                },
-                error: function(user, error) {
-                    alert("User cancelled the Facebook login or did not fully authorize.");
-                }
-            });
+            Dispatcher.dispatch(Action("didLoad"));
         };
-
         (function(d, s, id){
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {return;}

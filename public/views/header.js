@@ -21,6 +21,9 @@
 View.Header = React.createClass({
     
     render: function() {
+        // TODO: This info should be passed to the
+        // header. The header should not know about
+        // this.
         var user = Parse.User.current();
 
         return (
