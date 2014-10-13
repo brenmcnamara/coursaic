@@ -11,7 +11,7 @@
          maxlen:100
 */
 
-/*global React, Parse */
+/*global React, Parse, ViewModel */
 
 /**
  * Module containing all the store objects.
@@ -93,12 +93,16 @@ Store.Users = (function() {
                 user.save();
 
                 // Render after all the data has been fetched.
-                View.render("home");
+                View.render("home", {
+                    user: ViewModel.user(current())
+                });
             });
         }
         else {
             // Render after all the data has been fetched.
-            View.render("home");
+            View.render("home", {
+                user: ViewModel.user(current())
+            });
         }
     };
 
@@ -140,4 +144,7 @@ Store.Courses = (function() {
      * @method config
      */
     var config;
+
+
 }());
+

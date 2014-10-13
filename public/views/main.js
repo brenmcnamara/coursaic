@@ -11,9 +11,9 @@
  */
 View = {};
 
-View.render = function(key) {
+View.render = function(key, params) {
     if (key === 'home') {
-        React.renderComponent(View.Home_Root(),
+        React.renderComponent(View.Home_Root(params),
                               document.getElementsByTagName('body')[0]);
     }
 };

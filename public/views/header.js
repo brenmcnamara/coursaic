@@ -21,11 +21,6 @@
 View.Header = React.createClass({
     
     render: function() {
-        // TODO: This info should be passed to the
-        // header. The header should not know about
-        // this.
-        var user = Parse.User.current();
-
         return (
             <header className="header">
                 <img className="header__logo" src="./img/logo-dark.png" />
@@ -37,17 +32,15 @@ View.Header = React.createClass({
                 </div>
 
                 <div className="main-nav__item--unclickable">
-                    Welcome, {user.get('firstName')}
+                    Welcome, {this.props.user.firstName}
                 </div>
                 </nav>
                 <div className="profile-pic--circle header__profile-pic">
-                    <img src= {user.get('photoUrl')} />
+                    <img src= {this.props.user.photoUrl} />
                 </div>
             </header>
         );
     }
-
-
 });
 
 
@@ -65,7 +58,5 @@ View.Header_Fill = React.createClass({
             <div className="header-offset"></div>
         );
     }
-
-
 });
 

@@ -27,7 +27,7 @@ View.Home_Root = React.createClass({
     render: function() {
         return (
             <div className="main">
-                <View.Header />
+                <View.Header user={this.props.user} />
                 <View.Header_Fill />
                 <View.Home_Img />
                 <View.Search />
