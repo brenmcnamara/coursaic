@@ -8,6 +8,7 @@
     "lint": "./node_modules/jshint/bin/jshint ./public/js/*"
   },
   "dependencies": {
+    "ejs": "~0.7.1",
     "express": "3.4.7",
     "jasmine-node": "~1.14.5",
     "jshint": "~2.5.5",
