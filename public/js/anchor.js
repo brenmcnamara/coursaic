@@ -26,6 +26,14 @@ var Anchor = (function() {
     var href,
 
     /**
+     * @method path
+     * @return An array of strings, representing
+     *  that url path navigated. (i.e. coursaic.com/home/default
+     *  will give the result ["home", "default"])
+     */
+        path,
+
+    /**
      * Read the parameters of the
      * uri into a javascript object.
      * This method automatically converts
@@ -54,6 +62,15 @@ var Anchor = (function() {
     };
 
 
+    path = function() {
+        var pathname = window.location.pathname;
+        if (pathname[0] === '/') {
+            pathname = pathname.substr(1, pathname.length - 1);
+        }
+        return pathname.split('/');
+    };
+
+
     params = function() {
         // Match the parameters for the url.
         // Use "?" as equalivalent to having
@@ -75,7 +92,7 @@ var Anchor = (function() {
     };
     
 
-    return {href: href, params: params};
+    return {href: href, path: path, params: params};
 
 }());
 
