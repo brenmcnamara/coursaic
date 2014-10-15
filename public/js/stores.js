@@ -18,7 +18,11 @@
  *
  * @module Store
  */
-var Store = {};
+var Models = {}, Store = {};
+
+Models.School = Parse.Object.extend("School");
+
+Models.Course = Parse.Object.extend("Course");
 
 /**
  * @module Store
@@ -35,6 +39,9 @@ Store.Users = (function() {
      *
      * @private
      * @method _performLogin
+     *
+     * @param token {Dispatcher.Token} A dispatch token
+     * to notify of any actions that have been completed.
      */
     var _performLogin,
 
@@ -44,8 +51,12 @@ Store.Users = (function() {
      *
      * @private
      * @method _didLogin
+     *
      * @param user {Parse.User} The user that
-     *  loggedi in to the app.
+     * logged in to the app.
+     *
+     * @param token {Dispathcer.Token} A dispatch
+     * token to notify of any actions that have been completed.
      */
         _didLogin,
 
@@ -55,6 +66,9 @@ Store.Users = (function() {
      * nothing.
      *
      * @method login
+     *
+     * @param token {Dispatcher.Token} A dispatch
+     * token to notify of any actions that have been completed.
      */
         login,
     
@@ -66,19 +80,21 @@ Store.Users = (function() {
 
     /* IMPLEMENTATION */
 
-    _performLogin = function() {
+    _performLogin = function(token) {
         Parse.FacebookUtils.logIn(null, {
             success: function(user) {
                 _didLogin(user);
+                token.done();
             },
             error: function(user, error) {
                 alert("User cancelled the Facebook login or did not fully authorize.");
+                token.done();
             }
         });
     };
 
 
-    _didLogin = function(user) {
+    _didLogin = function(user, token) {
         var params;
 
         if (!user.existed()) {
@@ -96,6 +112,7 @@ Store.Users = (function() {
                 View.render("home", {
                     user: ViewModel.user(current())
                 });
+                token.done();
             });
         }
         else {
@@ -103,17 +120,18 @@ Store.Users = (function() {
             View.render("home", {
                 user: ViewModel.user(current())
             });
+            token.done();
         }
     };
 
 
-    login = function() {
+    login = function(token) {
         FB.getLoginStatus(function(response) {
             if (response.status === "connected") {
-                _didLogin(current());
+                _didLogin(current(), token);
             }
             else {
-                _performLogin();
+                _performLogin(token);
             }
         });  
     };
@@ -136,14 +154,6 @@ Store.Users = (function() {
 Store.Courses = (function() {
 
     /* DECLARATION */
-
-    /**
-     * Initial configuration for the
-     * courses store.
-     *
-     * @method config
-     */
-    var config;
 
 
 }());
