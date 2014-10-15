@@ -4,12 +4,13 @@
  */
 
 exports.root = function(req, res) {
-    res.redirect('/home');
+    res.redirect('/home/default');
 };
 
 
 exports.index = function(req, res) {
-  res.render('index');
+    console.log(JSON.stringify(req.params));
+    res.render('index');
 };
 
 

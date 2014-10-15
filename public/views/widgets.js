@@ -38,14 +38,14 @@ View.MainOptions = React.createClass({
         return (
             <ul className="main-options">
                 <li className="main-options__item">
-                    <img src="./img/icons/book.png"
+                    <img src="/img/icons/book.png"
                          style={createCourseStyle}
                          className="main-options__item__icon" />
                     <div className="main-options__item__text">Create Course</div>
                 </li>
 
                 <li className="main-options__item">
-                    <img src="./img/icons/group.png"
+                    <img src="/img/icons/group.png"
                          style={inviteFriendsStyle}
                          className="main-options__item__icon" />
 
@@ -53,7 +53,7 @@ View.MainOptions = React.createClass({
                 </li>
 
                 <li className="main-options__item">
-                    <img src="./img/icons/building.png"
+                    <img src="/img/icons/building.png"
                          style={changeSchoolStyle} 
                          className="main-options__item__icon" />
                     <div className="main-options__item__text">Change School</div>

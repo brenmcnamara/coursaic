@@ -27,7 +27,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.root);
-app.get('/home', routes.index);
+app.get('/home/:school', routes.index);
 app.get('/course', routes.course);
 
 

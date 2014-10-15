@@ -23,7 +23,7 @@ View.Header = React.createClass({
     render: function() {
         return (
             <header className="header">
-                <img className="header__logo" src="./img/logo-dark.png" />
+                <img className="header__logo" src="/img/logo-dark.png" />
                 <h1 className="header__title">Coursaic</h1>
                 <nav className="main-nav">
                     <div className="main-nav__item--clickable">

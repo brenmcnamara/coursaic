@@ -67,7 +67,7 @@ View.Search = React.createClass({
                            placeholder="Search for Vanderbilt Courses..."
                            className="search__input" />
 
-                    <img className="search__submit" src="./img/icons/search.png" />
+                    <img className="search__submit" src="/img/icons/search.png" />
                 </div>
             </div>
         );
