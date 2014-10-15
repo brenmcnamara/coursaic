@@ -86,10 +86,10 @@ Store.Users = (function() {
             // Note: This information might change. Current implementation
             // assumes this never changes.
             params = {fields: 'first_name,last_name,picture.type(square)'};
-            FB.api('/me', params, function(response) {
-                user.set('firstName', response.first_name);
-                user.set('lastName', response.last_name);
-                user.set('photoUrl', response.picture.data.url);
+            FB.api("/me", params, function(response) {
+                user.set("firstName", response.first_name);
+                user.set("lastName", response.last_name);
+                user.set("photoUrl", response.picture.data.url);
                 user.save();
 
                 // Render after all the data has been fetched.

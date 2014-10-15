@@ -17,3 +17,4 @@ View.render = function(key, params) {
                               document.getElementsByTagName('body')[0]);
     }
 };
+
