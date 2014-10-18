@@ -14,15 +14,98 @@
 /*global React, Parse, ViewModel */
 
 /**
- * Module containing all the store objects.
+ * The parent class for all stores.
  *
- * @module Store
+ * @class Store
+ * @constructor
  */
-var Models = {}, Store = {};
+var Store = function() {};
 
-Models.School = Parse.Object.extend("School");
+/**
+ * A table that maps callbacks to
+ *  events.
+ *
+ * @property _callbackHash
+ * @private
+ * @type Object
+ */
+Store.prototype._callbackHash = {};
 
-Models.Course = Parse.Object.extend("Course");
+/**
+ * Add an event listener to a store.
+ *
+ * @method addListender
+ *
+ * @param event {Event} An event that is being
+ *  propogated by the store.
+ *
+ * @param method {function} The method to call
+ *  when the event is emitted.
+ */
+Store.prototype.addListener = function(event, method) {
+    if (this._callbackHash[event.name]) {
+        // Add the method to the event.
+        this._callbackHash[event.name].push(method);
+    }
+    else {
+        this._callbackHash[event.name] = [method];
+    }
+};
+
+
+/**
+ * Remove an event listener for a given method. If
+ * the method is not registered for a change event.
+ * If a method is registered to an event more
+ * than once, this will remove only a single instance
+ * of the method.
+ *
+ * @throw If no method is registered for the event, this
+ *  will throw an error.
+ *
+ * @method event {Event} The event to remove the listener
+ *  for.
+ *
+ * @method method {function} The method that is registered
+ *  for the event.
+ */
+Store.prototype.removeListener = function(event, method) {
+    var i, n,
+        callbacks = this._callbackHash[event.name];
+
+    if (callbacks || callbacks.length === 0) {
+        for (i = 0, n = callbacks.length; i < n; ++i) {
+            if (method === callbacks[i]) {
+                // Replace this method with the method
+                // in the back of the list.
+                callbacks[i] = callbacks[n - 1];
+
+                // reduce the size of the array by 1.
+                callbacks.pop();
+            }
+        }
+    }
+    throw new Error("Method " + method + " is not registered for event " + event.name + ".");
+};
+
+
+/**
+ * Emit an event on a store and call all the callbacks
+ * associated with that event.
+ *
+ * @method emit
+ *
+ * @param event {Event} The event to emit from
+ *  the store.
+ */
+Store.prototype.emit = function(event) {
+    (this._callbackHash[event.name] || []).forEach(function (method) {
+        method(event);
+    });
+};
+
+
+// TODO: Delete everything below this.
 
 /**
  * @module Store
