@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * home.js
+ * home.react.js
  *
  * All React Components targeted
  * specifically for the home page.
@@ -34,7 +34,18 @@ View.Home_Root = React.createClass({
                 <View.Home_Content />
             </div>
         );
+    },
+
+
+    componentDidMount: function() {
+
+    },
+
+
+    componentWillUnmount: function() {
+
     }
+
 });
 
 

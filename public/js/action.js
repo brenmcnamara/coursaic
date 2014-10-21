@@ -13,49 +13,46 @@
          maxlen:100
 */
 
+/*global Dispather */
+
+
+var Action = {};
+
+Action.Name = {
+    // The page just loaded
+    DID_LOAD: 'DID_LOAD'
+};
+
 /**
- * Actions that are communicated between
- * the views and dispatcher.
+ * Register the actions with the dispatcher.
+ * This will reset the registered actions each
+ * time this is called. This method must be called
+ * before using Action.send.
  *
- * @class Action
- * @constructor
- *
- * @param name {String} The name of the action
- *
- * @param params {Object} Any parameters that are
- *  used to specify the action. These parameters
- *  are interpretted by the dispathcer.
+ * @method register
  */
-var Action = function(name, params) {
-    if (!(this instanceof Action)) {
-        return new Action(name, params);
+Action.register = function() {
+    var prop;
+    for (prop in Action.Name) {
+        if (Action.Name.hasOwnProperty(prop) && typeof prop === 'string') {
+            Dispatcher.register(Action.Name[prop]);
+        }
     }
-    this._name = name;
-    this._params = params || null;
 };
 
 
 /**
- * Getter for the name of the action.
+ * Send an action through the dispatcher.
  *
- * @method getName
- * @return {String} The name of the action.
- */
-Action.prototype.getName = function() {
-    return this._name;
-};
-
-
-/**
- * Getter for the parameters of
- * the action.
+ * @method send
  *
- * @method getParams
- * @return {Object} The parameters of the
- *  action, or null if there are no
+ * @param name {String} The name of the
+ *  action.
+ *
+ * @param payload {Object} The action
  *  parameters.
  */
-Action.prototype.getParams = function() {
-    return this._params;
+Action.send = function(name, payload) {
+    Dispatcher.dispatch(name, payload);
 };
 

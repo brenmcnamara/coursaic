@@ -20,22 +20,27 @@
     <link rel="stylesheet" type="text/css" href="/css/main.home.css" />
 
     <!-- Third-Party Scripts -->
+    <script type="text/javascript" src="https://www.promisejs.org/polyfills/promise-6.0.0.min.js"></script>
     <script type="text/javascript" src="/lib/parse/parse.1.3.0.js"></script>
     <script type="text/javascript" src="/lib/react/react.js"></script>
     <script type="text/javascript" src="/lib/react/JSXTransformer.js"></script>
 
     <!-- My Scripts -->
+    <script type="text/javascript" src="/js/event.js"></script>
     <script type="text/javascript" src="/js/anchor.js"></script>
-    <script type="text/javascript" src="/js/action.js"></script>
     <script type="text/javascript" src="/js/viewmodels.js"></script>
-    <script type="text/javascript" src="/js/stores.js"></script>
-    <script type="text/javascript" src="/js/dispatcher.js"></script>
 
-    <!-- Views -->
-    <script type="text/javascript" src="/views/main.js"></script>
-    <script type="text/jsx" src="/views/widgets.js"></script>
-    <script type="text/jsx" src="/views/header.js"></script>
-    <script type="text/jsx" src="/views/home.js"></script>
+    <script type="text/javascript" src="/js/Stores/store.js"></script>
+    <script type="text/javascript" src="/js/Stores/userstore.js"></script>
+
+    <script type="text/javascript" src="/js/dispatcher.js"></script>
+    <script type="text/javascript" src="/js/action.js"></script>
+    
+    <!-- React Components -->
+    <script type="text/javascript" src="/components/main.react.js"></script>
+    <script type="text/jsx" src="/components/widgets.react.js"></script>
+    <script type="text/jsx" src="/components/header.react.js"></script>
+    <script type="text/jsx" src="/components/home.react.js"></script>
 
 </head>
 
@@ -51,7 +56,8 @@
                     xfbml      : true,
                     version    : 'v2.1'
             });
-            Dispatcher.dispatch(Action("didLoad"));
+            Action.register();
+            Action.send(Action.Name.DID_LOAD)
         };
         (function(d, s, id){
             var js, fjs = d.getElementsByTagName(s)[0];

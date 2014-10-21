@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * header.js
+ * header.react.js
  *
  * All react components related to
  * the header.
@@ -21,6 +21,8 @@
 View.Header = React.createClass({
     
     render: function() {
+        var user = UserStore.current();
+
         return (
             <header className="header">
                 <img className="header__logo" src="/img/logo-dark.png" />
@@ -32,11 +34,11 @@ View.Header = React.createClass({
                 </div>
 
                 <div className="main-nav__item--unclickable">
-                    Welcome, {this.props.user.firstName}
+                    Welcome, {user.get('firstName')}
                 </div>
                 </nav>
                 <div className="profile-pic--circle header__profile-pic">
-                    <img src= {this.props.user.photoUrl} />
+                    <img src= {user.get('photoUrl')} />
                 </div>
             </header>
         );

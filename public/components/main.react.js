@@ -1,5 +1,5 @@
 /**
- * main.js
+ * main.react.js
  *
  * The file that sets up the View namespace
  * and module.

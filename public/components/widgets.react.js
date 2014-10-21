@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * widgets.js
+ * widgets.react.js
  *
  * All elements that are supported across
  * different web pages.

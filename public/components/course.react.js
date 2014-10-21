@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * home.js
+ * course.react.js
  *
  * All React Components targeted
  * specifically for the home page.

@@ -9,7 +9,7 @@
          maxlen:100
 */
 
-/*global Action, Anchor, React */
+/*global Action, Anchor, UserStore */
 
 /**
  * The dispatcher that manages
@@ -20,31 +20,36 @@ var Dispatcher = (function() {
     /* DECLARATION */
 
     /**
-     * Handles asynchonous calls
-     * and provides a mechanism for stores
-     * to register that any asynchronous
-     * (or synchonous) process has been
-     * finished.
+     * Register an action with the store. If an action
+     * was already registered with the store, this will
+     * clear any state that was previously registered.
+     * All actions must be registered before they are
+     * dispatched.
      *
-     * @constructor Token
-     * @class
-     * @param count {number} The number of completions
-     * necessary before the dispatcher is notified
-     * that an action has been completed.
+     * @method register
+     *
+     * @param name {String} The name of the action to
+     *  register.
      */
-    // TODO: Add error-handling in the token as well.
-    var Token,
+    var register,
 
     /**
      * Dispatch an action through to the stores.
      *
      * @method dispatch
-     * @param action {Action} The action to
-     * dispatch.
      *
-     * @throw An error if the dispatcher is
-     * already propogating an event. Only
-     * one event can be dispatched at a time.
+     * @param name {name} The name of the action
+     *  to dispatch.
+     *
+     * @param payload {Object} The parameters associated
+     *  with the action.
+     *
+     * @throw If the dispatcher is currently
+     *  dispatching another action (only 1 action can be
+     *  propogated at a time).
+     *
+     * @throw If the action has not yet been
+     *  registered.
      */
         dispatch,
 
@@ -61,84 +66,84 @@ var Dispatcher = (function() {
             // event. Only 1 event can fire
             // at a time.
             locked: false,
+
+            // A mapping of actions to callbacks.
+            // When an action is dispatched,
+            // all the callbacks for that action
+            // are executed.
+            actionHash: {},
+
+            // A reference to each store
+            // for the dispatcher to use
+            // and iterate. Stores can also
+            // be referenced directly, but
+            // these regerences can be used
+            // for performing generic algorithms
+            // over each store.
+            stores: [UserStore]
+            
         };
 
     /* IMPLEMENTATION */
 
-    /* TOKEN CLASS */
+    register = function(name) {
+        // Go through the stores and register
+        // action with each store.
+        var callbacks = stateMap.stores.reduce(function(memo, store) {
+            var callback = store.actionHandler(name);
+            if (callback) {
+                memo.push(callback);
+            }
+            return memo;
+        }, []);
 
-    Token = function(count) {
-        this._count = count;
-        this._current = 0;
+        stateMap.actionHash[name] = callbacks;
     };
 
 
-    /**
-     * Register a callback for when the
-     * token is done executing.
-     *
-     * @class Token
-     * @method onDone
-     */
-    Token.prototype.onDone = function(callback) {
-        this._callback = callback;
-    };
+    dispatch = function(name, payload) {
+        // Get the callbacks for the action.
+        var callbacks = stateMap.actionHash[name],
+            promises;
 
-
-    /**
-     * Notify that an operation
-     * has finished executing.
-     *
-     * @class Token
-     * @method done
-     */
-    Token.prototype.done = function() {
-        this._current = (this._current + 1);
-        if (this._count === this._current) {
-            this._callback();
+        if (!callbacks) {
+            throw new Error("Action " + name + " must be registered.");
         }
-        else if (this._count < this._current) {
-            throw new Error("Token has notified completion too many times.");
-        }
-    };
 
-
-    dispatch = function(action) {
-        // TODO: Handle errors that are thrown
-        // by any of the stores that get called.
-        var token,
-            tokenCallback = function() {
-                console.log("Hello world");
-                stateMap.locked = false;
-            };
-
-        if (stateMap.locked) {
-            throw new Error("Action is already propogating. Cannot call another action.");
-        }
+        // Lock the dispatcher before doing anything.
         stateMap.locked = true;
 
+        // Get all the promises that are produced
+        // by the functions.
+        if (callbacks.length > 0) {
+            promises = callbacks.reduce(function(memo, callback) {
+                memo.push(callback(payload));
+                return memo;
+            }, []);
 
-        if (action.getName() === "didLoad") {
-
-            token = new Token(1);
-            // Register callback before propogating any
-            // stores since some of the actions may
-            // be synchonous.
-            token.onDone(tokenCallback);
-            // Login the user.
-            Store.Users.login(token);
+            Promise.all(promises).then(
+                // Success callback
+                function() {
+                    // TODO: Move render call to a better place.
+                    // Note: This is the only time that render should
+                    // be called explicitly because the view has not yet
+                    // been mounted.
+                    View.render('home');
+                    stateMap.locked = false;
+                },
+                // Failure callback
+                function(err) {
+                    stateMap.locked =  false;
+                    throw err;
+                });
         }
         else {
-            // Not an action that is recognized.
-            // Reset the state before creating any error.
             stateMap.locked = false;
-            throw new Error("Unrecognized action: " + action.getName());
         }
-
     };
 
 
-    return {Token: Token, dispatch: dispatch};
+    return {register: register, dispatch: dispatch};
 
 }());
 

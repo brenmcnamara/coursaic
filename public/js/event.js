@@ -8,7 +8,7 @@
  * An event that is propogated through stores
  * and controller-views.
  *
- * @class Event
+ * @class CAEvent
  * @constructor
  *
  * @param name {String} The name of the event.
@@ -21,7 +21,7 @@
  * object. The parameters should never contain a
  * "name" property.
  */
-var Event = function(name, params) {
+var CAEvent = function(name, params) {
     var prop;
     this.name = name;
     for (prop in params) {
@@ -40,5 +40,6 @@ var Event = function(name, params) {
  * @property Name
  * @type Object
  */
-Event.Name = {};
-
+CAEvent.Name = {
+    DID_LOAD: 'DID_LOAD'
+};
