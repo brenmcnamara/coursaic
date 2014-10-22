@@ -24,13 +24,16 @@
  * this element.
  */
 View.Home_Root = React.createClass({
+
     render: function() {
+        var school = ConfigStore.school();
+
         return (
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
                 <View.Home_Img />
-                <View.Search />
+                <View.Search alias={school.get('alias')} />
                 <View.Home_Content />
             </div>
         );
@@ -61,11 +64,12 @@ View.Home_Img = React.createClass({
  */
 View.Search = React.createClass({
     render: function() {
+        var searchText = "Search for " + this.props.alias + " classes...";
         return (
             <div className="home-search">
                 <div className="search">
                     <input type="text"
-                           placeholder="Search for Vanderbilt Courses..."
+                           placeholder={searchText}
                            className="search__input" />
 
                     <img className="search__submit" src="/img/icons/search.png" />
