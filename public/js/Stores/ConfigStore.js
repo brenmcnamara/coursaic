@@ -38,29 +38,51 @@ var ConfigStore = (function() {
      *  called when the post-login process has completed.
      */
     StoreClass.prototype._didLogin = function(user) {
-        return new Promise(function(resolved, rejected) {
-            var params;
-            if (!user.existed()) {
-                // Get the user data from facebook.
-                // Note: This information might change. Current implementation
-                // assumes this never changes.
-                params = {fields: 'first_name,last_name,picture.type(square)'};
-                // TODO: Make sure to handle errors coming back from
-                // the facebook api.
-                FB.api("/me", params, function(response) {
-                    user.set("firstName", response.first_name);
-                    user.set("lastName", response.last_name);
-                    user.set("photoUrl", response.picture.data.url);
-                    // Save to the parse database. Response of save
-                    // is not being reaped, might want to change this later.
-                    user.save();
+
+        
+        var 
+            // Facebook promise will perform any operations needed
+            // with the facebook api.
+            fbPromise = new Promise(function(resolved, rejected) {
+                var params;
+                if (!user.existed()) {
+                    // Get the user data from facebook.
+                    // Note: This information might change. Current implementation
+                    // assumes this never changes.
+                    params = {fields: 'first_name,last_name,picture.type(square)'};
+                    // TODO: Make sure to handle errors coming back from
+                    // the facebook api.
+                    FB.api("/me", params, function(response) {
+                        user.set("firstName", response.first_name);
+                        user.set("lastName", response.last_name);
+                        user.set("photoUrl", response.picture.data.url);
+                        // Save to the parse database. Response of save
+                        // is not being reaped, might want to change this later.
+                        user.save();
+                        resolved();
+                    });
+                }
+                else {
                     resolved();
+                }
+            }),
+
+            // Fetch school promise will get the school for the indicated
+            // user from the parse server.
+            fetchSchoolPromise = new Promise(function(resolved, rejected) {
+                user.get('school').fetch({
+                    success: function(model, response, options) {
+                        resolved();
+                    },
+
+                    error: function(model, response, options) {
+                        throw new Error("The school of the user could not be fetched.");
+                    }
                 });
-            }
-            else {
-                resolved();
-            }
-        });
+            });
+
+        // Combine all the promises into one promise.
+        return Promise.all([fbPromise, fetchSchoolPromise]);
     };
 
 
@@ -76,6 +98,7 @@ var ConfigStore = (function() {
         return new Promise(function(resolved, rejected) {
             // Callback after the user has logged in successfully.
             var onDidLoginSuccess = function() {
+                console.log();
                     self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {pageKey: self.pageKey()}));
                     resolved();
                 },
@@ -131,7 +154,9 @@ var ConfigStore = (function() {
      *  being represented on the page.
      */
     StoreClass.prototype.school = function() {
-        return null;
+        // Note: This won't be the case when the page
+        // is not the normal page key.
+        return this.user().get('school');
     };
 
 
@@ -166,7 +191,9 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.pageKey = function() {
         // Currently, on the home page is being represented.
-        // Change this when adding other pages.
+        // Change this when adding other pages. The page key will
+        // have to be provided by the application and used to
+        // configure other parts of this store.
         return 'home';
     };
 
