@@ -124,11 +124,6 @@ var Dispatcher = (function() {
             Promise.all(promises).then(
                 // Success callback
                 function() {
-                    // TODO: Move render call to a better place.
-                    // Note: This is the only time that render should
-                    // be called explicitly because the view has not yet
-                    // been mounted.
-                    View.render('home');
                     stateMap.locked = false;
                 },
                 // Failure callback

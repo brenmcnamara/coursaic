@@ -26,6 +26,13 @@ View.render = function(key, params) {
  * Called when the page is first loaded.
  */
 View._onLoad = function(event) {
-    // Bind events here.
+    if (!event.pageKey) {
+        throw new Error("_onLoad event must include a pageKey.");
+    }
+    View.render(event.pageKey);
 };
+
+ConfigStore.addListener(CAEvent.Name.DID_LOAD, View._onLoad);
+
+
 

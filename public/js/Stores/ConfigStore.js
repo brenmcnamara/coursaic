@@ -9,7 +9,7 @@
          maxlen:100
 */
 
-/*global React, Parse, Action, CAEvent */
+/*global FB, Parse, Action, CAEvent */
 
 /**
  * Contains all the major state for the current
@@ -27,6 +27,44 @@ var ConfigStore = (function() {
 
     
     /**
+     * Perform any operations after the user has been
+     * logged in.
+     *
+     * @method _didLogin
+     *
+     * @param user {Parse.User} The user that was logged in.
+     *
+     * @return {Promise} A promise object that gets
+     *  called when the post-login process has completed.
+     */
+    StoreClass.prototype._didLogin = function(user) {
+        return new Promise(function(resolved, rejected) {
+            var params;
+            if (!user.existed()) {
+                // Get the user data from facebook.
+                // Note: This information might change. Current implementation
+                // assumes this never changes.
+                params = {fields: 'first_name,last_name,picture.type(square)'};
+                // TODO: Make sure to handle errors coming back from
+                // the facebook api.
+                FB.api("/me", params, function(response) {
+                    user.set("firstName", response.first_name);
+                    user.set("lastName", response.last_name);
+                    user.set("photoUrl", response.picture.data.url);
+                    // Save to the parse database. Response of save
+                    // is not being reaped, might want to change this later.
+                    user.save();
+                    resolved();
+                });
+            }
+            else {
+                resolved();
+            }
+        });
+    };
+
+
+    /**
      * @method _login
      *
      * @return {Promise} A promise object that gets called
@@ -34,11 +72,39 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype._login = function() {
         var self = this;
+
         return new Promise(function(resolved, rejected) {
-            // TODO: Perform the login operation here.
-            console.log("Loggin in the user!");
-            self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {}));
-            resolved();
+            // Callback after the user has logged in successfully.
+            var onDidLoginSuccess = function() {
+                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {pageKey: self.pageKey()}));
+                    resolved();
+                },
+
+                onDidLoginFailure = function(error) {
+                    throw error;
+                };
+
+            // First check if the user connection status with Facebook.
+            // Check if they are logged in to Facebook, not just Parse.
+            FB.getLoginStatus(function(response) {
+                if (response.status === "connected") {
+                    // They are logged in to Facebook.
+                    self._didLogin(self.user()).then(onDidLoginSuccess, onDidLoginFailure);
+                }
+                else {
+                    // They are NOT logged in to Facebook.
+
+                    // User is not logged in. Perform the login operation.
+                    Parse.FacebookUtils.logIn(null, {
+                        success: function(user) {
+                            self._didLogin(self.user()).then(onDidLoginSuccess, onDidLoginFailure);
+                        },
+                        error: function(user, error) {
+                            throw error;    
+                        }
+                    });
+                }
+            }); 
         });
     };
 
@@ -48,8 +114,7 @@ var ConfigStore = (function() {
         switch (name) {
             case Action.Name.PERFORM_LOAD:
                 return function(payload) {
-                    // Get the promise for the login
-                    // process.
+                    // Get the promise for the login process.
                     return self._login();
                 };
             default:
@@ -107,82 +172,6 @@ var ConfigStore = (function() {
 
 
     return new StoreClass();
-}());
-
-
-// TODO: Delete everything below here.
-/*
-Store.Users = (function() {
-    var _performLogin,
-        _didLogin,
-        login,
-        current;
-
-    _performLogin = function(token) {
-        Parse.FacebookUtils.logIn(null, {
-            success: function(user) {
-                _didLogin(user);
-                token.done();
-            },
-            error: function(user, error) {
-                alert("User cancelled the Facebook login or did not fully authorize.");
-                token.done();
-            }
-        });
-    };
-
-
-    _didLogin = function(user, token) {
-        var params;
-
-        if (!user.existed()) {
-            // Get the user data from facebook.
-            // Note: This information might change. Current implementation
-            // assumes this never changes.
-            params = {fields: 'first_name,last_name,picture.type(square)'};
-            FB.api("/me", params, function(response) {
-                user.set("firstName", response.first_name);
-                user.set("lastName", response.last_name);
-                user.set("photoUrl", response.picture.data.url);
-                user.save();
-
-                // Render after all the data has been fetched.
-                View.render("home", {
-                    user: ViewModel.user(current())
-                });
-                token.done();
-            });
-        }
-        else {
-            // Render after all the data has been fetched.
-            View.render("home", {
-                user: ViewModel.user(current())
-            });
-            token.done();
-        }
-    };
-
-
-    login = function(token) {
-        FB.getLoginStatus(function(response) {
-            if (response.status === "connected") {
-                _didLogin(current(), token);
-            }
-            else {
-                _performLogin(token);
-            }
-        });  
-    };
-
-
-    current = function() {
-        return Parse.User.current();
-    };
-
-
-    return {login: login, current: current};
 
 }());
-*/
-
 
