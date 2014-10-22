@@ -21,7 +21,7 @@
 View.Header = React.createClass({
     
     render: function() {
-        var user = UserStore.current();
+        var user = ConfigStore.user();
 
         return (
             <header className="header">

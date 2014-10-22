@@ -1,7 +1,5 @@
 /**
- * userstore.js
- *
- * The store for the user.
+ * ConfigStore.js
  */
 
 /*jslint browser:true, continue:false, devel:true,
@@ -11,19 +9,44 @@
          maxlen:100
 */
 
-/*global StoreBase, React, Parse, ViewModel, Action */
+/*global React, Parse, Action, CAEvent */
 
-var UserStore = (function() {
+/**
+ * Contains all the major state for the current
+ * page that defines the type of page it is, and
+ * the major attributes of the page.
+ *
+ * @module Store
+ * @class ConfigStore
+ */
+var ConfigStore = (function() {
 
-    var StoreClass = function() {},
-        stateMap = {};
+    var StoreClass = function() {};
 
-    StoreClass.prototype = StoreBase;
+    StoreClass.prototype = new Store();
+
+    
+    /**
+     * @method _login
+     *
+     * @return {Promise} A promise object that gets called
+     *  when the login process has completed.
+     */
+    StoreClass.prototype._login = function() {
+        var self = this;
+        return new Promise(function(resolved, rejected) {
+            // TODO: Perform the login operation here.
+            console.log("Loggin in the user!");
+            self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {}));
+            resolved();
+        });
+    };
+
 
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
-            case Action.Name.DID_LOAD:
+            case Action.Name.PERFORM_LOAD:
                 return function(payload) {
                     // Get the promise for the login
                     // process.
@@ -36,40 +59,56 @@ var UserStore = (function() {
 
 
     /**
-     * Perform the login operation for the user for
-     * the current user. This method will do nothing if 
-     * the user is already logged in.
+     * @method school
      *
-     * @private 
-     * @method _login
-     *
-     * @return {Promise} A promise that will be
-     *  executed when the login procedure has been
-     *  completed.
+     * @return {Parse.Object} The school that is currently
+     *  being represented on the page. Null if no school is
+     *  being represented on the page.
      */
-    StoreClass.prototype._login = function() {
-        var self = this;
-        return new Promise(function(resolved, rejected) {
-            // TODO: Perform the login operation here.
-            self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {}));
-            resolved();
-        });
+    StoreClass.prototype.school = function() {
+        return null;
     };
 
 
     /**
-     * @method current
-     * @return {Parse.User} The current user.
+     * @method user
+     *
+     * @return {Parse.User} The user that is being represented
+     *  on the current page. Null if no user is being represented
+     *  on the page.
      */
-     StoreClass.prototype.current = function() {
-        // TODO: Access this locally.
-        return Parse.User.current();
-     };
+    StoreClass.prototype.user = function() {
+        return Parse.User.current() || null;
+    };
+
+
+    /**
+     * @method exam
+     *
+     * @return {Parse.Object} The exam that is being represented
+     *  on the current page. Null if no exam is being represented
+     *  on the page.
+     */
+    StoreClass.prototype.exam = function() {
+        return null;
+    };
+
+
+    /**
+     * @method pageKey
+     *
+     * @return {String} A key representing the current page.
+     */
+    StoreClass.prototype.pageKey = function() {
+        // Currently, on the home page is being represented.
+        // Change this when adding other pages.
+        return 'home';
+    };
 
 
     return new StoreClass();
-
 }());
+
 
 // TODO: Delete everything below here.
 /*
@@ -145,3 +184,5 @@ Store.Users = (function() {
 
 }());
 */
+
+

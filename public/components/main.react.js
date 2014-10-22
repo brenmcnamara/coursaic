@@ -18,3 +18,14 @@ View.render = function(key, params) {
     }
 };
 
+/**
+ * @static
+ * @private
+ * @method _onLoad
+ *
+ * Called when the page is first loaded.
+ */
+View._onLoad = function(event) {
+    // Bind events here.
+};
+

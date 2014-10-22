@@ -20,7 +20,7 @@ var Action = {};
 
 Action.Name = {
     // The page just loaded
-    DID_LOAD: 'DID_LOAD'
+    PERFORM_LOAD: 'PERFORM_LOAD'
 };
 
 /**
