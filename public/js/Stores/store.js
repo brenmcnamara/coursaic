@@ -19,8 +19,7 @@
  * @class Store
  * @constructor
  */
-var Store = function() {},
-    StoreBase = new Store();
+var Store = function() {};
 
 /**
  * A table that maps callbacks to
