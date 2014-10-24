@@ -45,8 +45,8 @@ describe("Date Formatter", function() {
             // Date is 29.5 minutes before the current date.
             date = new Date(currentDate.getTime() - (1000 * 60 * 29.6));
 
-        expect(Formatter.Date.format(date)).toBe("30 mintutes ago");
-        expect(Formatter.Date.format(date, {preposition: true})).toBe("30 mintutes ago");
+        expect(Formatter.Date.format(date)).toBe("30 minutes ago");
+        expect(Formatter.Date.format(date, {preposition: true})).toBe("30 minutes ago");
     });
 
     
@@ -131,7 +131,7 @@ describe("Date Formatter", function() {
 
 
     it("should have the absolute date for any date more than a week ago", function() {
-        var date = new Date(2013, 3, 2);
+        var date = new Date(2013, 2, 2);
 
         expect(Formatter.Date.format(date)).toBe("March 2, 2013");
         expect(Formatter.Date.format(date, {preposition: true})).toBe("on March 2, 2013");
@@ -139,31 +139,31 @@ describe("Date Formatter", function() {
 
 
     it("should have the correct month abbreviations for an absolute date.", function() {
-        var january = new Date(2013, 1, 1),
-            february = new Date(2013, 2, 1),
-            march = new Date(2013, 3, 1),
-            april = new Date(2013, 4, 1),
-            may = new Date(2013, 5, 1),
-            june = new Date(2013, 6, 1),
-            july = new Date(2013, 7, 1),
-            august = new Date(2013, 8, 1),
-            september = new Date(2013, 9, 1),
-            october = new Date(2013, 10, 1),
-            november = new Date(2013, 11, 1),
-            december = new Date(2013, 12, 1);
+        var january = new Date(2013, 0, 1),
+            february = new Date(2013, 1, 1),
+            march = new Date(2013, 2, 1),
+            april = new Date(2013, 3, 1),
+            may = new Date(2013, 4, 1),
+            june = new Date(2013, 5, 1),
+            july = new Date(2013, 6, 1),
+            august = new Date(2013, 7, 1),
+            september = new Date(2013, 8, 1),
+            october = new Date(2013, 9, 1),
+            november = new Date(2013, 10, 1),
+            december = new Date(2013, 11, 1);
 
-        expect(Formatter.Date.format(january)).toMatch(/$Jan./);
-        expect(Formatter.Date.format(february)).toMatch(/$Feb./);
-        expect(Formatter.Date.format(march)).toMatch(/$March/);
-        expect(Formatter.Date.format(april)).toMatch(/$April/);
-        expect(Formatter.Date.format(may)).toMatch(/$May/);
-        expect(Formatter.Date.format(june)).toMatch(/$June/);
-        expect(Formatter.Date.format(july)).toMatch(/$July/);
-        expect(Formatter.Date.format(august)).toMatch(/$Aug./);
-        expect(Formatter.Date.format(september)).toMatch(/$Sept./);
-        expect(Formatter.Date.format(october)).toMatch(/$Oct./);
-        expect(Formatter.Date.format(november)).toMatch(/$Nov./);
-        expect(Formatter.Date.format(december)).toMatch(/$Dec./);
+        expect(Formatter.Date.format(january)).toMatch(/^Jan\./);
+        expect(Formatter.Date.format(february)).toMatch(/^Feb\./);
+        expect(Formatter.Date.format(march)).toMatch(/^March/);
+        expect(Formatter.Date.format(april)).toMatch(/^April/);
+        expect(Formatter.Date.format(may)).toMatch(/^May/);
+        expect(Formatter.Date.format(june)).toMatch(/^June/);
+        expect(Formatter.Date.format(july)).toMatch(/^July/);
+        expect(Formatter.Date.format(august)).toMatch(/^Aug\./);
+        expect(Formatter.Date.format(september)).toMatch(/^Sept\./);
+        expect(Formatter.Date.format(october)).toMatch(/^Oct\./);
+        expect(Formatter.Date.format(november)).toMatch(/^Nov\./);
+        expect(Formatter.Date.format(december)).toMatch(/^Dec\./);
     });
 
 

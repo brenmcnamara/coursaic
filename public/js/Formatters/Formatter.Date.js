@@ -52,9 +52,129 @@ Formatter.Date = (function() {
 
     /* Implementations */
 
-    format = function(date, options) {
-        // TODO: Implement me!
+
+    Date.daysBetween = function( date1, date2 ) {
+      //Get 1 day in milliseconds
+      var one_day=1000*60*60*24;
+
+      // Convert both dates to milliseconds
+      var date1_ms = date1.getTime();
+      var date2_ms = date2.getTime();
+
+      // Calculate the difference in milliseconds
+      var difference_ms = date2_ms - date1_ms;
+      //take out milliseconds
+      difference_ms = difference_ms/1000;
+      var seconds = Math.floor(difference_ms % 60);
+      difference_ms = difference_ms/60; 
+      var minutes = Math.floor(difference_ms % 60);
+      difference_ms = difference_ms/60; 
+      var hours = Math.floor(difference_ms % 24);  
+      var days = Math.floor(difference_ms/24);
+      
+      return [days, hours, minutes, seconds];
     };
+
+
+
+    format = function(date, options) {
+
+        var month = [];
+        month[0] = "Jan.";
+        month[1] = "Feb.";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "Aug.";
+        month[8] = "Sept.";
+        month[9] = "Oct.";
+        month[10] = "Nov.";
+        month[11] = "Dec.";
+
+        var dhms_difference = Date.daysBetween(date,new Date());
+        var diffDays = dhms_difference[0];
+        var diffHours = dhms_difference[1];
+        var diffMinutes = dhms_difference[2];
+        var diffSeconds = dhms_difference[3];
+
+        options = (options || {});
+
+        if(!options.preposition){
+            options.preposition = false;
+        }
+
+        //7 days ago exactly will return an exact formatted date
+        var returnScript = "";
+        if(diffDays >= 7){
+            if(options.preposition){
+                returnScript += "on ";
+            }
+            returnScript += month[date.getMonth()] + " " + date.getDate()
+             + ", " + date.getFullYear().toString();
+        }
+        else if(diffDays >= 1){
+            if(diffHours >= 12){
+              if(diffDays === 6){
+                returnScript  += "1 week ago";
+              }
+              else{
+                  returnScript += "" + (diffDays + 1).toString() + " days ago";
+              }
+            }
+            else if(diffDays === 1){
+                returnScript += "yesterday";
+            }
+            else {
+                returnScript += "" + diffDays.toString() + " days ago";
+            }
+        }
+        else if(diffDays === 0){
+            if(diffHours !== 23 && diffHours !== 0){
+                if(diffMinutes > 30){
+                    returnScript += "" + (diffHours + 1).toString() + " hours ago";
+                }
+                else{
+                    returnScript += "" + diffHours.toString() + " hours ago";
+                }
+            }
+            else if(diffHours === 23){
+                if(diffMinutes > 30){
+                    returnScript += "yesterday";
+                }
+                else{
+                    returnScript += "" + diffHours.toString() + " hours ago";
+                }
+            }
+            else if(diffMinutes !== 59 && diffMinutes !== 0){
+                if(diffSeconds > 30){
+                    returnScript += "" + (diffMinutes + 1).toString() + " minutes ago";
+                }
+                else{
+                    returnScript += "" + diffMinutes.toString() + " minutes ago";
+                }
+            }
+            else if(diffMinutes === 59){
+                if(diffSeconds > 30){
+                    returnScript += "" + "1 hour ago";
+                }
+                else{
+                    returnScript += "" + diffMinutes.toString() + " minutes ago";
+                }
+            }
+            else{
+                if(diffSeconds > 30){
+                    returnScript += "" + "1 minute ago";
+                }
+                else{
+                    returnScript += "just now";
+                }
+            }  
+        }
+        return returnScript;
+    };
+    
 
     return { format: format };
 
