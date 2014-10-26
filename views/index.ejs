@@ -57,8 +57,9 @@
                     version    : 'v2.1'
             });
             Action.register();
-            Action.send(Action.Name.PERFORM_LOAD)
+            Action.send(Action.Name.PERFORM_LOAD);
         };
+
         (function(d, s, id){
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {return;}
