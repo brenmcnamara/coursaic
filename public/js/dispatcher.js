@@ -80,7 +80,7 @@ var Dispatcher = (function() {
             // these regerences can be used
             // for performing generic algorithms
             // over each store.
-            stores: [ConfigStore]
+            stores: [ConfigStore, CourseStore]
             
         };
 

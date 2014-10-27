@@ -25,7 +25,28 @@ var Course = Parse.Object.extend("Course"),
     StoreClass.prototype = new Store();
 
     StoreClass.prototype.actionHandler = function(name) {
-        return null;
+        switch(name) {
+            case Action.Name.PERFORM_LOAD:
+
+                return function(payload) {
+                    return new Promise(function(resolve, rejected) {
+                        ConfigStore.onReady().then(
+                            // On success from ConfigStore.   
+                            function() {
+                                resolve();
+                            },
+                            // On failure from ConfigStore.
+                            function() {
+                                console.log("Config store exploded");
+                                throw new Error("ConfigStore failed to become ready.");
+                            });
+                    });
+
+                };
+
+            default:
+                return null;
+        }
     };
 
 
