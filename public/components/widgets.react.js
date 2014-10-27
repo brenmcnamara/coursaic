@@ -110,38 +110,30 @@ View.Divide = React.createClass({
  * A grid of courses.
  */
 View.CourseGrid = React.createClass({
+
     render: function() {
+        var courseList = CourseStore.map(function(course) {
+            return <View.CourseInfo key={ course.id } course={ course } />;
+        });
         return (
             <div className="course-grid">
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
-                <View.CourseInfo />
+                {courseList}
             </div>
         );
+    },
+
+    componentWillMount: function() {
+        CourseStore.addListener(CAEvent.Name.DID_FETCH_COURSES, this._onChange);
+    },
+
+    componentWillUnmount: function() {
+        CourseStore.removeListener(CAEvent.Name.DID_FETCH_COURSES, this._onChange)
+    },
+
+    _onChange: function() {
+        this.forceUpdate();
     }
+
 });
 
 
@@ -153,17 +145,21 @@ View.CourseGrid = React.createClass({
  */
 View.CourseInfo = React.createClass({
     render: function() {
-
-        var courseHeaderStyle = {
-            background: '#417505'
-        };
+        var course = this.props.course,
+            courseHeaderStyle = {
+                background: '#417505'
+            };
         // TODO: Separate out tags that are specific
         // to a page (i.e. home-content__course__grid__course).
         return (
             <div className="home-content__courses__grid__course course-info">
-                <header className="course-info__header" style={courseHeaderStyle}>CS 101</header>
+                <header className="course-info__header" style={courseHeaderStyle}>
+                    { course.get('code') }
+                </header>
                 <div className="course-info__body">
-                    <div className="course-info__body__text">Introduction to Computer Science</div>
+                    <div className="course-info__body__text">
+                        { course.get('description') }
+                    </div>
                 </div>
                 <footer className="course-info__footer">12 enrolled</footer>
             </div>

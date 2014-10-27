@@ -127,8 +127,8 @@ var ConfigStore = (function() {
         return new Promise(function(resolved, rejected) {
             // Callback after the user has logged in successfully.
             var onDidLoginSuccess = function() {
-                console.log();
-                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD, {pageKey: self.pageKey()}));
+                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD,
+                                          {pageKey: self.pageKey()}));
                     resolved();
                 },
 

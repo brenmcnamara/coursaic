@@ -41,5 +41,7 @@ var CAEvent = function(name, params) {
  * @type Object
  */
 CAEvent.Name = {
-    DID_LOAD: 'DID_LOAD'
+    DID_LOAD: 'DID_LOAD',
+    DID_FETCH_COURSES: 'DID_FETCH_COURSES'
 };
+

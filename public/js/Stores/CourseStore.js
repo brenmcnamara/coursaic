@@ -25,6 +25,7 @@ var Course = Parse.Object.extend("Course"),
     StoreClass.prototype = new Store();
 
     StoreClass.prototype.actionHandler = function(name) {
+        var self = this;
         switch(name) {
             case Action.Name.PERFORM_LOAD:
 
@@ -33,7 +34,17 @@ var Course = Parse.Object.extend("Course"),
                         ConfigStore.onReady().then(
                             // On success from ConfigStore.   
                             function() {
-                                resolve();
+                                self.fetchPage().then(
+                                    // Success
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES));
+                                        resolve();
+                                    },
+                                    // Failure
+                                    function() {
+                                        throw new Error("Failed to fetch courses.");
+                                    }
+                                );
                             },
                             // On failure from ConfigStore.
                             function() {
@@ -77,17 +88,10 @@ var Course = Parse.Object.extend("Course"),
      *
      * @method fetch
      *
-     * @param school {School} The school to get the courses
-     *  for.
-     *
-     * @param requestMap {Object} Any parameters that may
-     *  configure the request for the school. This may
-     *  include: skip, limit.
-     *
      * @return {Promise} A promise that executed when the
      *  asynchronous call has returned.
      */
-    StoreClass.prototype.fetchPage = function(school) {
+    StoreClass.prototype.fetchPage = function() {
         var self = this;
 
         if (this._isFetching) {
@@ -103,6 +107,9 @@ var Course = Parse.Object.extend("Course"),
             });
             query.find({
                 success: function(results) {
+                    // Add the courses that were just
+                    // fetched to the list of courses
+                    // that already exist.
                     self._courses.push.apply(self._courses, results);
                     // Increment the paging value for the next fetch.
                     self._page += 1;
