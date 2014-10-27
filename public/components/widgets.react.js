@@ -146,8 +146,9 @@ View.CourseGrid = React.createClass({
 View.CourseInfo = React.createClass({
     render: function() {
         var course = this.props.course,
+            field = course.get('field'),
             courseHeaderStyle = {
-                background: '#417505'
+                background: field.get('color')
             };
         // TODO: Separate out tags that are specific
         // to a page (i.e. home-content__course__grid__course).

@@ -84,6 +84,33 @@ var Course = Parse.Object.extend("Course"),
 
 
     /**
+     * Load all the data for a single course.
+     * This loading may occur asynchronously.
+     *
+     * @method _loadCourse
+     * @private
+     *
+     * @param course {Course} The course to load
+     *  the data for.
+     *
+     * @return {Promise} A promise that is executed
+     *  when all the data for the course has been
+     *  loaded.
+     */
+    StoreClass.prototype._loadCourse = function(course) {
+        return new Promise(function(resolve, reject) {
+            course.get('field').fetch({
+                success: function() {
+                    resolve();
+                },
+                error: function(error) {
+                    throw error;
+                }
+            });
+        });
+    };
+
+    /**
      * Fetch the courses for a given school.
      *
      * @method fetch
@@ -99,7 +126,7 @@ var Course = Parse.Object.extend("Course"),
         }
 
         this._isFetching = true;
-        return new Promise(function (resolved, rejected) {
+        return new Promise(function (resolve, rejecte) {
             var query = self._createCourseQuery(
             {
                 limit: self._limit,
@@ -113,8 +140,21 @@ var Course = Parse.Object.extend("Course"),
                     self._courses.push.apply(self._courses, results);
                     // Increment the paging value for the next fetch.
                     self._page += 1;
-                    self._isFetching = false;
-                    resolved();
+                    // Get the promises that are mapped
+                    // from all the _loadCourses calls.
+                    Promise.all(results.map(function(course) {
+                        return self._loadCourse(course);
+                    })).then(
+                        // Success
+                        function() {
+                            self._isFetching = false;
+                            resolve();
+                        },
+                        // Error
+                        function() {
+                            throw new Error("Failed to fetch data for courses");
+                        }
+                    );
                 },
                 error: function(error) {
                     self._isFetching = false;
