@@ -53,7 +53,24 @@ Formatter.Date = (function() {
     /* Implementations */
 
 
-    Date.daysBetween = function( date1, date2 ) {
+    var daysBetweenDates = function( date1, date2 ) {
+
+    /* Declarations */
+
+    /**
+     * Calculates the number of days between 2 Dates
+     *
+     * @method format
+     *
+     * @param date1 {Date} 
+     *
+     * @param date2 {Date}
+     *
+     * @return The numerical representation of the days between 2 days
+     *  
+     */
+
+    /* Implementations */
       //Get 1 day in milliseconds
       var one_day=1000*60*60*24;
 
@@ -75,108 +92,81 @@ Formatter.Date = (function() {
       return [days, hours, minutes, seconds];
     };
 
-
-
+    
     format = function(date, options) {
 
-        var month = [];
-        month[0] = "Jan.";
-        month[1] = "Feb.";
-        month[2] = "March";
-        month[3] = "April";
-        month[4] = "May";
-        month[5] = "June";
-        month[6] = "July";
-        month[7] = "Aug.";
-        month[8] = "Sept.";
-        month[9] = "Oct.";
-        month[10] = "Nov.";
-        month[11] = "Dec.";
+      options = (options || {});
 
-        var dhms_difference = Date.daysBetween(date,new Date());
-        var diffDays = dhms_difference[0];
-        var diffHours = dhms_difference[1];
-        var diffMinutes = dhms_difference[2];
-        var diffSeconds = dhms_difference[3];
+      var month = ["Jan.","Feb.","March","April","May",
+      "June","July","Aug.","Sept.","Oct.","Nov.","Dec."];
 
-        options = (options || {});
+      var dhms_difference = daysBetweenDates(date,new Date()),
+          diffDays = dhms_difference[0],
+          diffHours = dhms_difference[1],
+          diffMinutes = dhms_difference[2],
+          diffSeconds = dhms_difference[3];
 
-        if(!options.preposition){
-            options.preposition = false;
-        }
+      if(!options.preposition){
+          options.preposition = false;
+      }
 
-        //7 days ago exactly will return an exact formatted date
-        var returnScript = "";
-        if(diffDays >= 7){
-            if(options.preposition){
-                returnScript += "on ";
+      //7 days ago exactly will return an exact formatted date
+      var returnScript = "";
+      if(diffDays >= 7){
+          if(options.preposition){
+              returnScript += "on ";
+          }
+          returnScript += month[date.getMonth()] + " " + date.getDate()
+           + ", " + date.getFullYear().toString();
+      } else if(diffDays >= 1){
+          if(diffHours >= 12){
+            if(diffDays === 6){
+              returnScript  += "1 week ago";
+            } else{
+                returnScript += "" + (diffDays + 1).toString() + " days ago";
             }
-            returnScript += month[date.getMonth()] + " " + date.getDate()
-             + ", " + date.getFullYear().toString();
-        }
-        else if(diffDays >= 1){
-            if(diffHours >= 12){
-              if(diffDays === 6){
-                returnScript  += "1 week ago";
+          } else if(diffDays === 1){
+              returnScript += "yesterday";
+          } else {
+              returnScript += "" + diffDays.toString() + " days ago";
+          }
+      } else if(diffDays === 0){
+          if(diffHours !== 23 && diffHours !== 0){
+              if(diffMinutes > 30){
+                  returnScript += "" + (diffHours + 1).toString() + " hours ago";
+              } else{
+                  returnScript += "" + diffHours.toString() + " hours ago";
               }
-              else{
-                  returnScript += "" + (diffDays + 1).toString() + " days ago";
+          } else if(diffHours === 23){
+              if(diffMinutes > 30){
+                  returnScript += "yesterday";
+              } else{
+                  returnScript += "" + diffHours.toString() + " hours ago";
               }
-            }
-            else if(diffDays === 1){
-                returnScript += "yesterday";
-            }
-            else {
-                returnScript += "" + diffDays.toString() + " days ago";
-            }
-        }
-        else if(diffDays === 0){
-            if(diffHours !== 23 && diffHours !== 0){
-                if(diffMinutes > 30){
-                    returnScript += "" + (diffHours + 1).toString() + " hours ago";
-                }
-                else{
-                    returnScript += "" + diffHours.toString() + " hours ago";
-                }
-            }
-            else if(diffHours === 23){
-                if(diffMinutes > 30){
-                    returnScript += "yesterday";
-                }
-                else{
-                    returnScript += "" + diffHours.toString() + " hours ago";
-                }
-            }
-            else if(diffMinutes !== 59 && diffMinutes !== 0){
-                if(diffSeconds > 30){
-                    returnScript += "" + (diffMinutes + 1).toString() + " minutes ago";
-                }
-                else{
-                    returnScript += "" + diffMinutes.toString() + " minutes ago";
-                }
-            }
-            else if(diffMinutes === 59){
-                if(diffSeconds > 30){
-                    returnScript += "" + "1 hour ago";
-                }
-                else{
-                    returnScript += "" + diffMinutes.toString() + " minutes ago";
-                }
-            }
-            else{
-                if(diffSeconds > 30){
-                    returnScript += "" + "1 minute ago";
-                }
-                else{
-                    returnScript += "just now";
-                }
-            }  
-        }
-        return returnScript;
-    };
-    
+          } else if(diffMinutes !== 59 && diffMinutes !== 0){
+              if(diffSeconds > 30){
+                  returnScript += "" + (diffMinutes + 1).toString() + " minutes ago";
+              } else{
+                  returnScript += "" + diffMinutes.toString() + " minutes ago";
+              }
+          } else if(diffMinutes === 59){
+              if(diffSeconds > 30){
+                  returnScript += "" + "1 hour ago";
+              } else{
+                  returnScript += "" + diffMinutes.toString() + " minutes ago";
+              }
+          } else{
+              if(diffSeconds > 30){
+                  returnScript += "" + "1 minute ago";
+              } else{
+                  returnScript += "just now";
+              }
+          }  
+      }
+      return returnScript;
+  };
 
-    return { format: format };
 
+  return { format: format };
 }());
 
