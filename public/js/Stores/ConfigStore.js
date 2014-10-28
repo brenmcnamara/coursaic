@@ -104,10 +104,11 @@ var ConfigStore = (function() {
                         throw new Error("The school of the user could not be fetched.");
                     }
                 });
-            });
+            }),
 
+            fetchEnrolledPromise = CourseStore.fetchCoursesForUser(user);
         // Combine all the promises into one promise.
-        return Promise.all([fbPromise, fetchSchoolPromise]);
+        return Promise.all([fbPromise, fetchSchoolPromise, fetchEnrolledPromise]);
     };
 
 

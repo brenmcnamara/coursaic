@@ -11,7 +11,13 @@
 
 /*global FB, Parse, Action, CAEvent */
 
-var Course = Parse.Object.extend("Course"),
+var Course = Parse.Object.extend("Course", {
+
+    equals: function(course) {
+        return course.id === this.id;
+    }
+
+}),
     
     CourseStore = (function() {
 
@@ -19,6 +25,9 @@ var Course = Parse.Object.extend("Course"),
         this._isFetching = false;
         this._page = 0;
         this._limit = 30;
+        // TODO (brendan): Consider turning this into
+        // a hash table of courses and changing related
+        // methods.
         this._courses = [];
     };
 
@@ -48,7 +57,6 @@ var Course = Parse.Object.extend("Course"),
                             },
                             // On failure from ConfigStore.
                             function() {
-                                console.log("Config store exploded");
                                 throw new Error("ConfigStore failed to become ready.");
                             });
                     });
@@ -84,8 +92,71 @@ var Course = Parse.Object.extend("Course"),
 
 
     /**
+     * Get the course with the given id.
+     *
+     * @method _hasCourse
+     * @private
+     *
+     * @param course_id {String} The id of the course
+     * to fetch from the store.
+     *
+     * @return {Course} A course object with the given id. If the
+     *  course object does not exist in the collection, this will return
+     *  null.
+     */
+    StoreClass.prototype._courseById = function(course_id) {
+        var i, n;
+        for (i = 0, n = this._courses.length; i < n; ++i) {
+            if (this._courses[i].id === course_id) {
+                return this._courses[i];
+            }
+        }
+        return null;
+    };
+
+
+    /**
+     * Fetch all the data for a course and all a courses
+     * properties.
+     *
+     * @method _fetchCourse
+     * @private
+     *
+     * @param course {Course} The course to be fetched.
+     *
+     * @return {Promise} A promise that is executed when
+     *  the course has successfully been fetched.
+     */
+    StoreClass.prototype._fetchCourse = function(course) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            course.fetch({
+                success: function() {
+                    self._loadCourse(course).then(
+                        // Success
+                        function() {
+                            resolve();
+                        },
+                        // Failure
+                        function(error) {
+                            throw error;
+                        }
+                    );
+                },
+                error: function(error) {
+                    throw error;
+                }
+            });
+        });
+    };
+
+
+    /**
      * Load all the data for a single course.
-     * This loading may occur asynchronously.
+     * This loading may occur asynchronously. This method
+     * assumes that course.fetch has already been called on
+     * the course itself. This method is intented to fetch
+     * data within the course.
      *
      * @method _loadCourse
      * @private
@@ -93,21 +164,35 @@ var Course = Parse.Object.extend("Course"),
      * @param course {Course} The course to load
      *  the data for.
      *
-     * @return {Promise} A promise that is executed
+     * @return {Promise} A promise that is completed
      *  when all the data for the course has been
      *  loaded.
      */
     StoreClass.prototype._loadCourse = function(course) {
-        return new Promise(function(resolve, reject) {
-            course.get('field').fetch({
-                success: function() {
-                    resolve();
-                },
-                error: function(error) {
-                    throw error;
-                }
+        var 
+            fieldPromise = new Promise(function(resolve, reject) {
+                course.get('field').fetch({
+                    success: function() {
+                        resolve();
+                    },
+                    error: function(error) {
+                        throw error;
+                    }
+                });
+            }),
+
+            schoolPromise = new Promise(function(resolve, reject) {
+                course.get('school').fetch({
+                    success: function() {
+                        resolve();
+                    },
+                    error: function(error) {
+                        throw error;
+                    }
+                });
             });
-        });
+
+        return Promise.all([fieldPromise, schoolPromise]);
     };
 
     /**
@@ -134,12 +219,28 @@ var Course = Parse.Object.extend("Course"),
             });
             query.find({
                 success: function(results) {
+                    
+
+                    // Reduce the list of results to courses
+                    // that don't already exist in the collection.
+                    results = results.reduce(function(memo, course) {
+                        if (self._courseById(course.id)) {
+                            return memo;
+                        }
+                        else {
+                            memo.push(course);
+                            return memo;
+                        }
+                    }, []);
+
                     // Add the courses that were just
                     // fetched to the list of courses
                     // that already exist.
                     self._courses.push.apply(self._courses, results);
+
                     // Increment the paging value for the next fetch.
                     self._page += 1;
+
                     // Get the promises that are mapped
                     // from all the _loadCourses calls.
                     Promise.all(results.map(function(course) {
@@ -162,6 +263,51 @@ var Course = Parse.Object.extend("Course"),
                 }
             });
         });
+    };
+
+
+    /**
+     * Fetch the courses for a particular user. This method
+     * assumes that the user has been fetched.
+     *
+     * @method fetchCoursesForUser
+     *
+     * @param user {Parse.User} The user to get the courses for.
+     *
+     * @return {Promise} A promise that is executed when all
+     * the courses for the user have been fetched. The courses
+     * are automatically added to the user.
+     */
+    StoreClass.prototype.fetchCoursesForUser = function(user) {
+        var self = this,
+            enrolledList = user.get('enrolled'),
+            courses = [], promises = [], courseFromStore,
+            i, n;
+
+        // Loop through the courses in the enrolled list.
+        // Unify the enrolled list with the collection and
+        // generate all the promises necessary for fetching the
+        // courses.
+        for (i = 0, n = enrolledList.length; i < n; ++i) {
+            courseFromStore = this._courseById(enrolledList[i].id);
+            if (courseFromStore) {
+                courses.push(courseFromStore);
+            }
+            else {
+                // Keep the course in the enrolled list.
+                courses.push(enrolledList[i]);
+                // Add the course to the current course store.
+                this._courses.push(enrolledList[i]);
+                // load any missing data for the course and
+                // save the promise.
+
+                promises.push(self._fetchCourse(enrolledList[i]));
+            }
+        }
+        // Set the courses in the enrolled list
+        // to contain the courses that were saved.
+        user.set('enrolled', courses);
+        return Promise.all(promises);
     };
 
 

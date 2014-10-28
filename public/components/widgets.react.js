@@ -74,14 +74,16 @@ View.MainOptions = React.createClass({
  */
 View.MyCourses = React.createClass({
     render: function() {
+        console.log(this.props.enrolled);
+        var courses = this.props.enrolled.map(function(course) {
+            return <li>{ course.get('code') }</li>;
+        });
+
         return (
             <section className="category my-courses">
                 <div className="category__title">My Courses</div>
                 <ul className="category__list">
-                    <li>CS 101</li>
-                    <li>CS 201</li>
-                    <li>MATH 247</li>
-                    <li>ENGL 210A</li>
+                    { courses }
                 </ul>
             </section>
         );

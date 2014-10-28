@@ -107,11 +107,13 @@ View.Home_Content = React.createClass({
  */
 View.Home_SideNav = React.createClass({
     render: function() {
+        var enrolled = ConfigStore.user().get('enrolled');
+
         return (
             <div className="content__nav">
                 <View.MainOptions />
                 <View.Divide />
-                <View.MyCourses />
+                <View.MyCourses enrolled={enrolled} />
             </div>
         );
     }
