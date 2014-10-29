@@ -89,24 +89,24 @@ var Dispatcher = (function() {
     register = function(name) {
         // Go through the stores and register
         // action with each store.
-        var callbacks = stateMap.stores.reduce(function(memo, store) {
+        var storeCalls = stateMap.stores.reduce(function(memo, store) {
             var callback = store.actionHandler(name);
             if (callback) {
-                memo.push(callback);
+                memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }
             return memo;
         }, []);
 
-        stateMap.actionHash[name] = callbacks;
+        stateMap.actionHash[name] = storeCalls;
     };
 
 
     dispatch = function(name, payload) {
         // Get the callbacks for the action.
-        var callbacks = stateMap.actionHash[name],
+        var storeCalls = stateMap.actionHash[name],
             promises;
 
-        if (!callbacks) {
+        if (!storeCalls) {
             throw new Error("Action " + name + " must be registered.");
         }
 
@@ -115,11 +115,11 @@ var Dispatcher = (function() {
 
         // Get all the promises that are produced
         // by the functions.
-        if (callbacks.length > 0) {
-            promises = callbacks.reduce(function(memo, callback) {
-                memo.push(callback(payload));
-                return memo;
-            }, []);
+        if (storeCalls.length > 0) {
+            promises = storeCalls.map(function(storeCall) {
+                var callback = storeCall.callback;
+                return callback(payload);
+            });
 
             Promise.all(promises).then(
                 // Success callback
