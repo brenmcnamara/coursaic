@@ -21,7 +21,9 @@
  */
 var ConfigStore = (function() {
 
-    var StoreClass = function() {};
+    var StoreClass = function() {
+        this.dispatcherIndex = 1;
+    };
 
     StoreClass.prototype = new Store();
 

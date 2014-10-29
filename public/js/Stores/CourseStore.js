@@ -22,6 +22,7 @@ var Course = Parse.Object.extend("Course", {
     CourseStore = (function() {
 
     var StoreClass = function() {
+        this.dispatcherIndex = 2;
         this._isFetching = false;
         this._page = 0;
         this._limit = 30;
@@ -40,7 +41,7 @@ var Course = Parse.Object.extend("Course", {
 
                 return function(payload) {
                     return new Promise(function(resolve, rejected) {
-                        ConfigStore.onReady().then(
+                        Dispatcher.waitFor([ConfigStore.dispatcherIndex]).then(
                             // On success from ConfigStore.   
                             function() {
                                 self.fetchPage().then(

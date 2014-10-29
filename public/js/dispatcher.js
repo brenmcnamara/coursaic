@@ -20,6 +20,27 @@ var Dispatcher = (function() {
     /* DECLARATION */
 
     /**
+     * Coordinates synchronizing store calls during
+     * an action. A store can wait for another store to
+     * finish executing before the store handles a
+     * particular action.
+     *
+     * @method waitFor
+     *
+     * @param waitList {Array} A list of dispatcher
+     *  indexes of stores to wait for.
+     *
+     * @throw An error if waitFor is called when the
+     *  dispatcher is currently not dispatching an
+     *  action.
+     *
+     * @return {Promise} A promise that is executed when
+     *  all the stores in the waitFor list are done
+     *  executing.
+     */
+    var waitFor,
+
+    /**
      * Register an action with the store. If an action
      * was already registered with the store, this will
      * clear any state that was previously registered.
@@ -31,7 +52,7 @@ var Dispatcher = (function() {
      * @param name {String} The name of the action to
      *  register.
      */
-    var register,
+        register,
 
     /**
      * Dispatch an action through to the stores.
@@ -80,11 +101,41 @@ var Dispatcher = (function() {
             // these regerences can be used
             // for performing generic algorithms
             // over each store.
-            stores: [ConfigStore, CourseStore]
+            stores: [ConfigStore, CourseStore],
             
+            // A list of all resolves that are on the
+            // wait list. This is a map of
+            // dispatcherIndex -> Array of resolve callbacks.
+            waitHash_resolve: {},
+
+            // A list of all rejects that are on the
+            // wait list. This is a map of
+            // dispatcherIndex -> Array of reject callbacks.
+            waitHash_reject: {}
+
         };
 
     /* IMPLEMENTATION */
+
+    waitFor = function(waitList) {
+        return Promise.all(waitList.map(function(dispatcherIndex) {
+            return new Promise(function(resolve, reject) {
+                // Assume that the waitHash_resolve and waitHash_reject
+                // lists are symmetric. If an element in waitHash_resolve
+                // exists, then an element in waitHash_reject
+                // must also exist.
+                if (stateMap.waitHash_resolve[dispatcherIndex]) {
+                    stateMap.waitHash_resolve[dispatcherIndex].push(resolve);
+                    stateMap.waitHash_reject[dispatcherIndex].push(reject);
+                }
+                else {
+                    stateMap.waitHash_resolve[dispatcherIndex] = [resolve];
+                    stateMap.waitHash_reject[dispatcherIndex] = [reject];
+                }
+            });
+        }));
+    };
+
 
     register = function(name) {
         // Go through the stores and register
@@ -117,8 +168,42 @@ var Dispatcher = (function() {
         // by the functions.
         if (storeCalls.length > 0) {
             promises = storeCalls.map(function(storeCall) {
-                var callback = storeCall.callback;
-                return callback(payload);
+                var index = storeCall.index,
+                    callback = storeCall.callback;
+                return new Promise(function(resolve, reject) {
+                    callback(payload).then(
+                        // On success
+                        function() {
+                            resolve();
+                            // Notify all objects waiting for the
+                            // resolution of this callback to resolve
+                            // that the callback has resolved.
+                            (stateMap.waitHash_resolve[index] || []).forEach(function(wait_resolve) {
+                                wait_resolve();
+                            });
+                            // Empty out all resolution and rejection
+                            // calls associated with this index.
+                            stateMap.waitHash_resolve[index] = [];
+                            stateMap.waitHash_reject[index] = [];
+                        },
+                        // On error
+                        function() {
+                            reject();
+                            // Notify all objects waiting for the
+                            // resolution of this callback to resolve
+                            // that the callback has rejection.
+                            (stateMap.waitHash_reject[index] || []).forEach(function(wait_reject) {
+                                wait_reject();
+                            });
+                            // Empty out all resolution and rejection
+                            // calls associated with this index.
+                            stateMap.waitHash_resolve[index] = [];
+                            stateMap.waitHash_reject[index] = [];
+                        }
+                    );
+                });
+
+                
             });
 
             Promise.all(promises).then(
@@ -138,7 +223,7 @@ var Dispatcher = (function() {
     };
 
 
-    return {register: register, dispatch: dispatch};
+    return {register: register, dispatch: dispatch, waitFor: waitFor};
 
 }());
 

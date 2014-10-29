@@ -74,7 +74,6 @@ View.MainOptions = React.createClass({
  */
 View.MyCourses = React.createClass({
     render: function() {
-        console.log(this.props.enrolled);
         var courses = this.props.enrolled.map(function(course) {
             return <li>{ course.get('code') }</li>;
         });
