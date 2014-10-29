@@ -178,9 +178,10 @@ var Dispatcher = (function() {
                             // Notify all objects waiting for the
                             // resolution of this callback to resolve
                             // that the callback has resolved.
-                            (stateMap.waitHash_resolve[index] || []).forEach(function(wait_resolve) {
-                                wait_resolve();
-                            });
+                            (stateMap.waitHash_resolve[index] || [])
+                                .forEach(function(wait_resolve) {
+                                    wait_resolve();
+                                });
                             // Empty out all resolution and rejection
                             // calls associated with this index.
                             stateMap.waitHash_resolve[index] = [];
@@ -192,9 +193,10 @@ var Dispatcher = (function() {
                             // Notify all objects waiting for the
                             // resolution of this callback to resolve
                             // that the callback has rejection.
-                            (stateMap.waitHash_reject[index] || []).forEach(function(wait_reject) {
-                                wait_reject();
-                            });
+                            (stateMap.waitHash_reject[index] || [])
+                            .forEach(function(wait_reject) {
+                                    wait_reject();
+                                });
                             // Empty out all resolution and rejection
                             // calls associated with this index.
                             stateMap.waitHash_resolve[index] = [];

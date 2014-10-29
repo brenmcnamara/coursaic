@@ -38,19 +38,6 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype._isReady = false;
 
-    /**
-     * An array of callbacks containing all
-     * the callbacks from stores that
-     * are waiting for the ConfigStore to
-     * be ready with its initial configuration
-     * data. These callbacks can be added
-     * through the onReady method.
-     *
-     * @property _readyResolves
-     * @type Array
-     */
-    StoreClass.prototype._readyResolves = [];
-
 
     /**
      * Perform any operations after the user has been
@@ -164,32 +151,6 @@ var ConfigStore = (function() {
     };
 
 
-    /**
-     * Set the state of the ConfigStore to ready
-     * and perform any other necessary actions
-     * associated with setting the ready status.
-     *
-     * @method _becomeReady
-     * @private
-     *
-     * @throw An error if trying to set the ready status
-     * of the ConfigStore to true when it is already true.
-     */
-    StoreClass.prototype._becomeReady = function() {
-        if (this._isReady) {
-            throw new Error("Setting the ready status of the config store to " +
-                            "true when it is already set to true.");
-        }
-
-        // Call any pending resolves.
-        this._readyResolves.forEach(function(resolve) {
-            resolve();
-        });
-        // Empty out all the pending resolves.
-        this._readyResolves = [];
-    };
-
-
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
@@ -200,7 +161,6 @@ var ConfigStore = (function() {
                         self._login().then(
                             // Successful login.
                             function() {
-                                self._becomeReady();
                                 resolve();
                             },
                             // Failed login.
@@ -266,36 +226,6 @@ var ConfigStore = (function() {
         // configure other parts of this store.
         return 'home';
     };
-
-
-    /**
-     * A method for other stores to synchonnize with
-     * with the ConfigStore. Because the ConfigStore contains
-     * a lot of information that may be relevant to other stores,
-     * so other stores may need to wait for this initial content
-     * to the config store is ready.
-     *
-     * @return {Promise} A promise that is propogated
-     *  when the ConfigStore is ready with its configuration
-     *  information.
-     */
-    StoreClass.prototype.onReady = function() {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            if (self._isReady) {
-                // The config store is ready, just
-                // resolve the promise.
-                resolve();
-            }
-            else {
-                // The config store is not yet ready,
-                // save the resolve function and
-                // call it when the store becomes ready.
-                self._readyResolves.push(resolve);
-            }
-        });
-    };
-
 
     return new StoreClass();
 
