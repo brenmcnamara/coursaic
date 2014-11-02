@@ -71,7 +71,8 @@ var Course = Parse.Object.extend("Course", {
 
 
     /**
-     * Create a query object used to fetch courses.
+     * Create a query object used to fetch courses. This method
+     * should only be called after a User has been logged in.
      *
      * @private
      * @method _createQuery
@@ -84,7 +85,8 @@ var Course = Parse.Object.extend("Course", {
      */
     StoreClass.prototype._createCourseQuery = function(requestMap) {
         var query = new Parse.Query(Course);
-
+        // Only get schools for the user.
+        query.equalTo('school', UserStore.current().get('school'));
         query.limit(requestMap.limit);
         query.skip(requestMap.skip);
 
