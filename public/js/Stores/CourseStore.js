@@ -281,7 +281,7 @@ var Course = Parse.Object.extend("Course", {
      */
     StoreClass.prototype.fetchCoursesForUser = function(user) {
         var self = this,
-            enrolledList = user.get('enrolled'),
+            enrolledList = user.get('enrolled') || [],
             courses = [], promises = [], courseFromStore,
             i, n;
 
