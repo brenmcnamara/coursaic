@@ -22,7 +22,9 @@ Formatter.Date = (function() {
 
     "use strict";
 
-    /**
+    /* Declarations */
+
+   /**
      * Calculates the number of days between 2 Dates
      *
      * @method _tokenizeDateDiff
@@ -36,31 +38,7 @@ Formatter.Date = (function() {
      * that date2 is ahead of date1 
      *  
      */
-    var _tokenizeDateDiff = function( date1, date2 ) {
-
-      var one_day=1000*60*60*24,
-
-      // Convert both dates to milliseconds
-          date1_ms = date1.getTime(),
-          date2_ms = date2.getTime(),
-
-      // Calculate the difference in milliseconds
-          difference_ms = date2_ms - date1_ms,
-
-      //take out milliseconds
-          difference_ms = difference_ms/1000,
-          seconds = Math.floor(difference_ms % 60),
-          difference_ms = difference_ms/60,
-          minutes = Math.floor(difference_ms % 60),
-          difference_ms = difference_ms/60,
-          hours = Math.floor(difference_ms % 24), 
-          days = Math.floor(difference_ms/24);
-      
-      return [days, hours, minutes, seconds];
-    },
-
-
-    /* Declarations */
+    var _tokenizeDateDiff,
 
     /**
      * Formats the presentation of a date.
@@ -89,6 +67,30 @@ Formatter.Date = (function() {
         stateMap = {};
 
     /* Implementations */
+
+    _tokenizeDateDiff = function(date1, date2) {
+
+      var one_day = 1000 * 60 * 60 * 24,
+
+      // Convert both dates to milliseconds
+          date1_ms = date1.getTime(),
+          date2_ms = date2.getTime(),
+
+      // Calculate the difference in milliseconds
+          difference_ms = date2_ms - date1_ms,
+
+      //take out milliseconds
+          difference_ms = difference_ms/1000,
+          seconds = Math.floor(difference_ms % 60),
+          difference_ms = difference_ms/60,
+          minutes = Math.floor(difference_ms % 60),
+          difference_ms = difference_ms/60,
+          hours = Math.floor(difference_ms % 24), 
+          days = Math.floor(difference_ms/24);
+      
+      return [days, hours, minutes, seconds];
+    };
+
 
     format = function(date, options) {
 
@@ -175,6 +177,9 @@ Formatter.Date = (function() {
       }
       return returnScript;
   };
+
+
   return { format: format };
+
 }());
 
