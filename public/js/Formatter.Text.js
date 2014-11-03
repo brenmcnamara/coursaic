@@ -61,9 +61,24 @@ Formatter.Text = (function() {
 
     /* Implementations */
 
-    truncate = function(date, options) {
-        // TODO: Implement me!
+    truncate = function(text, options) {
+        //Changed "date" paramater to "text" -- doesn't that make more sense
+        options = (options || {});
+        text = text.trim();
+        //Assumptions of how to handle no options.maxlen property
+        options.maxlen = (options.maxlen || text.length);
+
+        //Checks to see if we need to modify the text
+        if(options.maxlen < text.length){
+            //removes any excess periods from the text         
+            while(text.charAt(text.length-1) === "."){
+                text = text.substring(0,text.length-1);
+            }
+            text = text.substring(0,options.maxlen) + "...";   
+        }
+        return text;
     };
+
 
     return { truncate: truncate };
 
