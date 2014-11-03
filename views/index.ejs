@@ -58,7 +58,7 @@
                     version    : 'v2.1'
             });
             Action.register();
-            Action.send(Action.Name.PERFORM_LOAD);
+            Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
         };
 
         (function(d, s, id){

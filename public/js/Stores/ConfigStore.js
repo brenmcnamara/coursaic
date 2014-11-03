@@ -36,6 +36,10 @@ var ConfigStore = (function() {
                     // Get the promise for the login process.
                     return new Promise(function(resolve, rejected) {
                         // Nothing to do yet. Might add stuff here
+                        if (!payload.pageKey) {
+                            throw new Error("Page loaded without pageKey specified.");
+                        }
+                        Anchor.set('pageKey', payload.pageKey);
                         resolve();
                     });
                 };
@@ -46,17 +50,17 @@ var ConfigStore = (function() {
 
 
     /**
+     * Get the page key for the current page. This method should
+     * only be called after the page has been loaded.
+     *
      * @method pageKey
      *
      * @return {String} A key representing the current page.
      */
     StoreClass.prototype.pageKey = function() {
-        // Currently, on the home page is being represented.
-        // Change this when adding other pages. The page key will
-        // have to be provided by the application and used to
-        // configure other parts of this store.
-        return 'home';
+        return Anchor.hashMap().pageKey;
     };
+
 
     return new StoreClass();
 
