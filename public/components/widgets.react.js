@@ -21,21 +21,29 @@
  */
 View.MainOptions = React.createClass({
     render: function() {
-
-        var createCourseStyle = {
-                height: '30px',
-                margin: '-15px 0 0 9px'
-            };
-
         return (
             <ul className="main-options">
-                <li className="main-options__item">
-                    <img src="/img/icons/book.png"
-                         style={createCourseStyle}
-                         className="main-options__item__icon" />
-                    <div className="main-options__item__text">Create Course</div>
-                </li>
+                <View.MainOption_CreateCourse />
             </ul>
+        );
+    }
+});
+
+
+View.MainOption_CreateCourse = React.createClass({
+    render: function() {
+        var createCourseStyle = {
+            height: '30px',
+            margin: '-15px 0 0 9px'
+        };
+
+        return (
+            <li className="main-options__item">
+                <img src="/img/icons/book.png"
+                     style={createCourseStyle}
+                     className="main-options__item__icon" />
+                <div className="main-options__item__text">Create Course</div>
+            </li>
         );
     }
 });
