@@ -25,14 +25,6 @@ View.MainOptions = React.createClass({
         var createCourseStyle = {
                 height: '30px',
                 margin: '-15px 0 0 9px'
-            },
-            inviteFriendsStyle = {
-                height: '28px',
-                margin: '-14px 0 0 0'
-            },
-            changeSchoolStyle = {
-                height: '28px',
-                margin: '-14px 0 0 6px'
             };
 
         return (
@@ -42,21 +34,6 @@ View.MainOptions = React.createClass({
                          style={createCourseStyle}
                          className="main-options__item__icon" />
                     <div className="main-options__item__text">Create Course</div>
-                </li>
-
-                <li className="main-options__item">
-                    <img src="/img/icons/group.png"
-                         style={inviteFriendsStyle}
-                         className="main-options__item__icon" />
-
-                    <div className="main-options__item__text">Invite Friends</div>
-                </li>
-
-                <li className="main-options__item">
-                    <img src="/img/icons/building.png"
-                         style={changeSchoolStyle} 
-                         className="main-options__item__icon" />
-                    <div className="main-options__item__text">Change School</div>
                 </li>
             </ul>
         );
