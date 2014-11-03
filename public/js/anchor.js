@@ -1,103 +1,104 @@
 /**
  * anchor.js
- *
- * A file that reads and interprets the
- * uri for the page.
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
+/**
+ * A module that keeps track of the
+ * url hash for the page, performing
+ * hash queries and hash updates.
+ */
 var Anchor = (function() {
 
     /* DECLARATION */
 
-    
     /**
-     * Get the link for the current page
-     * and decode the url components.
+     * Convert a hash object into a string
+     * that can be inserted into the url hash.
      *
-     * @method href
-     */
-    var href,
-
-    /**
-     * @method path
-     * @return An array of strings, representing
-     *  that url path navigated. (i.e. coursaic.com/home/default
-     *  will give the result ["home", "default"])
-     */
-        path,
-
-    /**
-     * Read the parameters of the
-     * uri into a javascript object.
-     * This method automatically converts
-     * any parameters that are numbers into
-     * number from.
-     *
-     * @method params
-     */
-        params,
-
-    /**
-     * The state for the Anchor module.
-     *
+     * @method _serializeHash
      * @private
-     * @method stateMap
-     * @type Object
+     *
+     * @param hashMap {Object} A set of key/value pairs
+     *  representing the hash values.
+     *
+     * @return {String} A new hash encoded from the hashMap.
      */
-        stateMap = {};
+    var _serializeHash,
 
-    /* Implementation */
+    /**
+     * Convert a string hash into a hashMap.
+     *
+     * @method _parseHash
+     * @private
+     *
+     * @param hash {String} The string hash.
+     *
+     * @return {Object} A hash map of key-value pairs.
+     */
+        _parseHash,
+    /**
+     * Get the url hash.
+     *
+     * @method hashMap
+     *
+     * @return {Object} The url hash as
+     *  key/value pairs.
+     */
+        hashMap,
 
-    href = function() {
-        // TODO: Make sure this is available
-        // in all browsers.
-        return decodeURIComponent(window.location.href);
-    };
+    /**
+     * Set the url hash.
+     *
+     * @param key {String} The key to set the hash
+     *  to.
+     *
+     * @param value {String} The value to set for the
+     *  key.
+     */
+        set;
 
+    /* IMPLEMENTATION */
 
-    path = function() {
-        var pathname = window.location.pathname;
-        if (pathname[0] === '/') {
-            pathname = pathname.substr(1, pathname.length - 1);
+    _serializeHash = function(hashMap) {
+        var prop, hashArr = [];
+        for (prop in hashMap) {
+            if (hashMap.hasOwnProperty(prop)) {
+                hashArr.push(prop + "=" + hashMap[prop]);
+            }
         }
-        return pathname.split('/');
+        return (hashArr.length) ? ("#" + hashArr.join("&")) : "";
     };
 
 
-    params = function() {
-        // Match the parameters for the url.
-        // Use "?" as equalivalent to having
-        // no parameters for simplified
-        // implementation.
-        var paramString =  (/\?.+$/.exec(href()) || ["?"])[0];
-        return paramString.substr(1, paramString.length - 1)
-                          .split('&')
-                          .reduce(function(memo, pair) {
-                            var keyValue = pair.split('=');
-                            if (+keyValue[1] === +keyValue[1]) {
-                                // If the value is a number, convert
-                                // it to a number.
-                                keyValue[1] = +keyValue[1];
-                            }
-                            memo[keyValue[0]] = keyValue[1];
+    _parseHash = function(hash) {
+        // Assumes that hash is in the correct format.
+        if (hash && hash !== "" && hash !== "#") {
+            return hash.substr(1, hash.length - 1)
+                       .split("&")
+                       .reduce(function(memo, pair) {
+                            var breakPair = pair.split("=");
+                            memo[breakPair[0]] = breakPair[1];
                             return memo;
-                        }, {});
+                       }, {});
+        }
+        return {};
     };
-    
 
-    return {href: href, path: path, params: params};
+
+    hashMap = function() {
+        var hash = window.location.hash;
+        return _parseHash(hash);
+    };
+
+
+    set = function(key, val) {
+        var map = hashMap();
+        map[key] = val;
+        window.location.hash = _serializeHash(map); 
+    };
+
+
+    return {set: set, hashMap: hashMap};
 
 }());
-
-if (typeof require === 'function' && exports) {
-    exports.Anchor = Anchor;
-}
-
 
