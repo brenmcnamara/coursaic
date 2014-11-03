@@ -150,12 +150,13 @@ View.CourseInfo = React.createClass({
             field = course.get('field'),
             courseHeaderStyle = {
                 background: field.get('color')
-            };
+            },
+            enrollMessage = course.get('enrollCount') + ' enrolled';
         // TODO: Separate out tags that are specific
         // to a page (i.e. home-content__course__grid__course).
         return (
             <div className="home-content__courses__grid__course course-info">
-                <header className="course-info__header" style={courseHeaderStyle}>
+                <header className="course-info__header" style={ courseHeaderStyle }>
                     { course.get('code') }
                 </header>
                 <div className="course-info__body">
@@ -163,7 +164,7 @@ View.CourseInfo = React.createClass({
                         { course.get('description') }
                     </div>
                 </div>
-                <footer className="course-info__footer">12 enrolled</footer>
+                <footer className="course-info__footer">{ enrollMessage }</footer>
             </div>
         );
     }

@@ -15,6 +15,8 @@ var UserStore = (function() {
 
     var StoreClass = function() {
         this.dispatcherIndex = 3;
+        // A hash of id -> Parse.User
+        this._userHash = {};
     };
 
     StoreClass.prototype = new Store();
@@ -161,6 +163,49 @@ var UserStore = (function() {
      */
     StoreClass.prototype.current = function() {
         return Parse.User.current();
+    };
+
+
+    /**
+     * Get the users that are enrolled in a course.
+     * These users are added to the UserStore.
+     *
+     * @method fetchEnrolledUsers
+     *
+     * @param course {Course} The course to get the users
+     *  for. This will set the enrollCount attribute on the
+     *  course.
+     *
+     * @return {Promise} A promise that is executed when
+     *  fetching the course has completed.
+     */
+    StoreClass.prototype.fetchEnrolledUsers = function(course) {
+        var self = this,
+            userQuery = new Parse.Query(Parse.User);
+
+        userQuery.equalTo('enrolled', course);
+        return new Promise(function(resolve, reject) {
+            userQuery.find({
+                // Success
+                success: function(results) {
+                    // Add the users to the UserStore
+                    // if they do not already exist.
+                    course.set('enrollCount', results.length);
+                    results.forEach(function(user) {
+                        // Overwrite any users when fetching a new
+                        // set of users. This saves a conditional
+                        // check and creates updates in case
+                        // user information has changed.
+                        self._userHash[user.id] = user;
+                    });
+                    resolve(results);
+                },
+                // Error
+                error: function(error) {
+                    throw error;
+                }
+            });
+        });
     };
 
 

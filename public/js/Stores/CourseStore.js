@@ -193,9 +193,11 @@ var Course = Parse.Object.extend("Course", {
                         throw error;
                     }
                 });
-            });
+            }),
 
-        return Promise.all([fieldPromise, schoolPromise]);
+            enrolledUsersPromise = UserStore.fetchEnrolledUsers(course);
+
+        return Promise.all([fieldPromise, schoolPromise, enrolledUsersPromise]);
     };
 
     /**
