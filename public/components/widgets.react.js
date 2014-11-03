@@ -91,7 +91,7 @@ View.MyCourses_Course = React.createClass({
     },
 
     handleClick: function(event) {
-        Action.send(Action.Name.PERFORM_LOAD, {course: this.props.course.id});
+        Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'course', course: this.props.course.id});
     }
 
 });

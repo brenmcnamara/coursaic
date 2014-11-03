@@ -39,7 +39,14 @@ var ConfigStore = (function() {
                         if (!payload.pageKey) {
                             throw new Error("Page loaded without pageKey specified.");
                         }
-                        Anchor.set('pageKey', payload.pageKey);
+
+                        switch (payload.pageKey) {
+                        case 'course':
+                            Anchor.set({pageKey: 'course', course: payload.course});
+                            break;
+                        default:
+                            Anchor.set({pageKey: payload.pageKey});
+                        }
                         resolve();
                     });
                 };
@@ -59,6 +66,21 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.pageKey = function() {
         return Anchor.hashMap().pageKey;
+    };
+
+
+    /**
+     * Get the id of the course representing
+     * the current page. Note that this is only
+     * applicable to a pageKey of 'course'.
+     *
+     * @method courseId
+     *
+     * @return {String} The id of the course for the current
+     * page.
+     */
+    StoreClass.prototype.courseId = function() {
+
     };
 
 
