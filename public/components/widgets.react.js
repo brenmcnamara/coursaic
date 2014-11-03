@@ -20,6 +20,7 @@
  * creating a class or creating an exam.
  */
 View.MainOptions = React.createClass({
+    
     render: function() {
         return (
             <ul className="main-options">
@@ -27,11 +28,14 @@ View.MainOptions = React.createClass({
             </ul>
         );
     }
+
 });
 
 
 View.MainOption_CreateCourse = React.createClass({
+    
     render: function() {
+        console.log("Rendering course");
         var createCourseStyle = {
             height: '30px',
             margin: '-15px 0 0 9px'
@@ -46,6 +50,7 @@ View.MainOption_CreateCourse = React.createClass({
             </li>
         );
     }
+
 });
 
 
@@ -58,9 +63,10 @@ View.MainOption_CreateCourse = React.createClass({
  * these courses.
  */
 View.MyCourses = React.createClass({
+   
     render: function() {
         var courses = this.props.enrolled.map(function(course) {
-            return <li>{ course.get('code') }</li>;
+            return <View.MyCourses_Course course={ course } />
         });
 
         return (
@@ -72,6 +78,22 @@ View.MyCourses = React.createClass({
             </section>
         );
     }
+
+});
+
+
+View.MyCourses_Course = React.createClass({
+    
+    render: function() {
+        return (
+            <li onClick={ this.handleClick }>{ this.props.course.get('code') }</li>
+        );
+    },
+
+    handleClick: function(event) {
+        Action.send(Action.Name.PERFORM_LOAD, {course: this.props.course.id});
+    }
+
 });
 
 
@@ -82,11 +104,13 @@ View.MyCourses = React.createClass({
  * components.
  */
 View.Divide = React.createClass({
+    
     render: function() {
         return (
             <div className="divide"></div>
         );
     }
+
 });
 
 
@@ -120,6 +144,7 @@ View.CourseGrid = React.createClass({
         this.forceUpdate();
     }
 
+
 });
 
 
@@ -130,6 +155,7 @@ View.CourseGrid = React.createClass({
  * after a search.
  */
 View.CourseInfo = React.createClass({
+    
     render: function() {
         var course = this.props.course,
             field = course.get('field'),
@@ -153,5 +179,6 @@ View.CourseInfo = React.createClass({
             </div>
         );
     }
+
 });
 

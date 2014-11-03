@@ -12,11 +12,35 @@
 View = {};
 
 View.render = function(key, params) {
-    if (key === 'home') {
-        React.renderComponent(View.Home_Root(params),
-                              document.getElementsByTagName('body')[0]);
+    switch (key) {
+        case 'home':
+            View._unmountRoot();
+            React.renderComponent(View.Home_Root(params),
+                                  document.getElementsByTagName('body')[0]);
+            break;
+        case 'course':
+            View._unmountRoot();
+            React.renderComponent(View.Course_Root(param),
+                                  document.getElementsByTagName('body')[0]);
+            break;
+        default:
+            throw new Error("Trying to render page with unrecognized key " + key);
     }
 };
+
+/**
+ * Unmount the root element
+ *
+ * @method _unmountRoot
+ * @private
+ *
+ * @return {Boolean} true if an element was
+ * unmounted, false otherwise.
+ */
+View._unmountRoot = function() {
+    return React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+};
+
 
 /**
  * @static
