@@ -69,9 +69,9 @@ Formatter.Text = (function() {
         options.maxlen = (options.maxlen || text.length);
 
         //Checks to see if we need to modify the text
-        if(options.maxlen < text.length){
+        if (options.maxlen < text.length) {
             //removes any excess periods from the text         
-            while(text.charAt(text.length-1) === "."){
+            while (text.charAt(text.length-1) === ".") {
                 text = text.substring(0,text.length-1);
             }
             text = text.substring(0,options.maxlen) + "...";   
