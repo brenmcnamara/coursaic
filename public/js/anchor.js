@@ -54,7 +54,31 @@ var Anchor = (function() {
      *  containing all the properties to add to
      *  the hash map.
      */
-        set;
+        set,
+
+    /**
+     * Listen for the hash to change.
+     *
+     * @method onChange
+     *
+     * @param callback {Function} A callback
+     *  function that is called when the
+     *  hash changes.
+     */
+        onChange,
+
+    /**
+     * Contains all the state for this module.
+     *
+     * @property stateMap 
+     * @type Object
+     */
+        stateMap = {
+            // The current hash that is known.
+            // This is to check for hash change
+            // events.
+            currentHash: window.location.hash    
+        };
 
     /* IMPLEMENTATION */
 
@@ -101,7 +125,22 @@ var Anchor = (function() {
     };
 
 
-    return {set: set, hashMap: hashMap};
+    onChange = function(callback) {
+        if (typeof callback !== 'function') {
+            throw new Error("Must provide a function callback for hash changes.");
+        }
+
+        setInterval(function() {
+            var hash = window.location.hash;
+            if (hash !== stateMap.currentHash) {
+                stateMap.currentHash = hash;
+                callback(_parseHash(hash));
+            }
+        }, 150);
+    };
+
+
+    return {set: set, hashMap: hashMap, onChange: onChange};
 
 }());
 
