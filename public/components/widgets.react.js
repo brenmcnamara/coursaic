@@ -66,7 +66,7 @@ View.MyCourses = React.createClass({
    
     render: function() {
         var courses = this.props.enrolled.map(function(course) {
-            return <View.MyCourses_Course course={ course } />
+            return <View.MyCourses_Course key={ course.id } course={ course } />
         });
 
         return (
@@ -85,8 +85,9 @@ View.MyCourses = React.createClass({
 View.MyCourses_Course = React.createClass({
     
     render: function() {
+        var course = this.props.course;
         return (
-            <li onClick={ this.handleClick }>{ this.props.course.get('code') }</li>
+            <li onClick={ this.handleClick }>{ course.get('code') }</li>
         );
     },
 
