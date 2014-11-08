@@ -163,8 +163,6 @@ var Dispatcher = (function() {
         var storeCalls = stateMap.actionHash[name],
             promises;
 
-        console.log(stateMap.waitHash_resolve);
-        console.log(stateMap.waitHash_reject);
         if (!storeCalls) {
             throw new Error("Action " + name + " must be registered.");
         }

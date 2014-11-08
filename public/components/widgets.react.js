@@ -166,7 +166,9 @@ View.CourseInfo = React.createClass({
         // TODO: Separate out tags that are specific
         // to a page (i.e. home-content__course__grid__course).
         return (
-            <div className="home-content__courses__grid__course course-info">
+            <div onClick= { this.handleClick }
+                 className="home-content__courses__grid__course course-info">
+
                 <header className="course-info__header" style={ courseHeaderStyle }>
                     { course.get('code') }
                 </header>
@@ -178,6 +180,11 @@ View.CourseInfo = React.createClass({
                 <footer className="course-info__footer">{ enrollMessage }</footer>
             </div>
         );
+    },
+
+    handleClick: function(event) {
+        Action.send(Action.Name.PERFORM_LOAD,
+                    {pageKey: 'course', course: this.props.course.id})
     }
 
 });
