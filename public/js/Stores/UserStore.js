@@ -66,7 +66,6 @@ var UserStore = (function() {
             fetchSchoolPromise = new Promise(function(resolve, reject) {
                 user.get('school').fetch({
                     success: function(model, response, options) {
-                        console.log("Fetching school is done");
                         resolve();
                     },
 
@@ -142,14 +141,15 @@ var UserStore = (function() {
         var self = this;
         switch (name) {
         case Action.Name.PERFORM_LOAD:
-            return new Promise(function(resolve, reject) {
-                Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                    .then(self._login.bind(self))
-                    .then(function() {
-                        resolve();
-                    });
-            });
-
+            return function(payload) {
+              return new Promise(function(resolve, reject) {
+                    Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(self._login.bind(self))
+                        .then(function() {
+                            resolve();
+                        });
+                });              
+            };
         default:
             return null;
         }

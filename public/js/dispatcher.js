@@ -144,6 +144,10 @@ var Dispatcher = (function() {
         // action with each store.
         var storeCalls = stateMap.stores.reduce(function(memo, store) {
             var callback = store.actionHandler(name);
+            if (typeof callback !== 'function') {
+                throw new Error("Dispatcher will only register objects of type" +
+                                "'function' from actionHandler.");
+            }
             if (callback) {
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }
@@ -159,13 +163,14 @@ var Dispatcher = (function() {
         var storeCalls = stateMap.actionHash[name],
             promises;
 
+        console.log(stateMap.waitHash_resolve);
+        console.log(stateMap.waitHash_reject);
         if (!storeCalls) {
             throw new Error("Action " + name + " must be registered.");
         }
 
         // Lock the dispatcher before doing anything.
         stateMap.locked = true;
-
         // Get all the promises that are produced
         // by the functions.
         if (storeCalls.length > 0) {
@@ -178,7 +183,7 @@ var Dispatcher = (function() {
                         function() {
                             resolve();
                             // Notify all objects waiting for the
-                            // resolution of this callback to resolve
+                            // resolution of this callback to notify
                             // that the callback has resolved.
                             (stateMap.waitHash_resolve[index] || [])
                                 .forEach(function(wait_resolve) {
@@ -206,8 +211,6 @@ var Dispatcher = (function() {
                         }
                     );
                 });
-
-                
             });
 
             Promise.all(promises).then(

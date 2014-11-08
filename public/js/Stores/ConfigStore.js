@@ -47,6 +47,7 @@ var ConfigStore = (function() {
                         default:
                             Anchor.set({pageKey: payload.pageKey});
                         }
+                        console.log("About to resolve.");
                         resolve();
                     });
                 };
