@@ -26,11 +26,8 @@ View.Course_Root = React.createClass({
     render: function() {
         return (
             <div className="main">
+                <h1>Hello world!</h1>
             </div>
         );
     }
 });
-
-
-
-

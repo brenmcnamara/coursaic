@@ -18,9 +18,9 @@ View.render = function(key, params) {
             React.renderComponent(View.Home_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
-        case 'course':
+        case 'course':            
             View._unmountRoot();
-            React.renderComponent(View.Course_Root(param),
+            React.renderComponent(View.Course_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
         default:

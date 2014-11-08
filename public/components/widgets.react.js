@@ -35,7 +35,6 @@ View.MainOptions = React.createClass({
 View.MainOption_CreateCourse = React.createClass({
     
     render: function() {
-        console.log("Rendering course");
         var createCourseStyle = {
             height: '30px',
             margin: '-15px 0 0 9px'
