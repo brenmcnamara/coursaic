@@ -76,5 +76,6 @@ View.Header_Fill = React.createClass({
             <div className={ fillType }></div>
         );
     }
+
 });
 

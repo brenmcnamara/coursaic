@@ -11,6 +11,23 @@ var Anchor = (function() {
 
     /* DECLARATION */
 
+    
+    var 
+
+    /**
+     * Check if an object is a subset of another object.
+     *
+     * @method _isSubset
+     * @private
+     *
+     * @param subset {Object} The subset to check.
+     * @param superset {Object} The superset to check.
+     *
+     * @return {Boolean} true if the superset is
+     *  an actual superset of the object.
+     */
+        _isSubset,
+
     /**
      * Convert a hash object into a string
      * that can be inserted into the url hash.
@@ -23,7 +40,7 @@ var Anchor = (function() {
      *
      * @return {String} A new hash encoded from the hashMap.
      */
-    var _serializeHash,
+        _serializeHash,
 
     /**
      * Convert a string hash into a hashMap.
@@ -53,6 +70,9 @@ var Anchor = (function() {
      * @param addMap {Object} A set of key/value pairs
      *  containing all the properties to add to
      *  the hash map.
+     *
+     * @param options {Object} A map of options to use
+     *  when setting the hash.
      */
         set,
 
@@ -77,10 +97,36 @@ var Anchor = (function() {
             // The current hash that is known.
             // This is to check for hash change
             // events.
-            currentHash: window.location.hash    
+            currentHash: window.location.hash,
+
+            // When this flag is set to true, the
+            // onChange event is not called for the next
+            // hash change. This flag will be automatically
+            // set back to false after the hash change has
+            // occurred.
+            silent: false   
         };
 
     /* IMPLEMENTATION */
+
+    _isSubset = function(subset, superset) {
+        var prop;
+        // Check that all properties of the subset are
+        // part of the superset.
+        for (prop in subset) {
+            if (subset.hasOwnProperty(prop)) {
+                // NOTE: This check only intended for
+                // shallow objects that contain a set
+                // of strings.
+                // Check if any elements in object are not equal.
+                if (subset[prop] !== superset[prop]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
 
     _serializeHash = function(hashMap) {
         var prop, hashArr = [];
@@ -114,14 +160,27 @@ var Anchor = (function() {
     };
 
 
-    set = function(addMap) {
-        var currentMap = hashMap(), prop;
-        for (prop in addMap) {
-            if (addMap.hasOwnProperty(prop)) {
-                currentMap[prop] = addMap[prop];
+    set = function(addMap, options) {
+        var hash,
+            prop,
+            currentMap = hashMap();
+
+        // Check for equality before preceding.
+        // This is because the stateMap.silent
+        // property should not be modified
+        // if the hash is going to be the same.
+        if (!_isSubset(addMap, currentMap)) {
+            options = options || { silent: false };
+            stateMap.silent = options.silent || false;
+
+            for (prop in addMap) {
+                if (addMap.hasOwnProperty(prop)) {
+                    currentMap[prop] = addMap[prop];
+                }
             }
+            hash = _serializeHash(currentMap);
+            window.location.hash = _serializeHash(currentMap); 
         }
-        window.location.hash = _serializeHash(currentMap); 
     };
 
 
@@ -134,7 +193,12 @@ var Anchor = (function() {
             var hash = window.location.hash;
             if (hash !== stateMap.currentHash) {
                 stateMap.currentHash = hash;
-                callback(_parseHash(hash));
+                if (stateMap.silent) {
+                    stateMap.silent = false;
+                }
+                else {
+                    callback(_parseHash(hash));
+                }
             }
         }, 150);
     };

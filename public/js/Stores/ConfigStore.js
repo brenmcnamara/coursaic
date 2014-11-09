@@ -33,6 +33,11 @@ var ConfigStore = (function() {
         switch (name) {
             case Action.Name.PERFORM_LOAD:
                 return function(payload) {
+                    console.log("PERFORM_LOAD");
+                    payload.updateHash = (typeof payload.updateHash === 'boolean') ?
+                                         payload.updateHash :
+                                         true;
+
                     // Get the promise for the login process.
                     return new Promise(function(resolve, rejected) {
                         // Nothing to do yet. Might add stuff here
@@ -40,13 +45,17 @@ var ConfigStore = (function() {
                             throw new Error("Page loaded without pageKey specified.");
                         }
 
-                        switch (payload.pageKey) {
-                        case 'course':
-                            Anchor.set({pageKey: 'course', course: payload.course});
-                            break;
-                        default:
-                            Anchor.set({pageKey: payload.pageKey});
+                        if (payload.updateHash) {
+                            switch (payload.pageKey) {
+                            case 'course':
+                                Anchor.set({pageKey: 'course', course: payload.course},
+                                           {silent: true});
+                                break;
+                            default:
+                                Anchor.set({pageKey: payload.pageKey}, {silent: true});
+                            }
                         }
+
                         resolve();
                     });
                 };
