@@ -33,7 +33,6 @@ var ConfigStore = (function() {
         switch (name) {
             case Action.Name.PERFORM_LOAD:
                 return function(payload) {
-                    console.log("PERFORM_LOAD");
                     payload.updateHash = (typeof payload.updateHash === 'boolean') ?
                                          payload.updateHash :
                                          true;
