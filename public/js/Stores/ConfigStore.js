@@ -51,12 +51,16 @@ var ConfigStore = (function() {
                         }
                         if (payload.updateHash) {
                             switch (payload.pageKey) {
+                            // All hash changes here should be set to silent. Non-silent
+                            // hash changes may be picked up and converted to another
+                            // action.
                             case 'course':
                                 Anchor.set({pageKey: 'course', course: payload.course},
                                            {silent: true});
                                 break;
                             default:
-                                Anchor.set({pageKey: payload.pageKey}, {silent: true});
+                                Anchor.set({pageKey: payload.pageKey},
+                                           {silent: true});
                             }
                         }
 
