@@ -33,6 +33,12 @@ var ConfigStore = (function() {
         switch (name) {
             case Action.Name.PERFORM_LOAD:
                 return function(payload) {
+                    // Update hash has a default value
+                    // of true if not provided. UpdateHash
+                    // is used to update the hash of the page.
+                    // This should be set to false if the load
+                    // action is coming from an event that is watching
+                    // the hash.
                     payload.updateHash = (typeof payload.updateHash === 'boolean') ?
                                          payload.updateHash :
                                          true;
@@ -43,7 +49,6 @@ var ConfigStore = (function() {
                         if (!payload.pageKey) {
                             throw new Error("Page loaded without pageKey specified.");
                         }
-
                         if (payload.updateHash) {
                             switch (payload.pageKey) {
                             case 'course':

@@ -9,7 +9,12 @@ var WatchDog = (function() {
     var
 
     /**
+     * Begin watching for page events. This method
+     * will convert page events to actions. The page
+     * events monitored will be events that cannot
+     * be monitored by React.
      *
+     * @method watch
      */
         watch;
 

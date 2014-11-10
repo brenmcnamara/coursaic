@@ -193,8 +193,8 @@ var Dispatcher = (function() {
                             stateMap.waitHash_reject[index] = [];
                         },
                         // On error
-                        function() {
-                            reject();
+                        function(err) {
+                            reject(err);
                             // Notify all objects waiting for the
                             // resolution of this callback to resolve
                             // that the callback has rejection.
@@ -219,6 +219,7 @@ var Dispatcher = (function() {
                 // Failure callback
                 function(err) {
                     stateMap.locked =  false;
+                    console.error(err);
                     throw err;
                 });
         }

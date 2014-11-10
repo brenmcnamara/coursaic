@@ -12,6 +12,7 @@
 View = {};
 
 View.render = function(key, params) {
+    console.log("Rendering...");
     switch (key) {
         case 'home':
             View._unmountRoot();
