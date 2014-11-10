@@ -22,14 +22,14 @@ var WatchDog = (function() {
 
     watch = function() {
         Anchor.onChange(function(hash) {
-            switch (hash.key) {
+            switch (hash.pageKey) {
             case 'course':
                 Action.send(Action.Name.PERFORM_LOAD,
                             {updateHash: false, pageKey: 'course', course: hash.course});
                 break;
             default:
                 Action.send(Action.Name.PERFORM_LOAD,
-                            {updateHash: false, pageKey: hash.key});
+                            {updateHash: false, pageKey: hash.pageKey});
             }
         });
     };
