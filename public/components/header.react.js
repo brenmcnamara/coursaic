@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * header.js
+ * header.react.js
  *
  * All react components related to
  * the header.
@@ -19,10 +19,21 @@
  * The header for any page.
  */
 View.Header = React.createClass({
+    
     render: function() {
+        var user = UserStore.current(),
+            headerType;
+
+        switch (ConfigStore.pageKey()) {
+        case 'course':
+            headerType = "header--fill";
+            break;
+        default:
+            headerType = "header";
+        }
         return (
-            <header className="header">
-                <img className="header__logo" src="./img/logo-dark.png" />
+            <header className={ headerType }>
+                <img className="header__logo" src="/img/logo-dark.png" />
                 <h1 className="header__title">Coursaic</h1>
                 <nav className="main-nav">
                     <div className="main-nav__item--clickable">
@@ -31,11 +42,11 @@ View.Header = React.createClass({
                 </div>
 
                 <div className="main-nav__item--unclickable">
-                    Welcome, Brendan
+                    Welcome, {user.get('firstName')}
                 </div>
                 </nav>
                 <div className="profile-pic--circle header__profile-pic">
-                    <img src="./img/profilePic.png" />
+                    <img src= {user.get('photoUrl')} />
                 </div>
             </header>
         );
@@ -51,10 +62,20 @@ View.Header = React.createClass({
  * by the header.
  */
 View.Header_Fill = React.createClass({
+    
     render: function() {
+        var fillType;
+        switch (ConfigStore.pageKey()) {
+        case 'course':
+            fillType = "header-offset--fill";
+            break;
+        default:
+            fillType = "header-offset";
+        }
         return (
-            <div className="header-offset"></div>
+            <div className={ fillType }></div>
         );
     }
+
 });
 

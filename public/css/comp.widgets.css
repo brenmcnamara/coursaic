@@ -245,6 +245,8 @@ ul.category__list {
     border: solid #979797 1px;
 
     border-radius: 2px;
+
+    cursor: pointer;
 }
 
 

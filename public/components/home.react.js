@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 /**
- * home.js
+ * home.react.js
  *
  * All React Components targeted
  * specifically for the home page.
@@ -9,6 +9,7 @@
 
 /*
  * Dependencies:
+ *  - Parse
  *  - React
  *  - View namespace
  *  - Components in header.js
@@ -23,17 +24,20 @@
  * this element.
  */
 View.Home_Root = React.createClass({
+
     render: function() {
+        var school = UserStore.current().get('school');
         return (
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
                 <View.Home_Img />
-                <View.Search />
+                <View.Search alias={school.get('alias')} />
                 <View.Home_Content />
             </div>
         );
     }
+
 });
 
 
@@ -59,14 +63,15 @@ View.Home_Img = React.createClass({
  */
 View.Search = React.createClass({
     render: function() {
+        var searchText = "Search for " + this.props.alias + " classes...";
         return (
             <div className="home-search">
                 <div className="search">
                     <input type="text"
-                           placeholder="Search for Vanderbilt Courses..."
+                           placeholder={searchText}
                            className="search__input" />
 
-                    <img className="search__submit" src="./img/icons/search.png" />
+                    <img className="search__submit" src="/img/icons/search.png" />
                 </div>
             </div>
         );
@@ -101,11 +106,13 @@ View.Home_Content = React.createClass({
  */
 View.Home_SideNav = React.createClass({
     render: function() {
+        var enrolled = UserStore.current().get('enrolled') || [];
+
         return (
             <div className="content__nav">
                 <View.MainOptions />
                 <View.Divide />
-                <View.MyCourses />
+                <View.MyCourses enrolled={enrolled} />
             </div>
         );
     }
