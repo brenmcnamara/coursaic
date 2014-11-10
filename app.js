@@ -4,11 +4,12 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 
 var app = express();
+
+var facebookId;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -22,12 +23,24 @@ app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+if ('production' == app.get('env')) {
+    facebookId = '275409559335896';
 }
 
-app.get('/', routes.index);
-app.get('/course', routes.course);
+if ('development' == app.get('env')) {
+    app.use(express.errorHandler());
+    facebookId = '286659964877522';
+}
+
+// Routes
+
+app.get('/', function(req, res) {
+    res.render('index', {facebook_id: facebookId});
+});
+
+app.get('/course', function(req, res) {
+    res.render('course');
+});
 
 
 http.createServer(app).listen(app.get('port'), function(){
