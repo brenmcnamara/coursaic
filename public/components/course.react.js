@@ -34,8 +34,8 @@ View.Course_Root = React.createClass({
                 <View.Header />
                 <View.Header_Fill />
                 <View.Course_Dashboard />
-                <View.Course_Summary course = { course }/>
-                <View.Course_Content />
+                <View.Course_Summary course = { course } />
+                <View.Course_Content course = { course } />
             </div>
         );
     }
@@ -67,7 +67,7 @@ View.Course_Summary = React.createClass({
     render: function() {
         var course = this.props.course,
             bannerStyle = {
-                background: "rgb(208, 2, 27)"
+                background: course.get('field').get('color')
             };
 
         return (
@@ -90,9 +90,10 @@ View.Course_Summary = React.createClass({
 View.Course_Content = React.createClass({
 
     render: function() {
+        var course = this.props.course;
         return (
             <div className="content course-content">
-                <View.Course_Content_Nav />
+                <View.Course_Content_Nav course = { course } />
                 <View.Course_Content_Body />
             </div>
         );
@@ -103,14 +104,16 @@ View.Course_Content = React.createClass({
 View.Course_Content_Nav = React.createClass({
 
     render: function() {
-        var examIconStyle = {
+        var course = this.props.course,
+            examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
             },
             selectionBarStyle = {
                 top: "27px",
-                background: "rgb(208, 2, 27)"
+                background: course.get('field').get('color')
             };
+
         return (
             <div className="content__nav">
                 <ul className="main-options">
