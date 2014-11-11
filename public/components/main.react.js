@@ -18,12 +18,13 @@ View.render = function(key, params) {
             React.renderComponent(View.Home_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
-        case 'course':            
+        case 'course':  
             View._unmountRoot();
             React.renderComponent(View.Course_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
         default:
+            console.error("Unrecognized page key " + key);
             throw new Error("Trying to render page with unrecognized key " + key);
     }
 };
@@ -50,8 +51,15 @@ View._unmountRoot = function() {
  * Called when the page is first loaded.
  */
 View._onLoad = function(event) {
-    View.render(ConfigStore.pageKey());
+    switch (ConfigStore.pageKey()) {
+    case 'course':
+        View.render('course', {courseId: ConfigStore.courseId()});
+        break;
+    default:
+        View.render(ConfigStore.pageKey());
+    }
 };
+
 
 UserStore.addListener(CAEvent.Name.DID_LOAD, View._onLoad);
 

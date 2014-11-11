@@ -24,12 +24,17 @@
  */
 View.Course_Root = React.createClass({
     render: function() {
+        var course = CourseStore.courseWithId(this.props.courseId);
+        if (!course) {
+            console.error("Unrecognized course id " + this.props.courseId);
+        }
+
         return (
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
                 <View.Course_Dashboard />
-                <View.Course_Summary />
+                <View.Course_Summary course = { course }/>
                 <View.Course_Content />
             </div>
         );
@@ -37,6 +42,13 @@ View.Course_Root = React.createClass({
 });
 
 
+/**
+ * Course_Dashboard
+ *
+ * The dashboard under the header element
+ * containing any other aside information
+ * for the course.
+ */
 View.Course_Dashboard = React.createClass({
     render: function() {
         var profileGridStyle = {
@@ -76,18 +88,19 @@ View.Course_Dashboard = React.createClass({
 View.Course_Summary = React.createClass({
 
     render: function() {
-        var bannerStyle = {
-            background: "rgb(208, 2, 27)"
-        };
+        var course = this.props.course,
+            bannerStyle = {
+                background: "rgb(208, 2, 27)"
+            };
 
         return (
             <div className="course-summary">
                 <div className="course-summary__banner" style={ bannerStyle }></div>
-                <h1 className="course-summary__code">CS 101</h1>
-                <p className="course-summary__name">Introduction to Computer Science</p>
+                <h1 className="course-summary__code">{ course.get('code') }</h1>
+                <p className="course-summary__name">{ course.get('name') }</p>
                 <p className="course-summary__field">
                     <span className="course-summary__field__key">Field: </span>
-                    <span className="course-summary__field__value">Computer Science</span>
+                    <span className="course-summary__field__value">{ course.get('field').get('name') }</span>
                 </p>
 
                 <div className="profile-pic--circle--bordered course-summary__creator-profile">

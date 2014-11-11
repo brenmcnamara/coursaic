@@ -97,8 +97,7 @@ var Course = Parse.Object.extend("Course", {
     /**
      * Get the course with the given id.
      *
-     * @method _hasCourse
-     * @private
+     * @method courseWithId
      *
      * @param course_id {String} The id of the course
      * to fetch from the store.
@@ -107,7 +106,7 @@ var Course = Parse.Object.extend("Course", {
      *  course object does not exist in the collection, this will return
      *  null.
      */
-    StoreClass.prototype._courseById = function(course_id) {
+    StoreClass.prototype.courseWithId = function(course_id) {
         var i, n;
         for (i = 0, n = this._courses.length; i < n; ++i) {
             if (this._courses[i].id === course_id) {
@@ -200,6 +199,7 @@ var Course = Parse.Object.extend("Course", {
         return Promise.all([fieldPromise, schoolPromise, enrolledUsersPromise]);
     };
 
+
     /**
      * Fetch the courses for a given school.
      *
@@ -229,7 +229,7 @@ var Course = Parse.Object.extend("Course", {
                     // Reduce the list of results to courses
                     // that don't already exist in the collection.
                     results = results.reduce(function(memo, course) {
-                        if (self._courseById(course.id)) {
+                        if (self.courseWithId(course.id)) {
                             return memo;
                         }
                         else {
@@ -294,7 +294,7 @@ var Course = Parse.Object.extend("Course", {
         // generate all the promises necessary for fetching the
         // courses.
         for (i = 0, n = enrolledList.length; i < n; ++i) {
-            courseFromStore = this._courseById(enrolledList[i].id);
+            courseFromStore = this.courseWithId(enrolledList[i].id);
             if (courseFromStore) {
                 courses.push(courseFromStore);
             }

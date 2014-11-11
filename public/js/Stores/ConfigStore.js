@@ -94,10 +94,11 @@ var ConfigStore = (function() {
      * @method courseId
      *
      * @return {String} The id of the course for the current
-     * page.
+     * page. If the page does not specify a course id, then this
+     * will return null.
      */
     StoreClass.prototype.courseId = function() {
-
+        return Anchor.hashMap().course || null;
     };
 
 
