@@ -55,7 +55,6 @@
         window.fbAsyncInit = function() {
             Parse.FacebookUtils.init({ // this line replaces FB.init({
                     appId      : <%= facebook_id %>, // Facebook App ID
-                    status     : true, // check Facebook Login status
                     cookie     : true, // enable cookies to allow Parse to access the session
                     xfbml      : true,
                     version    : 'v2.1'
