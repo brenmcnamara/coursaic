@@ -33,7 +33,7 @@
     background: #F5A623;
     height: 2px;
     width: 80%;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 /* -------------------- *\
@@ -381,7 +381,6 @@ ul.profile-grid {
       Course-Summary
 \* -------------------- */
 
-/* TODO: font sizes should be using em */
 .course-summary {
     position: absolute;
 
@@ -440,3 +439,17 @@ ul.profile-grid {
 
     width: 180px;
 }
+
+.course-summary__stats {
+   margin-left: 40px;
+   padding: 0px;
+}
+
+ul.course-summary__stats {
+    list-style: none;
+}
+
+.course-summary__stats__item {
+    margin-top: 5px;    
+}
+

@@ -53,6 +53,16 @@ ul.dashboard__course-logistics {
     top: 30px;
 }
 
+.dashboard__course-description {
+    position: absolute;
+    bottom: 5px;
+    width: 450px;
+    max-height: 100px;
+    left: 315px; /* width of course-summary + 15px */
+    
+    overflow: hidden;
+}
+
 /* -------------------- *\
           Exam
 \* -------------------- */

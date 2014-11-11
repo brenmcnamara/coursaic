@@ -33,7 +33,7 @@ View.Course_Root = React.createClass({
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
-                <View.Course_Dashboard />
+                <View.Course_Dashboard course = { course } />
                 <View.Course_Summary course = { course } />
                 <View.Course_Content course = { course } />
             </div>
@@ -51,12 +51,16 @@ View.Course_Root = React.createClass({
  */
 View.Course_Dashboard = React.createClass({
     render: function() {
-        var profileGridStyle = {
-            minWidth: "150px"
-        };
+        var course = this.props.course,
+            profileGridStyle = {
+                minWidth: "150px"
+            };
 
         return (
             <div className="dashboard">
+                <p className="dashboard__course-description">
+                    { course.get('description') }
+                </p>
             </div>
         );
     }
@@ -68,7 +72,13 @@ View.Course_Summary = React.createClass({
         var course = this.props.course,
             bannerStyle = {
                 background: course.get('field').get('color')
-            };
+            },
+            enrollText = (course.get('enrollCount') == 1) ? 
+                         "1 person enrolled" :
+                         course.get('enrollCount') + " people enrolled",
+            // TODO (brendan): Change this when exams are added.
+            examText = "No exams"
+
 
         return (
             <div className="course-summary">
@@ -79,6 +89,11 @@ View.Course_Summary = React.createClass({
                     <span className="course-summary__field__key">Field: </span>
                     <span className="course-summary__field__value">{ course.get('field').get('name') }</span>
                 </p>
+                <div className="divide"></div>
+                <ul className="course-summary__stats">
+                    <li className="course-summary__stats__item">{ enrollText }</li>
+                    <li className="course-summary__stats__item">{ examText }</li>
+                </ul>
             </div>
         );
     }
