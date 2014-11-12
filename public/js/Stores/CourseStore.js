@@ -11,13 +11,7 @@
 
 /*global FB, Parse, Action, CAEvent */
 
-var Course = Parse.Object.extend("Course", {
-
-    equals: function(course) {
-        return course.id === this.id;
-    }
-
-}),
+var Course = Parse.Object.extend("Course"),
     
     CourseStore = (function() {
 
