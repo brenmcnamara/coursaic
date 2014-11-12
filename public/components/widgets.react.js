@@ -174,7 +174,7 @@ View.CourseInfo = React.createClass({
                 </header>
                 <div className="course-info__body">
                     <div className="course-info__body__text">
-                        { course.get('description') }
+                        { Formatter.Text.truncate(course.get('description'), {maxlen: 75}) }
                     </div>
                 </div>
                 <footer className="course-info__footer">{ enrollMessage }</footer>
