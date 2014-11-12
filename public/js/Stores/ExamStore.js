@@ -112,6 +112,40 @@ var ExamStore = (function() {
     };
 
 
+    /**
+     * Get all the questions for a particular exam. This
+     * is a query method.
+     *
+     * @method questionsForExam
+     *
+     * @param exam {Exam} The exam to get the questions for.
+     *
+     * @param user {User} The user to get the questions for.
+     *  This parameter is optional. If this parameter is not
+     *  specified, then this method will return all the questions
+     *  for the exam. If it is specified, it will return all
+     *  questions in the exam that were created by the given user.
+     *
+     * @return {Array} An array of questions for the exam and
+     *  (optionally) the user.
+     */
+    StoreClass.prototype.questionsForExam = function(exam, user) {
+        // NOTE: Made the decision not to load the information
+        // for the user of questions. This means when checking
+        // if the question belongs to a user, check the id.
+        var questions = this._questionHash[exam.id];
+
+        if (user) {
+            // Get the questions that were created by
+            // the user.
+            return questions.filter(function(question) {
+                return question.get('author').id === user.id;
+            });
+        }
+        return questions;
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
