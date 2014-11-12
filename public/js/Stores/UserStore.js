@@ -82,6 +82,8 @@ var UserStore = (function() {
             // after setup of Stores.
             fetchEnrolledPromise = CourseStore.fetchCoursesForUser(user);
 
+        // Add the current user to the hash.
+        this._userHash[user.id] = user;
         // Combine all the promises into one promise.
         return Promise.all([fbPromise, fetchSchoolPromise, fetchEnrolledPromise]);
     };
@@ -196,7 +198,13 @@ var UserStore = (function() {
                         // set of users. This saves a conditional
                         // check and creates updates in case
                         // user information has changed.
-                        self._userHash[user.id] = user;
+                        
+                        // To avoid issues with parse, don't update
+                        // the user if the user fetched is the
+                        // currently logged in user.
+                        if (self.current().id !== user.id) {
+                            self._userHash[user.id] = user;
+                        }
                     });
                     resolve(results);
                 },
