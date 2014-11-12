@@ -16,7 +16,7 @@
 // the environment is a Node environment.
 // If this is running in the browser, Formatter
 // should already exist.
-var Formatter = {}; //Changed this but this might be wrong!!
+var Formatter;
 
 // Setup for Node Environment.
 if (typeof require === 'function' && exports) {
