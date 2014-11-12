@@ -1,5 +1,5 @@
 /**
- * ConfigStore.js
+ * ExamStore.js
  */
 
 /*jslint browser:true, continue:false, devel:true,
@@ -9,7 +9,7 @@
          maxlen:100
 */
 
-/*global Action, CAEvent, Exam, Course */
+/*global Action, CAEvent, Exam, Course, Question */
 
 /**
  * ExamStore.js
@@ -20,6 +20,9 @@ var ExamStore = (function() {
     var StoreClass = function() {
         // A hash of id -> exam object
         this._examHash = {};
+
+        // A hash of exam id -> array of questions.
+        this._questionHash = {};
     };
 
 
@@ -67,9 +70,45 @@ var ExamStore = (function() {
     /**
      * Get all the data for a given exam, this includes
      * the creator of the exam, the questions, etc...
+     *
+     * @method _loadExam
+     * @private
+     *
+     * @return {Promise} A promise that is called when
+     *  all the exam data has been fetched.
      */
     StoreClass.prototype._loadExam = function(exam) {
-        return UserStore.fetchAuthorOfExam(exam);
+        var
+            self = this,
+            // Load the author of the exam.
+            authorPromise = UserStore.fetchAuthorOfExam(exam),
+
+            // Load all the questions that are in the exam.
+            questionsPromise = new Promise(function(resolve, reject) {
+                var query = new Parse.Query(Question);
+                query.equalTo('exam', exam);
+
+                query.find({
+                    success: function(questions) {
+                        // No need now to load all the data from
+                        // the question, it is unnecessary.
+                        questions.forEach(function(question) {
+                            question.encodeAttrs();
+                            // Set the exam on this question.
+                            question.set('exam', exam);
+                        });
+                        // Cache the questions for the exam.
+                        self._questionHash[exam.id] = questions;
+                        resolve();
+                    },
+
+                    error: function(error) {
+                        throw error;
+                    }
+                });
+            });
+
+        return Promise.all([authorPromise, questionsPromise])
     };
 
 

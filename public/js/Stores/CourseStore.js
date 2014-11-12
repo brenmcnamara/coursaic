@@ -34,7 +34,7 @@ var Course = Parse.Object.extend("Course"),
             case Action.Name.PERFORM_LOAD:
 
                 return function(payload) {
-                    return new Promise(function(resolve, rejected) {
+                    return new Promise(function(resolve, reject) {
                         Dispatcher.waitFor([ConfigStore.dispatcherIndex]).then(
                             // On success from ConfigStore.   
                             function() {

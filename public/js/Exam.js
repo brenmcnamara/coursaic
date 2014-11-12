@@ -69,7 +69,8 @@ var
          * should not be called after the "fetch" method
          * is called on a question. Modifies the attributes
          * of the question to better represent the particular
-         * question type.
+         * question type. THIS METHOD MUST BE CALLED ONCE
+         * AFTER THE QUESTION IS FETCHED FROM A QUERY.
          *
          * @method encodeAttrs
          */
