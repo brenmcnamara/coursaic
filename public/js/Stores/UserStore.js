@@ -139,6 +139,25 @@ var UserStore = (function() {
     };
 
 
+    /**
+     * Add a user to the collection.
+     *
+     * @method _addUser
+     * @private
+     *
+     * @param user {Parse.User} The user to add to
+     *  the store.
+     */
+    StoreClass.prototype._addUser = function(user) {
+        // Avoid updating the user if it is the current
+        // user. This may cause consistency issues with
+        // Parse.
+        if (user.id !== this.current().id) {
+            this._userHash[user.id] = user;
+        }
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
@@ -198,17 +217,38 @@ var UserStore = (function() {
                         // set of users. This saves a conditional
                         // check and creates updates in case
                         // user information has changed.
-                        
-                        // To avoid issues with parse, don't update
-                        // the user if the user fetched is the
-                        // currently logged in user.
-                        if (self.current().id !== user.id) {
-                            self._userHash[user.id] = user;
-                        }
+                        self._addUser(user);
                     });
                     resolve(results);
                 },
                 // Error
+                error: function(error) {
+                    throw error;
+                }
+            });
+        });
+    };
+
+
+    /**
+     * Get the author of the exam for the course.
+     *
+     * @method fetchAuthorOfExam
+     *
+     * @param exam {Exam} The exam to get the author for.
+     *
+     * @return {Promise} The promise that gets called when
+     *  fetching the author has completed.
+     */
+    StoreClass.prototype.fetchAuthorOfExam = function(exam) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            exam.get('author').fetch({
+                success: function(user) {
+                    self._addUser(user);
+                    resolve();
+                },
+
                 error: function(error) {
                     throw error;
                 }
