@@ -120,6 +120,9 @@ View.Course_Content_Nav = React.createClass({
 
     render: function() {
         var course = this.props.course,
+            examList = ExamStore.examsForCourse(course).map(function(exam) {
+                return <li>{ exam.get('name') }</li>;
+            }),
             examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
@@ -128,7 +131,6 @@ View.Course_Content_Nav = React.createClass({
                 top: "27px",
                 background: course.get('field').get('color')
             };
-
         return (
             <div className="content__nav">
                 <ul className="main-options">
@@ -149,8 +151,7 @@ View.Course_Content_Nav = React.createClass({
                          style={ selectionBarStyle }></div>
 
                     <ul className="category__list">
-                        <li>Exam 1</li>
-                        <li>Exam 2</li>
+                        { examList }
                     </ul>
                 </div>
             </div>

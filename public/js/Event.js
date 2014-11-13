@@ -41,7 +41,11 @@ var CAEvent = function(name, params) {
  * @type Object
  */
 CAEvent.Name = {
+    // TODO (brendan): Better name for this event.
     DID_LOAD: 'DID_LOAD',
-    DID_FETCH_COURSES: 'DID_FETCH_COURSES'
+    DID_FETCH_COURSES: 'DID_FETCH_COURSES',
+    // Event for when all exams of a course
+    // are fetched.
+    DID_FETCH_ALL_EXAMS: 'DID_FETCH_ALL_EXAMS'
 };
 

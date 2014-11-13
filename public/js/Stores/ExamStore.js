@@ -56,6 +56,9 @@ var ExamStore = (function() {
                 success: function(response) {
                     response = response || [];
                     response.forEach(function(exam) {
+                        // Set the course since we know
+                        // it based on the query.
+                        exam.set('course', course);
                         self._examHash[exam.id] = exam;
                     });
                     resolve(response);
@@ -148,6 +151,31 @@ var ExamStore = (function() {
     };
 
 
+    /**
+     * A query operation to get an array of exams for a particular
+     * course.
+     *
+     * @method examsForCourse
+     *
+     * @param course {Course} The course to query the exams
+     *  with.
+     *
+     * @return {Array} An array of Exam objects. This is an empty
+     *  array if there are no exams for the given course.
+     */
+    StoreClass.prototype.examsForCourse = function(course) {
+        var prop, exams = [];
+        for (prop in this._examHash) {
+            if (this._examHash.hasOwnProperty(prop) &&
+                this._examHash[prop].get('course') === course) {
+
+                exams.push(this._examHash[prop]);
+            }
+        }
+        return exams;
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
@@ -179,6 +207,19 @@ var ExamStore = (function() {
                                         return self._loadExam(exam);
                                     }));
                                 },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                })
+                            // After all the exams have been loaded.
+                            .then(
+                                // Success.
+                                function() {
+                                    return new Promise(function(resolve) {
+                                        self.emit(CAEvent)
+                                    });
+                                },
+
                                 // Error.
                                 function(error) {
                                     throw error;
