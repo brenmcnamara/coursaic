@@ -32,6 +32,7 @@ var ConfigStore = (function() {
         var self = this;
         switch (name) {
             case Action.Name.PERFORM_LOAD:
+
                 return function(payload) {
                     // Update hash has a default value
                     // of true if not provided. UpdateHash

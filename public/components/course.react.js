@@ -119,18 +119,11 @@ View.Course_Content = React.createClass({
 View.Course_Content_Nav = React.createClass({
 
     render: function() {
-        var course = this.props.course,
-            examList = ExamStore.examsForCourse(course).map(function(exam) {
-                return <li>{ exam.get('name') }</li>;
-            }),
-            examIconStyle = {
+        var examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
-            },
-            selectionBarStyle = {
-                top: "27px",
-                background: course.get('field').get('color')
             };
+
         return (
             <div className="content__nav">
                 <ul className="main-options">
@@ -145,15 +138,36 @@ View.Course_Content_Nav = React.createClass({
 
                 <div className="divide"></div>
 
-                <div className="category exam-list">
-                    <div className="category__title">Exams</div>
-                    <div className="exam-list__selection-bar"
-                         style={ selectionBarStyle }></div>
+                <View.Exam_List course={ this.props.course } />
 
-                    <ul className="category__list">
-                        { examList }
-                    </ul>
-                </div>
+            </div>
+        );
+    }
+
+});
+
+
+View.Exam_List = React.createClass({
+
+    render: function() {
+        var course = this.props.course,
+            examList = ExamStore.examsForCourse(course).map(function(exam) {
+                return <View.Exam_List_Item key={ exam.id } exam={ exam } />
+            }),
+            selectionBarStyle = {
+                top: "27px",
+                background: course.get('field').get('color')
+            };
+
+        return (
+            <div className="category exam-list">
+                <div className="category__title">Exams</div>
+                <div className="exam-list__selection-bar"
+                     style={ selectionBarStyle }></div>
+
+                <ul className="category__list">
+                    { examList }
+                </ul>
             </div>
         );
     },
@@ -168,7 +182,20 @@ View.Course_Content_Nav = React.createClass({
     },
 
     componentWillUnmount: function() {
-        ExamStore.removeListener();
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    }
+
+});
+
+
+View.Exam_List_Item = React.createClass({
+
+    render: function() {
+        var exam = this.props.exam;
+
+        return (
+            <li>{ exam.get('name') }</li>
+        );
     }
 
 });

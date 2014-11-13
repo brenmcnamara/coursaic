@@ -40,7 +40,15 @@ View.render = function(key, params) {
  * unmounted, false otherwise.
  */
 View._unmountRoot = function() {
-    return React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+    var result;
+    try {
+        result = React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+    }
+    catch (e) {
+        console.error(e);
+        throw e;
+    }
+    return result;
 };
 
 
