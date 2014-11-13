@@ -49,6 +49,8 @@ var ExamStore = (function() {
         var self = this,
             query = new Parse.Query(Exam);
 
+        query.equalTo('course', course);
+
         return new Promise(function(resolve, reject) {
             query.find({
                 success: function(response) {
@@ -184,10 +186,14 @@ var ExamStore = (function() {
                 }
                 else {
                     return new Promise(function(resolve) {
+                        // Exam store does not need to do anything
+                        // when rendering page that is non-course.
                         resolve();
                     });
                 }
             };
+        default:
+            return null;
         }
     };
 
