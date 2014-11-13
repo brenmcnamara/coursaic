@@ -29,6 +29,7 @@ View.render = function(key, params) {
     }
 };
 
+
 /**
  * Unmount the root element
  *
@@ -44,11 +45,11 @@ View._unmountRoot = function() {
 
 
 /**
+ * Called when the page is first loaded.
+ *
  * @static
  * @private
  * @method _onLoad
- *
- * Called when the page is first loaded.
  */
 View._onLoad = function(event) {
     switch (ConfigStore.pageKey()) {
@@ -59,7 +60,6 @@ View._onLoad = function(event) {
         View.render(ConfigStore.pageKey());
     }
 };
-
 
 UserStore.addListener(CAEvent.Name.DID_LOAD, View._onLoad);
 

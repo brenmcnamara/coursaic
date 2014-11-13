@@ -46,6 +46,6 @@ CAEvent.Name = {
     DID_FETCH_COURSES: 'DID_FETCH_COURSES',
     // Event for when all exams of a course
     // are fetched.
-    DID_FETCH_ALL_EXAMS: 'DID_FETCH_ALL_EXAMS'
+    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS'
 };
 

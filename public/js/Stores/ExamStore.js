@@ -215,9 +215,8 @@ var ExamStore = (function() {
                             .then(
                                 // Success.
                                 function() {
-                                    return new Promise(function(resolve) {
-                                        self.emit(CAEvent)
-                                    });
+                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
+                                                          {courseId: payload.course}));
                                 },
 
                                 // Error.

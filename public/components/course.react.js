@@ -156,6 +156,19 @@ View.Course_Content_Nav = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    // Event handler for when exams are fetched.
+    didFetchExams: function(event) {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener();
     }
 
 });
