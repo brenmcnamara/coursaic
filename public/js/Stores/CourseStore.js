@@ -34,29 +34,52 @@ var Course = Parse.Object.extend("Course"),
             case Action.Name.PERFORM_LOAD:
 
                 return function(payload) {
-                    // TODO (brendan): Don't need to wrap in promise.
-                    // TODO (brendan): CourseStore needs to handle correct
-                    // pageKey.
-                    return new Promise(function(resolve, reject) {
-                        Dispatcher.waitFor([ConfigStore.dispatcherIndex]).then(
-                            // On success from ConfigStore.   
-                            function() {
-                                self.fetchPage().then(
-                                    // Success
+                    switch (payload.pageKey) {
+                    case 'home':
+                        // Fetch a page-worth of courses.
+                        return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                // Done waiting for the ConfigStore
+                               .then(self.fetchPage())
+                               // Finished getting the next set of courses.
+                               .then(
+                                    // Success.
                                     function() {
-                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES));
-                                        resolve();
+                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
                                     },
-                                    // Failure
+                                    // Error.
+                                    function(err) {
+                                        throw error;
+                                    });
+                    case 'course':
+                        // Just make sure the single course is loaded.
+                        return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                               .then(
+                                    // Success.
                                     function() {
-                                        throw new Error("Failed to fetch courses.");
+                                        var course;
+                                        // Get the course if the course does not
+                                        // already exist.
+                                        if (!self.courseWithId(payload.course)) {
+                                            // Don't have the course, need to fetch it.
+                                            course = new Course();
+                                            course.id = payload.course;
+                                            return self._fetchCourse(course);
+                                        }
+
+                                    },
+
+                                    // Error.
+                                    function(error) {
+                                        throw error;
                                     }
-                                );
-                            },
-                            // On failure from ConfigStore.
-                            function() {
-                                throw new Error("ConfigStore failed to become ready.");
-                            });
+                                )
+                    default:
+                        return new Promise(function(resolve, reject) {
+                            resolve();
+                        });
+                    }
+                    return new Promise(function(resolve, reject) {
+
                     });
 
                 };
@@ -115,7 +138,7 @@ var Course = Parse.Object.extend("Course"),
 
 
     /**
-     * Fetch all the data for a course and all a courses
+     * Fetch all the data for a course and all the course's
      * properties.
      *
      * @method _fetchCourse
@@ -131,6 +154,8 @@ var Course = Parse.Object.extend("Course"),
         return new Promise(function(resolve, reject) {
             course.fetch({
                 success: function() {
+                    // TODO (brendan): Separate out load and
+                    // fetch course calls.
                     self._loadCourse(course).then(
                         // Success
                         function() {
