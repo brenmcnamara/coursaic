@@ -151,20 +151,23 @@ View.Exam_List = React.createClass({
 
     render: function() {
         var course = this.props.course,
+            // TODO: Add a "No Exams" list item if there are no exams.
             examList = ExamStore.examsForCourse(course).map(function(exam) {
                 return <View.Exam_List_Item key={ exam.id } exam={ exam } />
             }),
             selectionBarStyle = {
                 top: "27px",
                 background: course.get('field').get('color')
-            };
+            },
+            selectionBar = (examList.length) ?
+                           (<div className="exam-list__selection-bar"
+                                 style={ selectionBarStyle }></div>) :
+                           null;
 
         return (
             <div className="category exam-list">
+                { selectionBar }
                 <div className="category__title">Exams</div>
-                <div className="exam-list__selection-bar"
-                     style={ selectionBarStyle }></div>
-
                 <ul className="category__list">
                     { examList }
                 </ul>

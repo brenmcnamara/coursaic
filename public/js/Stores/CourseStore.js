@@ -34,6 +34,9 @@ var Course = Parse.Object.extend("Course"),
             case Action.Name.PERFORM_LOAD:
 
                 return function(payload) {
+                    // TODO (brendan): Don't need to wrap in promise.
+                    // TODO (brendan): CourseStore needs to handle correct
+                    // pageKey.
                     return new Promise(function(resolve, reject) {
                         Dispatcher.waitFor([ConfigStore.dispatcherIndex]).then(
                             // On success from ConfigStore.   
