@@ -347,6 +347,9 @@ var Course = Parse.Object.extend("Course"),
      *  is not 'course', this will return null.
      */
     StoreClass.prototype.current = function() {
+        // TODO (brendan): Maybe make this throw an
+        // error if the current key is not called on
+        // the correct page.
         return (ConfigStore.pageKey() === 'course') ?
                 this.courseWithId(ConfigStore.courseId()) :
                 null;

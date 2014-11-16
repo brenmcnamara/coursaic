@@ -214,10 +214,15 @@ View.Course_Content_Body = React.createClass({
 View.Course_No_Exam = React.createClass({
 
     render: function() {
+        var examCount = ExamStore.examsForCourse(CourseStore.current()).length,
+            title = (examCount) ? "Select Exam" : "Create Exam",
+            description = (examCount) ? "Select an exam to the left." :
+                                        "This course has no exams. Create an exam to the left.";
+
         return (
             <div className="content__body__wrapper">
-                <h1 className="content__body__title">Select Exam</h1>
-                <p className="content__body__description">Select an exam in the left panel.</p>
+                <h1 className="content__body__title">{ title }</h1>
+                <p className="content__body__description">{ description }</p>
             </div>
         );
     }
