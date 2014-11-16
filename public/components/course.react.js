@@ -226,6 +226,18 @@ View.Course_Content_Body = React.createClass({
             </div>
         );
             
+    },
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
     }
 });
 
@@ -264,57 +276,116 @@ View.Course_No_Exam = React.createClass({
 View.Course_Exam = React.createClass({
     
     render: function() {
+        var exam = ExamStore.current();
         return (
             <div className="content__body__wrapper">
-                <h1 className="content__body__title">Exam 1</h1>
-                <p className="content__body__description">Here is a description of the exam</p>
+                <h1 className="content__body__title">{ exam.get('name') }</h1>
+                <p className="content__body__description">{ exam.get('description') }</p>
                 <div className="exam">
-                    <div className="exam__my-questions">
-                        <div className="exam__my-questions__title">My Questions</div>
-                        <ul className="exam__my-questions__question-list question-list">
-                            <li className="question">
-                                <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                <div className="question__content">
-                                    <div className="question__ask">What is the capital of California?</div>
-                                    <ul className="question__multi-choice multi-choice">
-                                        <li className="multi-choice__item">Canada. This is a really long question and there is a lot of text here. I am going to keep on typing.</li>
-                                        <li className="multi-choice__item">Hawaii</li>
-                                        <li className="multi-choice__item--correct">Sacramento</li>
-                                        <li className="multi-choice__item">Boise</li>
-                                    </ul>
-                                </div>
-                                <div className="question__explain">
-                                    Explanation: California is the captial of Sacramento.
-                                </div>
-
-                            </li>
-                             <li className="question">
-                                <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                <div className="question__content">
-                                    <div className="question__ask">
-                                        A farmer has 3 apples. He gives 2 to his buddy and buys 6 more at the store.  How many apples does the farmer have now?
-                                    </div>
-
-                                    <ul className="question__multi-choice multi-choice">
-                                        <li className="multi-choice__item">4</li>
-                                        <li className="multi-choice__item">9</li>
-                                        <li className="multi-choice__item--correct">7</li>
-                                        <li className="multi-choice__item">1</li>
-                                    </ul>
-                                </div>
-
-                                <div className="question__explain">
-                                    Explanation: 3 - 2 + 6 = 7.
-                                </div>
-                            </li>
-                        </ul>
-                    </div> 
+                    <View.Course_Exam_Questions />
                 </div>
             </div>
         );
     }
 
+});
+
+
+View.Course_Exam_Questions = React.createClass({
+
+    render: function() {
+        // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
+        // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
+        var questions = ExamStore.questionsForExam(ExamStore.current(),
+                                                   UserStore.current()),
+            listItems = questions.map(function(question) {
+                return <View.Course_Exam_Question_Item key={ question.id }
+                                                       question={ question } />
+            });
+
+        return (
+            <div className="exam__my-questions">
+                <div className="exam__my-questions__title">My Questions</div>
+                <ul className="exam__my-questions__question-list question-list">
+                     { listItems }
+                </ul>
+            </div> 
+        );
+    },
+
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    }
+
 
 });
+
+
+View.Course_Exam_Question_Item = React.createClass({
+
+    render: function() {
+        // NOTE (brendan): This is hard-coded for multiple-choice questions.
+        var question = this.props.question;
+        return (
+            <li className="question">
+                <img className="question__icon--edit" src="/img/icons/edit.png" />
+                <img className="question__icon--delete" src="/img/icons/delete.png" />
+                <div className="question__content">
+                    <div className="question__ask">{ question.get('question') }</div>
+                    <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                </div>
+                <div className="question__explain">{ question.get('explanation') }</div>
+            </li>
+        );
+    }
+
+});
+
+// TODO (brendan): Fix naming of these React classes to make them
+// shorter and more clear.
+View.Course_Exam_Question_MultiChoice_Option = React.createClass({
+
+    render: function() {
+        var question = this.props.question,
+            listItems = question.get('options').map(function(option, index) {
+                var isCorrect = question.isCorrect(option);
+                return <View.Course_Exam_Question_MultiChoice_Option_Item key={ index }
+                                                                          option={ option }
+                                                                          isCorrect={ isCorrect } />;
+            });
+
+        return (
+            <ul className="question__multi-choice multi-choice">
+                { listItems }
+            </ul>
+        );
+    }
+
+});
+
+
+View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
+
+    render: function() {
+        var questionClass = (this.props.isCorrect) ?
+                            "multi-choice__item--correct" :
+                            "multi-choice__item",
+            option = this.props.option;
+
+        return <li className={ questionClass }>{ option }</li>; 
+
+    }
+
+});
+

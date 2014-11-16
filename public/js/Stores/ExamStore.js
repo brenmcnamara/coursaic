@@ -138,8 +138,7 @@ var ExamStore = (function() {
         // NOTE: Made the decision not to load the information
         // for the user of questions. This means when checking
         // if the question belongs to a user, check the id.
-        var questions = this._questionHash[exam.id];
-
+        var questions = this._questionHash[exam.id] || [];
         if (user) {
             // Get the questions that were created by
             // the user.
