@@ -71,9 +71,18 @@ View.Course_Summary = React.createClass({
             enrollText = (course.get('enrollCount') == 1) ? 
                          "1 person enrolled" :
                          course.get('enrollCount') + " people enrolled",
-            // TODO (brendan): Change this when exams are added.
-            examText = "No exams"
+            examCount = ExamStore.examsForCourse(course).length,
+            examText;
 
+        if (examCount === 0) {
+            examText = "No Exams";
+        }
+        else if (examCount === 1) {
+            examText = "1 Exam";
+        }
+        else {
+            examText = examCount + " Exams";
+        }
 
         return (
             <div className="course-summary">
@@ -91,9 +100,19 @@ View.Course_Summary = React.createClass({
                 </ul>
             </div>
         );
+    },
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
     }
-
-
 });
 
 
