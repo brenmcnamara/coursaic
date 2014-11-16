@@ -176,6 +176,23 @@ var ExamStore = (function() {
     };
 
 
+    /**
+     * Get the exam that is represented by the current
+     * page.
+     *
+     * @method current
+     *
+     * @return {Exam} The current exam for the page. If the
+     *  page is something that does not have an exam, this will
+     *  return null.
+     */
+    StoreClass.prototype.current = function() {
+        return (ConfigStore.examId()) ?
+               this._examHash[ConfigStore.examId()] :
+               null;
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
