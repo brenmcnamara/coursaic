@@ -144,9 +144,9 @@ View.Course_Content_Nav = React.createClass({
 View.Exam_List = React.createClass({
 
     render: function() {
-            // TODO (brendan): Add a "No Exams" list item if there are no exams.
-            var course = CourseStore.current(),
-                examList = ExamStore.examsForCourse(course).map(function(exam) {
+        // TODO (brendan): Add a "No Exams" list item if there are no exams.
+        var course = CourseStore.current(),
+            examList = ExamStore.examsForCourse(course).map(function(exam) {
                 return <View.Exam_List_Item key={ exam.id } exam={ exam } />
             }),
             selectionBarStyle = {
@@ -225,7 +225,20 @@ View.Course_No_Exam = React.createClass({
                 <p className="content__body__description">{ description }</p>
             </div>
         );
+    },
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
     }
+
 });
 
 
