@@ -24,18 +24,13 @@
  */
 View.Course_Root = React.createClass({
     render: function() {
-        var course = CourseStore.courseWithId(this.props.courseId);
-        if (!course) {
-            console.error("Unrecognized course id " + this.props.courseId);
-        }
-
         return (
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
-                <View.Course_Dashboard course = { course } />
-                <View.Course_Summary course = { course } />
-                <View.Course_Content course = { course } />
+                <View.Course_Dashboard />
+                <View.Course_Summary />
+                <View.Course_Content />
             </div>
         );
     }
@@ -51,7 +46,7 @@ View.Course_Root = React.createClass({
  */
 View.Course_Dashboard = React.createClass({
     render: function() {
-        var course = this.props.course,
+        var course = CourseStore.current(),
             profileGridStyle = {
                 minWidth: "150px"
             };
@@ -69,7 +64,7 @@ View.Course_Dashboard = React.createClass({
 View.Course_Summary = React.createClass({
 
     render: function() {
-        var course = this.props.course,
+        var course = CourseStore.current(),
             bannerStyle = {
                 background: course.get('field').get('color')
             },
@@ -105,10 +100,9 @@ View.Course_Summary = React.createClass({
 View.Course_Content = React.createClass({
 
     render: function() {
-        var course = this.props.course;
         return (
             <div className="content course-content">
-                <View.Course_Content_Nav course = { course } />
+                <View.Course_Content_Nav />
                 <View.Course_Content_Body />
             </div>
         );
@@ -138,7 +132,7 @@ View.Course_Content_Nav = React.createClass({
 
                 <div className="divide"></div>
 
-                <View.Exam_List course={ this.props.course } />
+                <View.Exam_List />
 
             </div>
         );
@@ -150,9 +144,9 @@ View.Course_Content_Nav = React.createClass({
 View.Exam_List = React.createClass({
 
     render: function() {
-        var course = this.props.course,
-            // TODO: Add a "No Exams" list item if there are no exams.
-            examList = ExamStore.examsForCourse(course).map(function(exam) {
+            // TODO (brendan): Add a "No Exams" list item if there are no exams.
+            var course = CourseStore.current(),
+                examList = ExamStore.examsForCourse(course).map(function(exam) {
                 return <View.Exam_List_Item key={ exam.id } exam={ exam } />
             }),
             selectionBarStyle = {

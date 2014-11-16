@@ -115,29 +115,6 @@ var Course = Parse.Object.extend("Course"),
 
 
     /**
-     * Get the course with the given id.
-     *
-     * @method courseWithId
-     *
-     * @param course_id {String} The id of the course
-     * to fetch from the store.
-     *
-     * @return {Course} A course object with the given id. If the
-     *  course object does not exist in the collection, this will return
-     *  null.
-     */
-    StoreClass.prototype.courseWithId = function(course_id) {
-        var i, n;
-        for (i = 0, n = this._courses.length; i < n; ++i) {
-            if (this._courses[i].id === course_id) {
-                return this._courses[i];
-            }
-        }
-        return null;
-    };
-
-
-    /**
      * Fetch all the data for a course and all the course's
      * properties.
      *
@@ -335,6 +312,44 @@ var Course = Parse.Object.extend("Course"),
         // to contain the courses that were saved.
         user.set('enrolled', courses);
         return Promise.all(promises);
+    };
+
+
+    /**
+     * Get the course with the given id.
+     *
+     * @method courseWithId
+     *
+     * @param course_id {String} The id of the course
+     * to fetch from the store.
+     *
+     * @return {Course} A course object with the given id. If the
+     *  course object does not exist in the collection, this will return
+     *  null.
+     */
+    StoreClass.prototype.courseWithId = function(course_id) {
+        var i, n;
+        for (i = 0, n = this._courses.length; i < n; ++i) {
+            if (this._courses[i].id === course_id) {
+                return this._courses[i];
+            }
+        }
+        return null;
+    };
+
+
+    /**
+     * Get the current course for the page.
+     *
+     * @method current
+     *
+     * @return {Course} The current course. If the pageKey
+     *  is not 'course', this will return null.
+     */
+    StoreClass.prototype.current = function() {
+        return (ConfigStore.pageKey() === 'course') ?
+                this.courseWithId(ConfigStore.courseId()) :
+                null;
     };
 
 
