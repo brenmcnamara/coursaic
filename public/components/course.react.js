@@ -209,55 +209,81 @@ View.Course_Content_Body = React.createClass({
     render: function() {
         return (
             <div className="content__body">
-                <div className="content__body__wrapper">
-                    <h1 className="content__body__title">Exam 1</h1>
-                    <div className="exam">
-                        <div className="exam__my-questions">
-                            <div className="exam__my-questions__title">My Questions</div>
-                            <ul className="exam__my-questions__question-list question-list">
-                                <li className="question">
-                                    <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                    <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                    <div className="question__content">
-                                        <div className="question__ask">What is the capital of California?</div>
-                                        <ul className="question__multi-choice multi-choice">
-                                            <li className="multi-choice__item">Canada. This is a really long question and there is a lot of text here. I am going to keep on typing.</li>
-                                            <li className="multi-choice__item">Hawaii</li>
-                                            <li className="multi-choice__item--correct">Sacramento</li>
-                                            <li className="multi-choice__item">Boise</li>
-                                        </ul>
-                                    </div>
-                                    <div className="question__explain">
-                                        Explanation: California is the captial of Sacramento.
-                                    </div>
-
-                                </li>
-                                 <li className="question">
-                                    <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                    <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                    <div className="question__content">
-                                        <div className="question__ask">
-                                            A farmer has 3 apples. He gives 2 to his buddy and buys 6 more at the store.  How many apples does the farmer have now?
-                                        </div>
-
-                                        <ul className="question__multi-choice multi-choice">
-                                            <li className="multi-choice__item">4</li>
-                                            <li className="multi-choice__item">9</li>
-                                            <li className="multi-choice__item--correct">7</li>
-                                            <li className="multi-choice__item">1</li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="question__explain">
-                                        Explanation: 3 - 2 + 6 = 7.
-                                    </div>
-                                </li>
-                            </ul>
-                        </div> 
-                    </div>
-                </div>
+                <View.Course_No_Exam />
             </div>
         );
             
     }
+});
+
+
+View.Course_No_Exam = React.createClass({
+
+    render: function() {
+        return (
+            <div className="content__body__wrapper">
+                <h1 className="content__body__title">Select Exam</h1>
+                <p className="content__body__description">Select an exam in the left panel.</p>
+            </div>
+        );
+    }
+});
+
+
+View.Course_Exam = React.createClass({
+    
+    render: function() {
+        return (
+            <div className="content__body__wrapper">
+                <h1 className="content__body__title">Exam 1</h1>
+                <p className="content__body__description">Here is a description of the exam</p>
+                <div className="exam">
+                    <div className="exam__my-questions">
+                        <div className="exam__my-questions__title">My Questions</div>
+                        <ul className="exam__my-questions__question-list question-list">
+                            <li className="question">
+                                <img className="question__icon--edit" src="/img/icons/edit.png" />
+                                <img className="question__icon--delete" src="/img/icons/delete.png" />
+                                <div className="question__content">
+                                    <div className="question__ask">What is the capital of California?</div>
+                                    <ul className="question__multi-choice multi-choice">
+                                        <li className="multi-choice__item">Canada. This is a really long question and there is a lot of text here. I am going to keep on typing.</li>
+                                        <li className="multi-choice__item">Hawaii</li>
+                                        <li className="multi-choice__item--correct">Sacramento</li>
+                                        <li className="multi-choice__item">Boise</li>
+                                    </ul>
+                                </div>
+                                <div className="question__explain">
+                                    Explanation: California is the captial of Sacramento.
+                                </div>
+
+                            </li>
+                             <li className="question">
+                                <img className="question__icon--edit" src="/img/icons/edit.png" />
+                                <img className="question__icon--delete" src="/img/icons/delete.png" />
+                                <div className="question__content">
+                                    <div className="question__ask">
+                                        A farmer has 3 apples. He gives 2 to his buddy and buys 6 more at the store.  How many apples does the farmer have now?
+                                    </div>
+
+                                    <ul className="question__multi-choice multi-choice">
+                                        <li className="multi-choice__item">4</li>
+                                        <li className="multi-choice__item">9</li>
+                                        <li className="multi-choice__item--correct">7</li>
+                                        <li className="multi-choice__item">1</li>
+                                    </ul>
+                                </div>
+
+                                <div className="question__explain">
+                                    Explanation: 3 - 2 + 6 = 7.
+                                </div>
+                            </li>
+                        </ul>
+                    </div> 
+                </div>
+            </div>
+        );
+    }
+
+
 });

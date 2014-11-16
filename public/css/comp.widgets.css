@@ -65,9 +65,18 @@
     margin: 15px 0px 0px 0px;
     margin-top: 15px;
 
+    /* TODO: Move this to text css */
     font-size: 40px;
     /* TODO: consistent coloring */
     color: #444;
+}
+
+.content__body__description {
+    /* TODO: Move text styling to text css */
+    margin: 5px 0px; 
+    font-size: .8em;
+    color: #666;
+    
 }
 
 /* styling for any category elements
