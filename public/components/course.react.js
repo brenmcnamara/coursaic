@@ -259,6 +259,7 @@ View.Course_Content_Body = React.createClass({
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ConfigStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     }
 });
 
