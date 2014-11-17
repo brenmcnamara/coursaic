@@ -19,6 +19,7 @@
 var Action = {};
 
 Action.Name = {
+    // TODO (daniel): Add an action to this list.
     // The page just loaded
     PERFORM_LOAD: 'PERFORM_LOAD'
 };

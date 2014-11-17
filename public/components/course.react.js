@@ -204,6 +204,7 @@ View.Exam_List = React.createClass({
 });
 
 
+// TODO (daniel): Modify this element.
 View.Exam_List_Item = React.createClass({
 
     render: function() {
@@ -217,11 +218,15 @@ View.Exam_List_Item = React.createClass({
 });
 
 
+// TODO (daniel): Modify this element here.
 View.Course_Content_Body = React.createClass({
 
     render: function() {
         return (
             <div className="content__body">
+                // If there is a current exam, present
+                // the current exam, otherwise, present
+                // the "No Exam" element.
                 <View.Course_No_Exam />
             </div>
         );
@@ -276,6 +281,7 @@ View.Course_No_Exam = React.createClass({
 View.Course_Exam = React.createClass({
     
     render: function() {
+        // Get the current exam.
         var exam = ExamStore.current();
         return (
             <div className="content__body__wrapper">
