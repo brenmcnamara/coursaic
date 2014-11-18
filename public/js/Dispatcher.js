@@ -144,11 +144,11 @@ var Dispatcher = (function() {
         // action with each store.
         var storeCalls = stateMap.stores.reduce(function(memo, store) {
             var callback = store.actionHandler(name);
-            if (typeof callback !== 'function') {
-                throw new Error("Dispatcher will only register objects of type" +
-                                "'function' from actionHandler.");
-            }
             if (callback) {
+                if (typeof callback !== 'function') {
+                    throw new Error("Dispatcher will only register objects of type" +
+                                    "'function' from actionHandler.");
+                }
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }
             return memo;
