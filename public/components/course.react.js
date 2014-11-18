@@ -249,17 +249,18 @@ View.Course_Content_Body = React.createClass({
     },
 
     didLoadExam: function() {
+        console.log("Forcing Update");
         this.forceUpdate();
     },
 
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        ConfigStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+        ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     },
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        ConfigStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+        ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     }
 });
 

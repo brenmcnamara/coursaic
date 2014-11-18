@@ -70,7 +70,6 @@ var ConfigStore = (function() {
                 };
             case Action.Name.DISPLAY_EXAM:
                 return function(payload) {
-
                     // Get the promise for the exam display process.
                     return new Promise(function(resolve, rejected) {
                         // Nothing to do yet. Might add stuff here
@@ -80,15 +79,7 @@ var ConfigStore = (function() {
                         Anchor.set({pageKey: 'course', examId: payload.examId},
                                    {silent: true});
                         resolve();
-                    }).then(
-                        // Success.
-                        function() {
-                            self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM))
-                        },
-                        // Error.
-                        function(err) {
-                            throw error;
-                        });
+                    });
                 };
             default:
                 return null;
