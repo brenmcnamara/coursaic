@@ -83,7 +83,6 @@ var Course = Parse.Object.extend("Course"),
                     });
 
                 };
-
             default:
                 return null;
         }

@@ -211,8 +211,13 @@ View.Exam_List_Item = React.createClass({
         var exam = this.props.exam;
 
         return (
-            <li>{ exam.get('name') }</li>
+            <li onClick = {this.handleClick} >{ exam.get('name') }</li>
         );
+    },
+
+    handleClick: function(event) {
+        Action.send(Action.Name.DISPLAY_EXAM,
+                    {examId: this.props.exam.id})
     }
 
 });
@@ -222,27 +227,39 @@ View.Exam_List_Item = React.createClass({
 View.Course_Content_Body = React.createClass({
 
     render: function() {
-        return (
-            <div className="content__body">
-                // If there is a current exam, present
-                // the current exam, otherwise, present
-                // the "No Exam" element.
-                <View.Course_No_Exam />
-            </div>
-        );
-            
+        // If there is a current exam, present
+        // the current exam, otherwise, present
+        // the "No Exam" element.
+        if (ExamStore.current()) {
+            return (
+                <div className="content__body">
+                    <View.Course_Exam />
+                </div>
+            )}
+        else {
+            return (
+                <div className="content__body">
+                    <View.Course_No_Exam />
+                </div>
+            )};      
     },
 
     didFetchExams: function() {
         this.forceUpdate();
     },
 
+    didLoadExam: function() {
+        this.forceUpdate();
+    },
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     },
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     }
 });
 

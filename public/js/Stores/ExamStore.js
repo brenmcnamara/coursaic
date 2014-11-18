@@ -248,6 +248,20 @@ var ExamStore = (function() {
                     });
                 }
             };
+        case Action.Name.DISPLAY_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM))
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
         default:
             return null;
         }
