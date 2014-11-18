@@ -83,12 +83,6 @@ var Course = Parse.Object.extend("Course"),
                     });
 
                 };
-            case Action.Name.DISPLAY_EXAM:
-                return function(payload){
-                    return new Promise(function(resolve, rejected) {
-                        resolve();
-                    });
-                };
             default:
                 return null;
         }

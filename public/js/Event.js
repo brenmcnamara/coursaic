@@ -44,6 +44,8 @@ CAEvent.Name = {
     // TODO (brendan): Better name for this event.
     DID_LOAD: 'DID_LOAD',
     DID_FETCH_COURSES: 'DID_FETCH_COURSES',
+    // Event for when the exam hash is updated
+    // to display an exam on the course page.
     DID_LOAD_EXAM: 'DID_LOAD_EXAM',
     // Event for when all exams of a course
     // are fetched.
