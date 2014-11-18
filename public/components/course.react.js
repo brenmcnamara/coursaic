@@ -231,17 +231,17 @@ View.Course_Content_Body = React.createClass({
         // the current exam, otherwise, present
         // the "No Exam" element.
         if (ExamStore.current()) {
-        return (
-            <div className="content__body">
-                <View.Course_Exam />
-            </div>
-        )}
+            return (
+                <div className="content__body">
+                    <View.Course_Exam />
+                </div>
+            )}
         else {
-        return (
-            <div className="content__body">
-                <View.Course_No_Exam />
-            </div>
-        )};      
+            return (
+                <div className="content__body">
+                    <View.Course_No_Exam />
+                </div>
+            )};      
     },
 
     didFetchExams: function() {
@@ -249,7 +249,6 @@ View.Course_Content_Body = React.createClass({
     },
 
     didLoadExam: function() {
-        console.log("Forcing Update");
         this.forceUpdate();
     },
 

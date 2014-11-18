@@ -251,11 +251,10 @@ var ExamStore = (function() {
         case Action.Name.DISPLAY_EXAM:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore
+                        //Done waiting for the ConfigStore to update ExamHash
                         .then(
                             // Success.
                             function() {
-                                console.log("waited for configstore, about to emit event");
                                 self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM))
                             },
                             // Error.
