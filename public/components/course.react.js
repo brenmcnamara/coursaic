@@ -323,8 +323,8 @@ View.Course_Exam_Questions = React.createClass({
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
             listItems = questions.map(function(question) {
-                return <View.Course_Exam_Question_Item key={ question.id }
-                                                       question={ question } />
+                return <View.Course_Exam_Question_Item_Editing key={ question.id }
+                                                               question={ question } />
             });
 
         return (
@@ -360,7 +360,13 @@ View.Course_Exam_Question_Item = React.createClass({
 
     render: function() {
         // NOTE (brendan): This is hard-coded for multiple-choice questions.
-        var question = this.props.question;
+        // Change this if adding other types of questions.
+        var question = this.props.question,
+            explanationStyle= {
+                textDecoration: 'underline',
+                marginRight: '3px'
+            };
+
         return (
             <li className="question">
                 <img className="question__icon--edit" src="/img/icons/edit.png" />
@@ -369,12 +375,47 @@ View.Course_Exam_Question_Item = React.createClass({
                     <div className="question__ask">{ question.get('question') }</div>
                     <View.Course_Exam_Question_MultiChoice_Option question={ question } />
                 </div>
-                <div className="question__explain">{ question.get('explanation') }</div>
+                <div className="question__explain">
+                    <span style= { explanationStyle }>Explanation:</span>
+                    <span>{ question.get('explanation') }</span>
+                </div>
             </li>
         );
     }
 
 });
+
+
+View.Course_Exam_Question_Item_Editing = React.createClass({
+
+    render: function() {
+        var question = this.props.question,
+            explanationStyle= {
+                textDecoration: 'underline',
+                marginRight: '3px'
+            };
+
+        return (
+            <li className="question">
+                <img className="question__icon--save" src="/img/icons/save.png" />
+                <div className="question__content">
+                    <input type="text"
+                           defaultValue={ question.get('question') }
+                           className="question__ask" />
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing question={ question } />
+                </div>
+                <div className="question__explain">
+                    <span style={ explanationStyle }>Explanation:</span>
+                    <textarea rows="4" cols="50" defaultValue={ question.get('explanation') }>
+                    </textarea>
+                </div>
+            </li>
+        );
+    }
+
+
+});
+
 
 // TODO (brendan): Fix naming of these React classes to make them
 // shorter and more clear.
@@ -399,6 +440,32 @@ View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 });
 
 
+View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
+
+    render: function() {
+        var question = this.props.question,
+            name = 'multichoice-' + question.id,
+            listItems = question.get('options').map(function(option, index) {
+                var isCorrect = question.isCorrect(option),
+                    key = question.id + '-' + index.toString();
+                // TODO (brendan): Shorten this line.
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing name={ name }
+                                                                                  key={ key }
+                                                                                  option={ option }
+                                                                                  isCorrect={ isCorrect } />;
+            });
+
+        return (
+            <ul className="question__multi-choice multi-choice--editing">
+                { listItems }
+            </ul>
+        );
+    }
+
+
+});
+
+
 View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
 
     render: function() {
@@ -407,9 +474,42 @@ View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
                             "multi-choice__item",
             option = this.props.option;
 
-        return <li className={ questionClass }>{ option }</li>; 
+        return <li className={ questionClass }>{ option }</li>;
+    }
+
+});
+
+
+View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
+
+    render: function() {
+        var questionClass = (this.props.isCorrect) ?
+                            "multi-choice__item--correct" :
+                            "multi-choice__item",
+            option = this.props.option;
+
+        if (this.props.isCorrect) {
+            return (
+                <li className={ questionClass }>
+                    <input type="radio"
+                           name={ this.props.name }
+                           defaultValue={ option }
+                           defaultChecked />
+                    <span>{ option }</span>
+                </li>
+            );         
+        }
+        // Not the correct answer.
+        return (
+            <li className={ questionClass }>
+                <input type="radio" name={ this.props.name } defaultValue={ option } />
+                <span>{ option }</span>
+            </li>
+        ); 
 
     }
 
 });
+
+
 

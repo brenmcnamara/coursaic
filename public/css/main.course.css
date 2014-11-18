@@ -134,10 +134,21 @@ ul.question-list {
     vertical-align: middle;
 }
 
+input.question__ask {
+    width: 450px;
+}
+
+.question__explain > textarea {
+    vertical-align: top;
+    resize: none;
+    margin-left: 10px;
+}
+
 /* Note: Icons are laid out with assumption
  * that there will be exactly 2 icons */
 .question__icon--delete,
-.question__icon--edit {
+.question__icon--edit,
+.question__icon--save {
     cursor: pointer;
     position: absolute;
 
@@ -149,6 +160,10 @@ ul.question-list {
 
 .question__icon--delete {
     left: 35px;
+}
+
+.question__icon--save {
+    left: 15px;
 }
 
 .question__content {
@@ -163,6 +178,11 @@ ul.multi-choice {
     list-style: upper-alpha;
 }
 
+ul.multi-choice--editing {
+    list-style: none;
+}
+
+.multi-choice--editing,
 .multi-choice {
     margin: 0 80px 0 50px;
     padding: 0;
@@ -177,6 +197,18 @@ ul.multi-choice {
 
 .multi-choice__item--correct {
     color: #4A90E2
+}
+
+/* Undo the color for correct answers if the style is for editing 
+   TODO (brendan): Figure out why this style is not working. */
+.mutli-choice__item--correct > span,
+.multi-choice__item > span {
+    color: black;    
+}
+
+.multi-choice__item--correct > input[type="radio"],
+.multi-choice__item > input[type="radio"] {
+    margin-right: 10px;
 }
 
 .question__explain {
