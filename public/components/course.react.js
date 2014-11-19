@@ -494,7 +494,7 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
                            name={ this.props.name }
                            defaultValue={ option }
                            defaultChecked />
-                    <span>{ option }</span>
+                    <span><input type="text" defaultValue={ option } /></span>
                 </li>
             );         
         }
@@ -502,7 +502,7 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
         return (
             <li className={ questionClass }>
                 <input type="radio" name={ this.props.name } defaultValue={ option } />
-                <span>{ option }</span>
+                <span><input type="text" defaultValue={ option } /></span>
             </li>
         ); 
 

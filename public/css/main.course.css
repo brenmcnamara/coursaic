@@ -199,16 +199,17 @@ ul.multi-choice--editing {
     color: #4A90E2
 }
 
-/* Undo the color for correct answers if the style is for editing 
-   TODO (brendan): Figure out why this style is not working. */
-.mutli-choice__item--correct > span,
-.multi-choice__item > span {
-    color: black;    
-}
-
 .multi-choice__item--correct > input[type="radio"],
 .multi-choice__item > input[type="radio"] {
     margin-right: 10px;
+}
+
+/* Undo the color for correct answers when the style
+ * is set for editing */
+.multi-choice__item--correct input[type="text"],
+.multi-choice__item input[type="text"] {
+    width: 350px;
+    color: black;
 }
 
 .question__explain {
