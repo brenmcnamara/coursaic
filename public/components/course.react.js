@@ -322,8 +322,8 @@ View.Course_Exam_Questions = React.createClass({
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
             listItems = questions.map(function(question) {
-                return <View.Course_Exam_Question_Item_Editing key={ question.id }
-                                                               question={ question } />
+                return <View.Course_Exam_Question_Item key={ question.id }
+                                                       question={ question } />
             });
 
         return (
