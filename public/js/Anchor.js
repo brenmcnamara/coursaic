@@ -77,6 +77,19 @@ var Anchor = (function() {
         set,
 
     /**
+     * Unset the url hash properties that are
+     * specified in the list of keys.
+     *
+     * @param keys {Array} An array of strings
+     * that are the properties to remove from
+     * the url hash. 
+     *
+     * @param options {Object} An object containing
+     * all the options for modifying the hash.
+     */
+        unset,
+
+    /**
      * Listen for the hash to change.
      *
      * @method onChange
@@ -160,15 +173,21 @@ var Anchor = (function() {
     };
 
 
+    // TODO (brendan): Modify _serializeHash so that
+    // the order the hash elements appear is deterministic
+    // and we do not need to check for changes in set and unset
+    // methods.
     set = function(addMap, options) {
         var hash,
             prop,
             currentMap = hashMap();
 
-        // Check for equality before preceding.
+        // Check if what is being added is a subset
+        // of the current map.
         // This is because the stateMap.silent
         // property should not be modified
-        // if the hash is going to be the same.
+        // if the hash is not going to change
+        // anything.
         if (!_isSubset(addMap, currentMap)) {
             options = options || { silent: false };
             stateMap.silent = options.silent || false;
@@ -179,7 +198,30 @@ var Anchor = (function() {
                 }
             }
             hash = _serializeHash(currentMap);
-            window.location.hash = _serializeHash(currentMap); 
+            window.location.hash = hash; 
+        }
+    };
+
+
+    unset = function(keys, options) {
+        var hash, prop, currentMap = hashMap(),
+            // Check if any of the keys that are being
+            // removed actually exist in the hash. Change
+            // should not be triggered if no changes are actually
+            // made
+            isRemovingKeys = keys.reduce(function(memo, key) {
+                return memo || !!currentMap[key];
+            }, false);
+
+        if (isRemovingKeys) {
+            options = options || { silent: false };
+            stateMap.silent = options.silent || false;
+
+            keys.forEach(function(key) {
+                delete currentMap[key];
+            });
+            hash = _serializeHash(currentMap);
+            window.location.hash = hash;
         }
     };
 
@@ -204,7 +246,7 @@ var Anchor = (function() {
     };
 
 
-    return {set: set, hashMap: hashMap, onChange: onChange};
+    return {set: set, unset: unset, hashMap: hashMap, onChange: onChange};
 
 }());
 
