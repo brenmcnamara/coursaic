@@ -208,15 +208,36 @@ View.Exam_List_Item = React.createClass({
     render: function() {
         var exam = this.props.exam;
 
-        return (
-            <li onClick = {this.handleClick} >{ exam.get('name') }</li>
-        );
+        if (!ExamStore.currentQuestionEdit()) {
+            return (
+                <li onClick = {this.handleClick} >{ exam.get('name') }</li>
+            );
+        }
+        else {
+            return (
+                <li>{ exam.get('name') }</li>
+            );
+        }
     },
 
     handleClick: function(event) {
         Action.send(Action.Name.DISPLAY_EXAM,
                     {examId: this.props.exam.id})
+    },
+
+    didBeInEditing: function(event) {
+        this.forceUpdate();
+        // *** todo: mute the buttons prob with if statement on ExamStore.getEditingblahblah
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     }
+
 
 });
 
@@ -355,7 +376,7 @@ View.Course_Exam_Questions = React.createClass({
 View.Course_Exam_Question_Item = React.createClass({
 
     getInitialState: function() {
-        return {editMode: false};
+        return {isEditing: false};
     }, 
 
     render: function() {
@@ -368,12 +389,27 @@ View.Course_Exam_Question_Item = React.createClass({
             };
 
         //todo (daniel): figure out how states work
-        // console.log("check the state: " + this.state.editMode);
+        // console.log("check the state: " + this.state.isEditing);
 
-        if (!this.state.editMode) { //*** Change this true to EDIT state
+        if (!this.state.isEditing && !ExamStore.currentQuestionEdit()) { //*** Change this true to EDIT state
             return (
                 <li className="question">
                     <img onClick = {this.handleClick} className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )}
+        else if (!this.state.isEditing && ExamStore.currentQuestionEdit()) { //*** Change this true to EDIT state
+            return (
+                <li className="question">
+                    <img className="question__icon--edit" src="/img/icons/edit.png" />
                     <img className="question__icon--delete" src="/img/icons/delete.png" />
                     <div className="question__content">
                         <div className="question__ask">{ question.get('question') }</div>
@@ -393,7 +429,7 @@ View.Course_Exam_Question_Item = React.createClass({
 
     
     handleClick: function(event) {
-        this.setState({editMode: !this.state.editMode}); //*** 
+        this.setState({isEditing: !this.state.isEditing}); //*** 
         Action.send(Action.Name.PERFORM_QUESTION_EDIT,
                     {questionEditId: this.props.question.id})
     },
@@ -445,24 +481,17 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     handleClick: function(event) {
         console.log("*** clicked save button");
-        //console.log("this.state: " + this.state.editMode);
+        //console.log("this.state: " + this.state.isEditing);
         // Action.send(Action.Name.PERFORM_QUESTION_EDIT,
         //             {questionEditId: this.props.question.id})
     },
 
-    didBeInEditing: function() {
-        console.log("need to be unclickable now ***");
-        this.forceUpdate();
-    },
-
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     }
 
 

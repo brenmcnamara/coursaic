@@ -89,7 +89,7 @@ var ConfigStore = (function() {
                         if (!payload.questionEditId) {
                             throw new Error("Trying to edit question without any question");
                         }
-                        Anchor.set({pageKey: 'questionEditId', questionEditId: payload.questionEditId},
+                        Anchor.set({pageKey: 'course', questionEditId: payload.questionEditId},
                                    {silent: true});
                         resolve();
                     });
@@ -141,6 +141,21 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.examId = function() {
         return Anchor.hashMap().examId || null;
+    };
+
+    /**
+     * Get the id of the question that is being edited
+     * on the current page.  Note that this is applicable
+     * for certain pageKey's, such as the 'course' pageKey.
+     *
+     * @method examId
+     *
+     * @return {String} The id of the exam for the current page.
+     *  If the page does not specify an exam id, then this will
+     *  return null.
+     */
+    StoreClass.prototype.questionEditId = function() {
+        return Anchor.hashMap().questionEditId || null;
     };
 
 

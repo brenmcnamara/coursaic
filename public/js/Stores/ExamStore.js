@@ -191,6 +191,20 @@ var ExamStore = (function() {
                null;
     };
 
+    /** *** Daniel's tenative method
+     * Get the question that is currently in edit mode
+     *
+     * @method currentQuestionEdit
+     *
+     * @return {Question} The current question being edited. If 
+     *  the page is something that does not have an edited
+     *  question this will return null.
+     */
+    StoreClass.prototype.currentQuestionEdit = function() {
+        return (ConfigStore.questionEditId()) ?
+               ConfigStore.questionEditId() :
+               null;
+    };
 
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
