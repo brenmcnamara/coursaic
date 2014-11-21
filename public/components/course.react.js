@@ -235,7 +235,7 @@ View.Exam_List_Item = React.createClass({
     },
 
     componentWillUnmount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     }
 
 
@@ -487,12 +487,12 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
     },
 
 
-    componentWillMount: function() {
-    },
+    // componentWillMount: function() {
+    // },
 
 
-    componentWillUnmount: function() {
-    }
+    // componentWillUnmount: function() {
+    // }
 
 
 
