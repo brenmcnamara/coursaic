@@ -100,6 +100,7 @@ var
             // that were made in the "parse" method.
             var attrs = _copy(this.attributes);
             attrs.options = JSON.stringify(attrs.options);
+            delete attrs.isEditing;
             return attrs;
         },
 

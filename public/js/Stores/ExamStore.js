@@ -191,20 +191,37 @@ var ExamStore = (function() {
                null;
     };
 
-    /** *** Daniel's tenative method
-     * Get the question that is currently in edit mode
+
+    /**
+     * Get the question with the specified id. First,
+     *  gets the proper exam, and then loops through
+     *  the questions in the exam until it finds the
+     *  question matching the question id.
      *
-     * @method currentQuestionEdit
+     * @method questionForExam
      *
-     * @return {Question} The current question being edited. If 
-     *  the page is something that does not have an edited
-     *  question this will return null.
-     */
-    StoreClass.prototype.currentQuestionEdit = function() {
-        return (ConfigStore.questionEditId()) ?
-               ConfigStore.questionEditId() :
-               null;
+     * @param examId {String} The id of the exam. 
+     *
+     * @param questionId {String} The id of the question. 
+     *
+     * @return {Question} The question with the 
+     *  associated questionId within the exam with
+     *  the associated examId. Returns null if there
+     *  is nothing is found.
+     */ 
+    StoreClass.prototype.questionForExam= function(examId, questionId) {
+        var examQuestionArray = this._questionHash[examId];
+        if (examQuestionArray) {
+            for (i = 0; i < examQuestionArray.length; i++) {
+                if(examQuestionArray[i].id === questionId)
+                    return examQuestionArray[i];
+            }
+        }
+
+        return null;
+
     };
+
 
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
@@ -283,6 +300,8 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
+                                var question = self.questionForExam(payload.examId, payload.questionId);
+                                question.set('isEditing', true);
                                 self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING))
                             },
                             // Error.

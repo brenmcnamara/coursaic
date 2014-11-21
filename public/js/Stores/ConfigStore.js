@@ -86,10 +86,10 @@ var ConfigStore = (function() {
                     // Get the promise for the exam display process.
                     return new Promise(function(resolve, rejected) {
                         // Nothing to do yet. Might add stuff here
-                        if (!payload.questionEditId) {
+                        if (!payload.questionId) {
                             throw new Error("Trying to edit question without any question");
                         }
-                        Anchor.set({pageKey: 'course', questionEditId: payload.questionEditId},
+                        Anchor.set({pageKey: 'course', questionId: payload.questionId},
                                    {silent: true});
                         resolve();
                     });

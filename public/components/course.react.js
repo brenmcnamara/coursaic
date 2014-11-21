@@ -205,17 +205,21 @@ View.Exam_List = React.createClass({
 
 View.Exam_List_Item = React.createClass({
 
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
     render: function() {
         var exam = this.props.exam;
 
-        if (!ExamStore.currentQuestionEdit()) {
+        if (this.state.isEditing) {
             return (
-                <li onClick = {this.handleClick} >{ exam.get('name') }</li>
+                <li>{ exam.get('name') }</li>
             );
         }
         else {
             return (
-                <li>{ exam.get('name') }</li>
+                <li onClick = {this.handleClick} >{ exam.get('name') }</li>
             );
         }
     },
@@ -226,8 +230,8 @@ View.Exam_List_Item = React.createClass({
     },
 
     didBeInEditing: function(event) {
+        this.setState({isEditing: true});
         this.forceUpdate();
-        // *** todo: mute the buttons prob with if statement on ExamStore.getEditingblahblah
     },
 
     componentWillMount: function() {
@@ -388,25 +392,14 @@ View.Course_Exam_Question_Item = React.createClass({
                 marginRight: '3px'
             };
 
-        //todo (daniel): figure out how states work
+        //TODO (daniel): figure out how states work
         // console.log("check the state: " + this.state.isEditing);
 
-        if (!this.state.isEditing && !ExamStore.currentQuestionEdit()) { //*** Change this true to EDIT state
+        if (question.get('isEditing')) { //*** Change this true to EDIT state
             return (
-                <li className="question">
-                    <img onClick = {this.handleClick} className="question__icon--edit" src="/img/icons/edit.png" />
-                    <img className="question__icon--delete" src="/img/icons/delete.png" />
-                    <div className="question__content">
-                        <div className="question__ask">{ question.get('question') }</div>
-                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
-                    </div>
-                    <div className="question__explain">
-                        <span style= { explanationStyle }>Explanation:</span>
-                        <span>{ question.get('explanation') }</span>
-                    </div>
-                </li>
+                        <View.Course_Exam_Question_Item_Editing question={ question } />
         )}
-        else if (!this.state.isEditing && ExamStore.currentQuestionEdit()) { //*** Change this true to EDIT state
+        else if (this.state.isEditing) { //*** Change this true to EDIT state
             return (
                 <li className="question">
                     <img className="question__icon--edit" src="/img/icons/edit.png" />
@@ -423,18 +416,30 @@ View.Course_Exam_Question_Item = React.createClass({
         )}
         else {
             return (
-                        <View.Course_Exam_Question_Item_Editing question={ question } />
+                <li className="question">
+                    <img onClick = {this.handleClick} className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
         )};
     },
 
     
     handleClick: function(event) {
-        this.setState({isEditing: !this.state.isEditing}); //*** 
         Action.send(Action.Name.PERFORM_QUESTION_EDIT,
-                    {questionEditId: this.props.question.id})
+                    {examId: ExamStore.current().id,
+                        questionId: this.props.question.id})
     },
 
     didBeInEditing: function() {
+        this.setState({isEditing: true});
         this.forceUpdate();
     },
 
@@ -481,9 +486,6 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     handleClick: function(event) {
         console.log("*** clicked save button");
-        //console.log("this.state: " + this.state.isEditing);
-        // Action.send(Action.Name.PERFORM_QUESTION_EDIT,
-        //             {questionEditId: this.props.question.id})
     },
 
 
