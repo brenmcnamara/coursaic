@@ -262,6 +262,20 @@ var ExamStore = (function() {
                                 throw error;
                             });
                 };
+        case Action.Name.PERFORM_QUESTION_EDIT:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING))
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
         default:
             return null;
         }

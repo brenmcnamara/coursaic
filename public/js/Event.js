@@ -49,6 +49,9 @@ CAEvent.Name = {
     DID_LOAD_EXAM: 'DID_LOAD_EXAM',
     // Event for when all exams of a course
     // are fetched.
-    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS'
+    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS',
+    // Event for when you successfully enter
+    // edit mode. 
+    DID_BE_IN_EDITING: 'DID_BE_IN_EDITING'
 };
 

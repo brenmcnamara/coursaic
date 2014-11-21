@@ -115,7 +115,6 @@ View.Course_Summary = React.createClass({
     }
 });
 
-
 View.Course_Content = React.createClass({
 
     render: function() {
@@ -204,7 +203,6 @@ View.Exam_List = React.createClass({
 });
 
 
-// TODO (daniel): Modify this element.
 View.Exam_List_Item = React.createClass({
 
     render: function() {
@@ -223,7 +221,6 @@ View.Exam_List_Item = React.createClass({
 });
 
 
-// TODO (daniel): Modify this element here.
 View.Course_Content_Body = React.createClass({
 
     render: function() {
@@ -357,6 +354,10 @@ View.Course_Exam_Questions = React.createClass({
 
 View.Course_Exam_Question_Item = React.createClass({
 
+    getInitialState: function() {
+        return {editMode: false};
+    }, 
+
     render: function() {
         // NOTE (brendan): This is hard-coded for multiple-choice questions.
         // Change this if adding other types of questions.
@@ -366,21 +367,51 @@ View.Course_Exam_Question_Item = React.createClass({
                 marginRight: '3px'
             };
 
-        return (
-            <li className="question">
-                <img className="question__icon--edit" src="/img/icons/edit.png" />
-                <img className="question__icon--delete" src="/img/icons/delete.png" />
-                <div className="question__content">
-                    <div className="question__ask">{ question.get('question') }</div>
-                    <View.Course_Exam_Question_MultiChoice_Option question={ question } />
-                </div>
-                <div className="question__explain">
-                    <span style= { explanationStyle }>Explanation:</span>
-                    <span>{ question.get('explanation') }</span>
-                </div>
-            </li>
-        );
+        //todo (daniel): figure out how states work
+        // console.log("check the state: " + this.state.editMode);
+
+        if (!this.state.editMode) { //*** Change this true to EDIT state
+            return (
+                <li className="question">
+                    <img onClick = {this.handleClick} className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )}
+        else {
+            return (
+                        <View.Course_Exam_Question_Item_Editing question={ question } />
+        )};
+    },
+
+    
+    handleClick: function(event) {
+        this.setState({editMode: !this.state.editMode}); //*** 
+        Action.send(Action.Name.PERFORM_QUESTION_EDIT,
+                    {questionEditId: this.props.question.id})
+    },
+
+    didBeInEditing: function() {
+        this.forceUpdate();
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     }
+
 
 });
 
@@ -396,7 +427,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
         return (
             <li className="question">
-                <img className="question__icon--save" src="/img/icons/save.png" />
+                <img onClick = {this.handleClick} className="question__icon--save" src="/img/icons/save.png" />
                 <div className="question__content">
                     <input type="text"
                            defaultValue={ question.get('question') }
@@ -410,7 +441,30 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                 </div>
             </li>
         );
+    },
+
+    handleClick: function(event) {
+        console.log("*** clicked save button");
+        //console.log("this.state: " + this.state.editMode);
+        // Action.send(Action.Name.PERFORM_QUESTION_EDIT,
+        //             {questionEditId: this.props.question.id})
+    },
+
+    didBeInEditing: function() {
+        console.log("need to be unclickable now ***");
+        this.forceUpdate();
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
     }
+
 
 
 });
