@@ -101,7 +101,6 @@ var ExamStore = (function() {
                             question.encodeAttrs();
                             // Set the exam on this question.
                             question.set('exam', exam);
-                            console.log("fetching exam...: " + exam);
                         });
                         // Cache the questions for the exam.
                         self._questionHash[exam.id] = questions;
@@ -303,7 +302,7 @@ var ExamStore = (function() {
                             function() {
                                 var question = self.questionForExam(payload.examId,
                                                  payload.questionId);
-                                question.set('isEditing', true);
+                                question.isEditing(true);
                                 self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING));
                             },
                             // Error.
@@ -318,14 +317,27 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
+                                /*
                                 var question = self.questionForExam(payload.examId, payload.questionId),
                                     questionText = (payload.questionMap.question || question.get('question')),
                                     explanationText = (payload.questionMap.explanation || question.get('explanation')),
-                                    optionText = (payload.questionMap.option || question.get('options')),
+                                    optionText = (payload.questionMap.option || question.getOptions()),
                                     solutionText = (payload.questionMap.solution || question.get('solution'));
-                                // console.log("options: " + optionText);
-                                question.set({question: questionText, solution: solutionText, explanation: explanationText, options: optionText});
-                                question.set('isEditing', false);
+                                    */
+                                var question = self.questionForExam(payload.examId,
+                                                                    payload.questionId),
+                                    options = payload.questionMap.options;
+                                if (options) {
+                                    question.setOptions(options);
+                                }
+                                // Remove the options from the questionMap
+                                // because they must be added in a particular
+                                // way, as illustrated above.
+                                delete payload.questionMap.options;
+                                question.set(payload.questionMap);
+                                question.isEditing(false);
+                                // TODO (daniel): Need to wait for save to finish before emiting
+                                // a complete event.
                                 question.save();
                                 self.emit(new CAEvent(CAEvent.Name.DID_EXIT_EDITING));
                             },

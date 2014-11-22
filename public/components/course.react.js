@@ -348,13 +348,21 @@ View.Course_Exam = React.createClass({
 View.Course_Exam_Questions = React.createClass({
 
     render: function() {
+        console.log("Rendering questions list.");
         // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
             listItems = questions.map(function(question) {
-                return <View.Course_Exam_Question_Item key={ question.id }
-                                                       question={ question } />
+                if (question.isEditing()) {
+                    console.log("Found a question in editing mode.");
+                    return <View.Course_Exam_Question_Item_Editing question={ question } />;
+                }
+                else {
+                    return <View.Course_Exam_Question_Item key={ question.id }
+                                                           question={ question } />
+                }
+
             });
 
         return (
@@ -373,13 +381,30 @@ View.Course_Exam_Questions = React.createClass({
     },
 
 
+    didBeginEditing: function(event) {
+        console.log("Something is now editing on the page.");
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        // TODO (daniel): Rename this event.
+        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeginEditing);
+        // TODO (daniel): Rename this event.
+        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didEndEditing);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didEndEditing);
     }
 
 
@@ -401,14 +426,7 @@ View.Course_Exam_Question_Item = React.createClass({
                 marginRight: '3px'
             };
 
-        //TODO (daniel): figure out how states work
-        // console.log("check the state: " + this.state.isEditing);
-
-        if (question.get('isEditing')) { //*** Change this true to EDIT state
-            return (
-                        <View.Course_Exam_Question_Item_Editing question={ question } />
-        )}
-        else if (this.state.isEditing) { //*** Change this true to EDIT state
+        if (this.state.isEditing) {
             return (
                 <li className="question">
                     <img className="question__icon--edit" src="/img/icons/edit.png" />
@@ -426,7 +444,9 @@ View.Course_Exam_Question_Item = React.createClass({
         else {
             return (
                 <li className="question">
-                    <img onClick = {this.handleClick} className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img onClick={this.handleClickEdit}
+                         className="question__icon--edit"
+                         src="/img/icons/edit.png" />
                     <img className="question__icon--delete" src="/img/icons/delete.png" />
                     <div className="question__content">
                         <div className="question__ask">{ question.get('question') }</div>
@@ -441,32 +461,13 @@ View.Course_Exam_Question_Item = React.createClass({
     },
 
     
-    handleClick: function(event) {
+    // TODO (Daniel): Better name.
+    handleClickEdit: function(event) {
         Action.send(Action.Name.PERFORM_QUESTION_EDIT,
-                    {examId: ExamStore.current().id,
-                        questionId: this.props.question.id})
-    },
-
-    didBeInEditing: function() {
-        this.setState({isEditing: true});
-        this.forceUpdate();
-    },
-
-    didExitEditing: function() {
-        this.setState({isEditing: false});
-        this.forceUpdate();
-    },
-
-
-    componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
-        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
-    },
-
-
-    componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id
+                    });
     }
 
 
@@ -481,6 +482,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     render: function() {
+        console.log("Rendering editing item.");
         var question = this.props.question,
             explanationStyle= {
                 textDecoration: 'underline',
@@ -489,18 +491,18 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
         return (
             <li className="question">
-                <img onClick = {this.onSave} className="question__icon--save" src="/img/icons/save.png" />
+                <img onClick = { this.onSave } className="question__icon--save" src="/img/icons/save.png" />
                 <div className="question__content">
-                    <input onChange={this.onChangeQuestion}
+                    <input onChange={ this.onChangeQuestion }
                            type="text"
                            defaultValue={ question.get('question') }
                            className="question__ask" />
-                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChange={this.onChangeOptions}
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChange={ this.onChangeSolution }
                                                                           question={ question } />
                 </div>
                 <div className="question__explain">
                     <span style={ explanationStyle }>Explanation:</span>
-                    <textarea onChange={this.onChangeExplanation}
+                    <textarea onChange={ this.onChangeExplanation }
                               rows="4"
                               cols="50" 
                               defaultValue={ question.get('explanation') }>
@@ -512,18 +514,20 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onSave: function(event) {
+        console.log("onSave");
         Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {examId: ExamStore.current().id,
                         questionId: this.props.question.id,
                         questionMap: this.state.questionMap });
     },
 
+
     onChangeQuestion: function(event) {
         this.state.questionMap.question = event.target.value;
     },
 
 
-    onChangeOptions: function(event) {
+    onChangeSolution: function(event) {
         this.state.questionMap.solution = event.target.value;
     },
 
@@ -542,7 +546,7 @@ View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 
     render: function() {
         var question = this.props.question,
-            listItems = question.get('options').map(function(option, index) {
+            listItems = question.getOptions().map(function(option, index) {
                 var isCorrect = question.isCorrect(option);
                 return <View.Course_Exam_Question_MultiChoice_Option_Item key={ index }
                                                                           option={ option }
@@ -565,7 +569,7 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
         var self = this,
             question = this.props.question,
             name = 'multichoice-' + question.id,
-            listItems = question.get('options').map(function(option, index) {
+            listItems = question.getOptions().map(function(option, index) {
                 var isCorrect = question.isCorrect(option),
                     key = question.id + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
