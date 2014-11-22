@@ -209,6 +209,7 @@ View.Exam_List_Item = React.createClass({
         return {isEditing: false};
     }, 
 
+
     render: function() {
         var exam = this.props.exam;
 
@@ -234,12 +235,20 @@ View.Exam_List_Item = React.createClass({
         this.forceUpdate();
     },
 
+    didExitEditing: function() {
+        this.setState({isEditing: false});
+        this.forceUpdate();
+    },
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
+
     },
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
     }
 
 
@@ -443,14 +452,21 @@ View.Course_Exam_Question_Item = React.createClass({
         this.forceUpdate();
     },
 
+    didExitEditing: function() {
+        this.setState({isEditing: false});
+        this.forceUpdate();
+    },
+
 
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
     }
 
 
@@ -458,6 +474,11 @@ View.Course_Exam_Question_Item = React.createClass({
 
 
 View.Course_Exam_Question_Item_Editing = React.createClass({
+
+    getInitialState: function() {
+        return {questionMap: {}};
+    }, 
+
 
     render: function() {
         var question = this.props.question,
@@ -468,34 +489,48 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
         return (
             <li className="question">
-                <img onClick = {this.handleClick} className="question__icon--save" src="/img/icons/save.png" />
+                <img onClick = {this.onSave} className="question__icon--save" src="/img/icons/save.png" />
                 <div className="question__content">
-                    <input type="text"
+                    <input onChange={this.onChangeQuestion}
+                           type="text"
                            defaultValue={ question.get('question') }
                            className="question__ask" />
-                    <View.Course_Exam_Question_MultiChoice_Option_Editing question={ question } />
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChange={this.onChangeOptions}
+                                                                          question={ question } />
                 </div>
                 <div className="question__explain">
                     <span style={ explanationStyle }>Explanation:</span>
-                    <textarea rows="4" cols="50" defaultValue={ question.get('explanation') }>
+                    <textarea onChange={this.onChangeExplanation}
+                              rows="4"
+                              cols="50" 
+                              defaultValue={ question.get('explanation') }>
                     </textarea>
                 </div>
             </li>
         );
     },
 
-    handleClick: function(event) {
-        console.log("*** clicked save button");
+
+    onSave: function(event) {
+        Action.send(Action.Name.SAVE_QUESTION_EDIT,
+                    {examId: ExamStore.current().id,
+                        questionId: this.props.question.id,
+                        questionMap: this.state.questionMap });
+    },
+
+    onChangeQuestion: function(event) {
+        this.state.questionMap.question = event.target.value;
     },
 
 
-    // componentWillMount: function() {
-    // },
+    onChangeOptions: function(event) {
+        this.state.questionMap.solution = event.target.value;
+    },
 
 
-    // componentWillUnmount: function() {
-    // }
-
+    onChangeExplanation: function(event) {
+        this.state.questionMap.explanation = event.target.value;
+    }
 
 
 });
@@ -527,13 +562,15 @@ View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
 
     render: function() {
-        var question = this.props.question,
+        var self = this,
+            question = this.props.question,
             name = 'multichoice-' + question.id,
             listItems = question.get('options').map(function(option, index) {
                 var isCorrect = question.isCorrect(option),
                     key = question.id + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
-                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing name={ name }
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChange={self.onChangeOption}
+                                                                                  name={ name }
                                                                                   key={ key }
                                                                                   option={ option }
                                                                                   isCorrect={ isCorrect } />;
@@ -544,6 +581,11 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                 { listItems }
             </ul>
         );
+    },
+
+
+    onChangeOption: function(event) {
+        this.props.onChange(event);
     }
 
 
@@ -575,7 +617,8 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
         if (this.props.isCorrect) {
             return (
                 <li className={ questionClass }>
-                    <input type="radio"
+                    <input onChange={this.onChangeOption}
+                           type="radio"
                            name={ this.props.name }
                            defaultValue={ option }
                            defaultChecked />
@@ -586,11 +629,19 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
         // Not the correct answer.
         return (
             <li className={ questionClass }>
-                <input type="radio" name={ this.props.name } defaultValue={ option } />
+                <input onChange={this.onChangeOption}
+                       type="radio"
+                       name={ this.props.name }
+                       defaultValue={ option } />
                 <span><input type="text" defaultValue={ option } /></span>
             </li>
         ); 
 
+    },
+
+
+    onChangeOption: function(event) {
+        this.props.onChange(event);
     }
 
 });

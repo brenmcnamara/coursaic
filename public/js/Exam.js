@@ -18,10 +18,15 @@ var
      * @param obj {Object} The object to make
      *  a copy of.
      *
+     * @param retainKeys {Array} An array of keys
+     *  that we will set by reference instead of
+     *  copy by value. This is an optional
+     *  parameter.
+     *
      * @return {Object} A deep copy of the object.
      */
-    _copy = function(obj) {
-        var prop, copy;
+    _copy = function(obj, retainKeys) {
+        var prop, copy, shouldRetain;
 
         // First check if the object is
         // an Array.
@@ -40,7 +45,17 @@ var
             copy = {};
             for (prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
-                    copy[prop] = _copy(obj[prop]);
+                    console.log("copying property: " + prop);
+                    shouldRetain = (retainKeys || []).reduce(function(memo, key) {
+                        return memo || (prop === key);
+                    }, false);
+                    if (shouldRetain) {
+                        console.log("retaining property");
+                        copy[prop] = obj[prop];
+                    }
+                    else {
+                        copy[prop] = _copy(obj[prop]);
+                    }
                 }
             }
             return copy;
@@ -98,10 +113,27 @@ var
 
             // This method should basically undo any changes
             // that were made in the "parse" method.
-            var attrs = _copy(this.attributes);
+            var attrs = _copy(this.attributes, ["exam", "author"]);
             attrs.options = JSON.stringify(attrs.options);
             delete attrs.isEditing;
             return attrs;
+        },
+
+
+        save: function(attrs, options) {
+            console.log("gets into save");
+            
+            if (!attrs) {
+                console.log("in if statement");
+                attrs = this.toJSON(); 
+            }
+            console.log("out of if statement");
+            for (prop in attrs) {
+                if (attrs.hasOwnProperty(prop)) {
+                        console.log(prop + ": " + attrs[prop])
+                }
+            }
+            Parse.Object.prototype.save.call(this, attrs, options);
         },
 
 

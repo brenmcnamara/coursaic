@@ -44,7 +44,7 @@ var Course = Parse.Object.extend("Course"),
                                .then(
                                     // Success.
                                     function() {
-                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
+                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES));
                                     },
                                     // Error.
                                     function(err) {
@@ -72,7 +72,7 @@ var Course = Parse.Object.extend("Course"),
                                     function(error) {
                                         throw error;
                                     }
-                                )
+                                );
                     default:
                         return new Promise(function(resolve, reject) {
                             resolve();

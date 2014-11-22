@@ -94,6 +94,19 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.SAVE_QUESTION_EDIT:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.questionId) {
+                            throw new Error("Trying to save question without any question");
+                        }
+                        Anchor.unset(["questionId"],
+                                   {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }

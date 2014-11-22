@@ -101,6 +101,7 @@ var ExamStore = (function() {
                             question.encodeAttrs();
                             // Set the exam on this question.
                             question.set('exam', exam);
+                            console.log("fetching exam...: " + exam);
                         });
                         // Cache the questions for the exam.
                         self._questionHash[exam.id] = questions;
@@ -113,7 +114,7 @@ var ExamStore = (function() {
                 });
             });
 
-        return Promise.all([authorPromise, questionsPromise])
+        return Promise.all([authorPromise, questionsPromise]);
     };
 
 
@@ -286,7 +287,7 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM))
+                                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
                             },
                             // Error.
                             function(err) {
@@ -300,9 +301,33 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                var question = self.questionForExam(payload.examId, payload.questionId);
+                                var question = self.questionForExam(payload.examId,
+                                                 payload.questionId);
                                 question.set('isEditing', true);
-                                self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING))
+                                self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.SAVE_QUESTION_EDIT:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId, payload.questionId),
+                                    questionText = (payload.questionMap.question || question.get('question')),
+                                    explanationText = (payload.questionMap.explanation || question.get('explanation')),
+                                    optionText = (payload.questionMap.option || question.get('options')),
+                                    solutionText = (payload.questionMap.solution || question.get('solution'));
+                                // console.log("options: " + optionText);
+                                question.set({question: questionText, solution: solutionText, explanation: explanationText, options: optionText});
+                                question.set('isEditing', false);
+                                question.save();
+                                self.emit(new CAEvent(CAEvent.Name.DID_EXIT_EDITING));
                             },
                             // Error.
                             function(err) {
