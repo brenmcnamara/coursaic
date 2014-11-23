@@ -91,7 +91,6 @@ var ConfigStore = (function() {
                         }
                         Anchor.set({pageKey: 'course', questionEditId: payload.questionId},
                                    {silent: true});
-                        console.log("finished changing hash event");
                         resolve();
                     });
                 };

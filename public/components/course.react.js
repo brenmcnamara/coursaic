@@ -520,6 +520,9 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onChangeOptions: function(event, qindex) {
+        //  TODO (daniel): Ask Brendan for proper way to fix bug
+        //  that arises when changing the answer and not clicking
+        //  the radio button again.
         if(event.target.type === "radio"){
             this.state.questionMap.solution = event.target.value;
         }
