@@ -573,7 +573,7 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                     key = question.id + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
                 return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChange={self.onChangeOptions}
-                                                                                  qindex = { index } //does this do anything
+                                                                                  qindex = { index }
                                                                                   name={ name }
                                                                                   key={ key }
                                                                                   option={ option }
