@@ -230,25 +230,25 @@ View.Exam_List_Item = React.createClass({
                     {examId: this.props.exam.id})
     },
 
-    didBeInEditing: function(event) {
+    didBeginEditing: function(event) {
         this.setState({isEditing: true});
         this.forceUpdate();
     },
 
-    didExitEditing: function() {
+    didEndEditing: function() {
         this.setState({isEditing: false});
         this.forceUpdate();
     },
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
-        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
 
     },
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeInEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didExitEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 
@@ -348,14 +348,12 @@ View.Course_Exam = React.createClass({
 View.Course_Exam_Questions = React.createClass({
 
     render: function() {
-        console.log("Rendering questions list.");
         // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
             listItems = questions.map(function(question) {
                 if (question.isEditing()) {
-                    console.log("Found a question in editing mode.");
                     return <View.Course_Exam_Question_Item_Editing question={ question } />;
                 }
                 else {
@@ -382,7 +380,6 @@ View.Course_Exam_Questions = React.createClass({
 
 
     didBeginEditing: function(event) {
-        console.log("Something is now editing on the page.");
         this.setState({isEditing: true});
     },
 
@@ -394,17 +391,15 @@ View.Course_Exam_Questions = React.createClass({
 
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        // TODO (daniel): Rename this event.
-        ExamStore.addListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeginEditing);
-        // TODO (daniel): Rename this event.
-        ExamStore.addListener(CAEvent.Name.DID_EXIT_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        ExamStore.removeListener(CAEvent.Name.DID_BE_IN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_EXIT_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 
@@ -444,7 +439,7 @@ View.Course_Exam_Question_Item = React.createClass({
         else {
             return (
                 <li className="question">
-                    <img onClick={this.handleClickEdit}
+                    <img onClick={this.onEdit}
                          className="question__icon--edit"
                          src="/img/icons/edit.png" />
                     <img className="question__icon--delete" src="/img/icons/delete.png" />
@@ -461,8 +456,7 @@ View.Course_Exam_Question_Item = React.createClass({
     },
 
     
-    // TODO (Daniel): Better name.
-    handleClickEdit: function(event) {
+    onEdit: function(event) {
         Action.send(Action.Name.PERFORM_QUESTION_EDIT,
                     {
                         examId: ExamStore.current().id,
@@ -482,7 +476,6 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     render: function() {
-        console.log("Rendering editing item.");
         var question = this.props.question,
             explanationStyle= {
                 textDecoration: 'underline',
@@ -514,7 +507,6 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onSave: function(event) {
-        console.log("onSave");
         Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {examId: ExamStore.current().id,
                         questionId: this.props.question.id,

@@ -89,7 +89,7 @@ var ConfigStore = (function() {
                         if (!payload.questionId) {
                             throw new Error("Trying to edit question without any question");
                         }
-                        Anchor.set({pageKey: 'course', questionId: payload.questionId},
+                        Anchor.set({pageKey: 'course', questionEditId: payload.questionId},
                                    {silent: true});
                         resolve();
                     });
@@ -102,7 +102,7 @@ var ConfigStore = (function() {
                         if (!payload.questionId) {
                             throw new Error("Trying to save question without any question");
                         }
-                        Anchor.unset(["questionId"],
+                        Anchor.unset(["questionEditId"],
                                    {silent: true});
                         resolve();
                     });

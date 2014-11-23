@@ -52,9 +52,9 @@ CAEvent.Name = {
     DID_FETCH_EXAMS: 'DID_FETCH_EXAMS',
     // Event for when you successfully enter
     // edit mode. 
-    DID_BE_IN_EDITING: 'DID_BE_IN_EDITING',
+    DID_BEGIN_EDITING: 'DID_BEGIN_EDITING',
     // Event for when you successfuly exit
     // the edit mode.
-    DID_EXIT_EDITING: 'DID_EXIT_EDITING'
+    DID_END_EDITING: 'DID_END_EDITING'
 };
 

@@ -303,7 +303,7 @@ var ExamStore = (function() {
                                 var question = self.questionForExam(payload.examId,
                                                  payload.questionId);
                                 question.isEditing(true);
-                                self.emit(new CAEvent(CAEvent.Name.DID_BE_IN_EDITING));
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
                             },
                             // Error.
                             function(err) {
@@ -326,7 +326,8 @@ var ExamStore = (function() {
                                     */
                                 var question = self.questionForExam(payload.examId,
                                                                     payload.questionId),
-                                    options = payload.questionMap.options;
+                                    options = payload.questionMap.options,
+                                    saveOptions = {};
                                 if (options) {
                                     question.setOptions(options);
                                 }
@@ -336,10 +337,10 @@ var ExamStore = (function() {
                                 delete payload.questionMap.options;
                                 question.set(payload.questionMap);
                                 question.isEditing(false);
-                                // TODO (daniel): Need to wait for save to finish before emiting
-                                // a complete event.
-                                question.save();
-                                self.emit(new CAEvent(CAEvent.Name.DID_EXIT_EDITING));
+                                saveOptions = {success: function(){ 
+                                          self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
+                                question.save({},saveOptions); //saveOptions must be the
+                                                               // second or third parameter
                             },
                             // Error.
                             function(err) {
