@@ -523,6 +523,10 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         this.state.questionMap.solution = event.target.value;
     },
 
+    onChangeOption: function(event) {
+        console.log(event.target.value);
+    }
+
 
     onChangeExplanation: function(event) {
         this.state.questionMap.explanation = event.target.value;
@@ -565,7 +569,7 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                 var isCorrect = question.isCorrect(option),
                     key = question.id + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
-                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChange={self.onChangeOption}
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChange={self.onChangeSolution}
                                                                                   name={ name }
                                                                                   key={ key }
                                                                                   option={ option }
@@ -579,6 +583,10 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
         );
     },
 
+
+    onChangeSolution: function(event) {
+        this.props.onChange(event);
+    },
 
     onChangeOption: function(event) {
         this.props.onChange(event);
@@ -613,28 +621,32 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
         if (this.props.isCorrect) {
             return (
                 <li className={ questionClass }>
-                    <input onChange={this.onChangeOption}
+                    <input onChange={this.onChangeSolution}
                            type="radio"
                            name={ this.props.name }
                            defaultValue={ option }
                            defaultChecked />
-                    <span><input type="text" defaultValue={ option } /></span>
+                    <span><input onChange={this.onChangeOption} type="text" defaultValue={ option } /></span>
                 </li>
             );         
         }
         // Not the correct answer.
         return (
             <li className={ questionClass }>
-                <input onChange={this.onChangeOption}
+                <input onChange={ this.onChangeSolution }
                        type="radio"
                        name={ this.props.name }
                        defaultValue={ option } />
-                <span><input type="text" defaultValue={ option } /></span>
+                <span><input onChange={this.onChangeOption} type="text" defaultValue={ option } /></span>
             </li>
         ); 
 
     },
 
+
+    onChangeSolution: function(event) {
+        this.props.onChange(event);
+    },
 
     onChangeOption: function(event) {
         this.props.onChange(event);
