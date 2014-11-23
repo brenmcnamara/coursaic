@@ -1,0 +1,97 @@
+/**
+ * comp.popups.css
+ *
+ * Style for all the popup components.
+ */
+
+.popup {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  
+  min-width: 300px;
+  min-height: 300px;
+
+  z-index: 3;
+}
+
+.popup__background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: black;
+  opacity: .4;
+}
+
+.popup-window--small,
+.popup-window--medium {
+  position: absolute;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.popup-window--small {
+  margin-top: -50px;
+  margin-left: -150px;
+  top: 50%;
+  left: 50%;
+  
+  height: 100px;
+  width: 300px;
+}
+
+.popup-window--medium {
+  margin-top: -110px;
+  margin-left: -200px;
+  top: 50%;
+  left: 50%;
+  
+  width: 400px;
+  height: 220px;
+  
+  background: white;
+}
+
+.popup-window__header {
+  width: 100%;
+  background: #EAEAEA;
+  color: #4A90E2;
+  height: 40px;
+  line-height: 40px;
+  
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.create-course__button-wrapper {
+  margin: 10px auto;
+  width: 162px; /* This shouldn't be hard-coded in */
+  /* TODO (brendan): Fix this!! */
+  /* Trying to make this button wrapper wrap just around
+   * the css elements inside it, while also centering the
+   * element horizontally inside its parent using margin auto */
+}
+
+.create-course__button-wrapper > button {
+  margin: 0 5px;
+  text-align: center;
+}
+
+.create-course__name,
+.create-course__code,
+.create-course__field {
+  margin: 7px 0px 0px 20px;
+}
+
+.create-course__name,
+.create-course__code {
+  width: 85%;
+}
+
+.create-course__name > input,
+.create-course__code > input {
+  width: 100%;
+  padding: 2px 5px;
+}
+

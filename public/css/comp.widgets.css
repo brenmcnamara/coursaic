@@ -131,6 +131,23 @@
 
 
 /* -------------------- *\
+          Button
+\* -------------------- */
+
+.button {
+    background: #EAEAEA;
+    border: solid #CCC 1px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 1em;
+    color: #666;
+}
+
+.button:active {
+    background: #DDD;
+}
+
+/* -------------------- *\
        Main-Options
 \* -------------------- */
 

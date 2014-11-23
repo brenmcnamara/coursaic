@@ -510,5 +510,3 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
 
 });
 
-
-
