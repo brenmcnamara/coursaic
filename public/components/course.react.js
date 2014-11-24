@@ -492,7 +492,21 @@ View.Course_Exam_Question_Item = React.createClass({
 View.Course_Exam_Question_Item_Editing = React.createClass({
 
     getInitialState: function() {
-        return {questionMap: {options: this.props.question.getOptions()}};
+        // Find the index of the solution.
+        var question = this.props.question,
+            options = question.getOptions(),
+            solutionIndex = -1, i, n;
+        for (i = 0, n = options.length; i < n; ++i) {
+            if (question.isCorrect(options[i])) {
+                solutionIndex = i;
+            }
+        }
+
+        if (solutionIndex === -1) {
+            throw new Error("Solution could not be found for the question.");
+        }
+        return {solutionIndex: solutionIndex,
+                questionMap: {options: this.props.question.getOptions()}};
     }, 
 
 
@@ -553,7 +567,6 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     onSave: function(event) {
         if (!this.isQuestionValid()) {
-            cosnole.log("throwing error");
             throw new Error("Trying to save an invalid question.");
         }
         Action.send(Action.Name.SAVE_QUESTION_EDIT,
@@ -562,7 +575,6 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                         questionId: this.props.question.id,
                         questionMap: this.state.questionMap
                     });
-
     },
 
 
@@ -587,99 +599,81 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             // need to explicitly check if questionMap
             // properties are empty strings before we
             // set them to their default values
-            questionText = (questionMap.question == "" || questionMap.question) ?
-                            questionMap.question : question.get('question'),
-            solution = (questionMap.solution == "" || questionMap.solution) ?
-                            questionMap.solution : question.get('solution'),
-            explanation = (questionMap.explanation == "" || questionMap.explanation) ?
-                            questionMap.explanation : question.get('explanation'),
+            questionText = questionMap.question || question.get('question'),
+            solution = questionMap.solution || question.get('solution'),
+            explanation = questionMap.explanation || question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
             options = questionMap.options,
-            valuesSoFar = {},
+            // A map containing the options. This is in
+            // map form to make validation easier.
+            optionsMap = {},
             value,
             i, n;
 
         // Check if there are any repeating options.
-        for(i = 0, n = questionMap.options.length; i < n; ++i) {
-            value = questionMap.options[i];
-            if (Object.prototype.hasOwnProperty.call(valuesSoFar, value)) {
+        for(i = 0, n = options.length; i < n; ++i) {
+            // Create a hash containing a
+            // particular option and check if
+            // that value appears anywhere
+            // else in the options list.
+            value = options[i];
+            // Make sure the option value is
+            // not an empty string.
+            if (value === "") {
                 return false;
             }
-            valuesSoFar[value] = true;
+            if (optionsMap[value]) {
+                // The option already exists in the
+                // map, so an option is repeated,
+                // which means there are multiple
+                // options with the value.
+                return false;
+            }
+            optionsMap[value] = true;
         }
         // Check that the question, explanation, and solution are non-empty
-        return ((questionText.trim() !== "") &&
-               (explanation.trim() !== "") &&
-               (solution.trim() !== ""));
+        return ((questionText !== "") &&
+               (explanation !== "") &&
+               (solution !== ""));
     },
 
 
     onChangeQuestion: function(event) {
         var questionMap = View.Util.copy(this.state.questionMap);
-        questionMap.question = event.target.value;
-        this.setState({questionMap: questionMap});
-    },
-
-
-    /**
-     * The index of the current solution within the
-     * options.
-     *
-     * @method solutionIndex
-     *
-     * @return {Number} The index of the solution.
-     */
-    solutionIndex: function() {
-        // Get the most up-to-date solution and options
-        // for the question.
-        var question = this.props.question,
-            questionMap = this.state.questionMap,
-            solution = questionMap.solution || question.get('solution'),
-            options = questionMap.options,
-            i, n;
-
-        for (i = 0, n = options.length; i < n; ++i) {
-            if (solution === options[i]) {
-                return i;
-            }
-        }
-        throw new Error("Could not find the solution " +
-                        solution + "in the available options " +
-                        JSON.stringify(options));
+        questionMap.question = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
     },
 
 
     onChangeTextForOption: function(event, questionIndex) {
         var questionMap = View.Util.copy(this.state.questionMap),
-            solutionIndex = (questionMap.solutionIndex ||
-                             this.solutionIndex());
+            value = event.target.value.trim();
 
         // If the questionIndex is the index of the current
         // solution, then update the solution to
         // reflect the change in the text.
-        if (questionIndex === solutionIndex) {
-            questionMap.solution = event.target.value;
+        if (questionIndex === this.state.solutionIndex) {
+            questionMap.solution = value;
         }
 
-        questionMap.options[questionIndex] = event.target.value;
+        questionMap.options[questionIndex] = value;
         this.setState({questionMap: questionMap});
     },
 
 
     onChangeRadioForOption: function(event, questionIndex) {
         var questionMap = View.Util.copy(this.state.questionMap);
-        questionMap.solution = event.target.value;
-        questionMap.solutionIndex = questionIndex;
-        this.setState({questionMap: questionMap});
+        questionMap.solution = event.target.value.trim();
+        this.setState({ solutionIndex: questionIndex, questionMap: questionMap });
     },
 
 
     onChangeExplanation: function(event) {
         var questionMap = View.Util.copy(this.state.questionMap);
-        questionMap.explanation = event.target.value;
-        this.setState({questionMap: questionMap});
+        questionMap.explanation = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
     }
 
 
