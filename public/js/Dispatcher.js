@@ -210,7 +210,7 @@ var Dispatcher = (function() {
                     );
                 });
             });
-
+            // TODO (brendan): Make better name for promises. 
             Promise.all(promises).then(
                 // Success callback
                 function() {

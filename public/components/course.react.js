@@ -490,7 +490,8 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                            type="text"
                            defaultValue={ question.get('question') }
                            className="question__ask" />
-                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChange={ this.onChangeOptions }
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChangeText={ this.onChangeText }
+                                                                          onChangeRadio={ this.onChangeRadio }
                                                                           question={ question } />
                 </div>
                 <div className="question__explain">
@@ -515,27 +516,59 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onChangeQuestion: function(event) {
-        this.state.questionMap.question = event.target.value;
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.question = event.target.value;
+        this.setState({questionMap: questionMap});
+    },
+
+    _replaceOption: function(arr, newText, replaceText) {
+        for(i = 0; i < arr.length; i++) {
+            if(arr[i] === replaceText) {
+                arr[i] = newText;
+                console.log("this happens");
+                break;
+            }
+        }
+        return arr;
     },
 
 
-    onChangeOptions: function(event, qindex) {
-        //  TODO (daniel): Ask Brendan for proper way to fix bug
-        //  that arises when changing the answer and not clicking
-        //  the radio button again.
-        if(event.target.type === "radio"){
-            this.state.questionMap.solution = event.target.value;
-        }
-        else if(event.target.type === "text") {
-            this.state.questionMap.options[qindex] = event.target.value;
-            console.log(this.state.questionMap.options);
-        }
+    onChangeText: function(event, oldOption) {
+        var questionMap = View.Util.copy(this.state.questionMap),
+            isCorrect = this.props.question.isCorrect(oldOption);
+
+            // For loop that changes the value of an option to an
+            // updated value.
+            for (i = 0; i < questionMap.options.length; i++) {
+                if (questionMap.options[i] === oldOption) {
+                    questionMap.options[i] = event.target.value;
+                    break;
+                }
+             }
+             if(isCorrect) {
+                questionMap.solution = event.target.value;
+                this.setState({questionMap: questionMap});
+                console.log("new solution is: " + event.target.value);
+             }
+        this.setState({questionMap: questionMap});
+        console.log(questionMap.options);
+
+    },
+
+    onChangeRadio: function(event) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        console.log("new solution is: " + event.target.value);
+        questionMap.solution = event.target.value;
+        this.setState({questionMap: questionMap});
+        console.log(questionMap.options);
 
     },
 
 
     onChangeExplanation: function(event) {
-        this.state.questionMap.explanation = event.target.value;
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.explanation = event.target.value;
+        this.setState({questionMap: questionMap});
     }
 
 
@@ -575,8 +608,8 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                 var isCorrect = question.isCorrect(option),
                     key = question.id + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
-                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChange={self.onChangeOptions}
-                                                                                  qindex = { index }
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChangeText={ self.onChangeText }
+                                                                                  onChangeRadio = { self.onChangeRadio}
                                                                                   name={ name }
                                                                                   key={ key }
                                                                                   option={ option }
@@ -591,9 +624,13 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
     },
 
 
-    onChangeOptions: function(event, qindex) {
-        this.props.onChange(event, qindex);
+    onChangeText: function(event, oldOption) {
+        this.props.onChangeText(event, oldOption);
     },
+
+    onChangeRadio: function(event) {
+        this.props.onChangeRadio(event);
+    }
 
 
 });
@@ -615,42 +652,55 @@ View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
 
 View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
 
+    getInitialState: function() {
+        return {option: this.props.option, isCorrect: this.props.isCorrect};
+    },
+
+
     render: function() {
         var questionClass = (this.props.isCorrect) ?
                             "multi-choice__item--correct" :
                             "multi-choice__item",
-            option = this.props.option,
-            qindex  = this.props.qindex;
+            option = this.props.option;
+            //qindex  = this.props.qindex;
+            // console.log("option: "+ option);
+            // console.log("isCorrect: " + this.props.isCorrect);
 
         if (this.props.isCorrect) {
             return (
                 <li className={ questionClass }>
-                    <input onChange={ this.onChangeOptions }
+                    <input onChange={ this.onChangeRadio }
                            type="radio"
                            name={ this.props.name }
                            defaultValue={ option }
                            defaultChecked />
-                    <span><input onChange={ this.onChangeOptions } type="text" defaultValue={ option } /></span>
+                    <span><input onChange={ this.onChangeText } type="text" defaultValue={ option } /></span>
                 </li>
             );         
         }
         // Not the correct answer.
         return (
             <li className={ questionClass }>
-                <input onChange={ this.onChangeOptions }
+                <input onChange={ this.onChangeRadio }
                        type="radio"
                        name={ this.props.name }
                        defaultValue={ option } />
-                <span><input onChange={ this.onChangeOptions } type="text" defaultValue={ option } /></span>
+                <span><input onChange={ this.onChangeText } type="text" defaultValue={ option } /></span>
             </li>
         ); 
 
     },
 
 
-    onChangeOptions: function(event) {
-        this.props.onChange(event, this.props.qindex);
+    onChangeText: function(event) {
+        this.props.onChangeText(event, this.state.option);
+            this.setState({option: event.target.value});
     },
+
+    onChangeRadio: function(event) {
+        console.log("radio button clicked, value is: " + event.target.value);
+        this.props.onChangeRadio(event, this.state.option);
+    }
 
 
 });
