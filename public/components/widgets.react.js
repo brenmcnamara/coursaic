@@ -13,6 +13,8 @@
  *  - View namespace
  */
 
+// TODO (brenan): Move this to the home page react components.
+// Rename this to make it look like it is home-page specific.
 /**
  * MainOption
  *
@@ -41,13 +43,18 @@ View.MainOption_CreateCourse = React.createClass({
         };
 
         return (
-            <li className="main-options__item">
+            <li onClick={ this.didClick } className="main-options__item">
+
                 <img src="/img/icons/book.png"
-                     style={createCourseStyle}
+                     style={ createCourseStyle }
                      className="main-options__item__icon" />
                 <div className="main-options__item__text">Create Course</div>
             </li>
         );
+    },
+
+    didClick: function(event) {
+        Action.send(Action.Name.ENTER_CREATE_COURSE_MODE);
     }
 
 });

@@ -26,17 +26,50 @@
 View.Home_Root = React.createClass({
 
     render: function() {
+        // TODO (brendan): How can I avoid writing
+        // all the html twice?
         var school = UserStore.current().get('school');
-        return (
-            <div className="main">
-                <View.Header />
-                <View.Header_Fill />
-                <View.Home_Img />
-                <View.Search alias={school.get('alias')} />
-                <View.Home_Content />
-            </div>
-        );
+        if (CourseStore.isCreateCourseMode()) {
+            return (
+                <div className="main">
+                    <View.Popup_Create_Course />
+                    <View.Header />
+                    <View.Header_Fill />
+                    <View.Home_Img />
+                    <View.Search alias={school.get('alias')} />
+                    <View.Home_Content />
+                </div>
+            );        
+        }
+        else {
+            return (
+                <div className="main">
+                    <View.Header />
+                    <View.Header_Fill />
+                    <View.Home_Img />
+                    <View.Search alias={school.get('alias')} />
+                    <View.Home_Content />
+                </div>
+            );
+        }
+    },
+
+    didEnterCreateCourseMode: function() {
+        this.forceUpdate();
+    },
+
+
+    componentWillMount: function() {
+        CourseStore.addListener(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE,
+                                this.didEnterCreateCourseMode);
+    },
+
+
+    componentWillUnmount: function() {
+        CourseStore.removeListener(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE,
+                                   this.didEnterCreateCourseMode);
     }
+
 
 });
 

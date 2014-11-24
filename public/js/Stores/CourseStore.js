@@ -31,60 +31,73 @@ var Course = Parse.Object.extend("Course"),
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch(name) {
-            case Action.Name.PERFORM_LOAD:
-
-                return function(payload) {
-                    switch (payload.pageKey) {
-                    case 'home':
-                        // Fetch a page-worth of courses.
-                        return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                                // Done waiting for the ConfigStore
-                               .then(self.fetchPage())
-                               // Finished getting the next set of courses.
-                               .then(
-                                    // Success.
-                                    function() {
-                                        self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
-                                    },
-                                    // Error.
-                                    function(err) {
-                                        throw error;
-                                    });
-                    case 'course':
-                        // Just make sure the single course is loaded.
-                        return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                               .then(
-                                    // Success.
-                                    function() {
-                                        var course;
-                                        // Get the course if the course does not
-                                        // already exist.
-                                        if (!self.courseWithId(payload.course)) {
-                                            // Don't have the course, need to fetch it.
-                                            course = new Course();
-                                            course.id = payload.course;
-                                            return self._fetchCourse(course);
-                                        }
-
-                                    },
-
-                                    // Error.
-                                    function(error) {
-                                        throw error;
+        case Action.Name.PERFORM_LOAD:
+            return function(payload) {
+                switch (payload.pageKey) {
+                case 'home':
+                    // Fetch a page-worth of courses.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                            // Done waiting for the ConfigStore
+                           .then(self.fetchPage())
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
+                                },
+                                // Error.
+                                function(err) {
+                                    throw error;
+                                });
+                case 'course':
+                    // Just make sure the single course is loaded.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                           .then(
+                                // Success.
+                                function() {
+                                    var course;
+                                    // Get the course if the course does not
+                                    // already exist.
+                                    if (!self.courseWithId(payload.course)) {
+                                        // Don't have the course, need to fetch it.
+                                        course = new Course();
+                                        course.id = payload.course;
+                                        return self._fetchCourse(course);
                                     }
-                                )
-                    default:
-                        return new Promise(function(resolve, reject) {
-                            resolve();
-                        });
-                    }
+
+                                },
+
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                }
+                            )
+                default:
                     return new Promise(function(resolve, reject) {
-
+                        resolve();
                     });
+                }
+                return new Promise(function(resolve, reject) {
 
-                };
-            default:
-                return null;
+                });
+
+            };
+        case Action.Name.ENTER_CREATE_COURSE_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        // Done waiting for ConfigStore to finish.
+                       .then(
+                        // Success.
+                        function() {
+                            self.emit(new CAEvent(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE));
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        });
+            };
+        default:
+            return null;
         }
     };
 
@@ -336,6 +349,16 @@ var Course = Parse.Object.extend("Course"),
         return null;
     };
 
+    /**
+     * Check if the course store is in create course mode.
+     *
+     * @method isCreateCourseMode
+     *
+     * @return {Boolean} Create course mode.
+     */
+    StoreClass.prototype.isCreateCourseMode = function() {
+        return ConfigStore.isCreatingCourse();
+    };
 
     /**
      * Get the current course for the page.

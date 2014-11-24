@@ -49,6 +49,10 @@ CAEvent.Name = {
     DID_LOAD_EXAM: 'DID_LOAD_EXAM',
     // Event for when all exams of a course
     // are fetched.
-    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS'
+    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS',
+    // TODO (brendan): Do I need this event? Why not just
+    // use the event DID_ENTER_EDIT_MODE, then check the
+    // state of the CourseStore to see if a course is being edited.
+    DID_ENTER_CREATE_COURSE_MODE: 'DID_ENTER_CREATE_COURSE_MODE'
 };
 

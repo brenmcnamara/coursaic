@@ -22,7 +22,10 @@ Action.Name = {
     // TODO (daniel): Add an action to this list.
     // The page just loaded
     PERFORM_LOAD: 'PERFORM_LOAD',
-    DISPLAY_EXAM: 'DISPLAY_EXAM'
+    DISPLAY_EXAM: 'DISPLAY_EXAM',
+    // Action that is called when the
+    // for entering create-course mode.
+    ENTER_CREATE_COURSE_MODE: 'ENTER_CREATE_COURSE_MODE'
 };
 
 

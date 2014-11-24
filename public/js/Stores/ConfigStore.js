@@ -81,6 +81,13 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.ENTER_CREATE_COURSE_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({createCourse: 'true'}, {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
@@ -128,6 +135,20 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.examId = function() {
         return Anchor.hashMap().examId || null;
+    };
+
+
+    /**
+     * Determine if the hash specifies that there is
+     * a course being created.
+     *
+     * @method isCreatingCourse
+     *
+     * @return {Boolean} true if there is a course
+     *  being created, false otherwise.
+     */
+    StoreClass.prototype.isCreatingCourse = function() {
+        return Anchor.hashMap().createCourse === 'true';
     };
 
 
