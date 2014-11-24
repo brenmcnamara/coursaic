@@ -131,16 +131,26 @@
 
 
 /* -------------------- *\
-          Button
+      Form Elements
 \* -------------------- */
 
+.button--disabled,
 .button {
-    background: #EAEAEA;
     border: solid #CCC 1px;
     padding: 5px 10px;
-    border-radius: 3px;
+    border-radius: 2px;
     font-size: 1em;
-    color: #666;
+    background: #EAEAEA;
+}
+
+.button {
+    color: black;
+    cursor: pointer;
+}
+
+.button--disabled {
+    color: #999;
+    cursor: default;
 }
 
 .button:active {
