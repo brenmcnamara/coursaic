@@ -439,7 +439,7 @@ View.Course_Exam_Question_Item = React.createClass({
         else {
             return (
                 <li className="question">
-                    <img onClick={this.onEdit}
+                    <img onClick={ this.onEdit }
                          className="question__icon--edit"
                          src="/img/icons/edit.png" />
                     <img className="question__icon--delete" src="/img/icons/delete.png" />
@@ -462,6 +462,27 @@ View.Course_Exam_Question_Item = React.createClass({
                         examId: ExamStore.current().id,
                         questionId: this.props.question.id
                     });
+    },
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 
@@ -562,9 +583,16 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
     isQuestionValid: function() {
         var questionMap = this.state.questionMap,
             question = this.props.question,
-            questionText = questionMap.question || question.get('question'),
-            solution = questionMap.solution || question.get('solution'),
-            explanation = questionMap.explanation || question.get('explanation'),
+            // Since empty strings are falsey values we 
+            // need to explicitly check if questionMap
+            // properties are empty strings before we
+            // set them to their default values
+            questionText = (questionMap.question == "" || questionMap.question) ?
+                            questionMap.question : question.get('question'),
+            solution = (questionMap.solution == "" || questionMap.solution) ?
+                            questionMap.solution : question.get('solution'),
+            explanation = (questionMap.explanation == "" || questionMap.explanation) ?
+                            questionMap.explanation : question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
@@ -572,6 +600,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             valuesSoFar = {},
             value,
             i, n;
+
         // Check if there are any repeating options.
         for(i = 0, n = questionMap.options.length; i < n; ++i) {
             value = questionMap.options[i];
@@ -623,24 +652,26 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onChangeTextForOption: function(event, questionIndex) {
-        var questionMap = View.Util.copy(this.state.questionMap);
+        var questionMap = View.Util.copy(this.state.questionMap),
+            solutionIndex = (questionMap.solutionIndex ||
+                             this.solutionIndex());
 
         // If the questionIndex is the index of the current
         // solution, then update the solution to
         // reflect the change in the text.
-        if (questionIndex === this.solutionIndex()) {
+        if (questionIndex === solutionIndex) {
             questionMap.solution = event.target.value;
         }
 
         questionMap.options[questionIndex] = event.target.value;
-
         this.setState({questionMap: questionMap});
     },
 
 
-    onChangeRadioForOption: function(event) {
+    onChangeRadioForOption: function(event, questionIndex) {
         var questionMap = View.Util.copy(this.state.questionMap);
         questionMap.solution = event.target.value;
+        questionMap.solutionIndex = questionIndex;
         this.setState({questionMap: questionMap});
     },
 
@@ -726,8 +757,8 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
     },
 
 
-    onChangeRadio: function(event) {
-        this.props.onChangeRadio(event);
+    onChangeRadio: function(event, questionIndex) {
+        this.props.onChangeRadio(event, questionIndex);
     }
 
 
@@ -796,7 +827,7 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
 
 
     onChangeRadio: function(event) {
-        this.props.onChangeRadio(event);
+        this.props.onChangeRadio(event, this.props.index);
     }
 
 
