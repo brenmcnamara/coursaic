@@ -22,7 +22,9 @@ Action.Name = {
     // TODO (daniel): Add an action to this list.
     // The page just loaded
     PERFORM_LOAD: 'PERFORM_LOAD',
-    DISPLAY_EXAM: 'DISPLAY_EXAM'
+    DISPLAY_EXAM: 'DISPLAY_EXAM',
+    PERFORM_QUESTION_EDIT: 'PERFORM_QUESTION_EDIT',
+    SAVE_QUESTION_EDIT: 'SAVE_QUESTION_EDIT'
 };
 
 
