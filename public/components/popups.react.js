@@ -10,7 +10,11 @@
 View.Popup_Create_Course = React.createClass({
 
     render: function() {
-        var submitButton = (this.isValid()) ?
+        var fields = FieldStore.fields(),
+            fieldOptions = fields.map(function(field) {
+                return <option value={ field.id }>{ field.get('name') }</option>;
+            });
+            submitButton = (this.isValid()) ?
                            (<button type="button" className="button popup-window__button">
                                     Create
                                 </button>) :
@@ -39,10 +43,8 @@ View.Popup_Create_Course = React.createClass({
                     <div className="create-course__field">
                         <span>Field:</span>
                         <select onChange={ this.onChangeField }
-                                className="create-course__field" defaultValue="Temp 1">
-                            <option value="c01">Temp 1</option>
-                            <option value="c02">Temp 2</option>
-                            <option value="c03">Temp 3</option>
+                                className="create-course__field" defaultValue={ fields[0].id }>
+                            { fieldOptions }
                         </select>
                     </div>
                     <div className="create-course__button-wrapper">
