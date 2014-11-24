@@ -183,16 +183,7 @@ var Course = Parse.Object.extend("Course"),
      */
     StoreClass.prototype._loadCourse = function(course) {
         var 
-            fieldPromise = new Promise(function(resolve, reject) {
-                course.get('field').fetch({
-                    success: function() {
-                        resolve();
-                    },
-                    error: function(error) {
-                        throw error;
-                    }
-                });
-            }),
+            fieldPromise = FieldStore.fetchFieldForCourse(course),
 
             schoolPromise = new Promise(function(resolve, reject) {
                 course.get('school').fetch({
