@@ -220,7 +220,7 @@ View.Exam_List_Item = React.createClass({
         }
         else {
             return (
-                <li onClick = {this.handleClick} >{ exam.get('name') }</li>
+                <li onClick = { this.handleClick } >{ exam.get('name') }</li>
             );
         }
     },
@@ -232,7 +232,7 @@ View.Exam_List_Item = React.createClass({
 
     didBeginEditing: function(event) {
         this.setState({isEditing: true});
-        this.forceUpdate();
+        
     },
 
     didEndEditing: function() {
@@ -532,6 +532,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     onSave: function(event) {
         if (!this.isQuestionValid()) {
+            cosnole.log("throwing error");
             throw new Error("Trying to save an invalid question.");
         }
         Action.send(Action.Name.SAVE_QUESTION_EDIT,
@@ -559,9 +560,30 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
      *  to be saved, false otherwise.
      */
     isQuestionValid: function() {
-        // TODO (daniel): Implement me!
-        // check if solution is empty.
-        return true;
+        var questionMap = this.state.questionMap,
+            question = this.props.question,
+            questionText = questionMap.question || question.get('question'),
+            solution = questionMap.solution || question.get('solution'),
+            explanation = questionMap.explanation || question.get('explanation'),
+            // The updated question map will always contain
+            // the set of options available, so no
+            // need for a conditional check.
+            options = questionMap.options,
+            valuesSoFar = {},
+            value,
+            i, n;
+        // Check if there are any repeating options.
+        for(i = 0, n = questionMap.options.length; i < n; ++i) {
+            value = questionMap.options[i];
+            if (Object.prototype.hasOwnProperty.call(valuesSoFar, value)) {
+                return false;
+            }
+            valuesSoFar[value] = true;
+        }
+        // Check that the question, explanation, and solution are non-empy
+        return ((questionText.trim() !== "") &&
+               (explanation.trim() !== "") &&
+               (solution.trim() !== ""));
     },
 
 
