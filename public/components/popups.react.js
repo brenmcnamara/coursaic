@@ -15,7 +15,8 @@ View.Popup_Create_Course = React.createClass({
                 return <option value={ field.id }>{ field.get('name') }</option>;
             });
             submitButton = (this.isValid()) ?
-                           (<button type="button" className="button popup-window__button">
+                           (<button onClick={ this.onClickCreate } 
+                                    type="button" className="button popup-window__button">
                                     Create
                                 </button>) :
                            (<button type="button" className="button--disabled popup-window__button">
@@ -49,7 +50,9 @@ View.Popup_Create_Course = React.createClass({
                     </div>
                     <div className="create-course__button-wrapper">
                         { submitButton }
-                        <button type="button" className="button popup-window__button">
+                        <button onClick={ this.onClickCancel }
+                                type="button"
+                                className="button popup-window__button">
                             Cancel
                         </button>
                     </div>
@@ -103,6 +106,18 @@ View.Popup_Create_Course = React.createClass({
 
     onChangeField: function(event) {
         this.setState({ fieldId: event.target.value })
+    },
+
+
+    onClickCreate: function() {
+        if (!this.isValid()) {
+            throw new Error("Cannot create a course when form is not valid.");
+        }
+    },
+
+
+    onClickCancel: function() {
+        
     },
 
 

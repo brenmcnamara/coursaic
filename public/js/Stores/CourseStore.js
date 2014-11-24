@@ -96,6 +96,69 @@ var Course = Parse.Object.extend("Course"),
                             throw error;
                         });
             };
+        case Action.Name.CREATE_COURSE:
+            return function(payload) {
+                // TODO (brendan): Note that if this fails,
+                // createCourse mode will be exited since this
+                // is getting called after the config store.
+                // Not strongly exception-safe.
+                // TODO (brendan): Make sure that the app is in
+                // createCourse mode in the first place.
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                       // Wait for the config store to update the hash.
+                       .then(
+                        // Success.
+                        function() {
+                            var course = new Course();
+                            course.set(payload.courseMap);
+                            return new Promise(function(resolve, reject) {
+                                course.save({
+                                    success: function(course) {
+                                        self._courses.push(course);
+                                        resolve();
+                                    },
+                                    error: function(error) {
+                                        throw error;
+                                    }
+                                });
+                            });
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
+                        // Wait for the course to be saved
+                        // to the backend.
+                        .then(
+                        // Success.
+                        function() {
+                            // TODO (brendan): Maybe pass the course as a parameter
+                            // to this event.
+                            self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
+                        },
+                        // Error.
+                        function() {
+                            // TODO (brendan): Should I cancel create course mode?
+                            throw error;
+                        });
+            };
+        case Action.Name.CANCEL_CREATE_COURSE:
+            // TODO (brendan): Make sure that the app is
+            // in create course mode in the first palce.
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                   // Wait for the ConfigStore to finish updating
+                   // the hash.
+                   .then(
+                    // Success.
+                    function() {
+                        self.emit(new CAEvent(CAEvent.Name.DID_CANCEL_CREATE_COURSE));
+                    },
+                    // Error.
+                    function(error) {
+                        throw error;
+                    });
+            };
         default:
             return null;
         }

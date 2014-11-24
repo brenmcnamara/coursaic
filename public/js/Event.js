@@ -53,6 +53,9 @@ CAEvent.Name = {
     // TODO (brendan): Do I need this event? Why not just
     // use the event DID_ENTER_EDIT_MODE, then check the
     // state of the CourseStore to see if a course is being edited.
-    DID_ENTER_CREATE_COURSE_MODE: 'DID_ENTER_CREATE_COURSE_MODE'
+    DID_ENTER_CREATE_COURSE_MODE: 'DID_ENTER_CREATE_COURSE_MODE',
+
+    DID_CREATE_COURSE: 'DID_CREATE_COURSE',
+    DID_CANCEL_CREATE_COURSE: 'DID_CANCEL_CREATE_COURSE'
 };
 

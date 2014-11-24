@@ -146,8 +146,9 @@ var Dispatcher = (function() {
             var callback = store.actionHandler(name);
             if (callback) {
                 if (typeof callback !== 'function') {
-                    throw new Error("Dispatcher will only register objects of type" +
-                                    "'function' from actionHandler.");
+                    throw new Error("Dispatcher will only register objects of type " +
+                                    "'function' from actionHandler. Cannot register " +
+                                    name + " from store with index" + store.dispatcherIndex);
                 }
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }

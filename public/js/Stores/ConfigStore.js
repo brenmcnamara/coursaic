@@ -88,6 +88,24 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.CREATE_COURSE:
+                // TODO (brendan): Make sure that the app is in
+                // createCourse mode in the first place.
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createCourse'], {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.CANCEL_CREATE_COURSE:
+                // TODO (brendan): Make sure that the app is
+                // in create course mode in the first place.
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createCourse'], {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }

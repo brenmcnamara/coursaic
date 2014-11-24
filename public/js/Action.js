@@ -25,7 +25,10 @@ Action.Name = {
     DISPLAY_EXAM: 'DISPLAY_EXAM',
     // Action that is called when the
     // for entering create-course mode.
-    ENTER_CREATE_COURSE_MODE: 'ENTER_CREATE_COURSE_MODE'
+    ENTER_CREATE_COURSE_MODE: 'ENTER_CREATE_COURSE_MODE',
+
+    CREATE_COURSE: 'CREATE_COURSE',
+    CANCEL_CREATE_COURSE: 'CANCEL_CREATE_COURSE'
 };
 
 
