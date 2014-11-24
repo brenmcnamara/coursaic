@@ -580,7 +580,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             }
             valuesSoFar[value] = true;
         }
-        // Check that the question, explanation, and solution are non-empy
+        // Check that the question, explanation, and solution are non-empty
         return ((questionText.trim() !== "") &&
                (explanation.trim() !== "") &&
                (solution.trim() !== ""));
