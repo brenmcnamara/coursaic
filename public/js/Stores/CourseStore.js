@@ -11,7 +11,32 @@
 
 /*global FB, Parse, Action, CAEvent */
 
-var Course = Parse.Object.extend("Course"),
+var Course = Parse.Object.extend("Course", {
+
+    /**
+     * Getter/setter for the enroll count of courses. If a value
+     * is provided, then this is treated as a setter. If no parameter
+     * is provided, this is a getter.
+     *
+     * @method enrollCount
+     *
+     * @param val {Number} The value to set as the enroll count. If this
+     *  is provided, this method is treated as a setter and return nothing.
+     *
+     * @return {Number} The enroll count of the course. If no parameter is
+     *  provided, the count will be returned.
+     */
+    enrollCount: function(val) {
+        if (typeof val === 'number') {
+            this._enrollCount = val;
+        }
+        else {
+            return this._enrollCount || 0;
+        }
+    }
+
+
+}),
     
     CourseStore = (function() {
 
@@ -36,7 +61,8 @@ var Course = Parse.Object.extend("Course"),
                 switch (payload.pageKey) {
                 case 'home':
                     // Fetch a page-worth of courses.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
                             // Done waiting for the ConfigStore
                            .then(
                             // Success.
@@ -54,12 +80,13 @@ var Course = Parse.Object.extend("Course"),
                                     self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
                                 },
                                 // Error.
-                                function(err) {
+                                function(error) {
                                     throw error;
                                 });
                 case 'course':
                     // Just make sure the single course is loaded.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
                            .then(
                                 // Success.
                                 function() {

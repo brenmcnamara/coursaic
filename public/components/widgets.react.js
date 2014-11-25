@@ -171,7 +171,7 @@ View.CourseInfo = React.createClass({
             courseHeaderStyle = {
                 background: field.get('color')
             },
-            enrollMessage = course.get('enrollCount') + ' enrolled';
+            enrollMessage = course.enrollCount() + ' enrolled';
         // TODO: Separate out tags that are specific
         // to a page (i.e. home-content__course__grid__course).
         return (

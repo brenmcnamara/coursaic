@@ -126,8 +126,8 @@ var UserStore = (function() {
                     // User is not logged in. Perform the login operation.
                     Parse.FacebookUtils.logIn(null, {
                         success: function(user) {
-                            self._didLogin(self.current()).then(onDidLoginSuccess,
-                                                                onDidLoginFailure);
+                            self._didLogin(user).then(onDidLoginSuccess,
+                                                      onDidLoginFailure);
                         },
                         error: function(user, error) {
                             throw error;    
@@ -166,10 +166,24 @@ var UserStore = (function() {
                 // TODO (brendan): Don't need to wrap this in a promise.
                 return new Promise(function(resolve, reject) {
                     Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        .then(self._login.bind(self))
-                        .then(function() {
-                            resolve();
-                        });
+                        .then(
+                            // Success.
+                            function() {
+                                return self._login();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                        .then(
+                            // Success.
+                            function() {
+                                resolve();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
                 });              
             };
         default:
@@ -212,7 +226,7 @@ var UserStore = (function() {
                 success: function(results) {
                     // Add the users to the UserStore
                     // if they do not already exist.
-                    course.set('enrollCount', results.length);
+                    course.enrollCount(results.length);
                     results.forEach(function(user) {
                         // Overwrite any users when fetching a new
                         // set of users. This saves a conditional
@@ -266,8 +280,8 @@ var UserStore = (function() {
                     // adjusting the enroll count into 1 place for
                     // less confusion.
                     // Increment the enroll count locally.
-                    var enrollCount = course.get('enrollCount') || 0;
-                    course.set('enrollCount', enrollCount + 1);
+                    var enrollCount = course.enrollCount();
+                    course.enrollCount(enrollCount + 1);
                     resolve();
                 },
                 // Error.
