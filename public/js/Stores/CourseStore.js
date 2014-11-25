@@ -64,7 +64,6 @@ var Course = Parse.Object.extend("Course"),
                                         course.id = payload.course;
                                         return self._fetchCourse(course);
                                     }
-
                                 },
 
                                 // Error.
@@ -77,10 +76,6 @@ var Course = Parse.Object.extend("Course"),
                         resolve();
                     });
                 }
-                return new Promise(function(resolve, reject) {
-
-                });
-
             };
         case Action.Name.ENTER_CREATE_COURSE_MODE:
             return function(payload) {

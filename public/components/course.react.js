@@ -115,7 +115,6 @@ View.Course_Summary = React.createClass({
     }
 });
 
-
 View.Course_Content = React.createClass({
 
     render: function() {
@@ -204,26 +203,58 @@ View.Exam_List = React.createClass({
 });
 
 
-// TODO (daniel): Modify this element.
 View.Exam_List_Item = React.createClass({
+
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
 
     render: function() {
         var exam = this.props.exam;
 
-        return (
-            <li onClick = {this.handleClick} >{ exam.get('name') }</li>
-        );
+        if (this.state.isEditing) {
+            return (
+                <li>{ exam.get('name') }</li>
+            );
+        }
+        else {
+            return (
+                <li onClick = { this.handleClick } >{ exam.get('name') }</li>
+            );
+        }
     },
 
     handleClick: function(event) {
         Action.send(Action.Name.DISPLAY_EXAM,
                     {examId: this.props.exam.id})
+    },
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+        
+    },
+
+    didEndEditing: function() {
+        this.setState({isEditing: false});
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
+
 
 });
 
 
-// TODO (daniel): Modify this element here.
 View.Course_Content_Body = React.createClass({
 
     render: function() {
@@ -322,8 +353,14 @@ View.Course_Exam_Questions = React.createClass({
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
             listItems = questions.map(function(question) {
-                return <View.Course_Exam_Question_Item key={ question.id }
-                                                       question={ question } />
+                if (question.isEditing()) {
+                    return <View.Course_Exam_Question_Item_Editing question={ question } />;
+                }
+                else {
+                    return <View.Course_Exam_Question_Item key={ question.id }
+                                                           question={ question } />
+                }
+
             });
 
         return (
@@ -342,13 +379,27 @@ View.Course_Exam_Questions = React.createClass({
     },
 
 
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 
@@ -356,6 +407,10 @@ View.Course_Exam_Questions = React.createClass({
 
 
 View.Course_Exam_Question_Item = React.createClass({
+
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
 
     render: function() {
         // NOTE (brendan): This is hard-coded for multiple-choice questions.
@@ -366,50 +421,259 @@ View.Course_Exam_Question_Item = React.createClass({
                 marginRight: '3px'
             };
 
-        return (
-            <li className="question">
-                <img className="question__icon--edit" src="/img/icons/edit.png" />
-                <img className="question__icon--delete" src="/img/icons/delete.png" />
-                <div className="question__content">
-                    <div className="question__ask">{ question.get('question') }</div>
-                    <View.Course_Exam_Question_MultiChoice_Option question={ question } />
-                </div>
-                <div className="question__explain">
-                    <span style= { explanationStyle }>Explanation:</span>
-                    <span>{ question.get('explanation') }</span>
-                </div>
-            </li>
-        );
+        if (this.state.isEditing) {
+            return (
+                <li className="question">
+                    <img className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )}
+        else {
+            return (
+                <li className="question">
+                    <img onClick={ this.onEdit }
+                         className="question__icon--edit"
+                         src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )};
+    },
+
+    
+    onEdit: function(event) {
+        Action.send(Action.Name.PERFORM_QUESTION_EDIT,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id
+                    });
+    },
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
+
 
 });
 
 
 View.Course_Exam_Question_Item_Editing = React.createClass({
 
+    getInitialState: function() {
+        // Find the index of the solution.
+        var question = this.props.question,
+            options = question.getOptions(),
+            solutionIndex = -1, i, n;
+        for (i = 0, n = options.length; i < n; ++i) {
+            if (question.isCorrect(options[i])) {
+                solutionIndex = i;
+            }
+        }
+
+        if (solutionIndex === -1) {
+            throw new Error("Solution could not be found for the question.");
+        }
+        return {solutionIndex: solutionIndex,
+                questionMap: {options: this.props.question.getOptions()}};
+    }, 
+
+
     render: function() {
         var question = this.props.question,
+            questionId = question.id,
+            // This contains any updates to the state
+            // of the current question while the user is
+            // changing it.
+            updatedQuestionMap = this.state.questionMap,
+            questionText = updatedQuestionMap.question || question.get('question'),
+            solution = updatedQuestionMap.solution || question.get('solution'),
+            explanation = updatedQuestionMap.explanation || question.get('explanation'),
+            // The updated question map will always contain
+            // the set of options available, so no
+            // need for a conditional check.
+            options = updatedQuestionMap.options,
             explanationStyle= {
                 textDecoration: 'underline',
                 marginRight: '3px'
-            };
-
+            },
+            saveView = (this.isQuestionValid()) ?
+                       <img onClick = { this.onSave }
+                            className="question__icon--save"
+                            src="/img/icons/save.png" /> :
+                        // TODO (brendan): Modify styling to fade out
+                        // save button.
+                        <img className="question__icon--save"
+                             src="/img/icons/save.png" />;
         return (
             <li className="question">
-                <img className="question__icon--save" src="/img/icons/save.png" />
+                { saveView }
                 <div className="question__content">
-                    <input type="text"
-                           defaultValue={ question.get('question') }
+                    <input onChange={ this.onChangeQuestion }
+                           type="text"
+                           defaultValue={ questionText }
                            className="question__ask" />
-                    <View.Course_Exam_Question_MultiChoice_Option_Editing question={ question } />
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChangeText={ this.onChangeTextForOption }
+                                                                          onChangeRadio={ this.onChangeRadioForOption }
+                                                                          questionId={ questionId }
+                                                                          solution={ solution }
+                                                                          explanation={ explanation }
+                                                                          question={ questionText }
+                                                                          options={ options } />
                 </div>
                 <div className="question__explain">
                     <span style={ explanationStyle }>Explanation:</span>
-                    <textarea rows="4" cols="50" defaultValue={ question.get('explanation') }>
+                    <textarea onChange={ this.onChangeExplanation }
+                              rows="4"
+                              cols="50" 
+                              defaultValue={ explanation }>
                     </textarea>
                 </div>
             </li>
         );
+    },
+
+
+    onSave: function(event) {
+        if (!this.isQuestionValid()) {
+            throw new Error("Trying to save an invalid question.");
+        }
+        Action.send(Action.Name.SAVE_QUESTION_EDIT,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id,
+                        questionMap: this.state.questionMap
+                    });
+    },
+
+
+    /**
+     * Make sure that the question is in the correct form
+     * for saving. A question is valid if: (1) there are no
+     * repeating option values (every option is unique),
+     * (2) the question has a question text that is not
+     * empty, (3) the question has an explanation that is
+     * non-empty, and (4) the question has a solution that is
+     * non-empty.
+     *
+     * @method validateQuesion
+     *
+     * @return {Boolean} True if the question is ready
+     *  to be saved, false otherwise.
+     */
+    isQuestionValid: function() {
+        var questionMap = this.state.questionMap,
+            question = this.props.question,
+            // Since empty strings are falsey values we 
+            // need to explicitly check if questionMap
+            // properties are empty strings before we
+            // set them to their default values
+            questionText = questionMap.question || question.get('question'),
+            solution = questionMap.solution || question.get('solution'),
+            explanation = questionMap.explanation || question.get('explanation'),
+            // The updated question map will always contain
+            // the set of options available, so no
+            // need for a conditional check.
+            options = questionMap.options,
+            // A map containing the options. This is in
+            // map form to make validation easier.
+            optionsMap = {},
+            value,
+            i, n;
+
+        // Check if there are any repeating options.
+        for(i = 0, n = options.length; i < n; ++i) {
+            // Create a hash containing a
+            // particular option and check if
+            // that value appears anywhere
+            // else in the options list.
+            value = options[i];
+            // Make sure the option value is
+            // not an empty string.
+            if (value === "") {
+                return false;
+            }
+            if (optionsMap[value]) {
+                // The option already exists in the
+                // map, so an option is repeated,
+                // which means there are multiple
+                // options with the value.
+                return false;
+            }
+            optionsMap[value] = true;
+        }
+        // Check that the question, explanation, and solution are non-empty
+        return ((questionText !== "") &&
+               (explanation !== "") &&
+               (solution !== ""));
+    },
+
+
+    onChangeQuestion: function(event) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.question = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
+    },
+
+
+    onChangeTextForOption: function(event, questionIndex) {
+        var questionMap = View.Util.copy(this.state.questionMap),
+            value = event.target.value.trim();
+
+        // If the questionIndex is the index of the current
+        // solution, then update the solution to
+        // reflect the change in the text.
+        if (questionIndex === this.state.solutionIndex) {
+            questionMap.solution = value;
+        }
+
+        questionMap.options[questionIndex] = value;
+        this.setState({questionMap: questionMap});
+    },
+
+
+    onChangeRadioForOption: function(event, questionIndex) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.solution = event.target.value.trim();
+        this.setState({ solutionIndex: questionIndex, questionMap: questionMap });
+    },
+
+
+    onChangeExplanation: function(event) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.explanation = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
     }
 
     
@@ -422,7 +686,7 @@ View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 
     render: function() {
         var question = this.props.question,
-            listItems = question.get('options').map(function(option, index) {
+            listItems = question.getOptions().map(function(option, index) {
                 var isCorrect = question.isCorrect(option);
                 return <View.Course_Exam_Question_MultiChoice_Option_Item key={ index }
                                                                           option={ option }
@@ -442,15 +706,18 @@ View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
 
     render: function() {
-        var question = this.props.question,
-            name = 'multichoice-' + question.id,
-            listItems = question.get('options').map(function(option, index) {
-                var isCorrect = question.isCorrect(option),
-                    key = question.id + '-' + index.toString();
+        var self = this,
+            name = 'multichoice-' + this.props.questionId,
+            listItems = this.props.options.map(function(option, index) {
+                var isCorrect = self.isCorrect(option),
+                    key = self.props.questionId + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
-                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing name={ name }
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChangeText={ self.onChangeText }
+                                                                                  onChangeRadio={ self.onChangeRadio}
+                                                                                  name={ name }
                                                                                   key={ key }
                                                                                   option={ option }
+                                                                                  index={ index }
                                                                                   isCorrect={ isCorrect } />;
             });
 
@@ -459,6 +726,33 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                 { listItems }
             </ul>
         );
+    },
+
+
+    /**
+     * Check if the submission is the correct solution to
+     * the question.
+     *
+     * @method isCorrect
+     *
+     * @param submission {String} The submission to check
+     *  against the solution.
+     *
+     * @return {Boolean} True if the submission is the
+     *  correct answer to the question, false otherwise.
+     */
+    isCorrect: function(submission) {
+        return this.props.solution === submission;
+    },
+
+
+    onChangeText: function(event, questionIndex) {
+        this.props.onChangeText(event, questionIndex);
+    },
+
+
+    onChangeRadio: function(event, questionIndex) {
+        this.props.onChangeRadio(event, questionIndex);
     }
 
 
@@ -481,32 +775,55 @@ View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
 
 View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
 
+    getInitialState: function() {
+        return {option: this.props.option, isCorrect: this.props.isCorrect};
+    },
+
+
     render: function() {
         var questionClass = (this.props.isCorrect) ?
                             "multi-choice__item--correct" :
                             "multi-choice__item",
             option = this.props.option;
-
         if (this.props.isCorrect) {
             return (
                 <li className={ questionClass }>
-                    <input type="radio"
+                    <input onChange={ this.onChangeRadio }
+                           type="radio"
                            name={ this.props.name }
-                           defaultValue={ option }
+                           value={ option }
                            defaultChecked />
-                    <span><input type="text" defaultValue={ option } /></span>
+                    <span>
+                        <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                    </span>
                 </li>
             );         
         }
         // Not the correct answer.
         return (
             <li className={ questionClass }>
-                <input type="radio" name={ this.props.name } defaultValue={ option } />
-                <span><input type="text" defaultValue={ option } /></span>
+                <input onChange={ this.onChangeRadio }
+                       type="radio"
+                       name={ this.props.name }
+                       value={ option } />
+                <span>
+                    <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                </span>
             </li>
         ); 
 
+    },
+
+
+    onChangeText: function(event) {
+        this.props.onChangeText(event, this.props.index);
+    },
+
+
+    onChangeRadio: function(event) {
+        this.props.onChangeRadio(event, this.props.index);
     }
+
 
 });
 

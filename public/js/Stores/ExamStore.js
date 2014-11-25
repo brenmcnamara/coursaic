@@ -113,7 +113,7 @@ var ExamStore = (function() {
                 });
             });
 
-        return Promise.all([authorPromise, questionsPromise])
+        return Promise.all([authorPromise, questionsPromise]);
     };
 
 
@@ -192,6 +192,37 @@ var ExamStore = (function() {
     };
 
 
+    /**
+     * Get the question with the specified id. First,
+     *  gets the proper exam, and then loops through
+     *  the questions in the exam until it finds the
+     *  question matching the question id.
+     *
+     * @method questionForExam
+     *
+     * @param examId {String} The id of the exam. 
+     *
+     * @param questionId {String} The id of the question. 
+     *
+     * @return {Question} The question with the 
+     *  associated questionId within the exam with
+     *  the associated examId. Returns null if there
+     *  is nothing is found.
+     */ 
+    StoreClass.prototype.questionForExam= function(examId, questionId) {
+        var examQuestionArray = this._questionHash[examId];
+        if (examQuestionArray) {
+            for (i = 0; i < examQuestionArray.length; i++) {
+                if(examQuestionArray[i].id === questionId)
+                    return examQuestionArray[i];
+            }
+        }
+
+        return null;
+
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
@@ -255,7 +286,61 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM))
+                                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.PERFORM_QUESTION_EDIT:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                                 payload.questionId);
+                                question.isEditing(true);
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.SAVE_QUESTION_EDIT:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                /*
+                                var question = self.questionForExam(payload.examId, payload.questionId),
+                                    questionText = (payload.questionMap.question || question.get('question')),
+                                    explanationText = (payload.questionMap.explanation || question.get('explanation')),
+                                    optionText = (payload.questionMap.option || question.getOptions()),
+                                    solutionText = (payload.questionMap.solution || question.get('solution'));
+                                    */
+                                var question = self.questionForExam(payload.examId,
+                                                                    payload.questionId),
+                                    options = payload.questionMap.options,
+                                    saveOptions = {};
+                                if (options) {
+                                    question.setOptions(options);
+                                }
+                                // Remove the options from the questionMap
+                                // because they must be added in a particular
+                                // way, as illustrated above.
+                                delete payload.questionMap.options;
+                                question.set(payload.questionMap);
+                                question.isEditing(false);
+                                saveOptions = {success: function(){ 
+                                          self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
+                                question.save({},saveOptions); //saveOptions must be the
+                                                               // second or third parameter
                             },
                             // Error.
                             function(err) {

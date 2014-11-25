@@ -5,55 +5,7 @@
  */
 
 
-var 
-
-    /**
-     * Create a deep copy of an object.
-     * Note that this method has been added
-     * for a specific purpose and does not
-     * work in every case.
-     *
-     * @method copy
-     *
-     * @param obj {Object} The object to make
-     *  a copy of.
-     *
-     * @return {Object} A deep copy of the object.
-     */
-    _copy = function(obj) {
-        var prop, copy;
-
-        // First check if the object is
-        // an Array.
-        if (Array.isArray(obj)) {
-            return obj.slice();
-        }
-
-        switch (typeof obj) {
-        // NOTE: This method does not
-        // copy functions.
-        case 'object':
-            // Check for null
-            if (!obj) {
-                return obj;
-            }
-            copy = {};
-            for (prop in obj) {
-                if (obj.hasOwnProperty(prop)) {
-                    copy[prop] = _copy(obj[prop]);
-                }
-            }
-            return copy;
-        case 'boolean':
-        case 'number':
-        case 'string':
-        case 'undefined':
-            return obj;
-        default:
-            return obj;
-        }
-    },
-
+var
 
     /**
      * A class representing a question on an exam.
@@ -78,29 +30,29 @@ var
             this.attributes = this.parse(this.attributes);
         },
 
-
-        parse: function(data) {
+        // TODO (brendan): Document this.
+        getOptions: function() {
             // NOTE: This is assuming that the type
             // of the question is multiple choice. Should
             // change this when adding other types of
-            // questions.
-            var attrs = _copy(data);
-            attrs.options = JSON.parse(attrs.options);
-            return attrs;
+            // questions.  
+            return JSON.parse(this.get('options'));
         },
 
+        // TODO (brendan): Document this.
+        setOptions: function(options) {
+            this.set('options', JSON.stringify(options));
+        },
 
-        toJSON: function() {
-            // NOTE: This is assuming that the type
-            // of the question is multiple choice. Should
-            // change this when adding other types of
-            // questions.
+        // TODO (brendan): Document this.
+        isEditing: function(val) {
+            // This is a getter
+            if (arguments.length === 0) {
+                return this._isEditing;
+            }
 
-            // This method should basically undo any changes
-            // that were made in the "parse" method.
-            var attrs = _copy(this.attributes);
-            attrs.options = JSON.stringify(attrs.options);
-            return attrs;
+            // This is a setter.
+            this._isEditing = val;
         },
 
 
