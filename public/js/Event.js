@@ -59,7 +59,11 @@ CAEvent.Name = {
     DID_BEGIN_EDITING: 'DID_BEGIN_EDITING',
     // Event for when you successfuly exit
     // the edit mode.
-    DID_END_EDITING: 'DID_END_EDITING'
+    DID_END_EDITING: 'DID_END_EDITING',
+
+    // Notify that the enrollment of the current
+    // user has changed.
+    DID_CHANGE_ENROLLMENT: 'DID_CHANGE_ENROLLMENT'
 
 };
 

@@ -23,6 +23,7 @@
  * page.
  */
 View.Course_Root = React.createClass({
+    
     render: function() {
         var isEnrolled = CourseStore.current().isEnrolled(UserStore.current()),
             enrollButton = (isEnrolled) ?
@@ -39,7 +40,22 @@ View.Course_Root = React.createClass({
                 <View.Course_Content />
             </div>
         );
+    },
+
+    onChange: function() {
+        this.forceUpdate();
+    },
+
+
+    componentWillMount: function() {
+        CourseStore.addListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
+    },
+
+
+    componentWillUnmount: function() {
+        CourseStore.removeListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
     }
+
 });
 
 
@@ -51,6 +67,7 @@ View.Course_Root = React.createClass({
  * for the course.
  */
 View.Course_Dashboard = React.createClass({
+    
     render: function() {
         var course = CourseStore.current(),
             profileGridStyle = {
@@ -62,9 +79,10 @@ View.Course_Dashboard = React.createClass({
                 <p className="dashboard__course-description">
                     { course.get('description') }
                 </p>
-            </div>
-        );
+            </div>);
     }
+
+
 });
 
 View.Course_Summary = React.createClass({
@@ -108,17 +126,22 @@ View.Course_Summary = React.createClass({
         );
     },
 
-    didFetchExams: function() {
+
+    onChange: function() {
         this.forceUpdate();
     },
 
+
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
     },
 
+
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
     }
+
+
 });
 
 
@@ -126,10 +149,17 @@ View.Course_Enroll_Button = React.createClass({
 
     render: function() {
         return (
-            <button type="button" className="button enroll-button course-page__enroll">
+            <button onClick={ this.onClick }
+                    type="button" 
+                    className="button enroll-button course-page__enroll">
                 Enroll
             </button>
         );
+    },
+
+
+    onClick: function() {
+        Action.send(Action.Name.ENROLL_CURRENT_USER, { courseId: CourseStore.current().id });
     }
 
 
@@ -140,10 +170,17 @@ View.Course_Unenroll_Button = React.createClass({
 
     render: function() {
         return (
-            <button type="button" className="button unenroll-button course-page__enroll">
+            <button onClick={ this.onClick }
+                    type="button"
+                    className="button unenroll-button course-page__enroll">
                 Un Enroll
             </button>
         );
+    },
+
+
+    onClick: function() {
+        Action.send(Action.Name.UNENROLL_CURRENT_USER, { courseId: CourseStore.current().id });
     }
 
 

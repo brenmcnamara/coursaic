@@ -45,7 +45,7 @@ var Course = Parse.Object.extend("Course", {
          *  the course, false otherwise.
          */
         isEnrolled: function(user) {
-            var enrolled = this.get('enrolled') || [],
+            var enrolled = (this.get('enrolled') || []),
                 i, n;
 
             for (i = 0, n = enrolled.length; i < n; ++i) {
@@ -55,6 +55,7 @@ var Course = Parse.Object.extend("Course", {
             }
             return false;
         },
+
 
         /**
          * Add a user to the course so that he/she is
@@ -71,10 +72,41 @@ var Course = Parse.Object.extend("Course", {
         addUser: function(user) {
             var enrolled;
             if (this.isEnrolled(user)) {
-                throw new Error("The user is already added to the course.");
+                throw new Error("Could not find user " + user.id + " while" +
+                                "adding to course " + this.id);
             }
-            enrolled = this.get('enrolled');
+            enrolled = this.get('enrolled') || [];
             enrolled.push(user);
+            this.set('enrolled', enrolled);
+        },
+
+
+        /**
+         * Remove a user from the course so that he/she
+         * is no longer enrolled. THis method does not
+         * perform any persistence.
+         *
+         * @method removeUser
+         *
+         * @param user {User} The user to remove.
+         *
+         * @throw An erro if the user is not already
+         *  enrolled in the course.
+         */
+        removeUser: function(user) {
+            var enrolled = this.get('enrolled') || [],
+                i, n, indexOfUser = -1;
+            for (i = 0, n = enrolled.length; i < n && indexOfUser < 0; ++i) {
+                if (enrolled[i].id === user.id) {
+                    indexOfUser = i;
+                }
+            }
+            if (indexOfUser < 0) {
+                throw new Error("Could not find user " + user.id + " while " +
+                                "removing from course " + this.id);
+            }
+            enrolled = enrolled.slice(0, indexOfUser)
+                               .concat(enrolled.slice(indexOfUser + 1, n));
             this.set('enrolled', enrolled);
         }
 
@@ -263,6 +295,38 @@ var Course = Parse.Object.extend("Course", {
                         function(error) {
                             throw error;
                         });
+                };
+            case Action.Name.ENROLL_CURRENT_USER:
+                return function(payload) {
+                    var course = self.courseWithId(payload.courseId);
+                    // Note that this call will cause an error to occur
+                    // if the user is already enrolled in the course.
+                    course.addUser(UserStore.current());
+                    return course.save()
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
+                };
+            case Action.Name.UNENROLL_CURRENT_USER:
+                return function(payload) {
+                    var course = self.courseWithId(payload.courseId);
+                    course.removeUser(UserStore.current());
+                    return course.save()
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
                 };
             default:
                 return null;
