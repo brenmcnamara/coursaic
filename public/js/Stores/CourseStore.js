@@ -38,7 +38,15 @@ var Course = Parse.Object.extend("Course"),
                     // Fetch a page-worth of courses.
                     return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                             // Done waiting for the ConfigStore
-                           .then(self.fetchPage())
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchPage();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
                            // Finished getting the next set of courses.
                            .then(
                                 // Success.
@@ -337,7 +345,7 @@ var Course = Parse.Object.extend("Course"),
             query.find({
                 success: function(results) {
                     // Reduce the list of results to courses
-                    // that don't already exist in the collection.
+                    // that don't already exist in the CourseStore.
                     results = results.reduce(function(memo, course) {
                         if (self.courseWithId(course.id)) {
                             return memo;
@@ -468,6 +476,7 @@ var Course = Parse.Object.extend("Course"),
     StoreClass.prototype.isCreateCourseMode = function() {
         return ConfigStore.isCreatingCourse();
     };
+
 
     /**
      * Get the current course for the page.
