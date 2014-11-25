@@ -599,9 +599,9 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             // need to explicitly check if questionMap
             // properties are empty strings before we
             // set them to their default values
-            questionText = questionMap.question || question.get('question'),
-            solution = questionMap.solution || question.get('solution'),
-            explanation = questionMap.explanation || question.get('explanation'),
+            questionText = (questionMap.question || questionMap.question === "") ? questionMap.question: question.get('question'),
+            solution = (questionMap.solution || questionMap.solution === "") ? questionMap.solution: question.get('solution'),
+            explanation = (questionMap.explanation || questionMap.explanation === "") ? questionMap.explanation: question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
