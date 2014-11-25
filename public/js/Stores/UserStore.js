@@ -107,19 +107,12 @@ UserStore = (function() {
                         throw new Error("The school of the user could not be fetched.");
                     }
                 });
-            }),
-
-            // TODO (brendan): This method will be called before CourseStore
-            // is ready but that's okay, because this method does
-            // not need to be called after CourseStore's setup (it can be called
-            // at anytime). Need to document which methods need to be called
-            // after setup of Stores.
-            fetchEnrolledPromise = CourseStore.fetchCoursesForUser(user);
+            });
 
         // Add the current user to the hash.
         this._userHash[user.id] = user;
         // Combine all the promises into one promise.
-        return Promise.all([fbPromise, fetchSchoolPromise, fetchEnrolledPromise]);
+        return Promise.all([fbPromise, fetchSchoolPromise]);
     };
 
 
@@ -233,99 +226,6 @@ UserStore = (function() {
      */
     StoreClass.prototype.current = function() {
         return Parse.User.current();
-    };
-
-
-    /**
-     * Get the users that are enrolled in a course.
-     * These users are added to the UserStore.
-     *
-     * @method fetchEnrolledUsers
-     *
-     * @param course {Course} The course to get the users
-     *  for. This will set the enrollCount attribute on the
-     *  course.
-     *
-     * @return {Promise} A promise that is executed when
-     *  fetching the course has completed.
-     */
-    StoreClass.prototype.fetchEnrolledUsers = function(course) {
-        var self = this,
-            userQuery = new Parse.Query(Parse.User);
-
-        userQuery.equalTo('enrolled', course);
-        return new Promise(function(resolve, reject) {
-            userQuery.find({
-                // Success
-                success: function(results) {
-                    // Add the users to the UserStore
-                    // if they do not already exist.
-                    course.enrollCount(results.length);
-                    results.forEach(function(user) {
-                        // Overwrite any users when fetching a new
-                        // set of users. This saves a conditional
-                        // check and creates updates in case
-                        // user information has changed.
-                        self._addUser(user);
-                    });
-                    resolve(results);
-                },
-                // Error
-                error: function(error) {
-                    throw error;
-                }
-            });
-        });
-    };
-
-
-    /**
-     * Enroll the current user in a course.
-     *
-     * @method enrollUserToCourse
-     *
-     * @param course {Course} The course to enroll
-     *  the user in.
-     *
-     * @return {Promise} A promise that is executed
-     *  when an attempt to enroll the user into the course
-     *  has been completed. The success callback of the promise
-     *  will contain the course that the current user is
-     *  now enrolled in. The failure callback will contain
-     *  an error describing why the user could not be enrolled.
-     */
-    StoreClass.prototype.enrollUserToCourse = function(course) {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            var user = self.current(),
-                enrolled = user.get('enrolled') || [];
-            if (!course) {
-                throw new Error("Must provide a course to enrollUserToCourse.");
-            }
-
-            enrolled.push(course);
-            user.set('enrolled', enrolled);
-            // TODO (brendan): Handle the case where save
-            // fails.
-            user.save().then(
-                // Success.
-                function(user) {
-                    // TODO (brendan): Unify the code related to
-                    // adjusting the enroll count into 1 place for
-                    // less confusion.
-                    // Increment the enroll count locally.
-                    var enrollCount = course.enrollCount();
-                    course.enrollCount(enrollCount + 1);
-                    resolve();
-                },
-                // Error.
-                function(error) {
-                    // Undo changes before reporting the error.
-                    enrolled.pop();
-                    user.set('enrolled', enrolled);
-                    throw error;
-                });
-        });
     };
 
 

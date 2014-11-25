@@ -71,6 +71,9 @@ View.MainOption_CreateCourse = React.createClass({
 View.MyCourses = React.createClass({
    
     render: function() {
+        // TODO (brendan): Shouldn't be getting the enrolled courses
+        // from the parent, should generate them from this element making
+        // a query.
         var courses = this.props.enrolled.map(function(course) {
             return <View.MyCourses_Course key={ course.id } course={ course } />
         });
@@ -97,9 +100,11 @@ View.MyCourses_Course = React.createClass({
         );
     },
 
+
     handleClick: function(event) {
         Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'course', course: this.props.course.id});
     }
+
 
 });
 

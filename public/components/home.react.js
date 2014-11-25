@@ -149,8 +149,7 @@ View.Home_Content = React.createClass({
  */
 View.Home_SideNav = React.createClass({
     render: function() {
-        var enrolled = UserStore.current().get('enrolled') || [];
-
+        var enrolled = CourseStore.coursesForUser(UserStore.current()) || [];
         return (
             <div className="content__nav">
                 <View.MainOptions />
@@ -158,7 +157,22 @@ View.Home_SideNav = React.createClass({
                 <View.MyCourses enrolled={enrolled} />
             </div>
         );
+    },
+
+    componentWillMount: function() {
+        CourseStore.addListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+        CourseStore.addListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+    },
+
+    componentWillUnmount: function() {
+        CourseStore.removeListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+        CourseStore.removeListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+    },
+
+    onChange: function() {
+        this.forceUpdate();
     }
+
 });
 
 
