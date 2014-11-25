@@ -41,13 +41,13 @@
 }
 
 .popup-window--medium {
-  margin-top: -150px;
+  margin-top: -200px;
   margin-left: -200px;
   top: 50%;
   left: 50%;
   
   width: 400px;
-  height: 300px;
+  height: 400px;
   
   background: white;
 }
@@ -80,18 +80,26 @@
 
 .create-course__name,
 .create-course__code,
-.create-course__field {
+.create-course__field,
+.create-course__description {
   margin: 15px 0px 0px 20px;
 }
 
 .create-course__name,
-.create-course__code {
+.create-course__code,
+.create-course__description {
   width: 85%;
 }
 
 .create-course__name > input,
-.create-course__code > input {
+.create-course__code > input,
+.create-course__description > textarea {
   width: 100%;
   padding: 5px;
+}
+
+.create-course__description > textarea {
+  resize: none;
+  height: 3.5em;
 }
 

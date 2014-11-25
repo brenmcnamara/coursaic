@@ -104,18 +104,41 @@ var Course = Parse.Object.extend("Course"),
                        .then(
                         // Success.
                         function() {
-                            var course = new Course();
-                            course.set(payload.courseMap);
-                            return new Promise(function(resolve, reject) {
-                                course.save({
-                                    success: function(course) {
-                                        self._courses.push(course);
-                                        resolve();
-                                    },
-                                    error: function(error) {
-                                        throw error;
-                                    }
-                                });
+                            var course = new Course(),
+                                fieldId = payload.fieldId;
+                            // Set the field object on the payload so
+                            // it is added to the new course instance.
+                            payload.field = new Field();
+                            payload.field.id = fieldId;
+                            // Add the school of the current user.
+                            payload.school = UserStore.current().get('school');
+                            // Remove the field id from the payload before
+                            // setting it on the course.
+                            delete payload.fieldId;
+                            course.set(payload);
+                            // Get the field for the course, then
+                            // save the course.
+                            return FieldStore.fetchFieldForCourse(course);
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
+                        // Wait for the field object to be
+                        // fetched for the given course. Now
+                        // save the new course object to
+                        // the backend.
+                        .then(
+                        // Success.
+                        function(course) {
+                            course.save({
+                                success: function(course) {
+                                    self._courses.push(course);
+                                },
+
+                                error: function(error) {
+                                    throw error;
+                                }
                             });
                         },
                         // Error.
@@ -132,7 +155,7 @@ var Course = Parse.Object.extend("Course"),
                             self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
                         },
                         // Error.
-                        function() {
+                        function(error) {
                             // TODO (brendan): Should I cancel create course mode?
                             throw error;
                         });

@@ -9,6 +9,15 @@
 
 View.Popup_Create_Course = React.createClass({
 
+    getInitialState: function() {
+        var fields = FieldStore.fields();
+
+        return {
+                courseMap: { fieldId: fields[0].id }
+                };
+    },
+
+
     render: function() {
         var fields = FieldStore.fields(),
             fieldOptions = fields.map(function(field) {
@@ -41,6 +50,11 @@ View.Popup_Create_Course = React.createClass({
                                type="text"
                                placeholder="Code (i.e. CS 101)" />
                     </div>
+                    <div className="create-course__description">
+                        <textarea onChange= {this.onChangeDescription }
+                                  placeholder="Description for the course.">
+                        </textarea>
+                    </div>
                     <div className="create-course__field">
                         <span>Field:</span>
                         <select onChange={ this.onChangeField }
@@ -56,7 +70,6 @@ View.Popup_Create_Course = React.createClass({
                             Cancel
                         </button>
                     </div>
-                    
                 </div>
             </div>
         );
@@ -78,34 +91,49 @@ View.Popup_Create_Course = React.createClass({
         // TODO (brendan): Should have a minimum number
         // of characters before a course is a valid course
         // both for the name and the code.
-        var name, code;
+        var name, code, description;
         if (this.state) {
-            name = this.state.name || null;
-            code = this.state.code || null;
-            if (!name || !code) {
+            name = this.state.courseMap.name || null;
+            code = this.state.courseMap.code || null;
+            description = this.state.courseMap.description || null;
+            if (!(name && code && description)) {
                 return false;
             }
         }
         else {
             return false;
         }
-        return name.trim().length > 0 &&
-               code.trim().length > 0;
+        return name.length > 0 &&
+               code.length > 0 &&
+               description.length > 0;
     },
 
 
     onChangeName: function(event) {
-        this.setState({ name: event.target.value });
+        var courseMap = View.Util.copy(this.state.courseMap);
+        courseMap.name = event.target.value.trim();
+        this.setState({ courseMap: courseMap });
     },
 
 
     onChangeCode: function(event) {
-        this.setState({ code: event.target.value });
+        var courseMap = View.Util.copy(this.state.courseMap);
+        courseMap.code = event.target.value.trim();
+        this.setState({ courseMap: courseMap });
+    },
+
+
+    onChangeDescription: function(event) {
+        var courseMap = View.Util.copy(this.state.courseMap);
+        courseMap.description = event.target.value.trim();
+        this.setState({ courseMap: courseMap });
     },
 
 
     onChangeField: function(event) {
-        this.setState({ fieldId: event.target.value })
+        var courseMap = View.Util.copy(this.state.courseMap);
+        courseMap.fieldId = event.target.value.trim();
+        this.setState({ courseMap: courseMap });
     },
 
 
@@ -113,16 +141,20 @@ View.Popup_Create_Course = React.createClass({
         if (!this.isValid()) {
             throw new Error("Cannot create a course when form is not valid.");
         }
+        // State is the payload.
+        // Copy the course map from the state and add the
+        // current user's school.
+        Action.send(Action.Name.CREATE_COURSE, this.state.courseMap);
     },
 
 
     onClickCancel: function() {
-        
+        Action.send(Action.Name.CANCEL_CREATE_COURSE);
     },
 
 
     onClickBackground: function() {
-        // TODO (brendan): Implement this!
+        Action.send(Action.Name.CANCEL_CREATE_COURSE);
     }
 
 
