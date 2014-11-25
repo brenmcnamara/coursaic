@@ -68,9 +68,9 @@ View.Course_Summary = React.createClass({
             bannerStyle = {
                 background: course.get('field').get('color')
             },
-            enrollText = (course.get('enrollCount') == 1) ? 
+            enrollText = (course.enrollCount() == 1) ? 
                          "1 person enrolled" :
-                         course.get('enrollCount') + " people enrolled",
+                         course.enrollCount() + " people enrolled",
             examCount = ExamStore.examsForCourse(course).length,
             examText;
 
