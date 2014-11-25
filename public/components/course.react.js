@@ -37,37 +37,25 @@ View.Course_Root = React.createClass({
 });
 
 
+/**
+ * Course_Dashboard
+ *
+ * The dashboard under the header element
+ * containing any other aside information
+ * for the course.
+ */
 View.Course_Dashboard = React.createClass({
     render: function() {
-        var profileGridStyle = {
-            minWidth: "150px"
-        };
+        var course = CourseStore.current(),
+            profileGridStyle = {
+                minWidth: "150px"
+            };
 
         return (
             <div className="dashboard">
-                <ul className="dashboard__course-logistics">
-                    <li className="dashboard__course-logistics__item">2 exams</li>
-                    <li className="dashboard__course-logistics__item">12 people enrolled</li>
-                </ul>
-
-                <ul className="dashboard__profile-grid profile-grid" style={ profileGridStyle }>
-                    <li className="profile-grid__row__item profile-pic--square">
-                        <img src="/img/temp/bunny-profile.png" />
-                    </li>
-                    <li className="profile-grid__row__item profile-pic--square">
-                        <img src="/img/temp/frat-profile.png" />
-                    </li>
-                    <li className="profile-grid__row__item profile-pic--square">
-                        <img src="/img/temp/dog-profile.png" />
-                    </li>
-                    <li className="profile-grid__row__item profile-pic--square">
-                        <img src="/img/temp/monkey-profile.png" />
-                    </li>
-                    <li className="profile-grid__row__item profile-pic--square">
-                        <img src="/img/temp/tiger-profile.png" />
-                    </li>
-                    <li className="profile-grid__row__item member-count--square">+7</li>
-                </ul>
+                <p className="dashboard__course-description">
+                    { course.get('description') }
+                </p>
             </div>
         );
     }
@@ -76,33 +64,56 @@ View.Course_Dashboard = React.createClass({
 View.Course_Summary = React.createClass({
 
     render: function() {
-        var bannerStyle = {
-            background: "rgb(208, 2, 27)"
-        };
+        var course = CourseStore.current(),
+            bannerStyle = {
+                background: course.get('field').get('color')
+            },
+            enrollText = (course.get('enrollCount') == 1) ? 
+                         "1 person enrolled" :
+                         course.get('enrollCount') + " people enrolled",
+            examCount = ExamStore.examsForCourse(course).length,
+            examText;
+
+        if (examCount === 0) {
+            examText = "No Exams";
+        }
+        else if (examCount === 1) {
+            examText = "1 Exam";
+        }
+        else {
+            examText = examCount + " Exams";
+        }
 
         return (
             <div className="course-summary">
                 <div className="course-summary__banner" style={ bannerStyle }></div>
-                <h1 className="course-summary__code">CS 101</h1>
-                <p className="course-summary__name">Introduction to Computer Science</p>
+                <h1 className="course-summary__code">{ course.get('code') }</h1>
+                <p className="course-summary__name">{ course.get('name') }</p>
                 <p className="course-summary__field">
                     <span className="course-summary__field__key">Field: </span>
-                    <span className="course-summary__field__value">Computer Science</span>
+                    <span className="course-summary__field__value">{ course.get('field').get('name') }</span>
                 </p>
-
-                <div className="profile-pic--circle--bordered course-summary__creator-profile">
-                    <img src="/img/temp/monkey-profile.png" />
-                </div>
-                <div className="course-summary__creator-info">Course created by
-                    <span className="user-name"> Monkey Joe</span> on Sept. 20, 2013.
-                </div>
+                <div className="divide"></div>
+                <ul className="course-summary__stats">
+                    <li className="course-summary__stats__item">{ enrollText }</li>
+                    <li className="course-summary__stats__item">{ examText }</li>
+                </ul>
             </div>
         );
+    },
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
     }
-
-
 });
-
 
 View.Course_Content = React.createClass({
 
@@ -123,11 +134,8 @@ View.Course_Content_Nav = React.createClass({
         var examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
-            },
-            selectionBarStyle = {
-                top: "27px",
-                background: "rgb(208, 2, 27)"
             };
+
         return (
             <div className="content__nav">
                 <ul className="main-options">
@@ -142,19 +150,107 @@ View.Course_Content_Nav = React.createClass({
 
                 <div className="divide"></div>
 
-                <div className="category exam-list">
-                    <div className="category__title">Exams</div>
-                    <div className="exam-list__selection-bar"
-                         style={ selectionBarStyle }></div>
+                <View.Exam_List />
 
-                    <ul className="category__list">
-                        <li>Exam 1</li>
-                        <li>Exam 2</li>
-                    </ul>
-                </div>
             </div>
         );
     }
+
+});
+
+
+View.Exam_List = React.createClass({
+
+    render: function() {
+        // TODO (brendan): Add a "No Exams" list item if there are no exams.
+        var course = CourseStore.current(),
+            examList = ExamStore.examsForCourse(course).map(function(exam) {
+                return <View.Exam_List_Item key={ exam.id } exam={ exam } />
+            }),
+            selectionBarStyle = {
+                top: "27px",
+                background: course.get('field').get('color')
+            },
+            selectionBar = (examList.length) ?
+                           (<div className="exam-list__selection-bar"
+                                 style={ selectionBarStyle }></div>) :
+                           null;
+
+        return (
+            <div className="category exam-list">
+                { selectionBar }
+                <div className="category__title">Exams</div>
+                <ul className="category__list">
+                    { examList }
+                </ul>
+            </div>
+        );
+    },
+
+    // Event handler for when exams are fetched.
+    didFetchExams: function(event) {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    }
+
+});
+
+
+View.Exam_List_Item = React.createClass({
+
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+
+    render: function() {
+        var exam = this.props.exam;
+
+        if (this.state.isEditing) {
+            return (
+                <li>{ exam.get('name') }</li>
+            );
+        }
+        else {
+            return (
+                <li onClick = { this.handleClick } >{ exam.get('name') }</li>
+            );
+        }
+    },
+
+    handleClick: function(event) {
+        Action.send(Action.Name.DISPLAY_EXAM,
+                    {examId: this.props.exam.id})
+    },
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+        
+    },
+
+    didEndEditing: function() {
+        this.setState({isEditing: false});
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    }
+
 
 });
 
@@ -162,68 +258,572 @@ View.Course_Content_Nav = React.createClass({
 View.Course_Content_Body = React.createClass({
 
     render: function() {
+        // If there is a current exam, present
+        // the current exam, otherwise, present
+        // the "No Exam" element.
+        if (ExamStore.current()) {
+            return (
+                <div className="content__body">
+                    <View.Course_Exam />
+                </div>
+            )}
+        else {
+            return (
+                <div className="content__body">
+                    <View.Course_No_Exam />
+                </div>
+            )};      
+    },
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+    didLoadExam: function() {
+        this.forceUpdate();
+    },
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+    },
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+    }
+});
+
+
+View.Course_No_Exam = React.createClass({
+
+    render: function() {
+        var examCount = ExamStore.examsForCourse(CourseStore.current()).length,
+            title = (examCount) ? "Select Exam" : "Create Exam",
+            description = (examCount) ? "Select an exam to the left." :
+                                        "This course has no exams. Create an exam to the left.";
+
         return (
-            <div className="content__body">
-                <div className="content__body__wrapper">
-                    <h1 className="content__body__title">Exam 1</h1>
-                    <div className="exam">
-                        <div className="exam__creator-info">
-                            <div className="exam__creator-info__pic">
-                                <div className="profile-pic--circle--bordered">
-                                    <img src="/img/temp/frat-profile.png" />
-                                </div>
-                            </div>
-                            
-                            <span className="exam__creator-info__text">
-                                Exam created by <span className="user-name">Frat Star</span> on Sept. 22, 2013.
-                            </span>
-                        </div>
-                        <div className="exam__my-questions">
-                            <div className="exam__my-questions__title">My Questions</div>
-                            <ul className="exam__my-questions__question-list question-list">
-                                <li className="question">
-                                    <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                    <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                    <div className="question__content">
-                                        <div className="question__ask">What is the capital of California?</div>
-                                        <ul className="question__multi-choice multi-choice">
-                                            <li className="multi-choice__item">Canada. This is a really long question and there is a lot of text here. I am going to keep on typing.</li>
-                                            <li className="multi-choice__item">Hawaii</li>
-                                            <li className="multi-choice__item--correct">Sacramento</li>
-                                            <li className="multi-choice__item">Boise</li>
-                                        </ul>
-                                    </div>
-                                    <div className="question__explain">
-                                        Explanation: California is the captial of Sacramento.
-                                    </div>
+            <div className="content__body__wrapper">
+                <h1 className="content__body__title">{ title }</h1>
+                <p className="content__body__description">{ description }</p>
+            </div>
+        );
+    },
 
-                                </li>
-                                 <li className="question">
-                                    <img className="question__icon--edit" src="/img/icons/edit.png" />
-                                    <img className="question__icon--delete" src="/img/icons/delete.png" />
-                                    <div className="question__content">
-                                        <div className="question__ask">
-                                            A farmer has 3 apples. He gives 2 to his buddy and buys 6 more at the store.  How many apples does the farmer have now?
-                                        </div>
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
 
-                                        <ul className="question__multi-choice multi-choice">
-                                            <li className="multi-choice__item">4</li>
-                                            <li className="multi-choice__item">9</li>
-                                            <li className="multi-choice__item--correct">7</li>
-                                            <li className="multi-choice__item">1</li>
-                                        </ul>
-                                    </div>
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    },
 
-                                    <div className="question__explain">
-                                        Explanation: 3 - 2 + 6 = 7.
-                                    </div>
-                                </li>
-                            </ul>
-                        </div> 
-                    </div>
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+    }
+
+});
+
+
+View.Course_Exam = React.createClass({
+    
+    render: function() {
+        // Get the current exam.
+        var exam = ExamStore.current();
+        return (
+            <div className="content__body__wrapper">
+                <h1 className="content__body__title">{ exam.get('name') }</h1>
+                <p className="content__body__description">{ exam.get('description') }</p>
+                <div className="exam">
+                    <View.Course_Exam_Questions />
                 </div>
             </div>
         );
-            
     }
+
 });
+
+
+View.Course_Exam_Questions = React.createClass({
+
+    render: function() {
+        // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
+        // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
+        var questions = ExamStore.questionsForExam(ExamStore.current(),
+                                                   UserStore.current()),
+            listItems = questions.map(function(question) {
+                if (question.isEditing()) {
+                    return <View.Course_Exam_Question_Item_Editing question={ question } />;
+                }
+                else {
+                    return <View.Course_Exam_Question_Item key={ question.id }
+                                                           question={ question } />
+                }
+
+            });
+
+        return (
+            <div className="exam__my-questions">
+                <div className="exam__my-questions__title">My Questions</div>
+                <ul className="exam__my-questions__question-list question-list">
+                     { listItems }
+                </ul>
+            </div> 
+        );
+    },
+
+
+    didFetchExams: function() {
+        this.forceUpdate();
+    },
+
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    }
+
+
+});
+
+
+View.Course_Exam_Question_Item = React.createClass({
+
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+    render: function() {
+        // NOTE (brendan): This is hard-coded for multiple-choice questions.
+        // Change this if adding other types of questions.
+        var question = this.props.question,
+            explanationStyle= {
+                textDecoration: 'underline',
+                marginRight: '3px'
+            };
+
+        if (this.state.isEditing) {
+            return (
+                <li className="question">
+                    <img className="question__icon--edit" src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )}
+        else {
+            return (
+                <li className="question">
+                    <img onClick={ this.onEdit }
+                         className="question__icon--edit"
+                         src="/img/icons/edit.png" />
+                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <div className="question__content">
+                        <div className="question__ask">{ question.get('question') }</div>
+                        <View.Course_Exam_Question_MultiChoice_Option question={ question } />
+                    </div>
+                    <div className="question__explain">
+                        <span style= { explanationStyle }>Explanation:</span>
+                        <span>{ question.get('explanation') }</span>
+                    </div>
+                </li>
+        )};
+    },
+
+    
+    onEdit: function(event) {
+        Action.send(Action.Name.PERFORM_QUESTION_EDIT,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id
+                    });
+    },
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    }
+
+
+});
+
+
+View.Course_Exam_Question_Item_Editing = React.createClass({
+
+    getInitialState: function() {
+        // Find the index of the solution.
+        var question = this.props.question,
+            options = question.getOptions(),
+            solutionIndex = -1, i, n;
+        for (i = 0, n = options.length; i < n; ++i) {
+            if (question.isCorrect(options[i])) {
+                solutionIndex = i;
+            }
+        }
+
+        if (solutionIndex === -1) {
+            throw new Error("Solution could not be found for the question.");
+        }
+        return {solutionIndex: solutionIndex,
+                questionMap: {options: this.props.question.getOptions()}};
+    }, 
+
+
+    render: function() {
+        var question = this.props.question,
+            questionId = question.id,
+            // This contains any updates to the state
+            // of the current question while the user is
+            // changing it.
+            updatedQuestionMap = this.state.questionMap,
+            questionText = updatedQuestionMap.question || question.get('question'),
+            solution = updatedQuestionMap.solution || question.get('solution'),
+            explanation = updatedQuestionMap.explanation || question.get('explanation'),
+            // The updated question map will always contain
+            // the set of options available, so no
+            // need for a conditional check.
+            options = updatedQuestionMap.options,
+            explanationStyle= {
+                textDecoration: 'underline',
+                marginRight: '3px'
+            },
+            saveView = (this.isQuestionValid()) ?
+                       <img onClick = { this.onSave }
+                            className="question__icon--save"
+                            src="/img/icons/save.png" /> :
+                        // TODO (brendan): Modify styling to fade out
+                        // save button.
+                        <img className="question__icon--save"
+                             src="/img/icons/save.png" />;
+        return (
+            <li className="question">
+                { saveView }
+                <div className="question__content">
+                    <input onChange={ this.onChangeQuestion }
+                           type="text"
+                           defaultValue={ questionText }
+                           className="question__ask" />
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChangeText={ this.onChangeTextForOption }
+                                                                          onChangeRadio={ this.onChangeRadioForOption }
+                                                                          questionId={ questionId }
+                                                                          solution={ solution }
+                                                                          explanation={ explanation }
+                                                                          question={ questionText }
+                                                                          options={ options } />
+                </div>
+                <div className="question__explain">
+                    <span style={ explanationStyle }>Explanation:</span>
+                    <textarea onChange={ this.onChangeExplanation }
+                              rows="4"
+                              cols="50" 
+                              defaultValue={ explanation }>
+                    </textarea>
+                </div>
+            </li>
+        );
+    },
+
+
+    onSave: function(event) {
+        if (!this.isQuestionValid()) {
+            throw new Error("Trying to save an invalid question.");
+        }
+        Action.send(Action.Name.SAVE_QUESTION_EDIT,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id,
+                        questionMap: this.state.questionMap
+                    });
+    },
+
+
+    /**
+     * Make sure that the question is in the correct form
+     * for saving. A question is valid if: (1) there are no
+     * repeating option values (every option is unique),
+     * (2) the question has a question text that is not
+     * empty, (3) the question has an explanation that is
+     * non-empty, and (4) the question has a solution that is
+     * non-empty.
+     *
+     * @method validateQuesion
+     *
+     * @return {Boolean} True if the question is ready
+     *  to be saved, false otherwise.
+     */
+    isQuestionValid: function() {
+        var questionMap = this.state.questionMap,
+            question = this.props.question,
+            // Since empty strings are falsey values we 
+            // need to explicitly check if questionMap
+            // properties are empty strings before we
+            // set them to their default values
+            questionText = (questionMap.question || questionMap.question === "") ? questionMap.question: question.get('question'),
+            solution = (questionMap.solution || questionMap.solution === "") ? questionMap.solution: question.get('solution'),
+            explanation = (questionMap.explanation || questionMap.explanation === "") ? questionMap.explanation: question.get('explanation'),
+            // The updated question map will always contain
+            // the set of options available, so no
+            // need for a conditional check.
+            options = questionMap.options,
+            // A map containing the options. This is in
+            // map form to make validation easier.
+            optionsMap = {},
+            value,
+            i, n;
+
+        // Check if there are any repeating options.
+        for(i = 0, n = options.length; i < n; ++i) {
+            // Create a hash containing a
+            // particular option and check if
+            // that value appears anywhere
+            // else in the options list.
+            value = options[i];
+            // Make sure the option value is
+            // not an empty string.
+            if (value === "") {
+                return false;
+            }
+            if (optionsMap[value]) {
+                // The option already exists in the
+                // map, so an option is repeated,
+                // which means there are multiple
+                // options with the value.
+                return false;
+            }
+            optionsMap[value] = true;
+        }
+        // Check that the question, explanation, and solution are non-empty
+        return ((questionText !== "") &&
+               (explanation !== "") &&
+               (solution !== ""));
+    },
+
+
+    onChangeQuestion: function(event) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.question = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
+    },
+
+
+    onChangeTextForOption: function(event, questionIndex) {
+        var questionMap = View.Util.copy(this.state.questionMap),
+            value = event.target.value.trim();
+
+        // If the questionIndex is the index of the current
+        // solution, then update the solution to
+        // reflect the change in the text.
+        if (questionIndex === this.state.solutionIndex) {
+            questionMap.solution = value;
+        }
+
+        questionMap.options[questionIndex] = value;
+        this.setState({questionMap: questionMap});
+    },
+
+
+    onChangeRadioForOption: function(event, questionIndex) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.solution = event.target.value.trim();
+        this.setState({ solutionIndex: questionIndex, questionMap: questionMap });
+    },
+
+
+    onChangeExplanation: function(event) {
+        var questionMap = View.Util.copy(this.state.questionMap);
+        questionMap.explanation = event.target.value.trim();
+        this.setState({ questionMap: questionMap });
+    }
+
+    
+});
+
+
+// TODO (brendan): Fix naming of these React classes to make them
+// shorter and more clear.
+View.Course_Exam_Question_MultiChoice_Option = React.createClass({
+
+    render: function() {
+        var question = this.props.question,
+            listItems = question.getOptions().map(function(option, index) {
+                var isCorrect = question.isCorrect(option);
+                return <View.Course_Exam_Question_MultiChoice_Option_Item key={ index }
+                                                                          option={ option }
+                                                                          isCorrect={ isCorrect } />;
+            });
+
+        return (
+            <ul className="question__multi-choice multi-choice">
+                { listItems }
+            </ul>
+        );
+    }
+
+});
+
+
+View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
+
+    render: function() {
+        var self = this,
+            name = 'multichoice-' + this.props.questionId,
+            listItems = this.props.options.map(function(option, index) {
+                var isCorrect = self.isCorrect(option),
+                    key = self.props.questionId + '-' + index.toString();
+                // TODO (brendan): Shorten this line.
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChangeText={ self.onChangeText }
+                                                                                  onChangeRadio={ self.onChangeRadio}
+                                                                                  name={ name }
+                                                                                  key={ key }
+                                                                                  option={ option }
+                                                                                  index={ index }
+                                                                                  isCorrect={ isCorrect } />;
+            });
+
+        return (
+            <ul className="question__multi-choice multi-choice--editing">
+                { listItems }
+            </ul>
+        );
+    },
+
+
+    /**
+     * Check if the submission is the correct solution to
+     * the question.
+     *
+     * @method isCorrect
+     *
+     * @param submission {String} The submission to check
+     *  against the solution.
+     *
+     * @return {Boolean} True if the submission is the
+     *  correct answer to the question, false otherwise.
+     */
+    isCorrect: function(submission) {
+        return this.props.solution === submission;
+    },
+
+
+    onChangeText: function(event, questionIndex) {
+        this.props.onChangeText(event, questionIndex);
+    },
+
+
+    onChangeRadio: function(event, questionIndex) {
+        this.props.onChangeRadio(event, questionIndex);
+    }
+
+
+});
+
+
+View.Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
+
+    render: function() {
+        var questionClass = (this.props.isCorrect) ?
+                            "multi-choice__item--correct" :
+                            "multi-choice__item",
+            option = this.props.option;
+
+        return <li className={ questionClass }>{ option }</li>;
+    }
+
+});
+
+
+View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
+
+    getInitialState: function() {
+        return {option: this.props.option, isCorrect: this.props.isCorrect};
+    },
+
+
+    render: function() {
+        var questionClass = (this.props.isCorrect) ?
+                            "multi-choice__item--correct" :
+                            "multi-choice__item",
+            option = this.props.option;
+        if (this.props.isCorrect) {
+            return (
+                <li className={ questionClass }>
+                    <input onChange={ this.onChangeRadio }
+                           type="radio"
+                           name={ this.props.name }
+                           value={ option }
+                           defaultChecked />
+                    <span>
+                        <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                    </span>
+                </li>
+            );         
+        }
+        // Not the correct answer.
+        return (
+            <li className={ questionClass }>
+                <input onChange={ this.onChangeRadio }
+                       type="radio"
+                       name={ this.props.name }
+                       value={ option } />
+                <span>
+                    <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                </span>
+            </li>
+        ); 
+
+    },
+
+
+    onChangeText: function(event) {
+        this.props.onChangeText(event, this.props.index);
+    },
+
+
+    onChangeRadio: function(event) {
+        this.props.onChangeRadio(event, this.props.index);
+    }
+
+
+});
+

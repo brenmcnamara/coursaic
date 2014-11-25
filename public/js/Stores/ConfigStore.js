@@ -32,6 +32,7 @@ var ConfigStore = (function() {
         var self = this;
         switch (name) {
             case Action.Name.PERFORM_LOAD:
+
                 return function(payload) {
                     // Update hash has a default value
                     // of true if not provided. UpdateHash
@@ -67,11 +68,74 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.DISPLAY_EXAM:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.examId) {
+                            throw new Error("Displayed exam without any exam");
+                        }
+                        Anchor.set({pageKey: 'course', examId: payload.examId},
+                                   {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.ENTER_CREATE_COURSE_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({createCourse: 'true'}, {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.CREATE_COURSE:
+                // TODO (brendan): Make sure that the app is in
+                // createCourse mode in the first place.
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createCourse'], {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.CANCEL_CREATE_COURSE:
+                // TODO (brendan): Make sure that the app is
+                // in create course mode in the first place.
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createCourse'], {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.PERFORM_QUESTION_EDIT:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.questionId) {
+                            throw new Error("Trying to edit question without any question");
+                        }
+                        Anchor.set({pageKey: 'course', questionEditId: payload.questionId},
+                                   {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.SAVE_QUESTION_EDIT:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.questionId) {
+                            throw new Error("Trying to save question without any question");
+                        }
+                        Anchor.unset(["questionEditId"],
+                                   {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
     };
-
 
     /**
      * Get the page key for the current page. This method should
@@ -94,10 +158,56 @@ var ConfigStore = (function() {
      * @method courseId
      *
      * @return {String} The id of the course for the current
-     * page.
+     * page. If the page does not specify a course id, then this
+     * will return null.
      */
     StoreClass.prototype.courseId = function() {
+        return Anchor.hashMap().course || null;
+    };
 
+
+    /**
+     * Get the id of the exam that is being presented
+     * on the current page.  Note that this is applicable
+     * for certain pageKey's, such as the 'course' pageKey.
+     *
+     * @method examId
+     *
+     * @return {String} The id of the exam for the current page.
+     *  If the page does not specify an exam id, then this will
+     *  return null.
+     */
+    StoreClass.prototype.examId = function() {
+        return Anchor.hashMap().examId || null;
+    };
+
+    /**
+     * Get the id of the question that is being edited
+     * on the current page.  Note that this is applicable
+     * for certain pageKey's, such as the 'course' pageKey.
+     *
+     * @method examId
+     *
+     * @return {String} The id of the exam for the current page.
+     *  If the page does not specify an exam id, then this will
+     *  return null.
+     */
+    StoreClass.prototype.questionEditId = function() {
+        return Anchor.hashMap().questionEditId || null;
+    };
+
+
+    /**
+     * Determine if the hash specifies that there is
+     * a course being created.
+     *
+     * @method isCreatingCourse
+     *
+     * @return {Boolean} true if there is a course
+     *  being created, false otherwise.
+     */
+    StoreClass.prototype.isCreatingCourse = function() {
+        return Anchor.hashMap().createCourse === 'true';
     };
 
 

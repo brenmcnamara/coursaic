@@ -78,14 +78,18 @@ Formatter.Date = (function() {
 
       // Calculate the difference in milliseconds
           difference_ms = date2_ms - date1_ms,
+          seconds = 0,
+          minutes = 0,
+          hours = 0,
+          days = 0;
 
       //take out milliseconds
-          difference_ms = difference_ms/1000,
-          seconds = Math.floor(difference_ms % 60),
-          difference_ms = difference_ms/60,
-          minutes = Math.floor(difference_ms % 60),
-          difference_ms = difference_ms/60,
-          hours = Math.floor(difference_ms % 24), 
+          difference_ms = difference_ms/1000;
+          seconds = Math.floor(difference_ms % 60);
+          difference_ms = difference_ms/60;
+          minutes = Math.floor(difference_ms % 60);
+          difference_ms = difference_ms/60;
+          hours = Math.floor(difference_ms % 24); 
           days = Math.floor(difference_ms/24);
       
       return [days, hours, minutes, seconds];

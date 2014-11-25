@@ -82,6 +82,8 @@ var UserStore = (function() {
             // after setup of Stores.
             fetchEnrolledPromise = CourseStore.fetchCoursesForUser(user);
 
+        // Add the current user to the hash.
+        this._userHash[user.id] = user;
         // Combine all the promises into one promise.
         return Promise.all([fbPromise, fetchSchoolPromise, fetchEnrolledPromise]);
     };
@@ -137,12 +139,32 @@ var UserStore = (function() {
     };
 
 
+    /**
+     * Add a user to the collection.
+     *
+     * @method _addUser
+     * @private
+     *
+     * @param user {Parse.User} The user to add to
+     *  the store.
+     */
+    StoreClass.prototype._addUser = function(user) {
+        // Avoid updating the user if it is the current
+        // user. This may cause consistency issues with
+        // Parse.
+        if (user.id !== this.current().id) {
+            this._userHash[user.id] = user;
+        }
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
         case Action.Name.PERFORM_LOAD:
             return function(payload) {
-              return new Promise(function(resolve, reject) {
+                // TODO (brendan): Don't need to wrap this in a promise.
+                return new Promise(function(resolve, reject) {
                     Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                         .then(self._login.bind(self))
                         .then(function() {
@@ -196,11 +218,88 @@ var UserStore = (function() {
                         // set of users. This saves a conditional
                         // check and creates updates in case
                         // user information has changed.
-                        self._userHash[user.id] = user;
+                        self._addUser(user);
                     });
                     resolve(results);
                 },
                 // Error
+                error: function(error) {
+                    throw error;
+                }
+            });
+        });
+    };
+
+
+    /**
+     * Enroll the current user in a course.
+     *
+     * @method enrollUserToCourse
+     *
+     * @param course {Course} The course to enroll
+     *  the user in.
+     *
+     * @return {Promise} A promise that is executed
+     *  when an attempt to enroll the user into the course
+     *  has been completed. The success callback of the promise
+     *  will contain the course that the current user is
+     *  now enrolled in. The failure callback will contain
+     *  an error describing why the user could not be enrolled.
+     */
+    StoreClass.prototype.enrollUserToCourse = function(course) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            var user = self.current(),
+                enrolled = user.get('enrolled') || [];
+            if (!course) {
+                throw new Error("Must provide a course to enrollUserToCourse.");
+            }
+
+            enrolled.push(course);
+            user.set('enrolled', enrolled);
+            // TODO (brendan): Handle the case where save
+            // fails.
+            user.save().then(
+                // Success.
+                function(user) {
+                    // TODO (brendan): Unify the code related to
+                    // adjusting the enroll count into 1 place for
+                    // less confusion.
+                    // Increment the enroll count locally.
+                    var enrollCount = course.get('enrollCount') || 0;
+                    course.set('enrollCount', enrollCount + 1);
+                    resolve();
+                },
+                // Error.
+                function(error) {
+                    // Undo changes before reporting the error.
+                    enrolled.pop();
+                    user.set('enrolled', enrolled);
+                    throw error;
+                });
+        });
+    };
+
+
+    /**
+     * Get the author of the exam for the course.
+     *
+     * @method fetchAuthorOfExam
+     *
+     * @param exam {Exam} The exam to get the author for.
+     *
+     * @return {Promise} The promise that gets called when
+     *  fetching the author has completed.
+     */
+    StoreClass.prototype.fetchAuthorOfExam = function(exam) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            exam.get('author').fetch({
+                success: function(user) {
+                    self._addUser(user);
+                    resolve();
+                },
+
                 error: function(error) {
                     throw error;
                 }

@@ -53,6 +53,15 @@
 }
 
 /* -------------------- *\
+        Dashboard
+\* -------------------- */
+
+.dashboard__course-description {
+    font-size: 1em;
+    color: #666;
+}
+
+/* -------------------- *\
       Course-Summary
 \* -------------------- */
 
@@ -74,4 +83,10 @@
 .course-summary__field__key {
     color: #999;
     font-size: .875em;
+}
+
+.course-summary__stats__item {
+    color: #666;
+    font-size: .9em;
+    font-weight: bold;
 }

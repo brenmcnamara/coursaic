@@ -41,7 +41,25 @@ var CAEvent = function(name, params) {
  * @type Object
  */
 CAEvent.Name = {
+    // TODO (brendan): Better name for this event.
     DID_LOAD: 'DID_LOAD',
-    DID_FETCH_COURSES: 'DID_FETCH_COURSES'
+    DID_FETCH_COURSES: 'DID_FETCH_COURSES',
+    // Event for when the exam hash is updated
+    // to display an exam on the course page.
+    DID_LOAD_EXAM: 'DID_LOAD_EXAM',
+    // Event for when all exams of a course
+    // are fetched.
+    DID_FETCH_EXAMS: 'DID_FETCH_EXAMS',
+
+    DID_CREATE_COURSE: 'DID_CREATE_COURSE',
+    DID_CANCEL_CREATE_COURSE: 'DID_CANCEL_CREATE_COURSE',
+
+    // Event for when you successfully enter
+    // edit mode. 
+    DID_BEGIN_EDITING: 'DID_BEGIN_EDITING',
+    // Event for when you successfuly exit
+    // the edit mode.
+    DID_END_EDITING: 'DID_END_EDITING'
+
 };
 

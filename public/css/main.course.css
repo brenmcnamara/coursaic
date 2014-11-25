@@ -53,6 +53,16 @@ ul.dashboard__course-logistics {
     top: 30px;
 }
 
+.dashboard__course-description {
+    position: absolute;
+    bottom: 5px;
+    width: 450px;
+    max-height: 100px;
+    left: 315px; /* width of course-summary + 15px */
+    
+    overflow: hidden;
+}
+
 /* -------------------- *\
           Exam
 \* -------------------- */
@@ -124,10 +134,21 @@ ul.question-list {
     vertical-align: middle;
 }
 
+input.question__ask {
+    width: 450px;
+}
+
+.question__explain > textarea {
+    vertical-align: top;
+    resize: none;
+    margin-left: 10px;
+}
+
 /* Note: Icons are laid out with assumption
  * that there will be exactly 2 icons */
 .question__icon--delete,
-.question__icon--edit {
+.question__icon--edit,
+.question__icon--save {
     cursor: pointer;
     position: absolute;
 
@@ -139,6 +160,10 @@ ul.question-list {
 
 .question__icon--delete {
     left: 35px;
+}
+
+.question__icon--save {
+    left: 15px;
 }
 
 .question__content {
@@ -153,6 +178,11 @@ ul.multi-choice {
     list-style: upper-alpha;
 }
 
+ul.multi-choice--editing {
+    list-style: none;
+}
+
+.multi-choice--editing,
 .multi-choice {
     margin: 0 80px 0 50px;
     padding: 0;
@@ -167,6 +197,19 @@ ul.multi-choice {
 
 .multi-choice__item--correct {
     color: #4A90E2
+}
+
+.multi-choice__item--correct > input[type="radio"],
+.multi-choice__item > input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Undo the color for correct answers when the style
+ * is set for editing */
+.multi-choice__item--correct input[type="text"],
+.multi-choice__item input[type="text"] {
+    width: 350px;
+    color: black;
 }
 
 .question__explain {

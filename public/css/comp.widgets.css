@@ -33,7 +33,7 @@
     background: #F5A623;
     height: 2px;
     width: 80%;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 /* -------------------- *\
@@ -65,9 +65,18 @@
     margin: 15px 0px 0px 0px;
     margin-top: 15px;
 
+    /* TODO: Move this to text css */
     font-size: 40px;
     /* TODO: consistent coloring */
     color: #444;
+}
+
+.content__body__description {
+    /* TODO: Move text styling to text css */
+    margin: 5px 0px; 
+    font-size: .8em;
+    color: #666;
+    
 }
 
 /* styling for any category elements
@@ -122,6 +131,33 @@
 
 
 /* -------------------- *\
+      Form Elements
+\* -------------------- */
+
+.button--disabled,
+.button {
+    border: solid #CCC 1px;
+    padding: 5px 10px;
+    border-radius: 2px;
+    font-size: 1em;
+    background: #EAEAEA;
+}
+
+.button {
+    color: black;
+    cursor: pointer;
+}
+
+.button--disabled {
+    color: #999;
+    cursor: default;
+}
+
+.button:active {
+    background: #DDD;
+}
+
+/* -------------------- *\
        Main-Options
 \* -------------------- */
 
@@ -142,6 +178,7 @@ ul.main-options {
     position: relative;
     height: 35px;
     margin: 0px 0px 4px 0px;
+    cursor: pointer;
 }
 
 .main-options__item__icon {
@@ -381,7 +418,6 @@ ul.profile-grid {
       Course-Summary
 \* -------------------- */
 
-/* TODO: font sizes should be using em */
 .course-summary {
     position: absolute;
 
@@ -440,3 +476,17 @@ ul.profile-grid {
 
     width: 180px;
 }
+
+.course-summary__stats {
+   margin-left: 40px;
+   padding: 0px;
+}
+
+ul.course-summary__stats {
+    list-style: none;
+}
+
+.course-summary__stats__item {
+    margin-top: 5px;    
+}
+

@@ -101,9 +101,9 @@ var Dispatcher = (function() {
             // these regerences can be used
             // for performing generic algorithms
             // over each store.
-            // TODO: Should have a way for UserStores
+            // TODO (brendan): Should have a way for UserStores
             // to get registered when the app is initialized.
-            stores: [ConfigStore, CourseStore, UserStore],
+            stores: [ConfigStore, CourseStore, UserStore, ExamStore, FieldStore],
             
             // A list of all resolves that are on the
             // wait list. This is a map of
@@ -144,11 +144,12 @@ var Dispatcher = (function() {
         // action with each store.
         var storeCalls = stateMap.stores.reduce(function(memo, store) {
             var callback = store.actionHandler(name);
-            if (typeof callback !== 'function') {
-                throw new Error("Dispatcher will only register objects of type" +
-                                "'function' from actionHandler.");
-            }
             if (callback) {
+                if (typeof callback !== 'function') {
+                    throw new Error("Dispatcher will only register objects of type " +
+                                    "'function' from actionHandler. Cannot register " +
+                                    name + " from store with index" + store.dispatcherIndex);
+                }
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }
             return memo;
@@ -210,7 +211,7 @@ var Dispatcher = (function() {
                     );
                 });
             });
-
+            // TODO (brendan): Make better name for promises. 
             Promise.all(promises).then(
                 // Success callback
                 function() {

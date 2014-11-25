@@ -86,7 +86,7 @@ Store.prototype.removeListener = function(name, method) {
             }
         }
     }
-    throw new Error("Method " + method + " is not registered for event " + event.name + ".");
+    throw new Error("Method " + method + " is not registered for event " + name + ".");
 };
 
 
