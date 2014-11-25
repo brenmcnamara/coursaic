@@ -9,9 +9,43 @@
          maxlen:100
 */
 
-/*global Action, CAEvent, Store */
+/*global Parse, Action, CAEvent, Store */
 
-var UserStore = (function() {
+/**
+ * The class representing a user.
+ *
+ * @class User
+ * @constructor
+ */
+var User = Parse.User,
+    UserStore;
+
+// Extend the User class to contain custom
+// methods.
+
+/**
+ * Check if a user is enrolled in a particular
+ * class.
+ */
+User.prototype.isEnrolled = function(course) {
+    var i, n, enrolled = this.get('enrolled');
+    for (i = 0, n = enrolled.length; i < n; ++i) {
+        if (course.id === enrolled[i].id) {
+            return true;
+        }
+    }
+    return false;
+};
+
+
+/**
+ * The Store that manages all user data as
+ * well as login and logout operations.
+ *
+ * @module Store
+ * @class UserStore
+ */
+UserStore = (function() {
 
     var StoreClass = function() {
         this.dispatcherIndex = 3;

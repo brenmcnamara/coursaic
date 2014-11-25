@@ -24,12 +24,18 @@
  */
 View.Course_Root = React.createClass({
     render: function() {
+        var isEnrolled = UserStore.current().isEnrolled(CourseStore.current()),
+            enrollButton = (isEnrolled) ?
+                           <View.Course_Unenroll_Button /> :
+                           <View.Course_Enroll_Button />;
+
         return (
             <div className="main">
                 <View.Header />
                 <View.Header_Fill />
                 <View.Course_Dashboard />
                 <View.Course_Summary />
+                { enrollButton }
                 <View.Course_Content />
             </div>
         );
@@ -115,6 +121,35 @@ View.Course_Summary = React.createClass({
     }
 });
 
+
+View.Course_Enroll_Button = React.createClass({
+
+    render: function() {
+        return (
+            <button type="button" className="button enroll-button course-page__enroll">
+                Enroll
+            </button>
+        );
+    }
+
+
+});
+
+
+View.Course_Unenroll_Button = React.createClass({
+
+    render: function() {
+        return (
+            <button type="button" className="button unenroll-button course-page__enroll">
+                Un Enroll
+            </button>
+        );
+    }
+
+
+});
+
+
 View.Course_Content = React.createClass({
 
     render: function() {
@@ -125,6 +160,8 @@ View.Course_Content = React.createClass({
             </div>
         );
     }
+
+
 });
 
 
@@ -155,6 +192,7 @@ View.Course_Content_Nav = React.createClass({
             </div>
         );
     }
+
 
 });
 

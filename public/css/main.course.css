@@ -14,7 +14,7 @@
 .dashboard {
     position: relative;
 
-    height: 150px;
+    height: 170px;
     width: 100%;
     min-width: 800px;
 
@@ -24,7 +24,7 @@
 .dashboard__course-logistics {
     position: absolute;
 
-    left: 320px;
+    left: 370px;
     bottom: 10px;
 
     padding: 0;
@@ -55,13 +55,41 @@ ul.dashboard__course-logistics {
 
 .dashboard__course-description {
     position: absolute;
-    bottom: 5px;
+    bottom: 0px;
     width: 450px;
-    max-height: 100px;
-    left: 315px; /* width of course-summary + 15px */
+    max-height: 5em;
+    left: 365px; /* width of course-summary + 15px */
     
     overflow: hidden;
 }
+
+/* -------------------- *\
+         Enroll
+\* -------------------- */
+
+.course-page__enroll {
+    position: absolute;
+    left: 365px;
+    top: 90px;
+}
+
+.enroll-button,
+.unenroll-button {
+    width: 200px;
+    height: 30px;
+    font-size: 1.1em;
+    border: none;
+    color: white;
+}
+
+.enroll-button {
+    background: #2abf7a;
+}
+
+.unenroll-button {
+    background: #e34d2f;
+}
+
 
 /* -------------------- *\
           Exam
