@@ -11,10 +11,7 @@ View.Popup_Create_Course = React.createClass({
 
     getInitialState: function() {
         var fields = FieldStore.fields();
-
-        return {
-                courseMap: { fieldId: fields[0].id }
-                };
+        return { courseMap: { fieldId: fields[0].id } };
     },
 
 

@@ -232,6 +232,56 @@ var UserStore = (function() {
 
 
     /**
+     * Enroll the current user in a course.
+     *
+     * @method enrollUserToCourse
+     *
+     * @param course {Course} The course to enroll
+     *  the user in.
+     *
+     * @return {Promise} A promise that is executed
+     *  when an attempt to enroll the user into the course
+     *  has been completed. The success callback of the promise
+     *  will contain the course that the current user is
+     *  now enrolled in. The failure callback will contain
+     *  an error describing why the user could not be enrolled.
+     */
+    StoreClass.prototype.enrollUserToCourse = function(course) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            var user = self.current(),
+                enrolled = user.get('enrolled') || [];
+            if (!course) {
+                throw new Error("Must provide a course to enrollUserToCourse.");
+            }
+
+            enrolled.push(course);
+            user.set('enrolled', enrolled);
+            // TODO (brendan): Handle the case where save
+            // fails.
+            user.save().then(
+                // Success.
+                function(user) {
+                    // TODO (brendan): Unify the code related to
+                    // adjusting the enroll count into 1 place for
+                    // less confusion.
+                    // Increment the enroll count locally.
+                    var enrollCount = course.get('enrollCount') || 0;
+                    course.set('enrollCount', enrollCount + 1);
+                    resolve();
+                },
+                // Error.
+                function(error) {
+                    // Undo changes before reporting the error.
+                    enrolled.pop();
+                    user.set('enrolled', enrolled);
+                    throw error;
+                });
+        });
+    };
+
+
+    /**
      * Get the author of the exam for the course.
      *
      * @method fetchAuthorOfExam

@@ -59,7 +59,7 @@ View.MainOption_CreateCourse = React.createClass({
 
 });
 
-
+// TODO (brendan): Move this to home.react.js
 /**
  * MyCourses
  *
@@ -120,7 +120,7 @@ View.Divide = React.createClass({
 
 });
 
-
+// TODO (brendan): Move this to home page.
 /**
  * CourseGrid
  *
@@ -140,14 +140,16 @@ View.CourseGrid = React.createClass({
     },
 
     componentWillMount: function() {
-        CourseStore.addListener(CAEvent.Name.DID_FETCH_COURSES, this._onChange);
+        CourseStore.addListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+        CourseStore.addListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
     },
 
     componentWillUnmount: function() {
-        CourseStore.removeListener(CAEvent.Name.DID_FETCH_COURSES, this._onChange)
+        CourseStore.removeListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+        CourseStore.removeListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
     },
 
-    _onChange: function() {
+    onChange: function() {
         this.forceUpdate();
     }
 

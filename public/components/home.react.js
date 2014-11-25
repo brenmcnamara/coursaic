@@ -54,20 +54,30 @@ View.Home_Root = React.createClass({
         }
     },
 
-    didEnterCreateCourseMode: function() {
-        this.forceUpdate();
+
+    didBeginEditing: function() {
+        this.setState({ isEditing: true });
+    },
+
+
+    didEndEditing: function() {
+        this.setState({ isEditing: false });
     },
 
 
     componentWillMount: function() {
-        CourseStore.addListener(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE,
-                                this.didEnterCreateCourseMode);
+        CourseStore.addListener(CAEvent.Name.DID_BEGIN_EDITING,
+                                this.didBeginEditing);
+        CourseStore.addListener(CAEvent.Name.DID_END_EDITING,
+                                this.didEndEditing)
     },
 
 
     componentWillUnmount: function() {
-        CourseStore.removeListener(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE,
-                                   this.didEnterCreateCourseMode);
+        CourseStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING,
+                                   this.didBeginEditing);
+        CourseStore.removeListener(CAEvent.Name.DID_END_EDITING,
+                                   this.didEndEditing);
     }
 
 
@@ -150,6 +160,7 @@ View.Home_SideNav = React.createClass({
         );
     }
 });
+
 
 /**
  * Home_Body

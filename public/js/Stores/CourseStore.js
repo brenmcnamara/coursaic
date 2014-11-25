@@ -84,7 +84,7 @@ var Course = Parse.Object.extend("Course"),
                        .then(
                         // Success.
                         function() {
-                            self.emit(new CAEvent(CAEvent.Name.DID_ENTER_CREATE_COURSE_MODE));
+                            self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
                         },
                         // Error.
                         function(error) {
@@ -116,43 +116,56 @@ var Course = Parse.Object.extend("Course"),
                             // setting it on the course.
                             delete payload.fieldId;
                             course.set(payload);
-                            // Get the field for the course, then
-                            // save the course.
-                            return FieldStore.fetchFieldForCourse(course);
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
-                        // Wait for the field object to be
-                        // fetched for the given course. Now
-                        // save the new course object to
-                        // the backend.
-                        .then(
-                        // Success.
-                        function(course) {
-                            course.save({
-                                success: function(course) {
-                                    self._courses.push(course);
-                                },
+                            return new Promise(function(resolve, reject) {
+                                course.save({
+                                    success: function(course) {
+                                        self._courses.push(course);
+                                        // Pass along the course.
+                                        resolve(course);
+                                    },
 
-                                error: function(error) {
-                                    throw error;
-                                }
+                                    error: function(error) {
+                                        throw error;
+                                    }
+                                });
                             });
                         },
                         // Error.
                         function(error) {
                             throw error;
                         })
+                        // Wait for the course to be saved.
+                        .then(
+                        // Success.
+                        function(course) {
+                            return self._loadCourse(course);
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
                         // Wait for the course to be saved
-                        // to the backend.
+                        // and totally loaded. Now enroll
+                        // the current user into the course
+                        // that he/she just created.
+                        .then(
+                        // Success.
+                        function(course) {
+                            return UserStore.enrollUserToCourse(course);
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
+                        // The user has been enrolled in the course that
+                        // was just saved.
                         .then(
                         // Success.
                         function() {
                             // TODO (brendan): Maybe pass the course as a parameter
                             // to this event.
                             self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
+                            self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                         },
                         // Error.
                         function(error) {
@@ -170,7 +183,7 @@ var Course = Parse.Object.extend("Course"),
                    .then(
                     // Success.
                     function() {
-                        self.emit(new CAEvent(CAEvent.Name.DID_CANCEL_CREATE_COURSE));
+                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                     },
                     // Error.
                     function(error) {
@@ -260,7 +273,10 @@ var Course = Parse.Object.extend("Course"),
      *
      * @return {Promise} A promise that is completed
      *  when all the data for the course has been
-     *  loaded.
+     *  loaded. The success callback of the promise
+     *  will contain a single parameter of the course
+     *  that was loaded. The failure callback will contain
+     *  the error describing the failure.
      */
     StoreClass.prototype._loadCourse = function(course) {
         var 
@@ -269,7 +285,7 @@ var Course = Parse.Object.extend("Course"),
             schoolPromise = new Promise(function(resolve, reject) {
                 course.get('school').fetch({
                     success: function() {
-                        resolve();
+                        resolve(course);
                     },
                     error: function(error) {
                         throw error;
@@ -279,7 +295,20 @@ var Course = Parse.Object.extend("Course"),
 
             enrolledUsersPromise = UserStore.fetchEnrolledUsers(course);
 
-        return Promise.all([fieldPromise, schoolPromise, enrolledUsersPromise]);
+        return Promise.all([fieldPromise, schoolPromise, enrolledUsersPromise])
+                      // Unify the promises to return a promise that will pass
+                      // a single parameter of the course that was loaded.
+                      .then(
+                        // Success.
+                        function() {
+                            return new Promise(function(resolve, reject) {
+                                resolve(course);
+                            });
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        });
     };
 
 
@@ -299,7 +328,7 @@ var Course = Parse.Object.extend("Course"),
         }
 
         this._isFetching = true;
-        return new Promise(function (resolve, rejecte) {
+        return new Promise(function (resolve, reject) {
             var query = self._createCourseQuery(
             {
                 limit: self._limit,
@@ -307,8 +336,6 @@ var Course = Parse.Object.extend("Course"),
             });
             query.find({
                 success: function(results) {
-                    
-
                     // Reduce the list of results to courses
                     // that don't already exist in the collection.
                     results = results.reduce(function(memo, course) {
@@ -369,7 +396,16 @@ var Course = Parse.Object.extend("Course"),
     StoreClass.prototype.fetchCoursesForUser = function(user) {
         var self = this,
             enrolledList = user.get('enrolled') || [],
-            courses = [], promises = [], courseFromStore,
+            // This will be the new list of courses that
+            // the user is enrolled in. These will be the same
+            // courses that the user is currently enrolled in,
+            // except these courses will be in sync with the
+            // course store.
+            courses = [],
+            // A list of promises that will load any missing
+            // courses.
+            fetchCoursePromises = [],
+            courseFromStore,
             i, n;
 
         // Loop through the courses in the enrolled list.
@@ -383,19 +419,20 @@ var Course = Parse.Object.extend("Course"),
             }
             else {
                 // Keep the course in the enrolled list.
+
                 courses.push(enrolledList[i]);
                 // Add the course to the current course store.
                 this._courses.push(enrolledList[i]);
                 // load any missing data for the course and
                 // save the promise.
 
-                promises.push(self._fetchCourse(enrolledList[i]));
+                fetchCoursePromises.push(self._fetchCourse(enrolledList[i]));
             }
         }
         // Set the courses in the enrolled list
         // to contain the courses that were saved.
         user.set('enrolled', courses);
-        return Promise.all(promises);
+        return Promise.all(fetchCoursePromises);
     };
 
 
