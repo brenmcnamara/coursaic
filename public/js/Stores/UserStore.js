@@ -11,32 +11,6 @@
 
 /*global Parse, Action, CAEvent, Store */
 
-/**
- * The class representing a user.
- *
- * @class User
- * @constructor
- */
-var User = Parse.User,
-    UserStore;
-
-// Extend the User class to contain custom
-// methods.
-
-/**
- * Check if a user is enrolled in a particular
- * class.
- */
-User.prototype.isEnrolled = function(course) {
-    var i, n, enrolled = this.get('enrolled');
-    for (i = 0, n = enrolled.length; i < n; ++i) {
-        if (course.id === enrolled[i].id) {
-            return true;
-        }
-    }
-    return false;
-};
-
 
 /**
  * The Store that manages all user data as
@@ -45,7 +19,7 @@ User.prototype.isEnrolled = function(course) {
  * @module Store
  * @class UserStore
  */
-UserStore = (function() {
+var UserStore = (function() {
 
     var StoreClass = function() {
         this.dispatcherIndex = 3;

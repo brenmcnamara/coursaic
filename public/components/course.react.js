@@ -24,7 +24,7 @@
  */
 View.Course_Root = React.createClass({
     render: function() {
-        var isEnrolled = UserStore.current().isEnrolled(CourseStore.current()),
+        var isEnrolled = CourseStore.current().isEnrolled(UserStore.current()),
             enrollButton = (isEnrolled) ?
                            <View.Course_Unenroll_Button /> :
                            <View.Course_Enroll_Button />;
