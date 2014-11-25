@@ -24,6 +24,7 @@ var Field = Parse.Object.extend("Field"),
          */
         var StoreClass = function() {
             this._fieldHash = {};
+            this.dispatcherIndex = 5;
         };
 
         StoreClass.prototype = new Store();
@@ -42,6 +43,7 @@ var Field = Parse.Object.extend("Field"),
                                     // TODO (brendan): This is not equality safe.
                                     self._fieldHash[field.id] = field;
                                 });
+                                resolve();
                             },
 
                             error: function(error) {

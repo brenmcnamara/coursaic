@@ -165,27 +165,16 @@ var UserStore = (function() {
         case Action.Name.PERFORM_LOAD:
             return function(payload) {
                 // TODO (brendan): Don't need to wrap this in a promise.
-                return new Promise(function(resolve, reject) {
-                    Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        .then(
-                            // Success.
-                            function() {
-                                return self._login();
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            })
-                        .then(
-                            // Success.
-                            function() {
-                                resolve();
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
-                });              
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        return self._login();
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
             };
         default:
             return null;

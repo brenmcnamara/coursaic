@@ -18,6 +18,7 @@
 var ExamStore = (function() {
 
     var StoreClass = function() {
+        this.dispatcherIndex = 4;
         // A hash of id -> exam object
         this._examHash = {};
 

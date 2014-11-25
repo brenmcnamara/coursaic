@@ -168,14 +168,20 @@ var Dispatcher = (function() {
             throw new Error("Action " + name + " must be registered.");
         }
 
+        if (stateMap.locked) {
+            throw new Error("Dispatcher trying to dispatch " + name +
+                            " while an action is already dispatching.");
+        }
         // Lock the dispatcher before doing anything.
         stateMap.locked = true;
         // Get all the promises that are produced
         // by the functions.
+        console.log("Number of store calls: " + storeCalls.length);
         if (storeCalls.length > 0) {
             promises = storeCalls.map(function(storeCall) {
                 var index = storeCall.index,
                     callback = storeCall.callback;
+                // TODO (brendan): Clean up unnecessary nested promises.
                 return new Promise(function(resolve, reject) {
                     callback(payload).then(
                         // On success
