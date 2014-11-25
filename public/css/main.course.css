@@ -86,8 +86,17 @@ ul.dashboard__course-logistics {
     background: #2abf7a;
 }
 
+
+.enroll-button:active {
+    background: #1c8354;    
+}
+
 .unenroll-button {
     background: #e34d2f;
+}
+
+.unenroll-button:active {
+    background: #a53722
 }
 
 
