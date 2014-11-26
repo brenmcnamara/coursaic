@@ -73,32 +73,6 @@ ul.dashboard__course-logistics {
     top: 90px;
 }
 
-.enroll-button,
-.unenroll-button {
-    width: 200px;
-    height: 30px;
-    font-size: 1.1em;
-    border: none;
-    color: white;
-}
-
-.enroll-button {
-    background: #2abf7a;
-}
-
-
-.enroll-button:active {
-    background: #1c8354;    
-}
-
-.unenroll-button {
-    background: #e34d2f;
-}
-
-.unenroll-button:active {
-    background: #a53722
-}
-
 
 /* -------------------- *\
           Exam
@@ -133,6 +107,11 @@ ul.dashboard__course-logistics {
 
 .exam__my-questions {
     margin: 40px 0px 0px 0px;
+}
+
+.exam__my-questions__add-button {
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 /* -------------------- *\

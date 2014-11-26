@@ -151,7 +151,7 @@ View.Course_Enroll_Button = React.createClass({
         return (
             <button onClick={ this.onClick }
                     type="button" 
-                    className="button enroll-button course-page__enroll">
+                    className="button large-button--positive course-page__enroll">
                 Enroll
             </button>
         );
@@ -172,7 +172,7 @@ View.Course_Unenroll_Button = React.createClass({
         return (
             <button onClick={ this.onClick }
                     type="button"
-                    className="button unenroll-button course-page__enroll">
+                    className="button large-button--negative course-page__enroll">
                 Un Enroll
             </button>
         );
@@ -440,7 +440,8 @@ View.Course_Exam_Questions = React.createClass({
 
         return (
             <div className="exam__my-questions">
-                <div className="exam__my-questions__title">My Questions</div>
+                <span className="exam__my-questions__title">My Questions</span>
+                <View.Course_Exam_Questions_Add_Button />
                 <ul className="exam__my-questions__question-list question-list">
                      { listItems }
                 </ul>
@@ -477,6 +478,20 @@ View.Course_Exam_Questions = React.createClass({
         ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
+
+});
+
+
+View.Course_Exam_Questions_Add_Button = React.createClass({
+
+    render: function() {
+
+        return (
+            <button type="button" className="button small-button--positive exam__my-questions__add-button">
+                New
+            </button>
+        );
+    }
 
 });
 
