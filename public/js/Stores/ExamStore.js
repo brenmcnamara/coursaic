@@ -331,13 +331,6 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                /*
-                                var question = self.questionForExam(payload.examId, payload.questionId),
-                                    questionText = (payload.questionMap.question || question.get('question')),
-                                    explanationText = (payload.questionMap.explanation || question.get('explanation')),
-                                    optionText = (payload.questionMap.option || question.getOptions()),
-                                    solutionText = (payload.questionMap.solution || question.get('solution'));
-                                    */
                                 var question = self.questionForExam(payload.examId,
                                                                     payload.questionId),
                                     options = payload.questionMap.options,
@@ -351,10 +344,18 @@ var ExamStore = (function() {
                                 delete payload.questionMap.options;
                                 question.set(payload.questionMap);
                                 question.isEditing(false);
-                                saveOptions = {success: function(){ 
-                                          self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
-                                question.save({},saveOptions); //saveOptions must be the
-                                                               // second or third parameter
+
+                                return question.save().then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    }
+                                );
+                                
                             },
                             // Error.
                             function(err) {
