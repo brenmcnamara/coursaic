@@ -4,6 +4,10 @@
  * Style for all the popup components.
  */
 
+/* -------------------- *\
+       Main Popup
+\* -------------------- */
+
 .popup {
   position: fixed;
   height: 100%;
@@ -28,15 +32,16 @@
   position: absolute;
   border-radius: 3px;
   overflow: hidden;
+  background: white;
 }
 
 .popup-window--small {
-  margin-top: -50px;
+  margin-top: -120px;
   margin-left: -150px;
   top: 50%;
   left: 50%;
   
-  height: 100px;
+  height: 150px;
   width: 300px;
 }
 
@@ -48,21 +53,32 @@
   
   width: 400px;
   height: 400px;
-  
-  background: white;
 }
 
 .popup-window__header {
   width: 100%;
   background: #DDD;
   color: #4A90E2;
-  height: 50px;
-  line-height: 50px;
-  
+
   text-align: center;
   font-weight: bold;
-  font-size: 1.2em;
 }
+
+.popup-window--medium > .pop-window__header {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.2em;
+}
+
+.popup-window--small > .popup-window__header {
+   height: 35px;
+   line-height: 35px;
+   font-size: 1em;
+}
+
+/* -------------------- *\
+      Create Course
+\* -------------------- */
 
 .create-course__button-wrapper {
   margin: 10px auto;
@@ -103,3 +119,21 @@
   height: 3.5em;
 }
 
+/* -------------------- *\
+      Confirm-Popup
+\* -------------------- */
+
+.confirm-popup__button-wrapper {
+  text-align: center;
+}
+
+.confirm-popup__message {
+  margin: 15px;
+  text-align: center;
+  font-size: .8em;
+}
+
+.confirm-popup__button-wrapper > button {
+  margin: 0px 10px;
+  font-size: .8em;
+}
