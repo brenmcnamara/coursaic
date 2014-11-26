@@ -237,6 +237,8 @@ var Course = Parse.Object.extend("Course", {
                                 delete payload.fieldId;
                                 course.set(payload);
                                 return new Promise(function(resolve, reject) {
+                                    // TODO (brendan): Modify this using the
+                                    // promise syntax.
                                     course.save({
                                         success: function(course) {
                                             self._courses.push(course);

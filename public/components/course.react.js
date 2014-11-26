@@ -152,7 +152,7 @@ View.Course_Enroll_Button = React.createClass({
         return (
             <button onClick={ this.onClick }
                     type="button" 
-                    className="button enroll-button course-page__enroll">
+                    className="button large-button--positive course-page__enroll">
                 Enroll
             </button>
         );
@@ -173,7 +173,7 @@ View.Course_Unenroll_Button = React.createClass({
         return (
             <button onClick={ this.onClick }
                     type="button"
-                    className="button unenroll-button course-page__enroll">
+                    className="button large-button--negative course-page__enroll">
                 Un Enroll
             </button>
         );
@@ -313,7 +313,6 @@ View.Exam_List_Item = React.createClass({
 
     didEndEditing: function() {
         this.setState({isEditing: false});
-        this.forceUpdate();
     },
 
     componentWillMount: function() {
@@ -428,20 +427,34 @@ View.Course_Exam_Questions = React.createClass({
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
-            listItems = questions.map(function(question) {
-                if (question.isEditing()) {
-                    return <View.Course_Exam_Question_Item_Editing question={ question } />;
-                }
-                else {
-                    return <View.Course_Exam_Question_Item key={ question.id }
-                                                           question={ question } />
-                }
+            listItems;
 
-            });
+        if (ExamStore.isCreateQuestionMode()) {
+            // In create question mode, set the first element
+            // as a new question form..
+            listItems = [(
+                <View.Course_Exam_Question_Item_Editing key="new" />
+            )];
+        }
+        else {
+            listItems = [];
+        }
+
+        questions.forEach(function(question) {
+            if (question.isEditing()) {
+                listItems.push(<View.Course_Exam_Question_Item_Editing key="new"
+                                                                       question={ question } />);
+            }
+            else {
+                listItems.push(<View.Course_Exam_Question_Item key={ question.id }
+                                                               question={ question } />);
+            }
+        });
 
         return (
             <div className="exam__my-questions">
-                <div className="exam__my-questions__title">My Questions</div>
+                <span className="exam__my-questions__title">My Questions</span>
+                <View.Course_Exam_Questions_Add_Button />
                 <ul className="exam__my-questions__question-list question-list">
                      { listItems }
                 </ul>
@@ -465,10 +478,16 @@ View.Course_Exam_Questions = React.createClass({
     },
 
 
+    didCreateQuestion: function(event) {
+        this.forceUpdate();
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
         ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     },
 
 
@@ -476,8 +495,65 @@ View.Course_Exam_Questions = React.createClass({
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
         ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     }
 
+
+});
+
+
+View.Course_Exam_Questions_Add_Button = React.createClass({
+
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+    render: function() {
+
+        if (this.state.isEditing) {
+            return (
+                <button type="button"
+                        className="button small-button--positive exam__my-questions__add-button">
+                    New
+                </button>
+            );
+        }
+        else {
+            return (
+                <button onClick={ this.onClick }
+                        type="button"
+                        className="button small-button--positive exam__my-questions__add-button">
+                    New
+                </button>
+            );
+        }
+    },
+
+    onClick: function() {
+        Action.send(Action.Name.ENTER_NEW_QUESTION_MODE, { examId: ExamStore.current().id });
+    },
+
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    }
 
 });
 
@@ -569,33 +645,70 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     getInitialState: function() {
         // Find the index of the solution.
+        // If there is no question passed in, then this
+        // form is for creating a new question.
         var question = this.props.question,
-            options = question.getOptions(),
+            isNewQuestion = !question,
+            options = (!isNewQuestion) ? question.getOptions() : ["","","",""],
             solutionIndex = -1, i, n;
-        for (i = 0, n = options.length; i < n; ++i) {
+
+        // Find the index of the current solution.
+        for (i = 0, n = options.length; (i < n && !isNewQuestion); ++i) {
             if (question.isCorrect(options[i])) {
                 solutionIndex = i;
             }
         }
 
-        if (solutionIndex === -1) {
+        if (solutionIndex === -1 && !isNewQuestion) {
             throw new Error("Solution could not be found for the question.");
         }
-        return {solutionIndex: solutionIndex,
-                questionMap: {options: this.props.question.getOptions()}};
+
+        if (isNewQuestion) {
+            return {
+                    solutionIndex: 3,
+                    questionMap: {
+                                    options: ["","","",""],
+                                    question: "",
+                                    explanation: "",
+                                    solution: "",
+                                    type: 1 
+                                }
+                    };
+        }
+        // Not a new question, so the initial state depends on the question's
+        // current fields.
+        return { solutionIndex: solutionIndex,
+                 questionMap: { options: this.props.question.getOptions() }};
     }, 
 
 
     render: function() {
+        // Rendering a new question form if there was no question
+        // passed in to edit.
         var question = this.props.question,
-            questionId = question.id,
+            isNewQuestion = !question,
+            questionId = (!isNewQuestion) ? question.id : null,
             // This contains any updates to the state
             // of the current question while the user is
             // changing it.
             updatedQuestionMap = this.state.questionMap,
-            questionText = updatedQuestionMap.question || question.get('question'),
-            solution = updatedQuestionMap.solution || question.get('solution'),
-            explanation = updatedQuestionMap.explanation || question.get('explanation'),
+
+            // If the updated question map contains a field any of
+            // the properties of a question, that means it is in the
+            // process of being edited. Otherwise, just get the
+            // property from the question object itself.
+            // Note that if the question object is not passed
+            // in as a parameter, this will always get the field
+            // from the updatedQuestionMap due to how the initial
+            // state was set.
+            questionText = (updatedQuestionMap.question || updatedQuestionMap.question === "") ?
+                             updatedQuestionMap.question: question.get('question'),
+
+            solution = (updatedQuestionMap.solution || updatedQuestionMap.solution === "") ?
+                             updatedQuestionMap.solution: question.get('solution'),
+
+            explanation = (updatedQuestionMap.explanation || updatedQuestionMap.explanation === "") ?
+                             updatedQuestionMap.explanation: question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
@@ -618,6 +731,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                 <div className="question__content">
                     <input onChange={ this.onChangeQuestion }
                            type="text"
+                           placeholder="Ask a question (i.e. Why is the sky blue?)."
                            defaultValue={ questionText }
                            className="question__ask" />
                     <View.Course_Exam_Question_MultiChoice_Option_Editing onChangeText={ this.onChangeTextForOption }
@@ -633,6 +747,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                     <textarea onChange={ this.onChangeExplanation }
                               rows="4"
                               cols="50" 
+                              placeholder="Give an explanation to your solution."
                               defaultValue={ explanation }>
                     </textarea>
                 </div>
@@ -642,15 +757,30 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onSave: function(event) {
+        var map;
         if (!this.isQuestionValid()) {
             throw new Error("Trying to save an invalid question.");
         }
-        Action.send(Action.Name.SAVE_QUESTION_EDIT,
+        if(ExamStore.isCreateQuestionMode()){
+            // Add the current exam to the question.
+            map = View.Util.copy(this.state.questionMap);
+            map.examId = ExamStore.current().id;
+            Action.send(Action.Name.SAVE_QUESTION_NEW,
+                    {
+                        questionMap: map
+                    });
+        }
+        else{
+            // TODO (brendan): Modify so that examId is
+            // inside the questionMap.
+            Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {
                         examId: ExamStore.current().id,
                         questionId: this.props.question.id,
                         questionMap: this.state.questionMap
                     });
+        }
+        
     },
 
 
@@ -675,9 +805,14 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             // need to explicitly check if questionMap
             // properties are empty strings before we
             // set them to their default values
-            questionText = (questionMap.question || questionMap.question === "") ? questionMap.question: question.get('question'),
-            solution = (questionMap.solution || questionMap.solution === "") ? questionMap.solution: question.get('solution'),
-            explanation = (questionMap.explanation || questionMap.explanation === "") ? questionMap.explanation: question.get('explanation'),
+            questionText = (questionMap.question || questionMap.question === "") ? 
+                            questionMap.question: question.get('question'),
+
+            solution = (questionMap.solution || questionMap.solution === "") ?
+                            questionMap.solution: question.get('solution'),
+
+            explanation = (questionMap.explanation || questionMap.explanation === "") ?
+                            questionMap.explanation: question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
@@ -870,7 +1005,10 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
                            value={ option }
                            defaultChecked />
                     <span>
-                        <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                        <input onChange={ this.onChangeText }
+                               type="text"
+                               defaultValue={ option }
+                               placeholder="Give a multiple choice option." />
                     </span>
                 </li>
             );         
@@ -880,10 +1018,14 @@ View.Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
             <li className={ questionClass }>
                 <input onChange={ this.onChangeRadio }
                        type="radio"
+
                        name={ this.props.name }
                        value={ option } />
                 <span>
-                    <input onChange={ this.onChangeText } type="text" defaultValue={ option } />
+                    <input onChange={ this.onChangeText }
+                           type="text"
+                           placeholder="Give a multiple choice option."
+                           defaultValue={ option } />
                 </span>
             </li>
         ); 
