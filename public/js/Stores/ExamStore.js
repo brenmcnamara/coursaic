@@ -160,7 +160,7 @@ var ExamStore = (function() {
      *  otherwise.
      */
     StoreClass.prototype.isCreateQuestionMode = function() {
-        return ConfigStore.hashMap().questionEditId === 'new';
+        return ConfigStore.questionEditId() === 'new';
     };
 
 
@@ -353,6 +353,61 @@ var ExamStore = (function() {
                                 question.isEditing(false);
                                 saveOptions = {success: function(){ 
                                           self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
+                                question.save({},saveOptions); //saveOptions must be the
+                                                               // second or third parameter
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.ENTER_NEW_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.SAVE_QUESTION_NEW:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = new Question(),
+                                    options = payload.questionMap.options,
+                                    saveOptions = {};
+                                question.setOptions(options);
+                                // Remove the options from the questionMap
+                                // because they must be added in a particular
+                                // way, as illustrated above.
+                                delete payload.questionMap.options;
+                                payload.questionMap.author = UserStore.current();
+                                payload.questionMap.exam = self ._examHash[payload.examId];
+                                question.set(payload.questionMap);
+                                question.save().then(
+                                      // Success.
+                                      function(question) {
+                                        self._questionHash[payload.examId].push(question);
+                                      },
+
+                                      function(error) {
+                                      throw error;
+                                });
+
+                                saveOptions = { success: function() { 
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
+                                    }
+                                };
                                 question.save({},saveOptions); //saveOptions must be the
                                                                // second or third parameter
                             },

@@ -312,7 +312,6 @@ View.Exam_List_Item = React.createClass({
 
     didEndEditing: function() {
         this.setState({isEditing: false});
-        this.forceUpdate();
     },
 
     componentWillMount: function() {
@@ -427,16 +426,37 @@ View.Course_Exam_Questions = React.createClass({
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
-            listItems = questions.map(function(question) {
-                if (question.isEditing()) {
-                    return <View.Course_Exam_Question_Item_Editing question={ question } />;
-                }
-                else {
-                    return <View.Course_Exam_Question_Item key={ question.id }
-                                                           question={ question } />
-                }
+            listItems = [],
+            i, n,
 
-            });
+            convertQuestionToHTML = function(question, isNew) {
+            if (!isNew && question.isEditing()) {
+                return <View.Course_Exam_Question_Item_Editing key={ question.id } //what is this key? TODO (daniel): should I set as null or at all?
+                                                               isNew = { false }
+                                                               question={ question } />;
+            }
+            else if (!isNew) {
+                return <View.Course_Exam_Question_Item key={ question.id } //what is this key? TODO (daniel): should I set as null
+                                                       question={ question } />
+            }
+            else {
+                return <View.Course_Exam_Question_Item_Editing //key={ null } //what is this key? TODO (daniel): should I set as null or at all?
+                                                               isNew = { true }
+                                                               question={ null } />; // TODO (daniel): should I set as null
+            }
+
+        };
+
+        console.log("# of qs: " + questions.length);
+
+        for(i = 0, n = questions.length; i < n; ++i){
+            listItems[i] = convertQuestionToHTML(questions[i], false);
+        }
+
+
+        if (ExamStore.isCreateQuestionMode()) {
+            listItems.unshift(convertQuestionToHTML(null, true));
+        }
 
         return (
             <div className="exam__my-questions">
@@ -465,10 +485,16 @@ View.Course_Exam_Questions = React.createClass({
     },
 
 
+    didCreateQuestion: function(event) {
+        this.forceUpdate();
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
         ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     },
 
 
@@ -476,6 +502,7 @@ View.Course_Exam_Questions = React.createClass({
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
         ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     }
 
 
@@ -484,13 +511,52 @@ View.Course_Exam_Questions = React.createClass({
 
 View.Course_Exam_Questions_Add_Button = React.createClass({
 
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
     render: function() {
 
-        return (
-            <button type="button" className="button small-button--positive exam__my-questions__add-button">
-                New
-            </button>
-        );
+        if (this.state.isEditing) {
+            return (
+                <button type="button" className="button small-button--positive exam__my-questions__add-button">
+                    New
+                </button>
+            );
+        }
+        else {
+            return (
+                <button onClick={ this.onClick } type="button" className="button small-button--positive exam__my-questions__add-button">
+                    New
+                </button>
+            );
+        }
+    },
+
+    onClick: function() {
+        Action.send(Action.Name.ENTER_NEW_QUESTION_MODE,{examId: ExamStore.current().id});
+    },
+
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 });
@@ -583,17 +649,28 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
     getInitialState: function() {
         // Find the index of the solution.
-        var question = this.props.question,
-            options = question.getOptions(),
+        var isNew = this.props.isNew,
+            question = this.props.question,
+            options = (!isNew) ? question.getOptions() : ["","","",""],
             solutionIndex = -1, i, n;
-        for (i = 0, n = options.length; i < n; ++i) {
+
+        for (i = 0, n = options.length; (i < n && !isNew); ++i) {
             if (question.isCorrect(options[i])) {
                 solutionIndex = i;
             }
         }
 
-        if (solutionIndex === -1) {
+        if (solutionIndex === -1 && !isNew) {
             throw new Error("Solution could not be found for the question.");
+        }
+
+        if(isNew) {
+            return {solutionIndex: 3,
+                questionMap: {options: ["","","",""],
+                              question: "",
+                              explanation: "",
+                              solution: "",
+                              type: 1}};
         }
         return {solutionIndex: solutionIndex,
                 questionMap: {options: this.props.question.getOptions()}};
@@ -601,15 +678,21 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     render: function() {
-        var question = this.props.question,
-            questionId = question.id,
+        var isNew = this.props.isNew,
+            question = this.props.question,
+            questionId = (!isNew) ? question.id : null,
             // This contains any updates to the state
             // of the current question while the user is
             // changing it.
             updatedQuestionMap = this.state.questionMap,
-            questionText = updatedQuestionMap.question || question.get('question'),
-            solution = updatedQuestionMap.solution || question.get('solution'),
-            explanation = updatedQuestionMap.explanation || question.get('explanation'),
+            questionText = (updatedQuestionMap.question || updatedQuestionMap.question === "") ?
+                             updatedQuestionMap.question: question.get('question'),
+
+            solution = (updatedQuestionMap.solution || updatedQuestionMap.solution === "") ?
+                             updatedQuestionMap.solution: question.get('solution'),
+
+            explanation = (updatedQuestionMap.explanation || updatedQuestionMap.explanation === "") ?
+                             updatedQuestionMap.explanation: question.get('explanation'),
             // The updated question map will always contain
             // the set of options available, so no
             // need for a conditional check.
@@ -659,12 +742,22 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         if (!this.isQuestionValid()) {
             throw new Error("Trying to save an invalid question.");
         }
-        Action.send(Action.Name.SAVE_QUESTION_EDIT,
+        if(ExamStore.isCreateQuestionMode()){
+            Action.send(Action.Name.SAVE_QUESTION_NEW,
+                    {
+                        examId: ExamStore.current().id,
+                        questionMap: this.state.questionMap
+                    });
+        }
+        else{
+            Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {
                         examId: ExamStore.current().id,
                         questionId: this.props.question.id,
                         questionMap: this.state.questionMap
                     });
+        }
+        
     },
 
 

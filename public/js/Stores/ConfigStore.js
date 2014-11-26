@@ -132,6 +132,32 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.ENTER_NEW_QUESTION_MODE:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.examId) {
+                            throw new Error("Trying to create a new question without an exam");
+                        }
+                        Anchor.set({pageKey: 'course', questionEditId: "new"},
+                                   {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.SAVE_QUESTION_NEW:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.examId) {
+                            throw new Error("Trying to save a new question without an exam");
+                        }
+                        Anchor.unset(["questionEditId"],
+                                   {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
