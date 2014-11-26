@@ -151,6 +151,20 @@ var ExamStore = (function() {
 
 
     /**
+     * Check if there is a new question in the process of
+     * being created.
+     *
+     * @method isCreateQuestionMode
+     *
+     * @return {Boolean} True if a question is being created, false
+     *  otherwise.
+     */
+    StoreClass.prototype.isCreateQuestionMode = function() {
+        return ConfigStore.hashMap().questionEditId === 'new';
+    };
+
+
+    /**
      * A query operation to get an array of exams for a particular
      * course.
      *
@@ -209,7 +223,7 @@ var ExamStore = (function() {
      *  the associated examId. Returns null if there
      *  is nothing is found.
      */ 
-    StoreClass.prototype.questionForExam= function(examId, questionId) {
+    StoreClass.prototype.questionForExam = function(examId, questionId) {
         var examQuestionArray = this._questionHash[examId];
         if (examQuestionArray) {
             for (i = 0; i < examQuestionArray.length; i++) {
