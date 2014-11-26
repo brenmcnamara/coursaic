@@ -151,6 +151,20 @@ var ExamStore = (function() {
 
 
     /**
+     * Check if there is a new question in the process of
+     * being created.
+     *
+     * @method isCreateQuestionMode
+     *
+     * @return {Boolean} True if a question is being created, false
+     *  otherwise.
+     */
+    StoreClass.prototype.isCreateQuestionMode = function() {
+        return ConfigStore.questionEditId() === 'new';
+    };
+
+
+    /**
      * A query operation to get an array of exams for a particular
      * course.
      *
@@ -209,7 +223,7 @@ var ExamStore = (function() {
      *  the associated examId. Returns null if there
      *  is nothing is found.
      */ 
-    StoreClass.prototype.questionForExam= function(examId, questionId) {
+    StoreClass.prototype.questionForExam = function(examId, questionId) {
         var examQuestionArray = this._questionHash[examId];
         if (examQuestionArray) {
             for (i = 0; i < examQuestionArray.length; i++) {
@@ -317,13 +331,6 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                /*
-                                var question = self.questionForExam(payload.examId, payload.questionId),
-                                    questionText = (payload.questionMap.question || question.get('question')),
-                                    explanationText = (payload.questionMap.explanation || question.get('explanation')),
-                                    optionText = (payload.questionMap.option || question.getOptions()),
-                                    solutionText = (payload.questionMap.solution || question.get('solution'));
-                                    */
                                 var question = self.questionForExam(payload.examId,
                                                                     payload.questionId),
                                     options = payload.questionMap.options,
@@ -337,10 +344,70 @@ var ExamStore = (function() {
                                 delete payload.questionMap.options;
                                 question.set(payload.questionMap);
                                 question.isEditing(false);
-                                saveOptions = {success: function(){ 
-                                          self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
-                                question.save({},saveOptions); //saveOptions must be the
-                                                               // second or third parameter
+
+                                return question.save().then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    }
+                                );
+                                
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.ENTER_NEW_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.SAVE_QUESTION_NEW:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = new Question(),
+                                    options = payload.questionMap.options,
+                                    saveOptions = {},
+                                    examId = payload.questionMap.examId;
+                                question.setOptions(options);
+
+
+                                payload.questionMap.author = UserStore.current();
+                                payload.questionMap.exam = self._examHash[examId];
+                                // Delete any fields of the questionMap that should
+                                // not be saved with the question.
+                                delete payload.questionMap.options;
+                                delete payload.questionMap.examId;
+                                question.set(payload.questionMap);
+                                return question.save().then(
+                                      // Success.
+                                      function(question) {
+                                        self._questionHash[examId].push(question);
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
+                                      },
+
+                                      function(error) {
+                                      throw error;
+                                });
                             },
                             // Error.
                             function(err) {
