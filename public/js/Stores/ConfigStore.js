@@ -150,7 +150,7 @@ var ConfigStore = (function() {
                     // Get the promise for the exam display process.
                     return new Promise(function(resolve, rejected) {
                         // Nothing to do yet. Might add stuff here
-                        if (!payload.examId) {
+                        if (!payload.questionMap.examId) {
                             throw new Error("Trying to save a new question without an exam");
                         }
                         Anchor.unset(["questionEditId"],

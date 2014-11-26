@@ -384,32 +384,29 @@ var ExamStore = (function() {
                             function() {
                                 var question = new Question(),
                                     options = payload.questionMap.options,
-                                    saveOptions = {};
+                                    saveOptions = {},
+                                    examId = payload.questionMap.examId;
                                 question.setOptions(options);
-                                // Remove the options from the questionMap
-                                // because they must be added in a particular
-                                // way, as illustrated above.
-                                delete payload.questionMap.options;
+
+
                                 payload.questionMap.author = UserStore.current();
-                                payload.questionMap.exam = self ._examHash[payload.examId];
+                                payload.questionMap.exam = self._examHash[examId];
+                                // Delete any fields of the questionMap that should
+                                // not be saved with the question.
+                                delete payload.questionMap.options;
+                                delete payload.questionMap.examId;
                                 question.set(payload.questionMap);
-                                question.save().then(
+                                return question.save().then(
                                       // Success.
                                       function(question) {
-                                        self._questionHash[payload.examId].push(question);
+                                        self._questionHash[examId].push(question);
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
                                       },
 
                                       function(error) {
                                       throw error;
                                 });
-
-                                saveOptions = { success: function() { 
-                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
-                                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
-                                    }
-                                };
-                                question.save({},saveOptions); //saveOptions must be the
-                                                               // second or third parameter
                             },
                             // Error.
                             function(err) {
