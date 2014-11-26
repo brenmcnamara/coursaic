@@ -414,6 +414,58 @@ var ExamStore = (function() {
                                 throw error;
                             });
                 };
+        case Action.Name.ENTER_DELETE_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                                 payload.questionId);
+                                question.isEditing(true);
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.CANCEL_DELETE_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                   // Wait for the ConfigStore to finish updating
+                   // the hash.
+                   .then(
+                    // Success.
+                    function() {
+                        var question = self.questionForExam(payload.examId,
+                                             payload.questionId);
+                        question.isEditing(false);
+                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                    },
+                    // Error.
+                    function(error) {
+                        throw error;
+                    });
+            };
+        case Action.Name.DELETE_QUESTION:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                    //Done waiting for the ConfigStore to update ExamHash
+                    .then(
+                        // Success.
+                        function() {
+                            var question = self.questionForExam(payload.examId,
+                                                                payload.questionId);
+                            question.isEditing(false);
+                            question.destroy(question);
+                        },
+                        // Error.
+                        function(err) {
+                            throw error;
+                        });
+                };
         default:
             return null;
         }

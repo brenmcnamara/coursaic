@@ -161,7 +161,8 @@ View.Popup_Create_Course = React.createClass({
 View.Popup_Delete_Question = React.createClass({
 
     render: function() {
-        return <View.Popup_Confirm header="Deleting Question"
+        return <View.Popup_Confirm question = { this.props.question }
+                                   header="Deleting Question"
                                    message="Are you sure you would like to delete this question?"
                                    onYes= { this.onYes }
                                    onNo={ this.onNo } />

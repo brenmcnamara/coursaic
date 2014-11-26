@@ -29,18 +29,31 @@ View.Course_Root = React.createClass({
             enrollButton = (isEnrolled) ?
                            <View.Course_Unenroll_Button /> :
                            <View.Course_Enroll_Button />;
-
-        return (
-            <div className="main">
-                <View.Popup_Delete_Question />
-                <View.Header />
-                <View.Header_Fill />
-                <View.Course_Dashboard />
-                <View.Course_Summary />
-                { enrollButton }
-                <View.Course_Content />
-            </div>
-        );
+        if (ConfigStore.deleteQuestionId()) {
+            return (
+                <div className="main">
+                    <View.Popup_Delete_Question />
+                    <View.Header />
+                    <View.Header_Fill />
+                    <View.Course_Dashboard />
+                    <View.Course_Summary />
+                    { enrollButton }
+                    <View.Course_Content />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className="main">
+                    <View.Header />
+                    <View.Header_Fill />
+                    <View.Course_Dashboard />
+                    <View.Course_Summary />
+                    { enrollButton }
+                    <View.Course_Content />
+                </div>
+            );
+        }
     },
 
     onChange: function() {
@@ -594,7 +607,8 @@ View.Course_Exam_Question_Item = React.createClass({
                     <img onClick={ this.onEdit }
                          className="question__icon--edit"
                          src="/img/icons/edit.png" />
-                    <img className="question__icon--delete" src="/img/icons/delete.png" />
+                    <img onClick={ this.onDelete }
+                         className="question__icon--delete" src="/img/icons/delete.png" />
                     <div className="question__content">
                         <div className="question__ask">{ question.get('question') }</div>
                         <View.Course_Exam_Question_MultiChoice_Option question={ question } />
@@ -615,6 +629,16 @@ View.Course_Exam_Question_Item = React.createClass({
                         questionId: this.props.question.id
                     });
     },
+
+
+    onEdit: function(event) {
+        Action.send(Action.Name.ENTER_DELETE_QUESTION_MODE,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id
+                    });
+    },
+    
 
     didBeginEditing: function(event) {
         this.setState({isEditing: true});
