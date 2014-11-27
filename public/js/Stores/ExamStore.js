@@ -530,6 +530,25 @@ var ExamStore = (function() {
                             function() {
                                 // TODO (brendan):
                                 // Save the question.
+                                var examMap = payload.examMap,
+                                    exam = new Exam();
+
+                                examMap.course = CourseStore.courseWithId(examMap.courseId);
+                                examMap.author = UserStore.current();
+
+                                delete examMap.courseId;
+                                
+                                exam.set(examMap);
+                                return exam.save()
+                                           .then(
+                                            // Success.
+                                            function() {
+                                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                            },
+                                            // Error.
+                                            function(error) {
+                                                throw error;
+                                            });
                             },
                             // Error.
                             function(error) {

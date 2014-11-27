@@ -151,7 +151,8 @@
     text-align: center;
 }
 
-.button-wrapper > .button {
+.button-wrapper > .button,
+.button-wrapper > .button--disabled {
     margin: 0px 10px;
 }
 

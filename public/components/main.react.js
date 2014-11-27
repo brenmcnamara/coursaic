@@ -10,6 +10,7 @@
  *  - React framework
  */
 View = {};
+
 View.Util = {
     /**
      * Make a deep copy of the object.

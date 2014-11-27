@@ -253,7 +253,9 @@ View.Popup_Create_Exam = React.createClass({
         if (!this.isValid()) {
             throw new Error("Trying to create an exam when creation is not valid.");
         }
-        // TODO (brendan): Implement me!
+        var map = View.Util.copy(this.state.examMap);
+        map.courseId = CourseStore.current().id;
+        Action.send(Action.Name.CREATE_EXAM, { examMap: map });
     },
 
 
