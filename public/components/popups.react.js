@@ -163,35 +163,102 @@ View.Popup_Create_Course = React.createClass({
 
 View.Popup_Create_Exam = React.createClass({
 
+    getInitialState: function() {
+        return { examMap: {} };
+    },
+
+
     render: function() {
+        var createButton = (this.isValid()) ?
+            (
+                <button onClick={ this.onClickCreate }
+                        type="button"
+                        className="button popup-window__button">
+                    Create
+                </button>
+            ) :
+            (
+                <button type="button"
+                        className="button--disabled popup-window__button">
+                    Create
+                </button>
+            );
         return (
             <div className="popup">
                 <div className="popup__background"></div>
                 <div className="popup-window--medium create-exam">
                     <div className="popup-window__header">Create Exam</div>
                     <div className="create-exam__name">
-                        <input type="text"
-                           className="text-input"
-                           placeholder="Name of the Exam (i.e. Exam 1)" />
+                        <input onChange={ this.onChangeName }
+                               type="text"
+                               className="text-input"
+                               placeholder="Name of the Exam (i.e. Exam 1)" />
                     </div>
                     <div className="create-exam__description">
-                        <textarea type="text"
-                              className="text-input"
-                              placeholder="Add a description of what material this exam should cover.">
+                        <textarea onChange={ this.onChangeDescription }
+                                  type="text"
+                                  className="text-input"
+                                  placeholder="Add a description of what material this exam should cover.">
                         </textarea>
                     </div>
 
                     <div className="button-wrapper create-exam__button-wrapper">
-                        <button type="button" className="button">
-                            Create
-                        </button>
-                        <button type="button" className="button popup-window__button">
+                        { createButton }
+                        <button onClick={ this.onClickCancel }
+                                type="button"
+                                className="button popup-window__button">
                             Cancel
                         </button>
                     </div>
                 </div>
             </div>
         );        
+    },
+
+
+    /**
+     * Check if the form for creating an exam is valid.
+     *
+     * @method isValid
+     *
+     * @return {Boolean} True if all the data needed
+     *  to specify an Exam is provided, false otherwise.
+     *  This includes a name and a description of the exam.
+     */
+    isValid: function() {
+        var examMap;
+        if (!this.state) {
+            return false;
+        }
+        examMap = this.state.examMap;
+        return examMap.name && examMap.description;
+    },
+
+
+    onChangeName: function(event) {
+        var examMap = View.Util.copy(this.state.examMap);
+        examMap.name = event.target.value;
+        this.setState({ examMap: examMap });
+    },
+
+
+    onChangeDescription: function(event) {
+        var examMap = View.Util.copy(this.state.examMap);
+        examMap.description = event.target.value;
+        this.setState({ examMap: examMap });
+    },
+
+
+    onClickCreate: function(event) {
+        if (!this.isValid()) {
+            throw new Error("Trying to create an exam when creation is not valid.");
+        }
+        // TODO (brendan): Implement me!
+    },
+
+
+    onClickCancel: function(event) {
+        // TODO (brendan): Implement me!
     }
 
 
