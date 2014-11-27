@@ -27,34 +27,27 @@ View.Course_Root = React.createClass({
     render: function() {
         var isEnrolled = CourseStore.current().isEnrolled(UserStore.current()),
             enrollButton = (isEnrolled) ?
-                           <View.Course_Unenroll_Button /> :
-                           <View.Course_Enroll_Button />;
-        if (ConfigStore.deleteQuestionId()) {
-            return (
-                <div className="main">
-                    <View.Popup_Delete_Question />
-                    <View.Header />
-                    <View.Header_Fill />
-                    <View.Course_Dashboard />
-                    <View.Course_Summary />
-                    { enrollButton }
-                    <View.Course_Content />
-                </div>
-            );
-        }
-        else {
-            return (
-                <div className="main">
-                    <View.Popup_Create_Exam />
-                    <View.Header />
-                    <View.Header_Fill />
-                    <View.Course_Dashboard />
-                    <View.Course_Summary />
-                    { enrollButton }
-                    <View.Course_Content />
-                </div>
-            );
-        }
+                           (<View.Course_Unenroll_Button />) :
+                           (<View.Course_Enroll_Button />),
+            deleteQuestionPopup = (ExamStore.deleteQuestionId()) ?
+                                  (<View.Popup_Delete_Question />) :
+                                  (null)
+            createExamPopup = (ExamStore.isCreateExamMode()) ?
+                              (<View.Popup_Create_Exam />) :
+                              (null);
+
+        return (
+            <div className="main">
+                { createExamPopup }
+                { deleteQuestionPopup }
+                <View.Header />
+                <View.Header_Fill />
+                <View.Course_Dashboard />
+                <View.Course_Summary />
+                { enrollButton }
+                <View.Course_Content />
+            </div>
+        );
     },
 
 
@@ -247,7 +240,8 @@ View.Course_Content_Nav = React.createClass({
                              style={ examIconStyle }
                              className="main-options__item__icon" />
 
-                        <div className="main-options__item__text">Create Exam</div>
+                        <div onClick={ this.onClickCreateExam }
+                             className="main-options__item__text">Create Exam</div>
                     </li>
                 </ul>
 
@@ -257,6 +251,11 @@ View.Course_Content_Nav = React.createClass({
 
             </div>
         );
+    },
+
+
+    onClickCreateExam: function(event) {
+        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
     }
 
 

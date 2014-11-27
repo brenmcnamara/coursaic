@@ -118,6 +118,19 @@ var ExamStore = (function() {
 
 
     /**
+     * Get the id of the question being deleted.
+     *
+     * @method deleteQuestionId
+     *
+     * @return {String} The id of a question being deleted.
+     *  This will be null if no question is being deleted.
+     */
+    StoreClass.prototype.deleteQuestionId = function() {
+        return ConfigStore.deleteQuestionId();
+    };
+
+
+    /**
      * Get all the questions for a particular exam. This
      * is a query method.
      *
@@ -496,6 +509,20 @@ var ExamStore = (function() {
                                 throw error;
                             });
                 };
+        case Action.Name.ENTER_CREATE_EXAM_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                       .then(
+                        // Success.
+                        function() {
+                            self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        }
+                        );
+            };
         default:
             return null;
         }

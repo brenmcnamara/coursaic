@@ -280,7 +280,7 @@ View.Popup_Delete_Question = React.createClass({
         Action.send(Action.Name.DELETE_QUESTION,
             {
                 examId: ExamStore.current().id,
-                deleteQuestionId: ConfigStore.deleteQuestionId(),
+                deleteQuestionId: ExamStore.deleteQuestionId(),
             });
     },
 
