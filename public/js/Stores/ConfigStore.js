@@ -236,14 +236,12 @@ var ConfigStore = (function() {
 
     /**
      * Get the id of the question that is being edited
-     * on the current page.  Note that this is applicable
-     * for certain pageKey's, such as the 'course' pageKey.
+     * on the current page.  
      *
      * @method questionEditId
      *
-     * @return {String} The id of the exam for the current page.
-     *  If the page does not specify an exam id, then this will
-     *  return null.
+     * @return {String} The id of the question that
+     * is being deleted.
      */
     StoreClass.prototype.questionEditId = function() {
         return Anchor.hashMap().questionEditId || null;

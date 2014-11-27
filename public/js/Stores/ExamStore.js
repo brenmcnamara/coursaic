@@ -458,14 +458,13 @@ var ExamStore = (function() {
                             function() {
                                 var question = self.questionForExam(payload.examId,
                                                payload.deleteQuestionId),
-                                    examId = payload.examId,
-                                    spliceIndex;
+                                    examId = payload.examId;
                                 return question.destroy().then(
                                       // Success.
                                       function(question) {
-                                        // self._questionHash[examId].push(question);
+                                        var spliceIndex;
                                         spliceIndex = self._questionHash[examId].indexOf(question);
-                                        if(spliceIndex!=-1){
+                                        if (spliceIndex!=-1) {
                                             self._questionHash[examId].splice(spliceIndex, 1);
                                         }
                                         else{
