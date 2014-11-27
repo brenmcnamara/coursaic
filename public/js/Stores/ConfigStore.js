@@ -158,6 +158,33 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.ENTER_DELETE_QUESTION_MODE:
+                return function(payload) {
+                    // Get the promise for the exam display process.
+                    return new Promise(function(resolve, rejected) {
+                        // Nothing to do yet. Might add stuff here
+                        if (!payload.deleteQuestionId) {
+                            throw new Error("Trying to delete question without any question");
+                        }
+                        Anchor.set({pageKey: 'course', deleteQuestionId: payload.deleteQuestionId},
+                                   {silent: true});
+                        resolve();
+                    });
+                }
+            case Action.Name.CANCEL_DELETE_QUESTION_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['deleteQuestionId'], {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.DELETE_QUESTION:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['deleteQuestionId'], {silent: true});
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
@@ -212,7 +239,7 @@ var ConfigStore = (function() {
      * on the current page.  Note that this is applicable
      * for certain pageKey's, such as the 'course' pageKey.
      *
-     * @method examId
+     * @method questionEditId
      *
      * @return {String} The id of the exam for the current page.
      *  If the page does not specify an exam id, then this will
@@ -222,6 +249,21 @@ var ConfigStore = (function() {
         return Anchor.hashMap().questionEditId || null;
     };
 
+
+    /**
+     * Get the id of the question that is being deleted
+     * on the current page.  Note that this is applicable
+     * for certain pageKey's, such as the 'course' pageKey.
+     *
+     * @method deleteQuestionId
+     *
+     * @return {String} The id of the exam for the current page.
+     *  If the page does not specify an exam id, then this will
+     *  return null.
+     */
+    StoreClass.prototype.deleteQuestionId = function() {
+        return Anchor.hashMap().deleteQuestionId || null;
+    };
 
     /**
      * Determine if the hash specifies that there is

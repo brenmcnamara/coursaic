@@ -422,8 +422,8 @@ var ExamStore = (function() {
                             // Success.
                             function() {
                                 var question = self.questionForExam(payload.examId,
-                                                 payload.questionId);
-                                question.isEditing(true);
+                                                 payload.deleteQuestionId);
+                                // question.isEditing(true);
                                 self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
                             },
                             // Error.
@@ -440,8 +440,8 @@ var ExamStore = (function() {
                     // Success.
                     function() {
                         var question = self.questionForExam(payload.examId,
-                                             payload.questionId);
-                        question.isEditing(false);
+                                             payload.deleteQuestionId);
+                        // question.isEditing(false);
                         self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                     },
                     // Error.
@@ -452,19 +452,36 @@ var ExamStore = (function() {
         case Action.Name.DELETE_QUESTION:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                    //Done waiting for the ConfigStore to update ExamHash
-                    .then(
-                        // Success.
-                        function() {
-                            var question = self.questionForExam(payload.examId,
-                                                                payload.questionId);
-                            question.isEditing(false);
-                            question.destroy(question);
-                        },
-                        // Error.
-                        function(err) {
-                            throw error;
-                        });
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                               payload.deleteQuestionId),
+                                    examId = payload.examId,
+                                    spliceIndex;
+                                return question.destroy().then(
+                                      // Success.
+                                      function(question) {
+                                        // self._questionHash[examId].push(question);
+                                        spliceIndex = self._questionHash[examId].indexOf(question);
+                                        if(spliceIndex!=-1){
+                                            self._questionHash[examId].splice(spliceIndex, 1);
+                                        }
+                                        else{
+                                            throw new Error("Cannot delete non-existent question");
+                                        }
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                      },
+
+                                      function(error) {
+                                      throw error;
+                                });
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
                 };
         default:
             return null;

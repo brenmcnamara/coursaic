@@ -56,6 +56,16 @@ View.Course_Root = React.createClass({
         }
     },
 
+
+    didBeginEditing: function(event) {
+        this.forceUpdate();
+    },
+
+
+    didEndEditing: function(event) {
+        this.forceUpdate();
+    },
+
     onChange: function() {
         this.forceUpdate();
     },
@@ -63,11 +73,15 @@ View.Course_Root = React.createClass({
 
     componentWillMount: function() {
         CourseStore.addListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     },
 
 
     componentWillUnmount: function() {
         CourseStore.removeListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 });
@@ -631,11 +645,11 @@ View.Course_Exam_Question_Item = React.createClass({
     },
 
 
-    onEdit: function(event) {
+    onDelete: function(event) {
         Action.send(Action.Name.ENTER_DELETE_QUESTION_MODE,
                     {
                         examId: ExamStore.current().id,
-                        questionId: this.props.question.id
+                        deleteQuestionId: this.props.question.id
                     });
     },
     
@@ -758,13 +772,14 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                            placeholder="Ask a question (i.e. Why is the sky blue?)."
                            defaultValue={ questionText }
                            className="question__ask" />
-                    <View.Course_Exam_Question_MultiChoice_Option_Editing onChangeText={ this.onChangeTextForOption }
-                                                                          onChangeRadio={ this.onChangeRadioForOption }
-                                                                          questionId={ questionId }
-                                                                          solution={ solution }
-                                                                          explanation={ explanation }
-                                                                          question={ questionText }
-                                                                          options={ options } />
+                    <View.Course_Exam_Question_MultiChoice_Option_Editing 
+                                                      onChangeText={ this.onChangeTextForOption }
+                                                      onChangeRadio={ this.onChangeRadioForOption }
+                                                      questionId={ questionId }
+                                                      solution={ solution }
+                                                      explanation={ explanation }
+                                                      question={ questionText }
+                                                      options={ options } />
                 </div>
                 <div className="question__explain">
                     <span style={ explanationStyle }>Explanation:</span>
@@ -947,14 +962,15 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
                 var isCorrect = self.isCorrect(option),
                     key = self.props.questionId + '-' + index.toString();
                 // TODO (brendan): Shorten this line.
-                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing onChangeText={ self.onChangeText }
-                                                                                  onChangeRadio={ self.onChangeRadio}
-                                                                                  name={ name }
-                                                                                  key={ key }
-                                                                                  option={ option }
-                                                                                  index={ index }
-                                                                                  isCorrect={ isCorrect } />;
-            });
+                return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing 
+                                                              onChangeText={ self.onChangeText }
+                                                              onChangeRadio={ self.onChangeRadio}
+                                                              name={ name }
+                                                              key={ key }
+                                                              option={ option }
+                                                              index={ index }
+                                                              isCorrect={ isCorrect } />;
+});
 
         return (
             <ul className="question__multi-choice multi-choice--editing">
