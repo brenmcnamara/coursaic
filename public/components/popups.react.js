@@ -156,3 +156,72 @@ View.Popup_Create_Course = React.createClass({
 
 
 });
+
+
+View.Popup_Delete_Question = React.createClass({
+
+    render: function() {
+        return <View.Popup_Confirm question = { this.props.question }
+                                   header="Deleting Question"
+                                   message="Are you sure you would like to delete this question?"
+                                   onYes= { this.onYes }
+                                   onNo={ this.onNo } />
+    },
+
+
+    onYes: function() {
+        Action.send(Action.Name.DELETE_QUESTION,
+            {
+                examId: ExamStore.current().id,
+                deleteQuestionId: ConfigStore.deleteQuestionId(),
+            });
+    },
+
+
+    onNo: function() {
+        Action.send(Action.Name.CANCEL_DELETE_QUESTION_MODE,
+            {
+                examId: ExamStore.current().id,
+                deleteQuestionId: ConfigStore.deleteQuestionId(),
+            });
+    }
+
+
+});
+
+
+View.Popup_Confirm = React.createClass({
+
+    render: function() {
+        return (
+            <div className="popup">
+                <div className="popup__background"></div>
+                <div className="popup-window--small confirm-popup">
+                    <div className="popup-window__header">{ this.props.header }</div>
+                    <div className="confirm-popup__message">{ this.props.message }</div>
+                    <div className="confirm-popup__button-wrapper">
+                        <button onClick={ this.onClickYes }
+                                type="button"
+                                className="button">Yes</button>
+
+                        <button onClick={ this.onClickNo }
+                                type="button"
+                                className="button">No</button>
+                    </div>
+                </div>
+            </div>
+        );
+    },
+
+
+    onClickYes: function(event) {
+        this.props.onYes(event);
+    },
+
+
+    onClickNo: function(event) {
+        this.props.onNo(event);
+    }
+
+
+});
