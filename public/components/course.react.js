@@ -45,6 +45,7 @@ View.Course_Root = React.createClass({
         else {
             return (
                 <div className="main">
+                    <View.Popup_Create_Exam />
                     <View.Header />
                     <View.Header_Fill />
                     <View.Course_Dashboard />

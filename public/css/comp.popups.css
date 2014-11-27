@@ -64,7 +64,7 @@
   font-weight: bold;
 }
 
-.popup-window--medium > .pop-window__header {
+.popup-window--medium > .popup-window__header {
     height: 50px;
     line-height: 50px;
     font-size: 1.2em;
@@ -98,25 +98,52 @@
 .create-course__code,
 .create-course__field,
 .create-course__description {
-  margin: 15px 0px 0px 20px;
+  margin-top: 15px;
 }
 
 .create-course__name,
 .create-course__code,
 .create-course__description {
-  width: 85%;
+  text-align: center;
+}
+
+.create-course__field {
+  margin-left: 15px; 
 }
 
 .create-course__name > input,
 .create-course__code > input,
 .create-course__description > textarea {
-  width: 100%;
-  padding: 5px;
+  width: 85%;  
 }
 
 .create-course__description > textarea {
   resize: none;
   height: 3.5em;
+}
+
+/* -------------------- *\
+       Create Exam
+\* -------------------- */
+
+.create-exam__name,
+.create-exam__description {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.create-exam__name > input,
+.create-exam__description > textarea {
+  width: 85%;
+}
+
+.create-exam__description > textarea {
+  resize: none;
+  height: 4.5em;
+}
+
+.create-exam__button-wrapper {
+  margin-top: 20px;
 }
 
 /* -------------------- *\

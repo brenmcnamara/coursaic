@@ -38,17 +38,20 @@ View.Popup_Create_Course = React.createClass({
                         Create Your Course
                     </div>
                     <div className="create-course__name">
-                        <input onChange={ this.onChangeName }
+                        <input className="text-input"
+                               onChange={ this.onChangeName }
                                type="text"
                                placeholder="Name (i.e. Introduction to Computer Science)" />
                     </div>
                     <div className="create-course__code">
-                        <input onChange={ this.onChangeCode }
+                        <input className="text-input"
+                               onChange={ this.onChangeCode }
                                type="text"
                                placeholder="Code (i.e. CS 101)" />
                     </div>
                     <div className="create-course__description">
-                        <textarea onChange= {this.onChangeDescription }
+                        <textarea className="text-input"
+                                  onChange= {this.onChangeDescription }
                                   placeholder="Description for the course.">
                         </textarea>
                     </div>
@@ -158,6 +161,43 @@ View.Popup_Create_Course = React.createClass({
 });
 
 
+View.Popup_Create_Exam = React.createClass({
+
+    render: function() {
+        return (
+            <div className="popup">
+                <div className="popup__background"></div>
+                <div className="popup-window--medium create-exam">
+                    <div className="popup-window__header">Create Exam</div>
+                    <div className="create-exam__name">
+                        <input type="text"
+                           className="text-input"
+                           placeholder="Name of the Exam (i.e. Exam 1)" />
+                    </div>
+                    <div className="create-exam__description">
+                        <textarea type="text"
+                              className="text-input"
+                              placeholder="Add a description of what material this exam should cover.">
+                        </textarea>
+                    </div>
+
+                    <div className="button-wrapper create-exam__button-wrapper">
+                        <button type="button" className="button">
+                            Create
+                        </button>
+                        <button type="button" className="button popup-window__button">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );        
+    }
+
+
+});
+
+
 View.Popup_Delete_Question = React.createClass({
 
     render: function() {
@@ -225,3 +265,4 @@ View.Popup_Confirm = React.createClass({
 
 
 });
+
