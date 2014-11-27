@@ -192,10 +192,25 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.CREATE_EXAM:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createExam']);
+                        resolve();
+                    });
+                };
+            case Action.Name.CANCEL_CREATE_EXAM:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['createExam']);
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
     };
+
 
     /**
      * Get the page key for the current page. This method should
@@ -241,6 +256,7 @@ var ConfigStore = (function() {
         return Anchor.hashMap().examId || null;
     };
 
+
     /**
      * Get the id of the question that is being edited
      * on the current page.  
@@ -269,6 +285,7 @@ var ConfigStore = (function() {
     StoreClass.prototype.deleteQuestionId = function() {
         return Anchor.hashMap().deleteQuestionId || null;
     };
+
 
     /**
      * Determine if the hash specifies that there is

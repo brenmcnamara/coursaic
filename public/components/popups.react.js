@@ -185,7 +185,7 @@ View.Popup_Create_Exam = React.createClass({
             );
         return (
             <div className="popup">
-                <div className="popup__background"></div>
+                <div className="popup__background" onClick={ this.onClickCancel }></div>
                 <div className="popup-window--medium create-exam">
                     <div className="popup-window__header">Create Exam</div>
                     <div className="create-exam__name">
@@ -258,7 +258,7 @@ View.Popup_Create_Exam = React.createClass({
 
 
     onClickCancel: function(event) {
-        // TODO (brendan): Implement me!
+        Action.send(Action.Name.CANCEL_CREATE_EXAM);
     }
 
 

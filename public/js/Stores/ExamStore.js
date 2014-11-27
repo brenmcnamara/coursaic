@@ -520,7 +520,35 @@ var ExamStore = (function() {
                         // Error.
                         function(error) {
                             throw error;
-                        }
+                        });
+            };
+        case Action.Name.CREATE_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                // TODO (brendan):
+                                // Save the question.
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
+                        );
+            };
+        case Action.Name.CANCEL_CREATE_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
                         );
             };
         default:
