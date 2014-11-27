@@ -185,6 +185,13 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.ENTER_CREATE_EXAM_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({ 'createExam': 'true' }, { silent: true });
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
@@ -269,11 +276,25 @@ var ConfigStore = (function() {
      *
      * @method isCreatingCourse
      *
-     * @return {Boolean} true if there is a course
+     * @return {Boolean} True if there is a course
      *  being created, false otherwise.
      */
     StoreClass.prototype.isCreatingCourse = function() {
         return Anchor.hashMap().createCourse === 'true';
+    };
+
+
+    /**
+     * Determine if the hash specified that
+     * there is an exam being created.
+     *
+     * @method isCreatingExam
+     *
+     * @return {Boolean} True if there is an exam being
+     *  created, false otherwise.
+     */
+    StoreClass.prototype.isCreatingExam = function() {
+        return Anchor.hashMap().createExam === 'true';
     };
 
 

@@ -165,6 +165,20 @@ var ExamStore = (function() {
 
 
     /**
+     * Check if there is a new exam in the process of being
+     * created.
+     *
+     * @method isCreateExamMode
+     *
+     * @return {Boolean} True if an exam is being created, false
+     *  otherwise.
+     */
+    StoreClass.prototype.isCreateExamMode = function() {
+        return ConfigStore.isCreatingExam();
+    };
+
+
+    /**
      * A query operation to get an array of exams for a particular
      * course.
      *
