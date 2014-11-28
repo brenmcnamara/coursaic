@@ -316,6 +316,7 @@ View.Exam_List = React.createClass({
         ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     },
 
+
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
