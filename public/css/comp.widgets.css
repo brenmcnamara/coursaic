@@ -65,9 +65,8 @@
     margin: 15px 0px 0px 0px;
     margin-top: 15px;
 
-    /* TODO: Move this to text css */
     font-size: 40px;
-    /* TODO: consistent coloring */
+    font-weight: bold;
     color: #444;
 }
 

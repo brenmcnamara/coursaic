@@ -195,7 +195,7 @@ View.Course_Unenroll_Button = React.createClass({
             <button onClick={ this.onClick }
                     type="button"
                     className="button large-button--negative course-page__enroll">
-                Un Enroll
+                Unenroll
             </button>
         );
     },
@@ -432,17 +432,33 @@ View.Course_Exam = React.createClass({
     
     render: function() {
         // Get the current exam.
-        var exam = ExamStore.current();
+        var exam = ExamStore.current(),
+            hasQuestions = ExamStore.questionsForExam(exam).length > 0,
+            takeExamButton = (hasQuestions) ?
+                             (<button onClick={ this.onClickTakeExam }
+                                      type="button"
+                                      className="button large-button--positive take-exam-button">
+                                Take Exam
+                              </button>) :
+                             (null);
+
         return (
             <div className="content__body__wrapper">
-                <h1 className="content__body__title">{ exam.get('name') }</h1>
+                <span className="content__body__title">{ exam.get('name') }</span>
+                { takeExamButton }
                 <p className="content__body__description">{ exam.get('description') }</p>
                 <div className="exam-info">
                     <View.Course_Exam_Questions />
                 </div>
             </div>
         );
+    },
+
+
+    onClickTakeExam: function(event) {
+        Action.send(Action.Name.PERFORM_LOAD,{ pageKey: 'exam', examId: ExamStore.current().id });
     }
+
 
 });
 

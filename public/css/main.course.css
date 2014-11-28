@@ -78,6 +78,11 @@ ul.dashboard__course-logistics {
           Exam
 \* -------------------- */
 
+.take-exam-button {
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
 .exam-info {
     margin-top: 5px;
 }

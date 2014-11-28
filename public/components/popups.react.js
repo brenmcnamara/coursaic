@@ -29,7 +29,6 @@ View.Popup_Create_Course = React.createClass({
                                     Create
                                 </button>);
 
-
         return (
             <div className="popup">
                 <div onClick={ this.onClickBackground } className="popup__background"></div>
