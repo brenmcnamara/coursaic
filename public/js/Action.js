@@ -18,7 +18,6 @@
 var Action = {};
 
 Action.Name = {
-    // TODO (daniel): Add an action to this list.
     // The page just loaded
     PERFORM_LOAD: 'PERFORM_LOAD',
     DISPLAY_EXAM: 'DISPLAY_EXAM',
@@ -37,7 +36,18 @@ Action.Name = {
     // to change the enrollment status for should be provided
     // in the payload of the action.
     ENROLL_CURRENT_USER: 'ENROLL_CURRENT_USER',
-    UNENROLL_CURRENT_USER: 'UNENROLL_CURRENT_USER'
+    UNENROLL_CURRENT_USER: 'UNENROLL_CURRENT_USER',
+    ENTER_NEW_QUESTION_MODE: 'ENTER_NEW_QUESTION_MODE',
+    
+    SAVE_QUESTION_NEW: 'SAVE_QUESTION_NEW',
+    
+    ENTER_DELETE_QUESTION_MODE: 'ENTER_DELETE_QUESTION_MODE',
+    CANCEL_DELETE_QUESTION_MODE: 'CANCEL_DELETE_QUESTION_MODE',
+    DELETE_QUESTION: 'DELETE_QUESTION',
+
+    ENTER_CREATE_EXAM_MODE: 'ENTER_CREATE_EXAM_MODE',
+    CREATE_EXAM: 'CREATE_EXAM',
+    CANCEL_CREATE_EXAM: 'CANCEL_CREATE_EXAM'
 
 };
 

@@ -134,6 +134,10 @@
       Form Elements
 \* -------------------- */
 
+.text-input {
+    padding: 5px;    
+}
+
 .button--disabled,
 .button {
     border: solid #CCC 1px;
@@ -141,6 +145,15 @@
     border-radius: 2px;
     font-size: 1em;
     background: #EAEAEA;
+}
+
+.button-wrapper {
+    text-align: center;
+}
+
+.button-wrapper > .button,
+.button-wrapper > .button--disabled {
+    margin: 0px 10px;
 }
 
 .button {
@@ -155,6 +168,53 @@
 
 .button:active {
     background: #DDD;
+}
+
+.small-button,
+.small-button--positive,
+.small-button--negative,
+.large-button,
+.large-button--positive,
+.large-button--negative {
+    
+    border: none;
+    color: white;
+}
+
+.large-button,
+.large-button--positive,
+.large-button--negative {
+    font-size: 1.1em;
+    width: 200px;
+    height: 30px;
+}
+
+.small-button,
+.small-button--positive,
+.small-button--negative {
+    font-size: .8em;
+    width: 80px;
+    height: 25px;
+}
+
+.small-button--positive,
+.large-button--positive {
+    background: #4A90E2;
+}
+
+.small-button--positive:active,
+.large-button--positive:active {
+    background: #386dac;
+}
+
+.small-button--negative,
+.large-button--negative {
+    background: #e34d2f;
+}
+
+.small-button--negative:active,
+.large-button--negative:active {
+    background: #a53722
 }
 
 /* -------------------- *\

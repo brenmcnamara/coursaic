@@ -119,6 +119,19 @@ var ExamStore = (function() {
 
 
     /**
+     * Get the id of the question being deleted.
+     *
+     * @method deleteQuestionId
+     *
+     * @return {String} The id of a question being deleted.
+     *  This will be null if no question is being deleted.
+     */
+    StoreClass.prototype.deleteQuestionId = function() {
+        return ConfigStore.deleteQuestionId();
+    };
+
+
+    /**
      * Get all the questions for a particular exam. This
      * is a query method.
      *
@@ -148,6 +161,34 @@ var ExamStore = (function() {
             });
         }
         return questions;
+    };
+
+
+    /**
+     * Check if there is a new question in the process of
+     * being created.
+     *
+     * @method isCreateQuestionMode
+     *
+     * @return {Boolean} True if a question is being created, false
+     *  otherwise.
+     */
+    StoreClass.prototype.isCreateQuestionMode = function() {
+        return ConfigStore.questionEditId() === 'new';
+    };
+
+
+    /**
+     * Check if there is a new exam in the process of being
+     * created.
+     *
+     * @method isCreateExamMode
+     *
+     * @return {Boolean} True if an exam is being created, false
+     *  otherwise.
+     */
+    StoreClass.prototype.isCreateExamMode = function() {
+        return ConfigStore.isCreatingExam();
     };
 
 
@@ -210,7 +251,7 @@ var ExamStore = (function() {
      *  the associated examId. Returns null if there
      *  is nothing is found.
      */ 
-    StoreClass.prototype.questionForExam= function(examId, questionId) {
+    StoreClass.prototype.questionForExam = function(examId, questionId) {
         var examQuestionArray = this._questionHash[examId];
         if (examQuestionArray) {
             for (i = 0; i < examQuestionArray.length; i++) {
@@ -318,13 +359,6 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                /*
-                                var question = self.questionForExam(payload.examId, payload.questionId),
-                                    questionText = (payload.questionMap.question || question.get('question')),
-                                    explanationText = (payload.questionMap.explanation || question.get('explanation')),
-                                    optionText = (payload.questionMap.option || question.getOptions()),
-                                    solutionText = (payload.questionMap.solution || question.get('solution'));
-                                    */
                                 var question = self.questionForExam(payload.examId,
                                                                     payload.questionId),
                                     options = payload.questionMap.options,
@@ -338,16 +372,205 @@ var ExamStore = (function() {
                                 delete payload.questionMap.options;
                                 question.set(payload.questionMap);
                                 question.isEditing(false);
-                                saveOptions = {success: function(){ 
-                                          self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));}};
-                                question.save({},saveOptions); //saveOptions must be the
-                                                               // second or third parameter
+
+                                return question.save().then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    }
+                                );
+                                
                             },
                             // Error.
                             function(err) {
                                 throw error;
                             });
                 };
+        case Action.Name.ENTER_NEW_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.SAVE_QUESTION_NEW:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = new Question(),
+                                    options = payload.questionMap.options,
+                                    saveOptions = {},
+                                    examId = payload.questionMap.examId;
+                                question.setOptions(options);
+
+
+                                payload.questionMap.author = UserStore.current();
+                                payload.questionMap.exam = self._examHash[examId];
+                                // Delete any fields of the questionMap that should
+                                // not be saved with the question.
+                                delete payload.questionMap.options;
+                                delete payload.questionMap.examId;
+                                question.set(payload.questionMap);
+                                return question.save().then(
+                                      // Success.
+                                      function(question) {
+                                        self._questionHash[examId].push(question);
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
+                                      },
+
+                                      function(error) {
+                                      throw error;
+                                });
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.ENTER_DELETE_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                                 payload.deleteQuestionId);
+                                // question.isEditing(true);
+                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.CANCEL_DELETE_QUESTION_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                   // Wait for the ConfigStore to finish updating
+                   // the hash.
+                   .then(
+                    // Success.
+                    function() {
+                        var question = self.questionForExam(payload.examId,
+                                             payload.deleteQuestionId);
+                        // question.isEditing(false);
+                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                    },
+                    // Error.
+                    function(error) {
+                        throw error;
+                    });
+            };
+        case Action.Name.DELETE_QUESTION:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        //Done waiting for the ConfigStore to update ExamHash
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                               payload.deleteQuestionId),
+                                    examId = payload.examId;
+                                return question.destroy().then(
+                                      // Success.
+                                      function(question) {
+                                        var spliceIndex;
+                                        spliceIndex = self._questionHash[examId].indexOf(question);
+                                        if (spliceIndex!=-1) {
+                                            self._questionHash[examId].splice(spliceIndex, 1);
+                                        }
+                                        else{
+                                            throw new Error("Cannot delete non-existent question");
+                                        }
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                      },
+
+                                      function(error) {
+                                      throw error;
+                                });
+                            },
+                            // Error.
+                            function(err) {
+                                throw error;
+                            });
+                };
+        case Action.Name.ENTER_CREATE_EXAM_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                       .then(
+                        // Success.
+                        function() {
+                            self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        });
+            };
+        case Action.Name.CREATE_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                // TODO (brendan):
+                                // Save the question.
+                                var examMap = payload.examMap,
+                                    exam = new Exam();
+
+                                examMap.course = CourseStore.courseWithId(examMap.courseId);
+                                examMap.author = UserStore.current();
+
+                                delete examMap.courseId;
+                                
+                                exam.set(examMap);
+                                return exam.save()
+                                           .then(
+                                            // Success.
+                                            function() {
+                                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                            },
+                                            // Error.
+                                            function(error) {
+                                                throw error;
+                                            });
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
+                        );
+            };
+        case Action.Name.CANCEL_CREATE_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
+                        );
+            };
         default:
             return null;
         }
