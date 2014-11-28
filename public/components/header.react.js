@@ -59,14 +59,9 @@ View.Header = React.createClass({
 View.Header_Fill = React.createClass({
     
     render: function() {
-        var fillType;
-        switch (ConfigStore.pageKey()) {
-        case 'course':
-            fillType = "header-offset--fill";
-            break;
-        default:
-            fillType = "header-offset";
-        }
+        var fillType = (this.props.isOpaque) ?
+                       ("header-offset") :
+                       ("header-offset--fill");
         return (
             <div className={ fillType }></div>
         );

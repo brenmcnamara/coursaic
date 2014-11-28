@@ -1,0 +1,50 @@
+/*
+ * main.exam.css
+ *
+ * Styling for the exam page.
+ */
+
+.exam {
+  margin: 0 50px 0 30px;  
+}
+
+.exam__title {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.exam__question-list {
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+ul.exam__question-list {
+  list-style: decimal;
+}
+
+.question-item,
+.question-item--multi-choice {
+  margin: 0 0 30px 10px;
+}
+
+.question-item__question {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.question-item--multi-choice__options {
+   padding-left: 30px;
+}
+
+ul.question-item--multi-choice__options {
+  list-style: none;
+}
+
+.question-item--multi-choice__options__item {
+  margin: 10px 0px;
+}
+
+.question-item--multi-choice__options__item > input {
+  margin-right: 10px;
+}
