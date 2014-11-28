@@ -9,7 +9,12 @@
 View.Exam_Root = React.createClass({
 
     render: function() {
-        return <div>Hello, World from Exam Page.</div>
+        return (
+            <div className="main">
+                <View.Header isOpaque={ false } />
+                <View.Header_Fill isOpaque={ false } />
+            </div>
+        );
     }
 
 

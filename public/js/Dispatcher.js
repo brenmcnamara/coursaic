@@ -176,7 +176,6 @@ var Dispatcher = (function() {
         stateMap.locked = true;
         // Get all the promises that are produced
         // by the functions.
-        console.log("Number of store calls: " + storeCalls.length);
         if (storeCalls.length > 0) {
             promises = storeCalls.map(function(storeCall) {
                 var index = storeCall.index,

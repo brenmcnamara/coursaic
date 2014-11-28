@@ -22,15 +22,10 @@ View.Header = React.createClass({
     
     render: function() {
         var user = UserStore.current(),
-            headerType;
+            headerType = (this.props.isOpaque) ?
+                         ("header") :
+                         ("header--fill");
 
-        switch (ConfigStore.pageKey()) {
-        case 'course':
-            headerType = "header--fill";
-            break;
-        default:
-            headerType = "header";
-        }
         return (
             <header className={ headerType }>
                 <img className="header__logo" src="/img/logo-dark.png" />

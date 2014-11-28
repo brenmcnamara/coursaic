@@ -33,8 +33,8 @@ View.Home_Root = React.createClass({
             return (
                 <div className="main">
                     <View.Popup_Create_Course />
-                    <View.Header />
-                    <View.Header_Fill />
+                    <View.Header isOpaque={ true } />
+                    <View.Header_Fill isOpaque={ true } />
                     <View.Home_Img />
                     <View.Search alias={school.get('alias')} />
                     <View.Home_Content />
@@ -44,8 +44,8 @@ View.Home_Root = React.createClass({
         else {
             return (
                 <div className="main">
-                    <View.Header />
-                    <View.Header_Fill />
+                    <View.Header isOpaque={ true } />
+                    <View.Header_Fill isOpaque={ true } />
                     <View.Home_Img />
                     <View.Search alias={school.get('alias')} />
                     <View.Home_Content />

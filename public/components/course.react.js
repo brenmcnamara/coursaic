@@ -40,8 +40,8 @@ View.Course_Root = React.createClass({
             <div className="main">
                 { createExamPopup }
                 { deleteQuestionPopup }
-                <View.Header />
-                <View.Header_Fill />
+                <View.Header isOpaque={ false } />
+                <View.Header_Fill isOpaque={ false } />
                 <View.Course_Dashboard />
                 <View.Course_Summary />
                 { enrollButton }
