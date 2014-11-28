@@ -266,12 +266,22 @@ View.Exam_List = React.createClass({
 
     render: function() {
         // TODO (brendan): Add a "No Exams" list item if there are no exams.
-        var course = CourseStore.current(),
-            examList = ExamStore.examsForCourse(course).map(function(exam) {
+        var PIXEL_SPACE_BETWEEN_EXAMS = 27,
+            PIXEL_SPACE_TO_FIRST_EXAM = 27,
+            course = CourseStore.current(),
+            selectedExamIndex = -1,
+            examList = ExamStore.examsForCourse(course).map(function(exam, index) {
+                if (ExamStore.current() && exam.id === ExamStore.current().id) {
+                    selectedExamIndex = index;
+                }
                 return <View.Exam_List_Item key={ exam.id } exam={ exam } />
             }),
+            displayStyle = (selectedExamIndex === -1) ? "none" : "inline",
+            selectedExamBarPixelPosition = (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) +
+                                                                 PIXEL_SPACE_TO_FIRST_EXAM,
             selectionBarStyle = {
-                top: "27px",
+                top: selectedExamBarPixelPosition.toString() +"px",
+                display: displayStyle,
                 background: course.get('field').get('color')
             },
             selectionBar = (examList.length) ?
@@ -295,12 +305,20 @@ View.Exam_List = React.createClass({
         this.forceUpdate();
     },
 
+
+    didLoadExam: function(event) {
+        this.forceUpdate();
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     },
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+        ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     }
 
 });
