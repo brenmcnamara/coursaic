@@ -437,7 +437,7 @@ View.Course_Exam = React.createClass({
             <div className="content__body__wrapper">
                 <h1 className="content__body__title">{ exam.get('name') }</h1>
                 <p className="content__body__description">{ exam.get('description') }</p>
-                <div className="exam">
+                <div className="exam-info">
                     <View.Course_Exam_Questions />
                 </div>
             </div>
@@ -479,10 +479,10 @@ View.Course_Exam_Questions = React.createClass({
         });
 
         return (
-            <div className="exam__my-questions">
-                <span className="exam__my-questions__title">My Questions</span>
+            <div className="exam-info__my-questions">
+                <span className="exam-info__my-questions__title">My Questions</span>
                 <View.Course_Exam_Questions_Add_Button />
-                <ul className="exam__my-questions__question-list question-list">
+                <ul className="exam-info__my-questions__question-list question-list">
                      { listItems }
                 </ul>
             </div> 
@@ -540,7 +540,7 @@ View.Course_Exam_Questions_Add_Button = React.createClass({
         if (this.state.isEditing) {
             return (
                 <button type="button"
-                        className="button small-button--positive exam__my-questions__add-button">
+                        className="button small-button--positive exam-info__my-questions__add-button">
                     New
                 </button>
             );
@@ -549,7 +549,7 @@ View.Course_Exam_Questions_Add_Button = React.createClass({
             return (
                 <button onClick={ this.onClick }
                         type="button"
-                        className="button small-button--positive exam__my-questions__add-button">
+                        className="button small-button--positive exam-info__my-questions__add-button">
                     New
                 </button>
             );
