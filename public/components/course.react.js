@@ -266,7 +266,7 @@ View.Exam_List = React.createClass({
 
     render: function() {
         // TODO (brendan): Add a "No Exams" list item if there are no exams.
-        var PIXEL_SPACE_BETWEEN_EXAMS = 27,
+        var PIXEL_SPACE_BETWEEN_EXAMS = 28,
             PIXEL_SPACE_TO_FIRST_EXAM = 27,
             course = CourseStore.current(),
             selectedExamIndex = -1,
