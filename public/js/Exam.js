@@ -80,22 +80,8 @@ var
      *
      * @class Exam
      */
-    Exam = Parse.Object.extend("Exam", {
+    Exam = Parse.Object.extend("Exam"),
 
-        /**
-         * Generate an exam run from the current exam.
-         *
-         * @method generateRum
-         *
-         * @return {ExamRun} An exam run generated
-         *  from the Exam.
-         */
-        generateRun: function() {
-
-        }
-
-
-    }),
 
     /**
      * A class that represents an instance of

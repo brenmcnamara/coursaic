@@ -119,6 +119,48 @@ var ExamStore = (function() {
 
 
     /**
+     * Generate an exam run for the current exam.
+     *
+     * @method _generateExamRun
+     * @private
+     *
+     * @return {ExamRun} An exam run of the current exam.
+     */
+    StoreClass.prototype._generateExamRun = function() {
+        var MAX_QUESTION_COUNT = 30,
+            // Make a copy of the array, since the array will be
+            // modified by the randomization algorithm. Note that
+            // the array is modified, but the questions inside the
+            // array are not.
+            allQuestions = this.questionsForExam(this.current()).slice(),
+            // An array of random questions pulled to be in the exam run.
+            // The maximum number of random questions is equal to the exam
+            // run.
+            randomQuestions, i, randomIndex;
+
+        // TODO (brendan): Implement the randomization algorithm. For
+        // now, just set the set of questions to all the questions available.
+        randomQuestions = allQuestions;
+/*
+        if (allQuestions.length <= MAX_QUESTION_COUNT) {
+            randomQuestions = allQuestions;
+        }
+        else {
+            // Need to grab MAX_QUESTION_COUNT random questions
+            // from the set of questions.
+            for (i = 0; i < MAX_QUESTION_COUNT; ++i) {
+                // Grab a random question from the allQuestions list.
+                // Add that question to the randomQuestions array.
+                randomIndex = 
+            }
+        }
+*/
+
+        return new ExamRun(randomQuestions);
+    };
+
+
+    /**
      * Get the id of the question being deleted.
      *
      * @method deleteQuestionId
@@ -235,6 +277,20 @@ var ExamStore = (function() {
 
 
     /**
+     * Get the current exam run for the run that the user
+     * is taking. Note that this property is only applicable
+     * to certain pages.
+     *
+     * @method currentExamRun
+     *
+     * @return {ExamRun} The current exam run for the page.
+     */
+    StoreClass.prototype.currentExamRun = function() {
+
+    };
+
+
+    /**
      * Get the question with the specified id. First,
      *  gets the proper exam, and then loops through
      *  the questions in the exam until it finds the
@@ -272,48 +328,51 @@ var ExamStore = (function() {
             return function(payload) {
                 // The exams are loaded only when loading a course
                 // page.
-                if (payload.pageKey === 'course') {
-                    return Dispatcher.waitFor([CourseStore.dispatcherIndex])
-                            // After the CourseStore has finished.
-                            .then(
-                                // Success.
-                                function() {
-                                    return self._fetchExamsForCourse(
-                                            CourseStore.courseWithId(payload.course));
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                })
-                            // After the exams have been fetched for the course.
-                            .then(
-                                // Success.
-                                function(exams) {
-                                    // Map the exams in the course into
-                                    // a list of promises.
-                                    return Promise.all(exams.map(function(exam) {
-                                        // Load all the data in the exam.
-                                        return self._loadExam(exam);
-                                    }));
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                })
-                            // After all the exams have been loaded.
-                            .then(
-                                // Success.
-                                function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
-                                                          {courseId: payload.course}));
-                                },
+                switch (payload.pageKey) {
 
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-                }
-                else {
+                case 'course':
+                    return Dispatcher.waitFor([CourseStore.dispatcherIndex])
+                        // After the CourseStore has finished.
+                        .then(
+                            // Success.
+                            function() {
+                                return self._fetchExamsForCourse(
+                                        CourseStore.courseWithId(payload.course));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                        // After the exams have been fetched for the course.
+                        .then(
+                            // Success.
+                            function(exams) {
+                                // Map the exams in the course into
+                                // a list of promises.
+                                return Promise.all(exams.map(function(exam) {
+                                    // Load all the data in the exam.
+                                    return self._loadExam(exam);
+                                }));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                        // After all the exams have been loaded.
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
+                                                      {courseId: payload.course}));
+                            },
+
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
+                case 'exam':
+                    // TODO (brendan): Implement me!
+                default:
                     return new Promise(function(resolve) {
                         // Exam store does not need to do anything
                         // when rendering page that is non-course.
