@@ -127,6 +127,7 @@ var ExamStore = (function() {
      * @return {ExamRun} An exam run of the current exam.
      */
     StoreClass.prototype._generateExamRun = function() {
+        console.log("Generate exam run was called.");
         var MAX_QUESTION_COUNT = 30,
             // Make a copy of the array, since the array will be
             // modified by the randomization algorithm. Note that
@@ -286,7 +287,7 @@ var ExamStore = (function() {
      * @return {ExamRun} The current exam run for the page.
      */
     StoreClass.prototype.currentExamRun = function() {
-
+        return this._examRun || null;
     };
 
 
@@ -331,11 +332,16 @@ var ExamStore = (function() {
                 switch (payload.pageKey) {
 
                 case 'course':
+                case 'exam':
+                    // Wait for the course to get loaded, then
+                    // load all the exams for the course and questions
+                    // for the exam.
                     return Dispatcher.waitFor([CourseStore.dispatcherIndex])
                         // After the CourseStore has finished.
                         .then(
                             // Success.
                             function() {
+                                console.log("Done waiting for course store");
                                 return self._fetchExamsForCourse(
                                         CourseStore.courseWithId(payload.course));
                             },
@@ -362,16 +368,20 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
+                                // NOTE: This case is for both exam
+                                // and courses. In the exam case, we
+                                // have to generate an exam run to use.
+                                if (payload.pageKey === 'exam') {
+                                    self._examRun = self._generateExamRun();
+                                }
                                 self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
-                                                      {courseId: payload.course}));
+                                                      { courseId: payload.course }));
                             },
 
                             // Error.
                             function(error) {
                                 throw error;
                             });
-                case 'exam':
-                    // TODO (brendan): Implement me!
                 default:
                     return new Promise(function(resolve) {
                         // Exam store does not need to do anything

@@ -167,6 +167,12 @@ var Course = Parse.Object.extend("Course", {
                                         throw error;
                                     });
                     case 'course':
+                    case 'exam':
+                        // Wait for the User to be loaded.
+                        // Load all the information for the course.
+                        // NOTE: This is needed by the exam page key so that
+                        // the exam store can load the exam and question related
+                        // to the single exam of the course.
                         // Just make sure the single course is loaded.
                         return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
                                                    UserStore.dispatcherIndex])
@@ -188,7 +194,8 @@ var Course = Parse.Object.extend("Course", {
                                     function(error) {
                                         throw error;
                                     }
-                                )
+                                );
+
                     default:
                         return new Promise(function(resolve, reject) {
                             resolve();

@@ -457,7 +457,11 @@ View.Course_Exam = React.createClass({
 
 
     onClickTakeExam: function(event) {
-        Action.send(Action.Name.PERFORM_LOAD,{ pageKey: 'exam', examId: ExamStore.current().id });
+        Action.send(Action.Name.PERFORM_LOAD,
+                    {
+                        pageKey: 'exam',
+                        examId: ExamStore.current().id,
+                        course: CourseStore.current().id });
     }
 
 
