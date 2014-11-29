@@ -107,6 +107,7 @@ View.Course_Dashboard = React.createClass({
 
 });
 
+
 View.Course_Summary = React.createClass({
 
     render: function() {
