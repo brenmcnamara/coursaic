@@ -64,7 +64,8 @@ CAEvent.Name = {
     // Notify that the enrollment of the current
     // user has changed.
     DID_CHANGE_ENROLLMENT: 'DID_CHANGE_ENROLLMENT',
-    DID_CREATE_QUESTION: 'DID_CREATE_QUESTION'
+    DID_CREATE_QUESTION: 'DID_CREATE_QUESTION',
 
+    DID_CREATE_EXAM_RUN: 'DID_CREATE_EXAM_RUN'
 };
 

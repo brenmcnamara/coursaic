@@ -461,7 +461,8 @@ View.Course_Exam = React.createClass({
                     {
                         pageKey: 'exam',
                         examId: ExamStore.current().id,
-                        course: CourseStore.current().id });
+                        course: CourseStore.current().id
+                    });
     }
 
 

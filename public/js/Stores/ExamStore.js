@@ -127,7 +127,6 @@ var ExamStore = (function() {
      * @return {ExamRun} An exam run of the current exam.
      */
     StoreClass.prototype._generateExamRun = function() {
-        console.log("Generate exam run was called.");
         var MAX_QUESTION_COUNT = 30,
             // Make a copy of the array, since the array will be
             // modified by the randomization algorithm. Note that
@@ -142,20 +141,6 @@ var ExamStore = (function() {
         // TODO (brendan): Implement the randomization algorithm. For
         // now, just set the set of questions to all the questions available.
         randomQuestions = allQuestions;
-/*
-        if (allQuestions.length <= MAX_QUESTION_COUNT) {
-            randomQuestions = allQuestions;
-        }
-        else {
-            // Need to grab MAX_QUESTION_COUNT random questions
-            // from the set of questions.
-            for (i = 0; i < MAX_QUESTION_COUNT; ++i) {
-                // Grab a random question from the allQuestions list.
-                // Add that question to the randomQuestions array.
-                randomIndex = 
-            }
-        }
-*/
 
         return new ExamRun(randomQuestions);
     };
@@ -341,7 +326,6 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                console.log("Done waiting for course store");
                                 return self._fetchExamsForCourse(
                                         CourseStore.courseWithId(payload.course));
                             },
@@ -373,6 +357,7 @@ var ExamStore = (function() {
                                 // have to generate an exam run to use.
                                 if (payload.pageKey === 'exam') {
                                     self._examRun = self._generateExamRun();
+                                    self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM_RUN));
                                 }
                                 self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
                                                       { courseId: payload.course }));
