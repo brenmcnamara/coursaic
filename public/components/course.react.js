@@ -276,7 +276,7 @@ View.Exam_List = React.createClass({
                 }
                 return <View.Exam_List_Item key={ exam.id } exam={ exam } />
             }),
-            displayStyle = (selectedExamIndex === -1) ? "none" : "inline",
+            displayStyle = (selectedExamIndex === -1) ? "none" : "initial",
             selectedExamBarPixelPosition = (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) +
                                                                  PIXEL_SPACE_TO_FIRST_EXAM,
             selectionBarStyle = {
