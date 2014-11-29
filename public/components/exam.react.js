@@ -28,6 +28,7 @@ View.Exam_Form = React.createClass({
         return (
             <div className="exam">
                 <h1 className="exam__title">Exam 1</h1>
+                <View.Divide_Full />
                 <View.Exam_Form_Question_List />
                 <View.Exam_Form_Buttons />
             </div>
