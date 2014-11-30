@@ -148,7 +148,7 @@ var Dispatcher = (function() {
                 if (typeof callback !== 'function') {
                     throw new Error("Dispatcher will only register objects of type " +
                                     "'function' from actionHandler. Cannot register " +
-                                    name + " from store with index" + store.dispatcherIndex);
+                                    name + " from store with index " + store.dispatcherIndex);
                 }
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }

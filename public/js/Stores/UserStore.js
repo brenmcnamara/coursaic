@@ -163,6 +163,7 @@ var UserStore = (function() {
         var self = this;
         switch (name) {
         case Action.Name.PERFORM_LOAD:
+        case Action.Name.CANCEL_TAKE_EXAM:
             return function(payload) {
                 // TODO (brendan): Don't need to wrap this in a promise.
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])

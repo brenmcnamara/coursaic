@@ -277,6 +277,20 @@ var ExamStore = (function() {
 
 
     /**
+     * Indicates if the user is trying to cancel
+     * the current exam run.
+     *
+     * @method isCancelingExamRun
+     *
+     * @return {Boolean} True if the user is trying
+     *  to cancel the current exam run, false otherwise.
+     */
+    StoreClass.prototype.isCancelingExamRun = function() {
+        return ConfigStore.isCancelingExamRun();
+    };
+
+
+    /**
      * Get the question with the specified id. First,
      *  gets the proper exam, and then loops through
      *  the questions in the exam until it finds the
@@ -378,7 +392,7 @@ var ExamStore = (function() {
         case Action.Name.DISPLAY_EXAM:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -392,7 +406,7 @@ var ExamStore = (function() {
         case Action.Name.PERFORM_QUESTION_EDIT:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -409,7 +423,7 @@ var ExamStore = (function() {
         case Action.Name.SAVE_QUESTION_EDIT:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -447,7 +461,7 @@ var ExamStore = (function() {
         case Action.Name.ENTER_NEW_QUESTION_MODE:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -461,7 +475,7 @@ var ExamStore = (function() {
         case Action.Name.SAVE_QUESTION_NEW:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -624,6 +638,36 @@ var ExamStore = (function() {
                                 throw error;
                             }
                         );
+            };
+        case Action.Name.ENTER_CANCEL_TAKE_EXAM_MODE:
+            return function(payload) {
+                console.log("Calling enter cancel mode for exam store.");
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        console.log("Done waiting for config store.");
+                                        self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
+            };
+        case Action.Name.EXIT_CANCEL_TAKE_EXAM_MODE:
+        case Action.Name.CANCEL_TAKE_EXAM:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        console.log("Exiting mode");
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });            
             };
         default:
             return null;

@@ -269,15 +269,14 @@ View.Popup_Create_Exam = React.createClass({
 View.Popup_Delete_Question = React.createClass({
 
     render: function() {
-        return <View.Popup_Confirm question = { this.props.question }
-                                   header="Deleting Question"
+        return <View.Popup_Confirm header="Deleting Question"
                                    message="Are you sure you would like to delete this question?"
-                                   onYes= { this.onYes }
+                                   onYes={ this.onYes }
                                    onNo={ this.onNo } />
     },
 
 
-    onYes: function() {
+    onYes: function(event) {
         Action.send(Action.Name.DELETE_QUESTION,
             {
                 examId: ExamStore.current().id,
@@ -286,12 +285,36 @@ View.Popup_Delete_Question = React.createClass({
     },
 
 
-    onNo: function() {
+    onNo: function(event) {
         Action.send(Action.Name.CANCEL_DELETE_QUESTION_MODE,
             {
                 examId: ExamStore.current().id,
                 deleteQuestionId: ConfigStore.deleteQuestionId(),
             });
+    }
+
+
+});
+
+
+View.Popup_Cancel_Take_Exam = React.createClass({
+
+    render: function() {
+        return <View.Popup_Confirm header="Cancel Your Exam"
+                                   message="Are you sure you would like to cancel taking this exam?"
+                                   onYes={ this.onYes }
+                                   onNo={ this.onNo } />
+    },
+
+
+    onYes: function(event) {
+        Action.send(Action.Name.CANCEL_TAKE_EXAM,
+                    { examId: ExamStore.current().id });
+    },
+
+
+    onNo: function(event) {
+        Action.send(Action.Name.EXIT_CANCEL_TAKE_EXAM_MODE);
     }
 
 
