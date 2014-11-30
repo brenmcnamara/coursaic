@@ -40,6 +40,7 @@
 
 .header__logo {
     position: absolute;
+    cursor: pointer;
 
     width: 55px;
     height: 44px;
@@ -51,6 +52,7 @@
 
 .header__title {
     position: relative;
+    cursor: pointer;
     display: inline;
 
     left: 100px;

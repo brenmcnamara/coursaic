@@ -33,8 +33,8 @@ View.Header = React.createClass({
         }
         return (
             <header className={ headerType }>
-                <img className="header__logo" src="/img/logo-dark.png" />
-                <h1 className="header__title">Coursaic</h1>
+                <img onClick={ this.onClickLogo } className="header__logo" src="/img/logo-dark.png" />
+                <h1 onClick={ this.onClickText } className="header__title">Coursaic</h1>
                 <nav className="main-nav">
                     <div className="main-nav__item--clickable">
                         Logout
@@ -50,7 +50,21 @@ View.Header = React.createClass({
                 </div>
             </header>
         );
+    },
+
+
+    onClickLogo: function(event) {
+        Action.send(Action.Name.PERFORM_LOAD,
+                    {pageKey: 'home'})
+    },
+
+
+    onClickText: function(event) {
+        Action.send(Action.Name.PERFORM_LOAD,
+                    {pageKey: 'home'})
     }
+
+
 });
 
 
