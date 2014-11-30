@@ -206,22 +206,21 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
-            case Action.Name.ENTER_CANCEL_TAKE_EXAM_MODE:
+            case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
                 return function(payload) {
-                    console.log("Calling config store");
                     return new Promise(function(resolve, reject) {
                         Anchor.set({ 'cancelExam': 'true' }, { silent: true });
                         resolve();
                     });
                 };
-            case Action.Name.EXIT_CANCEL_TAKE_EXAM_MODE:
+            case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
                         Anchor.unset(['cancelExam'], { silent: true });
                         resolve();
                     });
                 };
-            case Action.Name.CANCEL_TAKE_EXAM:
+            case Action.Name.CANCEL_EXAM_RUN:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
                         Anchor.unset(['cancelExam'], { silent: true });

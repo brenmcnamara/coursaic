@@ -9,9 +9,8 @@
 View.Exam_Root = React.createClass({
 
     render: function() {
-        console.log("Rendering");
         var cancelExamPopup = (ExamStore.isCancelingExamRun()) ?
-                              (<View.Popup_Cancel_Take_Exam />) :
+                              (<View.Popup_Cancel_Exam_Run />) :
                               (null);
         return (
             <div className="main">
@@ -28,7 +27,6 @@ View.Exam_Root = React.createClass({
     },
 
     componentWillMount: function() {
-        console.log("Component will mount.");
         ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.onChange);
         ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.onChange);
     },
@@ -87,7 +85,6 @@ View.Exam_Form_Question_List = React.createClass({
     },
 
     componentWillMount: function() {
-        console.log("Will mount");
         ExamStore.addListener(CAEvent.Name.DID_CREATE_EXAM_RUN, this.onChange);
     },
 
@@ -157,7 +154,7 @@ View.Exam_Form_Buttons = React.createClass({
     },
 
     onClickCancel: function() {
-        Action.send(Action.Name.ENTER_CANCEL_TAKE_EXAM_MODE, { examId: ExamStore.current().id });
+        Action.send(Action.Name.ENTER_CANCEL_EXAM_RUN_MODE, { examId: ExamStore.current().id });
     }
 
 

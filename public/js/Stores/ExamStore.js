@@ -639,14 +639,12 @@ var ExamStore = (function() {
                             }
                         );
             };
-        case Action.Name.ENTER_CANCEL_TAKE_EXAM_MODE:
+        case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
             return function(payload) {
-                console.log("Calling enter cancel mode for exam store.");
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                                  .then(
                                     // Success.
                                     function() {
-                                        console.log("Done waiting for config store.");
                                         self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
                                     },
                                     // Error.
@@ -654,14 +652,13 @@ var ExamStore = (function() {
                                         throw error;
                                     });
             };
-        case Action.Name.EXIT_CANCEL_TAKE_EXAM_MODE:
-        case Action.Name.CANCEL_TAKE_EXAM:
+        case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
+        case Action.Name.CANCEL_EXAM_RUN:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                                  .then(
                                     // Success.
                                     function() {
-                                        console.log("Exiting mode");
                                         self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                                     },
                                     // Error.

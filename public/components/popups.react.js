@@ -297,7 +297,7 @@ View.Popup_Delete_Question = React.createClass({
 });
 
 
-View.Popup_Cancel_Take_Exam = React.createClass({
+View.Popup_Cancel_Exam_Run = React.createClass({
 
     render: function() {
         return <View.Popup_Confirm header="Cancel Your Exam"
@@ -308,13 +308,13 @@ View.Popup_Cancel_Take_Exam = React.createClass({
 
 
     onYes: function(event) {
-        Action.send(Action.Name.CANCEL_TAKE_EXAM,
+        Action.send(Action.Name.CANCEL_EXAM_RUN,
                     { examId: ExamStore.current().id });
     },
 
 
     onNo: function(event) {
-        Action.send(Action.Name.EXIT_CANCEL_TAKE_EXAM_MODE);
+        Action.send(Action.Name.EXIT_CANCEL_EXAM_RUN_MODE);
     }
 
 
