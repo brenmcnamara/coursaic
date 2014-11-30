@@ -291,6 +291,19 @@ var ExamStore = (function() {
 
 
     /**
+     * Indicates if the page is showing exam results.
+     *
+     * @method isShowingExamResults
+     *
+     * @return {Boolean} True if the current page is showing
+     *  exam results, false otherwise.
+     */
+    StoreClass.prototype.isShowingExamResults = function() {
+        return ConfigStore.isShowingExamResults();
+    };
+
+
+    /**
      * Get the question with the specified id. First,
      *  gets the proper exam, and then loops through
      *  the questions in the exam until it finds the
@@ -665,6 +678,27 @@ var ExamStore = (function() {
                                     function(error) {
                                         throw error;
                                     });            
+            };
+        case Action.Name.SUBMIT_EXAM_RUN:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        // Grade the exam and save it with the current exam run.
+                                        var prop, guesses = payload.guesses;
+                                        for (prop in guesses) {
+                                            // Prop is an index for the guess.
+                                            if (guesses.hasOwnProperty(prop)) {
+                                                self.currentExamRun.setGuess(prop, guesses[prop]);
+                                            }
+                                        }
+                                        self.emit(new CAEvent(CAEvent.Name.DID_GRADE_EXAM_RUN));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
             };
         default:
             return null;

@@ -182,6 +182,9 @@ var Course = Parse.Object.extend("Course", {
                                         var course;
                                         // Get the course if the course does not
                                         // already exist.
+                                        if (!payload.course) {
+                                            throw new Error("PERFORM_LOAD must provide course id in payload");
+                                        }
                                         if (!self.courseWithId(payload.course)) {
                                             // Don't have the course, need to fetch it.
                                             course = new Course();

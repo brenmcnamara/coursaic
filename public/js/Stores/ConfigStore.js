@@ -228,6 +228,13 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.SUBMIT_EXAM_RUN:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({'examResults': 'true'}, { silent: true });
+                        resolve();
+                    });
+                };
             default:
                 return null;
         }
@@ -348,6 +355,11 @@ var ConfigStore = (function() {
      */
      StoreClass.prototype.isCancelingExamRun = function() {
         return Anchor.hashMap().cancelExam === 'true';
+     };
+
+
+     StoreClass.prototype.isShowingExamResults = function() {
+        return Anchor.hashMap().examResults === 'true';
      };
 
 
