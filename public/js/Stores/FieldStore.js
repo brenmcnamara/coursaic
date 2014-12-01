@@ -34,23 +34,29 @@ var Field = Parse.Object.extend("Field"),
             switch (name) {
             case Action.Name.PERFORM_LOAD:
                 return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        // Get all the Fields.
-                        var query = new Parse.Query(Field);
-                        query.find({
-                            success: function(response) {
-                                response.forEach(function(field) {
-                                    // TODO (brendan): This is not equality safe.
-                                    self._fieldHash[field.id] = field;
-                                });
-                                resolve();
-                            },
+                    return Dispatcher.waitFor([UserStore.dispatcherIndex])
+                            
+                            .then(
+                                // Success.
+                                function() {
+                                    var query = new Parse.Query(Field);
+                                    query.find({
+                                        success: function(response) {
+                                            response.forEach(function(field) {
+                                                // TODO (brendan): This is not equality safe.
+                                                self._fieldHash[field.id] = field;
+                                            });
+                                        },
 
-                            error: function(error) {
-                                throw error;
-                            }
-                        });
-                    });
+                                        error: function(error) {
+                                            throw error;
+                                        }
+                                    });
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
                 };
             default:
                 return null;
