@@ -59,6 +59,16 @@ ul.exam__question-list {
   font-size: 1.1em;
 }
 
+.solution-item__explanation {
+  margin-top: 20px;
+}
+
+.solution-item__explanation > span:nth-child(1) {
+  text-decoration: underline;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 .question-item--multi-choice__options {
    padding-left: 30px;
 }

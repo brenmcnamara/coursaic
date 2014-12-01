@@ -166,6 +166,10 @@ View.Exam_Results_Solutions_List_Item = React.createClass({
                 <ul className="solution-item--multi-choice__options">
                     { options }
                 </ul>
+                <div className="solution-item__explanation">
+                    <span>Explanation:</span>
+                    <span> { question.get('explanation') }</span>
+                </div>
             </li>
         );
     }
