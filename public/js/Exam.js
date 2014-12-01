@@ -30,7 +30,7 @@ var
             this.attributes = this.parse(this.attributes);
         },
 
-        // TODO (brendan): Document this.
+        // TODO: Document this.
         getOptions: function() {
             // NOTE: This is assuming that the type
             // of the question is multiple choice. Should
@@ -39,12 +39,12 @@ var
             return JSON.parse(this.get('options'));
         },
 
-        // TODO (brendan): Document this.
+        // TODO: Document this.
         setOptions: function(options) {
             this.set('options', JSON.stringify(options));
         },
 
-        // TODO (brendan): Document this.
+        // TODO: Document this.
         isEditing: function(val) {
             // This is a getter
             if (arguments.length === 0) {

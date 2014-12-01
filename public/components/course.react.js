@@ -266,7 +266,7 @@ View.Course_Content_Nav = React.createClass({
 View.Exam_List = React.createClass({
 
     render: function() {
-        // TODO (brendan): Add a "No Exams" list item if there are no exams.
+        // TODO: Add a "No Exams" list item if there are no exams.
         var PIXEL_SPACE_BETWEEN_EXAMS = 28,
             PIXEL_SPACE_TO_FIRST_EXAM = 27,
             course = CourseStore.current(),
@@ -491,7 +491,7 @@ View.Course_Exam = React.createClass({
 View.Course_Exam_Questions = React.createClass({
 
     render: function() {
-        // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
+        // TODO: Consider breaking up DID_FETCH_EXAMS
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
@@ -633,7 +633,7 @@ View.Course_Exam_Question_Item = React.createClass({
     }, 
 
     render: function() {
-        // NOTE (brendan): This is hard-coded for multiple-choice questions.
+        // NOTE: This is hard-coded for multiple-choice questions.
         // Change this if adding other types of questions.
         var question = this.props.question,
             explanationStyle= {
@@ -800,7 +800,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                        <img onClick = { this.onSave }
                             className="question__icon--save"
                             src="/img/icons/save.png" /> :
-                        // TODO (brendan): Modify styling to fade out
+                        // TODO: Modify styling to fade out
                         // save button.
                         <img className="question__icon--save"
                              src="/img/icons/save.png" />;
@@ -851,7 +851,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                     });
         }
         else{
-            // TODO (brendan): Modify so that examId is
+            // TODO: Modify so that examId is
             // inside the questionMap.
             Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {
@@ -971,7 +971,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 });
 
 
-// TODO (brendan): Fix naming of these React classes to make them
+// TODO: Fix naming of these React classes to make them
 // shorter and more clear.
 View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 
@@ -1002,7 +1002,7 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
             listItems = this.props.options.map(function(option, index) {
                 var isCorrect = self.isCorrect(option),
                     key = self.props.questionId + '-' + index.toString();
-                // TODO (brendan): Shorten this line.
+                // TODO: Shorten this line.
                 return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing 
                                                               onChangeText={ self.onChangeText }
                                                               onChangeRadio={ self.onChangeRadio}

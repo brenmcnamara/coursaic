@@ -101,7 +101,7 @@ var Dispatcher = (function() {
             // these regerences can be used
             // for performing generic algorithms
             // over each store.
-            // TODO (brendan): Should have a way for UserStores
+            // TODO: Should have a way for UserStores
             // to get registered when the app is initialized.
             stores: [ConfigStore, CourseStore, UserStore, ExamStore, FieldStore],
             
@@ -183,7 +183,7 @@ var Dispatcher = (function() {
             promises = storeCalls.map(function(storeCall) {
                 var index = storeCall.index,
                     callback = storeCall.callback;
-                // TODO (brendan): Clean up unnecessary nested promises.
+                // TODO: Clean up unnecessary nested promises.
                 return new Promise(function(resolve, reject) {
                     callback(payload).then(
                         // On success
@@ -219,7 +219,7 @@ var Dispatcher = (function() {
                     );
                 });
             });
-            // TODO (brendan): Make better name for promises. 
+            // TODO: Make better name for promises. 
             Promise.all(promises).then(
                 // Success callback
                 function() {
