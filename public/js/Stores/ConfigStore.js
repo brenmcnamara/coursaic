@@ -51,6 +51,8 @@ var ConfigStore = (function() {
                             throw new Error("Page loaded without pageKey specified.");
                         }
                         if (payload.updateHash) {
+                            // TODO (brendan): This is very hacky.
+                            Anchor.unset(['examResults'], { silent: true });
                             switch (payload.pageKey) {
                             // All hash changes here should be set to silent. Non-silent
                             // hash changes may be picked up and converted to another

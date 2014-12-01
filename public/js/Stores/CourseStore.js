@@ -593,7 +593,7 @@ var Course = Parse.Object.extend("Course", {
             // TODO (brendan): Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
-            return (ConfigStore.pageKey() === 'course') ?
+            return (ConfigStore.courseId()) ?
                     this.courseWithId(ConfigStore.courseId()) :
                     null;
         };

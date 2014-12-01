@@ -15,6 +15,7 @@ View.Exam_Root = React.createClass({
                 <div className="main">
                     <View.Header isOpaque={ false } />
                     <View.Header_Fill isOpaque={ false } />
+                    <View.Back_Button />
                     <View.Exam_Results />
                 </div>
             );
@@ -50,6 +51,29 @@ View.Exam_Root = React.createClass({
         ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.onChange);
         ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.onChange);
         ExamStore.removeListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
+    }
+
+
+});
+
+
+
+View.Back_Button = React.createClass({
+
+    render: function() {
+        return (
+            <button onClick={ this.onClick }
+                    type="button"
+                    className="exam-result-back button">
+                Back to Course
+            </button>
+        );
+    },
+
+
+    onClick: function() {
+        Action.send(Action.Name.PERFORM_LOAD, { pageKey: 'course',
+                                                course: CourseStore.current().id });
     }
 
 
@@ -117,7 +141,6 @@ View.Exam_Results_Solutions_List = React.createClass({
 View.Exam_Results_Solutions_List_Item = React.createClass({
 
     render: function() {
-        console.log(JSON.stringify(this.props));
         var self = this,
             question = this.props.question,
             options = question.getOptions().map(function(option, index) {
