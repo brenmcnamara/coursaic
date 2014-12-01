@@ -47,8 +47,8 @@ View.MainOption_CreateCourse = React.createClass({
 
                 <img src="/img/icons/book.png"
                      style={ createCourseStyle }
-                     className="main-options__item__icon" />
-                <div className="main-options__item__text">Create Course</div>
+                     className="main-options__item__icon--clickable" />
+                <div className="main-options__item__text--clickable">Create Course</div>
             </li>
         );
     },
