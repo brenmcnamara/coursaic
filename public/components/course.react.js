@@ -227,36 +227,82 @@ View.Course_Content = React.createClass({
 
 View.Course_Content_Nav = React.createClass({
 
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+
     render: function() {
         var examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
             };
+        if(!this.state.isEditing) {
+            return (
+                <div className="content__nav">
+                    <ul className="main-options">
+                        <li className="main-options__item">
+                            <img src="/img/icons/exam.png"
+                                 style={ examIconStyle }
+                                 className="main-options__item__icon--clickable" />
 
-        return (
-            <div className="content__nav">
-                <ul className="main-options">
-                    <li className="main-options__item">
-                        <img src="/img/icons/exam.png"
-                             style={ examIconStyle }
-                             className="main-options__item__icon" />
+                            <div onClick={ this.onClickCreateExam }
+                                 className="main-options__item__text--clickable">Create Exam</div>
+                        </li>
+                    </ul>
 
-                        <div onClick={ this.onClickCreateExam }
-                             className="main-options__item__text">Create Exam</div>
-                    </li>
-                </ul>
+                    <div className="divide"></div>
 
-                <div className="divide"></div>
+                    <View.Exam_List />
 
-                <View.Exam_List />
+                </div>
+        );}
+        else {
+            return (
+                <div className="content__nav">
+                    <ul className="main-options">
+                        <li className="main-options__item">
+                            <img src="/img/icons/exam.png"
+                                 style={ examIconStyle }
+                                 className="main-options__item__icon--unclickable" />
 
-            </div>
-        );
+                            <div className="main-options__item__text--unclickable">Create Exam</div>
+                        </li>
+                    </ul>
+
+                    <div className="divide"></div>
+
+                    <View.Exam_List />
+
+                </div>
+        );}  
+    },
+
+    
+    onClickCreateExam: function(event) {
+        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
     },
 
 
-    onClickCreateExam: function(event) {
-        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 

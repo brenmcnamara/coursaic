@@ -246,10 +246,10 @@ ul.main-options {
     position: relative;
     height: 35px;
     margin: 0px 0px 4px 0px;
-    cursor: pointer;
 }
 
-.main-options__item__icon {
+.main-options__item__icon--clickable,
+.main-options__item__icon--unclickable {
     /* Note that height and margin
      * should be specified inline for each
      * image
@@ -259,9 +259,18 @@ ul.main-options {
 
 }
 
-.main-options__item__text {
+.main-options__item__icon--clickable {
+    cursor: pointer;
+}
+
+.main-options__item__text--clickable,
+.main-options__item__text--unclickable {
     line-height: 35px;
     margin-left: 45px;
+}
+
+.main-options__item__text--clickable {
+    cursor: pointer;
 }
 
 /* -------------------- *\

@@ -61,6 +61,11 @@ var ConfigStore = (function() {
                                 Anchor.set({pageKey: 'course', course: payload.course},
                                            {silent: true});
                                 break;
+                            case 'home':
+                                Anchor.set({pageKey: 'home'},
+                                           {silent: true});
+                                Anchor.unset(['examId'], { silent: true });
+                                break;
                             default:
                                 Anchor.set({pageKey: payload.pageKey},
                                            {silent: true});
