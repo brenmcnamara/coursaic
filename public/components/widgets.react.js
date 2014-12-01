@@ -125,6 +125,17 @@ View.Divide = React.createClass({
 
 });
 
+View.Divide_Full = React.createClass({
+
+    render: function() {
+        return (
+            <div className="divide--full"></div>
+        );
+    }
+
+
+});
+
 // TODO (brendan): Move this to home page.
 /**
  * CourseGrid

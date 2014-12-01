@@ -22,15 +22,10 @@ View.Header = React.createClass({
     
     render: function() {
         var user = UserStore.current(),
-            headerType;
+            headerType = (this.props.isOpaque) ?
+                         ("header") :
+                         ("header--fill");
 
-        switch (ConfigStore.pageKey()) {
-        case 'course':
-            headerType = "header--fill";
-            break;
-        default:
-            headerType = "header";
-        }
         return (
             <header className={ headerType }>
                 <img onClick={ this.onClickLogo } className="header__logo" src="/img/logo-dark.png" />
@@ -78,14 +73,9 @@ View.Header = React.createClass({
 View.Header_Fill = React.createClass({
     
     render: function() {
-        var fillType;
-        switch (ConfigStore.pageKey()) {
-        case 'course':
-            fillType = "header-offset--fill";
-            break;
-        default:
-            fillType = "header-offset";
-        }
+        var fillType = (this.props.isOpaque) ?
+                       ("header-offset") :
+                       ("header-offset--fill");
         return (
             <div className={ fillType }></div>
         );

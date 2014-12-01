@@ -167,6 +167,12 @@ var Course = Parse.Object.extend("Course", {
                                         throw error;
                                     });
                     case 'course':
+                    case 'exam':
+                        // Wait for the User to be loaded.
+                        // Load all the information for the course.
+                        // NOTE: This is needed by the exam page key so that
+                        // the exam store can load the exam and question related
+                        // to the single exam of the course.
                         // Just make sure the single course is loaded.
                         return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
                                                    UserStore.dispatcherIndex])
@@ -176,6 +182,9 @@ var Course = Parse.Object.extend("Course", {
                                         var course;
                                         // Get the course if the course does not
                                         // already exist.
+                                        if (!payload.course) {
+                                            throw new Error("PERFORM_LOAD must provide course id in payload");
+                                        }
                                         if (!self.courseWithId(payload.course)) {
                                             // Don't have the course, need to fetch it.
                                             course = new Course();
@@ -188,7 +197,8 @@ var Course = Parse.Object.extend("Course", {
                                     function(error) {
                                         throw error;
                                     }
-                                )
+                                );
+
                     default:
                         return new Promise(function(resolve, reject) {
                             resolve();
@@ -583,7 +593,7 @@ var Course = Parse.Object.extend("Course", {
             // TODO (brendan): Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
-            return (ConfigStore.pageKey() === 'course') ?
+            return (ConfigStore.courseId()) ?
                     this.courseWithId(ConfigStore.courseId()) :
                     null;
         };

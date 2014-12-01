@@ -119,6 +119,34 @@ var ExamStore = (function() {
 
 
     /**
+     * Generate an exam run for the current exam.
+     *
+     * @method _generateExamRun
+     * @private
+     *
+     * @return {ExamRun} An exam run of the current exam.
+     */
+    StoreClass.prototype._generateExamRun = function() {
+        var MAX_QUESTION_COUNT = 30,
+            // Make a copy of the array, since the array will be
+            // modified by the randomization algorithm. Note that
+            // the array is modified, but the questions inside the
+            // array are not.
+            allQuestions = this.questionsForExam(this.current()).slice(),
+            // An array of random questions pulled to be in the exam run.
+            // The maximum number of random questions is equal to the exam
+            // run.
+            randomQuestions, i, randomIndex;
+
+        // TODO (brendan): Implement the randomization algorithm. For
+        // now, just set the set of questions to all the questions available.
+        randomQuestions = allQuestions;
+
+        return new ExamRun(randomQuestions);
+    };
+
+
+    /**
      * Get the id of the question being deleted.
      *
      * @method deleteQuestionId
@@ -235,6 +263,47 @@ var ExamStore = (function() {
 
 
     /**
+     * Get the current exam run for the run that the user
+     * is taking. Note that this property is only applicable
+     * to certain pages.
+     *
+     * @method currentExamRun
+     *
+     * @return {ExamRun} The current exam run for the page.
+     */
+    StoreClass.prototype.currentExamRun = function() {
+        return this._examRun || null;
+    };
+
+
+    /**
+     * Indicates if the user is trying to cancel
+     * the current exam run.
+     *
+     * @method isCancelingExamRun
+     *
+     * @return {Boolean} True if the user is trying
+     *  to cancel the current exam run, false otherwise.
+     */
+    StoreClass.prototype.isCancelingExamRun = function() {
+        return ConfigStore.isCancelingExamRun();
+    };
+
+
+    /**
+     * Indicates if the page is showing exam results.
+     *
+     * @method isShowingExamResults
+     *
+     * @return {Boolean} True if the current page is showing
+     *  exam results, false otherwise.
+     */
+    StoreClass.prototype.isShowingExamResults = function() {
+        return ConfigStore.isShowingExamResults();
+    };
+
+
+    /**
      * Get the question with the specified id. First,
      *  gets the proper exam, and then loops through
      *  the questions in the exam until it finds the
@@ -272,48 +341,60 @@ var ExamStore = (function() {
             return function(payload) {
                 // The exams are loaded only when loading a course
                 // page.
-                if (payload.pageKey === 'course') {
-                    return Dispatcher.waitFor([CourseStore.dispatcherIndex])
-                            // After the CourseStore has finished.
-                            .then(
-                                // Success.
-                                function() {
-                                    return self._fetchExamsForCourse(
-                                            CourseStore.courseWithId(payload.course));
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                })
-                            // After the exams have been fetched for the course.
-                            .then(
-                                // Success.
-                                function(exams) {
-                                    // Map the exams in the course into
-                                    // a list of promises.
-                                    return Promise.all(exams.map(function(exam) {
-                                        // Load all the data in the exam.
-                                        return self._loadExam(exam);
-                                    }));
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                })
-                            // After all the exams have been loaded.
-                            .then(
-                                // Success.
-                                function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
-                                                          {courseId: payload.course}));
-                                },
+                switch (payload.pageKey) {
 
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-                }
-                else {
+                case 'course':
+                case 'exam':
+                    // Wait for the course to get loaded, then
+                    // load all the exams for the course and questions
+                    // for the exam.
+                    return Dispatcher.waitFor([CourseStore.dispatcherIndex])
+                        // After the CourseStore has finished.
+                        .then(
+                            // Success.
+                            function() {
+                                return self._fetchExamsForCourse(
+                                        CourseStore.courseWithId(payload.course));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                        // After the exams have been fetched for the course.
+                        .then(
+                            // Success.
+                            function(exams) {
+                                // Map the exams in the course into
+                                // a list of promises.
+                                return Promise.all(exams.map(function(exam) {
+                                    // Load all the data in the exam.
+                                    return self._loadExam(exam);
+                                }));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                        // After all the exams have been loaded.
+                        .then(
+                            // Success.
+                            function() {
+                                // NOTE: This case is for both exam
+                                // and courses. In the exam case, we
+                                // have to generate an exam run to use.
+                                if (payload.pageKey === 'exam') {
+                                    self._examRun = self._generateExamRun();
+                                    self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM_RUN));
+                                }
+                                self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
+                                                      { courseId: payload.course }));
+                            },
+
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
+                default:
                     return new Promise(function(resolve) {
                         // Exam store does not need to do anything
                         // when rendering page that is non-course.
@@ -324,7 +405,7 @@ var ExamStore = (function() {
         case Action.Name.DISPLAY_EXAM:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -338,7 +419,7 @@ var ExamStore = (function() {
         case Action.Name.PERFORM_QUESTION_EDIT:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -355,7 +436,7 @@ var ExamStore = (function() {
         case Action.Name.SAVE_QUESTION_EDIT:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -393,7 +474,7 @@ var ExamStore = (function() {
         case Action.Name.ENTER_NEW_QUESTION_MODE:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -407,7 +488,7 @@ var ExamStore = (function() {
         case Action.Name.SAVE_QUESTION_NEW:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                        //Done waiting for the ConfigStore to update ExamHash
+                        // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
                             function() {
@@ -570,6 +651,54 @@ var ExamStore = (function() {
                                 throw error;
                             }
                         );
+            };
+        case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
+            };
+        case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
+        case Action.Name.CANCEL_EXAM_RUN:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });            
+            };
+        case Action.Name.SUBMIT_EXAM_RUN:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        // Grade the exam and save it with the current exam run.
+                                        var prop, guesses = payload.guesses;
+                                        for (prop in guesses) {
+                                            // Prop is an index for the guess.
+                                            if (guesses.hasOwnProperty(prop)) {
+                                                self.currentExamRun().setGuess(+prop, guesses[+prop]);
+                                            }
+                                        }
+                                        self.emit(new CAEvent(CAEvent.Name.DID_GRADE_EXAM_RUN));
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
             };
         default:
             return null;

@@ -52,15 +52,18 @@ View.Util = {
 };
 
 View.render = function(key, params) {
+    View._unmountRoot();
     switch (key) {
         case 'home':
-            View._unmountRoot();
             React.renderComponent(View.Home_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
         case 'course':
-            View._unmountRoot();
             React.renderComponent(View.Course_Root(params),
+                                  document.getElementsByTagName('body')[0]);
+            break;
+        case 'exam':
+            React.renderComponent(View.Exam_Root(params),
                                   document.getElementsByTagName('body')[0]);
             break;
         default:
@@ -102,7 +105,7 @@ View._unmountRoot = function() {
 View._onLoad = function(event) {
     switch (ConfigStore.pageKey()) {
     case 'course':
-        View.render('course', {courseId: ConfigStore.courseId()});
+        View.render('course', { courseId: ConfigStore.courseId() });
         break;
     default:
         View.render(ConfigStore.pageKey());

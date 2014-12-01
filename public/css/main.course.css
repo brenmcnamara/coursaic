@@ -78,15 +78,20 @@ ul.dashboard__course-logistics {
           Exam
 \* -------------------- */
 
-.exam {
+.take-exam-button {
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.exam-info {
     margin-top: 5px;
 }
 
-.exam__creator-info__pic {
+.exam-info__creator-info__pic {
     float: left;
 }
 
-.exam__creator-info::after {
+.exam-info__creator-info::after {
     content: '.';
     visibility: hidden;
     clear: both;
@@ -95,9 +100,9 @@ ul.dashboard__course-logistics {
     height: 0px;
 }
 
-.exam__creator-info { }
+.exam-info__creator-info { }
 
-.exam__creator-info__text {
+.exam-info__creator-info__text {
     display: inline-block;
     margin-left: 5px;
     /* Note: This is dependent on the height of the picture */
@@ -105,11 +110,11 @@ ul.dashboard__course-logistics {
 
 }
 
-.exam__my-questions {
+.exam-info__my-questions {
     margin: 40px 0px 0px 0px;
 }
 
-.exam__my-questions__add-button {
+.exam-info__my-questions__add-button {
     margin-left: 10px;
     vertical-align: middle;
 }

@@ -148,7 +148,7 @@ var Dispatcher = (function() {
                 if (typeof callback !== 'function') {
                     throw new Error("Dispatcher will only register objects of type " +
                                     "'function' from actionHandler. Cannot register " +
-                                    name + " from store with index" + store.dispatcherIndex);
+                                    name + " from store with index " + store.dispatcherIndex);
                 }
                 memo.push({'index': store.dispatcherIndex, 'callback': callback});
             }
@@ -161,7 +161,8 @@ var Dispatcher = (function() {
 
     dispatch = function(name, payload) {
         // Get the callbacks for the action.
-        var storeCalls = stateMap.actionHash[name],
+        var self = this,
+            storeCalls = stateMap.actionHash[name],
             promises;
 
         if (!storeCalls) {
@@ -172,11 +173,12 @@ var Dispatcher = (function() {
             throw new Error("Dispatcher trying to dispatch " + name +
                             " while an action is already dispatching.");
         }
+
         // Lock the dispatcher before doing anything.
         stateMap.locked = true;
+        this._currentAction = name;
         // Get all the promises that are produced
         // by the functions.
-        console.log("Number of store calls: " + storeCalls.length);
         if (storeCalls.length > 0) {
             promises = storeCalls.map(function(storeCall) {
                 var index = storeCall.index,
@@ -222,16 +224,19 @@ var Dispatcher = (function() {
                 // Success callback
                 function() {
                     stateMap.locked = false;
+                    self._currentAction = null;
                 },
                 // Failure callback
                 function(err) {
                     stateMap.locked =  false;
+                    self._currentAction = null;
                     console.error(err);
                     throw err;
                 });
         }
         else {
             stateMap.locked = false;
+            this._currentAction = null;
         }
     };
 

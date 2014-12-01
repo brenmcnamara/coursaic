@@ -51,6 +51,8 @@ var ConfigStore = (function() {
                             throw new Error("Page loaded without pageKey specified.");
                         }
                         if (payload.updateHash) {
+                            // TODO (brendan): This is very hacky.
+                            Anchor.unset(['examResults'], { silent: true });
                             switch (payload.pageKey) {
                             // All hash changes here should be set to silent. Non-silent
                             // hash changes may be picked up and converted to another
@@ -115,7 +117,7 @@ var ConfigStore = (function() {
                             throw new Error("Trying to edit question without any question");
                         }
                         Anchor.set({pageKey: 'course', questionEditId: payload.questionId},
-                                   {silent: true});
+                                   { silent: true });
                         resolve();
                     });
                 };
@@ -128,7 +130,7 @@ var ConfigStore = (function() {
                             throw new Error("Trying to save question without any question");
                         }
                         Anchor.unset(["questionEditId"],
-                                   {silent: true});
+                                     { silent: true });
                         resolve();
                     });
                 };
@@ -195,14 +197,43 @@ var ConfigStore = (function() {
             case Action.Name.CREATE_EXAM:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
-                        Anchor.unset(['createExam']);
+                        Anchor.unset(['createExam'], { silent: true });
                         resolve();
                     });
                 };
             case Action.Name.CANCEL_CREATE_EXAM:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
-                        Anchor.unset(['createExam']);
+                        Anchor.unset(['createExam'], { silent: true });
+                        resolve();
+                    });
+                };
+            case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({ 'cancelExam': 'true' }, { silent: true });
+                        resolve();
+                    });
+                };
+            case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['cancelExam'], { silent: true });
+                        resolve();
+                    });
+                };
+            case Action.Name.CANCEL_EXAM_RUN:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['cancelExam'], { silent: true });
+                        Anchor.set({'pageKey': 'course'}, { silent: true });
+                        resolve();
+                    });
+                };
+            case Action.Name.SUBMIT_EXAM_RUN:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.set({'examResults': 'true'}, { silent: true });
                         resolve();
                     });
                 };
@@ -313,6 +344,25 @@ var ConfigStore = (function() {
     StoreClass.prototype.isCreatingExam = function() {
         return Anchor.hashMap().createExam === 'true';
     };
+
+
+    /**
+     * Determine if the hash specifies that a class
+     * is in the process of being canceled.
+     *
+     * @method isCancelingExamRun
+     *
+     * @return {Boolean} True if an exam run is being
+     *  canceled, false otherwise.
+     */
+     StoreClass.prototype.isCancelingExamRun = function() {
+        return Anchor.hashMap().cancelExam === 'true';
+     };
+
+
+     StoreClass.prototype.isShowingExamResults = function() {
+        return Anchor.hashMap().examResults === 'true';
+     };
 
 
     return new StoreClass();

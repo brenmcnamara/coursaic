@@ -29,11 +29,20 @@
 /* The dividing line between
  * other elements
  */
-.divide {
+
+.divide,
+.divide--full {
     background: #F5A623;
     height: 2px;
-    width: 80%;
     margin: 10px auto;
+}
+
+.divide {
+    width: 80%;
+}
+
+.divide--full {
+    width: 100%;
 }
 
 /* -------------------- *\
@@ -65,9 +74,8 @@
     margin: 15px 0px 0px 0px;
     margin-top: 15px;
 
-    /* TODO: Move this to text css */
     font-size: 40px;
-    /* TODO: consistent coloring */
+    font-weight: bold;
     color: #444;
 }
 

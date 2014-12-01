@@ -80,7 +80,97 @@ var
      *
      * @class Exam
      */
-    Exam = Parse.Object.extend("Exam");
+    Exam = Parse.Object.extend("Exam"),
+
+
+    /**
+     * A class that represents an instance of
+     * an exam that someone can take.
+     *
+     * @class ExamRun
+     * @constructor
+     *
+     * @param questions {Array} An array of questions
+     *  to be added to the current exam run.
+     */
+    ExamRun = function(questions) {
+        this._questions = questions;
+        // A psuedo-array representing the
+        // guesses that the user submits. Note
+        // that the user is not required to submit
+        // a guess for each question, but any questions
+        // without a guess will evaluate to incorrect.
+        this._guesses = {length: this._questions.length};
+    };
+
+
+/**
+ * Get the list of questions associated with the
+ * exam.
+ *
+ * @method questions
+ *
+ * @return {Array} An array of question objects
+ *  that are part of the ExamRun.
+ */
+ExamRun.prototype.questions = function() {
+    return this._questions;
+};
+
+
+/**
+ * Get the guess for a question at a particular
+ * index.
+ *
+ * @method guessAtIndex
+ *
+ * @return {String} The guess for a particular question,
+ *  or null if no guess was submited.
+ */
+ExamRun.prototype.guessAtIndex = function(index) {
+    return this._guesses[index] || null;
+};
+
+
+/**
+ * Set a guess for a particular question in the exam
+ * run.
+ *
+ * @method setGuess
+ *
+ * @param questionIndex {Number} The index of the question
+ *  to set a guess for. This is the index of the question
+ *  inside the questions array.
+ *
+ * @param guess {String} The guess to the solution for the
+ *  question.
+ */
+ExamRun.prototype.setGuess = function(questionIndex, guess) {
+    this._guesses[questionIndex] = guess;
+};
+
+
+/**
+ * Grade the submissions for the current exam run.
+ *
+ * @method grade
+ *
+ * @return {Number} A grade on the ExamRun, as a decimal
+ *  number from 0 to 1. 0 indicates everything is incorrect,
+ *  1 indicates everything is correct. If there are no questions
+ *  in the exam run, this will always return 0.
+ */
+ExamRun.prototype.grade = function() {
+    var questions = this.questions(),
+        questionCount = questions.length,
+        correctCount = [].reduce.call(this._guesses, function(memo, guess, index) {
+            return (questions[index].isCorrect(guess)) ? memo + 1 : memo;
+        }, 0);
+    if (questionCount === 0) {
+        return 0;
+    }
+    return correctCount / questionCount;
+};
 
 
 /**

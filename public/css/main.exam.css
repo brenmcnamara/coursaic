@@ -1,0 +1,102 @@
+/*
+ * main.exam.css
+ *
+ * Styling for the exam page.
+ */
+
+.exam,
+.exam-run-results {
+  margin: 0 50px 0 30px;  
+}
+
+.exam-result-back {
+  position: absolute;
+  top: 90px;
+  right: 50px;
+}
+
+
+.exam__title {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.exam__button-wrapper {
+  margin-bottom: 50px;
+}
+
+.exam-run-results__list,
+.exam__question-list {
+  margin: 25px 0 0 20px;
+  padding: 0;
+}
+
+ul.exam-run-results__list,
+ul.exam__question-list {
+  list-style: decimal;
+}
+
+.exam-run-results__score {
+  font-weight: bold;
+  color: #888;
+}
+
+.exam-run-results__score__percent {
+  color: #4A90E2;
+}
+
+.solution-item,
+.solution-item--multi-choice,
+.question-item,
+.question-item--multi-choice {
+  margin: 0 0 30px 10px;
+}
+
+.solution-item__question,
+.question-item__question {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.solution-item__explanation {
+  margin-top: 20px;
+}
+
+.solution-item__explanation > span:nth-child(1) {
+  text-decoration: underline;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.question-item--multi-choice__options {
+   padding-left: 30px;
+}
+
+ul.solution-item--multi-choice__options {
+  list-style: upper-alpha;  
+}
+
+ul.question-item--multi-choice__options {
+  list-style: none;
+}
+
+.solution-item--multi-choice__options__item--correct,
+.solution-item--multi-choice__options__item--incorrect,
+.solution-item--multi-choice__options__item,
+.question-item--multi-choice__options__item {
+  margin: 10px 0px;
+}
+
+.solution-item--multi-choice__options__item--correct {
+  color: #4A90E2;
+}
+
+.solution-item--multi-choice__options__item--incorrect {
+  color: #e34d2f;  
+}
+
+.question-item--multi-choice__options__item > input {
+  margin-right: 10px;
+}
+
