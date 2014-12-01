@@ -138,7 +138,7 @@ var ExamStore = (function() {
             // run.
             randomQuestions, i, randomIndex;
 
-        // TODO (brendan): Implement the randomization algorithm. For
+        // TODO: Implement the randomization algorithm. For
         // now, just set the set of questions to all the questions available.
         randomQuestions = allQuestions;
 
@@ -610,7 +610,7 @@ var ExamStore = (function() {
                         .then(
                             // Success.
                             function() {
-                                // TODO (brendan):
+                                // TODO:
                                 // Save the question.
                                 var examMap = payload.examMap,
                                     exam = new Exam();

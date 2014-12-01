@@ -51,7 +51,7 @@ var ConfigStore = (function() {
                             throw new Error("Page loaded without pageKey specified.");
                         }
                         if (payload.updateHash) {
-                            // TODO (brendan): This is very hacky.
+                            // TODO: This is very hacky.
                             Anchor.unset(['examResults'], { silent: true });
                             switch (payload.pageKey) {
                             // All hash changes here should be set to silent. Non-silent
@@ -91,7 +91,7 @@ var ConfigStore = (function() {
                     });
                 };
             case Action.Name.CREATE_COURSE:
-                // TODO (brendan): Make sure that the app is in
+                // TODO: Make sure that the app is in
                 // createCourse mode in the first place.
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
@@ -100,7 +100,7 @@ var ConfigStore = (function() {
                     });
                 };
             case Action.Name.CANCEL_CREATE_COURSE:
-                // TODO (brendan): Make sure that the app is
+                // TODO: Make sure that the app is
                 // in create course mode in the first place.
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
