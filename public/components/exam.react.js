@@ -63,6 +63,7 @@ View.Exam_Results = React.createClass({
         return (
             <div className="exam-run-results">
                 <h1 className="exam__title">{ exam.get('name') }</h1>
+                <View.Exam_Score />
                 <View.Divide_Full />
                 <View.Exam_Results_Solutions_List />
             </div>
@@ -70,6 +71,23 @@ View.Exam_Results = React.createClass({
     }
 
 
+});
+
+
+View.Exam_Score = React.createClass({
+
+    render: function() {
+        var examRun = ExamStore.currentExamRun(),
+            // TODO (brendan): Add some formatter for this.
+            percentage = Math.floor(examRun.grade() * 100);
+
+        return (
+            <div className="exam-run-results__score">
+                You scored <span className="exam-run-results__score__percent">{ percentage }%</span>
+            </div>
+        );        
+    }
+    
 });
 
 

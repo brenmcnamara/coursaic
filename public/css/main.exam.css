@@ -29,6 +29,15 @@ ul.exam__question-list {
   list-style: decimal;
 }
 
+.exam-run-results__score {
+  font-weight: bold;
+  color: #888;
+}
+
+.exam-run-results__score__percent {
+  color: #4A90E2;
+}
+
 .solution-item,
 .solution-item--multi-choice,
 .question-item,
