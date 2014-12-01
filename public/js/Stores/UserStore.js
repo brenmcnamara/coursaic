@@ -12,14 +12,17 @@
 /*global Parse, Action, CAEvent, Store */
 
 
-/**
- * The Store that manages all user data as
- * well as login and logout operations.
- *
- * @module Store
- * @class UserStore
- */
-var UserStore = (function() {
+
+var School = Parse.Object.extend("School"),
+
+    /**
+     * The Store that manages all user data as
+     * well as login and logout operations.
+     *
+     * @module Store
+     * @class UserStore
+     */
+    UserStore = (function() {
 
     var StoreClass = function() {
         this.dispatcherIndex = 3;
@@ -52,12 +55,18 @@ var UserStore = (function() {
                     // Note: This information might change. Current implementation
                     // assumes this never changes.
                     params = {fields: 'first_name,last_name,picture.type(square)'};
-                    // TODO: Make sure to handle errors coming back from
+                    // TODO (brendan): Make sure to handle errors coming back from
                     // the facebook api.
                     FB.api("/me", params, function(response) {
+                        var school = new School();
+                        // TODO (brendan): Temporary hard-coding of UPenn.
+                        // This should be removed.
+                        school.id = "rQIGXlBeyE";
                         user.set("firstName", response.first_name);
                         user.set("lastName", response.last_name);
                         user.set("photoUrl", response.picture.data.url);
+                        user.set("school", school);
+
                         // Save to the parse database. Response of save
                         // is not being reaped, might want to change this later.
                         user.save();
