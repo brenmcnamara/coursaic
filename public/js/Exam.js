@@ -119,6 +119,20 @@ ExamRun.prototype.questions = function() {
 
 
 /**
+ * Get the guess for a question at a particular
+ * index.
+ *
+ * @method guessAtIndex
+ *
+ * @return {String} The guess for a particular question,
+ *  or null if no guess was submited.
+ */
+ExamRun.prototype.guessAtIndex = function(index) {
+    return this._guesses[index] || null;
+};
+
+
+/**
  * Set a guess for a particular question in the exam
  * run.
  *

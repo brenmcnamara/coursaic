@@ -11,7 +11,13 @@ View.Exam_Root = React.createClass({
     render: function() {
         var cancelExamPopup;
         if (ExamStore.isShowingExamResults()) {
-            return <div>Hello from results page!</div>
+            return (
+                <div className="main">
+                    <View.Header isOpaque={ false } />
+                    <View.Header_Fill isOpaque={ false } />
+                    <View.Exam_Results />
+                </div>
+            );
         }
         else {
             cancelExamPopup = (ExamStore.isCancelingExamRun()) ?
@@ -44,6 +50,106 @@ View.Exam_Root = React.createClass({
         ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.onChange);
         ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.onChange);
         ExamStore.removeListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
+    }
+
+
+});
+
+
+View.Exam_Results = React.createClass({
+
+    render: function() {
+        var exam = ExamStore.current();
+        return (
+            <div className="exam-run-results">
+                <h1 className="exam__title">{ exam.get('name') }</h1>
+                <View.Divide_Full />
+                <View.Exam_Results_Solutions_List />
+            </div>
+        );
+    }
+
+
+});
+
+
+View.Exam_Results_Solutions_List = React.createClass({
+
+    render: function() {
+        var examRun = ExamStore.currentExamRun(),
+            solutions = examRun.questions().map(function(question, index) {
+                var guess = examRun.guessAtIndex(index),
+                    key = question.id + "-" + index.toString();
+                return <View.Exam_Results_Solutions_List_Item question={ question }
+                                                              guess={ guess }
+                                                              key={ key } />;
+            });
+
+        return (
+            <ul className="exam-run-results__list">{ solutions }</ul>
+        );
+    }
+
+
+});
+
+
+// TODO (brendan): This item is mutli-choice specific,
+// should change the name to specify that.
+View.Exam_Results_Solutions_List_Item = React.createClass({
+
+    render: function() {
+        console.log(JSON.stringify(this.props));
+        var self = this,
+            question = this.props.question,
+            options = question.getOptions().map(function(option, index) {
+                var key = question.id + "-option-" + index.toString();
+                if (question.isCorrect(option)) {
+                    return <View.Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
+                                                                               option={ option }
+                                                                               isCorrect={ true } />;
+                }
+                else if (option === self.props.guess) {
+                    return <View.Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
+                                                                               isIncorrect={ true }
+                                                                               option={ option } />; 
+                }
+                else {
+                    return <View.Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
+                                                                               option={ option } />
+                }
+            });
+        return (
+            <li className="solution-item--multi-choice">
+                <div className="solution-item__question">{ question.get('question') }</div>
+                <ul className="solution-item--multi-choice__options">
+                    { options }
+                </ul>
+            </li>
+        );
+    }
+
+
+});
+
+
+View.Exam_Results_Solutions_List_Multi_Choice_Item = React.createClass({
+
+    render: function() {
+        var itemType;
+        if (this.props.isIncorrect) {
+            itemType = "solution-item--multi-choice__options__item--incorrect";
+        }
+        else if (this.props.isCorrect) {
+
+            itemType = "solution-item--multi-choice__options__item--correct";
+        }
+        else {
+            itemType = "solution-item--multi-choice__options__item";
+        }
+        return (
+            <li className={ itemType }>{ this.props.option }</li>
+        );
     }
 
 

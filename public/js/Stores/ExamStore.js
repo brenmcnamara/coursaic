@@ -690,7 +690,7 @@ var ExamStore = (function() {
                                         for (prop in guesses) {
                                             // Prop is an index for the guess.
                                             if (guesses.hasOwnProperty(prop)) {
-                                                self.currentExamRun.setGuess(prop, guesses[prop]);
+                                                self.currentExamRun().setGuess(+prop, guesses[+prop]);
                                             }
                                         }
                                         self.emit(new CAEvent(CAEvent.Name.DID_GRADE_EXAM_RUN));
