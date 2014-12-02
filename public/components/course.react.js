@@ -227,36 +227,82 @@ View.Course_Content = React.createClass({
 
 View.Course_Content_Nav = React.createClass({
 
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+
     render: function() {
         var examIconStyle = {
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
             };
+        if(!this.state.isEditing) {
+            return (
+                <div className="content__nav">
+                    <ul className="main-options">
+                        <li className="main-options__item">
+                            <img src="/img/icons/exam.png"
+                                 style={ examIconStyle }
+                                 className="main-options__item__icon--clickable" />
 
-        return (
-            <div className="content__nav">
-                <ul className="main-options">
-                    <li className="main-options__item">
-                        <img src="/img/icons/exam.png"
-                             style={ examIconStyle }
-                             className="main-options__item__icon" />
+                            <div onClick={ this.onClickCreateExam }
+                                 className="main-options__item__text--clickable">Create Exam</div>
+                        </li>
+                    </ul>
 
-                        <div onClick={ this.onClickCreateExam }
-                             className="main-options__item__text">Create Exam</div>
-                    </li>
-                </ul>
+                    <div className="divide"></div>
 
-                <div className="divide"></div>
+                    <View.Exam_List />
 
-                <View.Exam_List />
+                </div>
+        );}
+        else {
+            return (
+                <div className="content__nav">
+                    <ul className="main-options">
+                        <li className="main-options__item">
+                            <img src="/img/icons/exam.png"
+                                 style={ examIconStyle }
+                                 className="main-options__item__icon--unclickable" />
 
-            </div>
-        );
+                            <div className="main-options__item__text--unclickable">Create Exam</div>
+                        </li>
+                    </ul>
+
+                    <div className="divide"></div>
+
+                    <View.Exam_List />
+
+                </div>
+        );}  
+    },
+
+    
+    onClickCreateExam: function(event) {
+        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
     },
 
 
-    onClickCreateExam: function(event) {
-        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
 
@@ -266,7 +312,7 @@ View.Course_Content_Nav = React.createClass({
 View.Exam_List = React.createClass({
 
     render: function() {
-        // TODO (brendan): Add a "No Exams" list item if there are no exams.
+        // TODO: Add a "No Exams" list item if there are no exams.
         var PIXEL_SPACE_BETWEEN_EXAMS = 28,
             PIXEL_SPACE_TO_FIRST_EXAM = 27,
             course = CourseStore.current(),
@@ -491,7 +537,7 @@ View.Course_Exam = React.createClass({
 View.Course_Exam_Questions = React.createClass({
 
     render: function() {
-        // TODO (brendan): Consider breaking up DID_FETCH_EXAMS
+        // TODO: Consider breaking up DID_FETCH_EXAMS
         // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
         var questions = ExamStore.questionsForExam(ExamStore.current(),
                                                    UserStore.current()),
@@ -633,7 +679,7 @@ View.Course_Exam_Question_Item = React.createClass({
     }, 
 
     render: function() {
-        // NOTE (brendan): This is hard-coded for multiple-choice questions.
+        // NOTE: This is hard-coded for multiple-choice questions.
         // Change this if adding other types of questions.
         var question = this.props.question,
             explanationStyle= {
@@ -800,7 +846,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                        <img onClick = { this.onSave }
                             className="question__icon--save"
                             src="/img/icons/save.png" /> :
-                        // TODO (brendan): Modify styling to fade out
+                        // TODO: Modify styling to fade out
                         // save button.
                         <img className="question__icon--save"
                              src="/img/icons/save.png" />;
@@ -851,7 +897,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                     });
         }
         else{
-            // TODO (brendan): Modify so that examId is
+            // TODO: Modify so that examId is
             // inside the questionMap.
             Action.send(Action.Name.SAVE_QUESTION_EDIT,
                     {
@@ -971,7 +1017,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 });
 
 
-// TODO (brendan): Fix naming of these React classes to make them
+// TODO: Fix naming of these React classes to make them
 // shorter and more clear.
 View.Course_Exam_Question_MultiChoice_Option = React.createClass({
 
@@ -1002,7 +1048,7 @@ View.Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
             listItems = this.props.options.map(function(option, index) {
                 var isCorrect = self.isCorrect(option),
                     key = self.props.questionId + '-' + index.toString();
-                // TODO (brendan): Shorten this line.
+                // TODO: Shorten this line.
                 return <View.Course_Exam_Question_MultiChoice_Option_Item_Editing 
                                                               onChangeText={ self.onChangeText }
                                                               onChangeRadio={ self.onChangeRadio}

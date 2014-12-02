@@ -128,7 +128,7 @@ var Course = Parse.Object.extend("Course", {
             this._isFetching = false;
             this._page = 0;
             this._limit = 30;
-            // TODO (brendan): Consider turning this into
+            // TODO: Consider turning this into
             // a hash table of courses and changing related
             // methods.
             this._courses = [];
@@ -221,11 +221,11 @@ var Course = Parse.Object.extend("Course", {
                 };
             case Action.Name.CREATE_COURSE:
                 return function(payload) {
-                    // TODO (brendan): Note that if this fails,
+                    // TODO: Note that if this fails,
                     // createCourse mode will be exited since this
                     // is getting called after the config store.
                     // Not strongly exception-safe.
-                    // TODO (brendan): Make sure that the app is in
+                    // TODO: Make sure that the app is in
                     // createCourse mode in the first place.
                     return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                            // Wait for the config store to update the hash.
@@ -247,7 +247,7 @@ var Course = Parse.Object.extend("Course", {
                                 delete payload.fieldId;
                                 course.set(payload);
                                 return new Promise(function(resolve, reject) {
-                                    // TODO (brendan): Modify this using the
+                                    // TODO: Modify this using the
                                     // promise syntax.
                                     course.save({
                                         success: function(course) {
@@ -280,19 +280,19 @@ var Course = Parse.Object.extend("Course", {
                             .then(
                             // Success.
                             function() {
-                                // TODO (brendan): Maybe pass the course as a parameter
+                                // TODO: Maybe pass the course as a parameter
                                 // to this event.
                                 self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
                                 self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                             },
                             // Error.
                             function(error) {
-                                // TODO (brendan): Should I cancel create course mode?
+                                // TODO: Should I cancel create course mode?
                                 throw error;
                             });
                 };
             case Action.Name.CANCEL_CREATE_COURSE:
-                // TODO (brendan): Make sure that the app is
+                // TODO: Make sure that the app is
                 // in create course mode in the first palce.
                 return function(payload) {
                     return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
@@ -387,7 +387,7 @@ var Course = Parse.Object.extend("Course", {
             return new Promise(function(resolve, reject) {
                 course.fetch({
                     success: function() {
-                        // TODO (brendan): Separate out load and
+                        // TODO: Separate out load and
                         // fetch course calls.
                         self._loadCourse(course).then(
                             // Success
@@ -590,7 +590,7 @@ var Course = Parse.Object.extend("Course", {
          *  is not 'course', this will return null.
          */
         StoreClass.prototype.current = function() {
-            // TODO (brendan): Maybe make this throw an
+            // TODO: Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
             return (ConfigStore.courseId()) ?

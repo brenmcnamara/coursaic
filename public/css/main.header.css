@@ -38,9 +38,9 @@
     width: 100%; /* same as header */
 }
 
-.header__logo {
+.header__logo--clickable,
+.header__logo--unclickable {
     position: absolute;
-    cursor: pointer;
 
     width: 55px;
     height: 44px;
@@ -50,9 +50,13 @@
     left: 20px;
 }
 
-.header__title {
-    position: relative;
+.header__logo--clickable {
     cursor: pointer;
+}
+
+.header__title--clickable,
+.header__title--unclickable {
+    position: relative;
     display: inline;
 
     left: 100px;
@@ -60,6 +64,10 @@
 
     font-size: 28px;
     color: #4A90E2;
+}
+
+.header__title--clickable {
+    cursor: pointer;
 }
 
 .header__profile-pic {

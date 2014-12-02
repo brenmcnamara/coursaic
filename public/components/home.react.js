@@ -26,7 +26,7 @@
 View.Home_Root = React.createClass({
 
     render: function() {
-        // TODO (brendan): How can I avoid writing
+        // TODO: How can I avoid writing
         // all the html twice?
         var school = UserStore.current().get('school');
         if (CourseStore.isCreateCourseMode()) {

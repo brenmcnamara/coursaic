@@ -102,7 +102,7 @@ View.Exam_Score = React.createClass({
 
     render: function() {
         var examRun = ExamStore.currentExamRun(),
-            // TODO (brendan): Add some formatter for this.
+            // TODO: Add some formatter for this.
             percentage = Math.floor(examRun.grade() * 100);
 
         return (
@@ -136,7 +136,7 @@ View.Exam_Results_Solutions_List = React.createClass({
 });
 
 
-// TODO (brendan): This item is mutli-choice specific,
+// TODO: This item is mutli-choice specific,
 // should change the name to specify that.
 View.Exam_Results_Solutions_List_Item = React.createClass({
 
