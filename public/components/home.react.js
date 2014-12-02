@@ -36,7 +36,6 @@ View.Home_Root = React.createClass({
                     <View.Header isOpaque={ true } />
                     <View.Header_Fill isOpaque={ true } />
                     <View.Home_Img />
-                    <View.Search alias={school.get('alias')} />
                     <View.Home_Content />
                 </div>
             );        
@@ -47,7 +46,6 @@ View.Home_Root = React.createClass({
                     <View.Header isOpaque={ true } />
                     <View.Header_Fill isOpaque={ true } />
                     <View.Home_Img />
-                    <View.Search alias={school.get('alias')} />
                     <View.Home_Content />
                 </div>
             );
