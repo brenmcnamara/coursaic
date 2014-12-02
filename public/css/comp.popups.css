@@ -83,7 +83,7 @@
 .create-course__button-wrapper {
   margin: 10px auto;
   width: 162px; /* This shouldn't be hard-coded in */
-  /* TODO (brendan): Fix this!! */
+  /* TODO: Fix this!! */
   /* Trying to make this button wrapper wrap just around
    * the css elements inside it, while also centering the
    * element horizontally inside its parent using margin auto */

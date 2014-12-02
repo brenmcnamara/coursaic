@@ -41,7 +41,7 @@ var CAEvent = function(name, params) {
  * @type Object
  */
 CAEvent.Name = {
-    // TODO (brendan): Better name for this event.
+    // TODO: Better name for this event.
     DID_LOAD: 'DID_LOAD',
     DID_FETCH_COURSES: 'DID_FETCH_COURSES',
     // Event for when the exam hash is updated

@@ -55,11 +55,11 @@ var School = Parse.Object.extend("School"),
                     // Note: This information might change. Current implementation
                     // assumes this never changes.
                     params = {fields: 'first_name,last_name,picture.type(square)'};
-                    // TODO (brendan): Make sure to handle errors coming back from
+                    // TODO: Make sure to handle errors coming back from
                     // the facebook api.
                     FB.api("/me", params, function(response) {
                         var school = new School();
-                        // TODO (brendan): Temporary hard-coding of UPenn.
+                        // TODO: Temporary hard-coding of UPenn.
                         // This should be removed.
                         school.id = "rQIGXlBeyE";
                         user.set("firstName", response.first_name);
@@ -174,7 +174,7 @@ var School = Parse.Object.extend("School"),
         case Action.Name.PERFORM_LOAD:
         case Action.Name.CANCEL_EXAM_RUN:
             return function(payload) {
-                // TODO (brendan): Don't need to wrap this in a promise.
+                // TODO: Don't need to wrap this in a promise.
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
                                  .then(
                                     // Success.

@@ -40,7 +40,7 @@ var Field = Parse.Object.extend("Field"),
                         query.find({
                             success: function(response) {
                                 response.forEach(function(field) {
-                                    // TODO (brendan): This is not equality safe.
+                                    // TODO: This is not equality safe.
                                     self._fieldHash[field.id] = field;
                                 });
                                 resolve();

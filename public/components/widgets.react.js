@@ -13,7 +13,7 @@
  *  - View namespace
  */
 
-// TODO (brenan): Move this to the home page react components.
+// TODO: Move this to the home page react components.
 // Rename this to make it look like it is home-page specific.
 /**
  * MainOption
@@ -59,7 +59,7 @@ View.MainOption_CreateCourse = React.createClass({
 
 });
 
-// TODO (brendan): Move this to home.react.js
+// TODO: Move this to home.react.js
 /**
  * MyCourses
  *
@@ -71,7 +71,7 @@ View.MainOption_CreateCourse = React.createClass({
 View.MyCourses = React.createClass({
    
     render: function() {
-        // TODO (brendan): Shouldn't be getting the enrolled courses
+        // TODO: Shouldn't be getting the enrolled courses
         // from the parent, should generate them from this element making
         // a query.
         var courses = this.props.enrolled.map(function(course) {
@@ -136,7 +136,7 @@ View.Divide_Full = React.createClass({
 
 });
 
-// TODO (brendan): Move this to home page.
+// TODO: Move this to home page.
 /**
  * CourseGrid
  *

@@ -87,7 +87,7 @@ View.Popup_Create_Course = React.createClass({
     isValid: function() {
         // Can assume that there is a field selected.
         // Check that there is a valid name and course code.
-        // TODO (brendan): Should have a minimum number
+        // TODO: Should have a minimum number
         // of characters before a course is a valid course
         // both for the name and the code.
         var name, code, description;

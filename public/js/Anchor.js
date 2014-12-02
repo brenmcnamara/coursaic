@@ -173,7 +173,7 @@ var Anchor = (function() {
     };
 
 
-    // TODO (brendan): Modify _serializeHash so that
+    // TODO: Modify _serializeHash so that
     // the order the hash elements appear is deterministic
     // and we do not need to check for changes in set and unset
     // methods.
