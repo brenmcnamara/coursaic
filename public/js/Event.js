@@ -52,6 +52,7 @@ CAEvent.Name = {
     DID_FETCH_EXAMS: 'DID_FETCH_EXAMS',
 
     DID_CREATE_COURSE: 'DID_CREATE_COURSE',
+    DID_CREATE_EXAM: 'DID_CREATE_EXAM',
     DID_CANCEL_CREATE_COURSE: 'DID_CANCEL_CREATE_COURSE',
 
     // Event for when you successfully enter

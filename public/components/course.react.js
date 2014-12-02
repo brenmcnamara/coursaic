@@ -99,7 +99,7 @@ View.Course_Dashboard = React.createClass({
         return (
             <div className="dashboard">
                 <p className="dashboard__course-description">
-                    { course.get('description') }
+                    { Formatter.Text.truncate(course.get('description'), { maxlen: 200 }) }
                 </p>
             </div>);
     }
@@ -311,6 +311,11 @@ View.Course_Content_Nav = React.createClass({
 
 View.Exam_List = React.createClass({
 
+    getInitialState: function() {
+        return {isEditing: false};
+    }, 
+
+
     render: function() {
         // TODO: Add a "No Exams" list item if there are no exams.
         var PIXEL_SPACE_BETWEEN_EXAMS = 28,
@@ -358,15 +363,36 @@ View.Exam_List = React.createClass({
     },
 
 
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    didCreateExam: function(event) {
+        this.forceUpdate();
+    },
+
+
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
     }
 
 });
