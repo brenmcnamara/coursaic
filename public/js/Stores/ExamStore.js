@@ -625,8 +625,10 @@ var ExamStore = (function() {
                                 return exam.save()
                                            .then(
                                             // Success.
-                                            function() {
+                                            function(exam) {
+                                                self._examHash[exam.id] = exam;
                                                 self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                                                self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
                                             },
                                             // Error.
                                             function(error) {
