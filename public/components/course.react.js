@@ -520,25 +520,55 @@ View.Course_No_Exam = React.createClass({
 });
 
 
+// TODO: Change this to Course_Exam_Info
 View.Course_Exam = React.createClass({
     
     render: function() {
         // Get the current exam.
         var exam = ExamStore.current(),
-            hasQuestions = ExamStore.questionsForExam(exam).length > 0,
-            takeExamButton = (hasQuestions) ?
-                             (<button onClick={ this.onClickTakeExam }
-                                      type="button"
-                                      className="button large-button--positive take-exam-button">
-                                Take Exam
-                              </button>) :
-                             (null);
+            questionCount = ExamStore.questionsForExam(exam).length,
+            takeExamHTML,
+            noExamStyle = {
+                color: "#e34d2f"
+            };
+
+            if (questionCount === 0) {
+                takeExamHTML = (
+                        <p style={ noExamStyle }>
+                            This exam has no questions. You must add questions before you
+                            can take the exam.
+                        </p>
+                    );
+            }
+            else if (questionCount === 1) {
+                takeExamHTML = (
+                            <p>
+                                This exam only has <strong>1
+                                </strong> question. <span onClick={ this.onClickTakeExam }
+                                      className="inline-button">Take the exam.</span>
+                            </p>
+
+                        );
+            }
+            else {
+                takeExamHTML = (
+                            <p>
+                                This exam has <strong>{ questionCount }
+                                </strong> questions create between all users. <span onClick={ this.onClickTakeExam }
+                                      className="inline-button"> Take the exam.</span>
+                            </p>
+
+                        );
+            }
 
         return (
             <div className="content__body__wrapper">
                 <span className="content__body__title">{ exam.get('name') }</span>
-                { takeExamButton }
-                <p className="content__body__description">{ exam.get('description') }</p>
+                <div className="content__body__description">
+                    <p>{ exam.get('description') }</p>
+                    { takeExamHTML }
+                </div>
+
                 <div className="exam-info">
                     <View.Course_Exam_Questions />
                 </div>

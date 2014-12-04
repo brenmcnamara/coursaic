@@ -225,6 +225,15 @@
     background: #a53722
 }
 
+.inline-button {
+    color: #4A90E2;
+    cursor: pointer;
+}
+
+.inline-button:hover {
+    text-decoration: underline;       
+}
+
 /* -------------------- *\
        Main-Options
 \* -------------------- */
