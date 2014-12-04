@@ -554,7 +554,7 @@ View.Course_Exam = React.createClass({
                 takeExamHTML = (
                             <p>
                                 This exam has <strong>{ questionCount }
-                                </strong> questions create between all users. <span onClick={ this.onClickTakeExam }
+                                </strong> questions created between all users. <span onClick={ this.onClickTakeExam }
                                       className="inline-button"> Take the exam.</span>
                             </p>
 
