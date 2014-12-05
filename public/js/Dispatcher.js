@@ -103,7 +103,9 @@ var Dispatcher = (function() {
             // over each store.
             // TODO: Should have a way for UserStores
             // to get registered when the app is initialized.
-            stores: [ConfigStore, CourseStore, UserStore, ExamStore, FieldStore],
+            stores: [ ConfigStore, CourseStore, 
+                      UserStore, ExamStore,
+                      FieldStore, PageStore ],
             
             // A list of all resolves that are on the
             // wait list. This is a map of

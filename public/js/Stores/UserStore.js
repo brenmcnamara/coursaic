@@ -114,7 +114,6 @@ var School = Parse.Object.extend("School"),
             return new Promise(function(resolve, reject) {
                 // Callback after the user has logged in successfully.
                 var onDidLoginSuccess = function() {
-                        self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
                         resolve();
                     },
 
