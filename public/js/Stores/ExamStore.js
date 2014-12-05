@@ -627,6 +627,7 @@ var ExamStore = (function() {
                                             // Success.
                                             function(exam) {
                                                 self._examHash[exam.id] = exam;
+                                                self._questionHash[exam.id] = [];
                                                 self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                                                 self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
                                             },
