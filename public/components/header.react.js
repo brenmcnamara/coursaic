@@ -36,11 +36,6 @@ View.Header = React.createClass({
                     <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-dark.png" />
                     <h1 onClick={ this.onClickText } className="header__title--clickable">Coursaic</h1>
                     <nav className="main-nav">
-                        <div className="main-nav__item--clickable">
-                            Logout
-                        <div className="main-nav__break"></div>
-                    </div>
-
                     <div className="main-nav__item--unclickable">
                         Welcome, {user.get('firstName')}
                     </div>
