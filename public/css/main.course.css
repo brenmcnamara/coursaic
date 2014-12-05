@@ -169,7 +169,8 @@ input.question__ask {
  * that there will be exactly 2 icons */
 .question__icon--delete,
 .question__icon--edit,
-.question__icon--save {
+.question__icon--save,
+.question__icon--cancel {
     cursor: pointer;
     position: absolute;
 
@@ -184,7 +185,11 @@ input.question__ask {
 }
 
 .question__icon--save {
-    left: 15px;
+    left: 0px;
+}
+
+.question__icon--cancel {
+    left: 33px;
 }
 
 .question__content {

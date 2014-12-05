@@ -126,6 +126,15 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.CANCEL_QUESTION_EDIT:
+                // TODO: Make sure that the app is
+                // in create course mode in the first place.
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['questionEditId'], {silent: true});
+                        resolve();
+                    });
+                };
             case Action.Name.SAVE_QUESTION_EDIT:
                 return function(payload) {
                     // Get the promise for the exam display process.
@@ -149,6 +158,13 @@ var ConfigStore = (function() {
                         }
                         Anchor.set({pageKey: 'course', questionEditId: "new"},
                                    {silent: true});
+                        resolve();
+                    });
+                };
+            case Action.Name.CANCEL_CREATE_QUESTION:
+                return function(payload) {
+                    return new Promise(function(resolve, reject) {
+                        Anchor.unset(['questionEditId'], {silent: true});
                         resolve();
                     });
                 };
