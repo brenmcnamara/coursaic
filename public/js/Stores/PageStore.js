@@ -94,6 +94,19 @@ var PageStore = (function() {
                 return function(payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
                 };
+            case Action.Name.ENTER_DELETE_QUESTION_MODE:
+                return function(payload) {
+                    return self._addMode({ toMode: PageStore.Mode.DELETE_QUESTION,
+                                           toPayload: payload });
+                };
+            case Action.Name.CANCEL_DELETE_QUESTION_MODE:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                };
+            case Action.Name.DELETE_QUESTION:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                };
         };
     };
 
