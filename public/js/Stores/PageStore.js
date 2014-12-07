@@ -118,7 +118,26 @@ var PageStore = (function() {
                 };
             case Action.Name.CANCEL_EXAM_RUN:
                 return function(payload) {
-                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
+                    return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
+                                     .then(
+                                        // Success.
+                                        function() {
+                                            return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
+                                        },
+                                        // Error.
+                                        function(error) {
+                                            throw error;
+                                        })
+                                     // Wait for the mode to change.
+                                     .then(
+                                        // Success.
+                                        function() {
+                                            self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
+                                        },
+                                        // Error.
+                                        function(error) {
+                                            throw error;
+                                        });
                 };
         };
     };
@@ -126,7 +145,7 @@ var PageStore = (function() {
     /**
      * Get the current mode for the page.
      *
-     * @method mode
+     * @method currentMode
      *
      * @return {String} The current mode of the page.
      *  If there is no current mode, it will return null.
@@ -139,7 +158,7 @@ var PageStore = (function() {
     /**
      * Get the payload for the current mode.
      *
-     * @method payload
+     * @method currentPayload
      *
      * @return {Object} The payload for the current
      *  mode. If there is no mode, this will return null.
