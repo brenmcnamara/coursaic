@@ -107,6 +107,19 @@ var PageStore = (function() {
                 return function(payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
                 };
+            case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
+                return function(payload) {
+                    return self._addMode({ toMode: PageStore.Mode.CANCEL_EXAM_RUN,
+                                           toPayload: payload });
+                };
+            case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
+                };
+            case Action.Name.CANCEL_EXAM_RUN:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
+                };
         };
     };
 
@@ -141,7 +154,7 @@ var PageStore = (function() {
 }());
 
 PageStore.Mode = {
-    CANCEL_TAKE_EXAM: 'CANCEL_TAKE_EXAM',
+    CANCEL_EXAM_RUN: 'CANCEL_EXAM_RUN',
     CREATE_COURSE: 'CREATE_COURSE',
     CREATE_EXAM: 'CREATE_EXAM',
     CREATE_QUESTION: 'CREATE_QUESTION',
