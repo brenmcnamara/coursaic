@@ -17,6 +17,42 @@ var PageStore = (function() {
 
     StoreClass.prototype =  new Store();
 
+    // TODO: Delete this function after creating the CHANGE_MODE action.
+    StoreClass.prototype._addMode = function(inputMap) {
+        var self = this,
+            toMode = inputMap.toMode,
+            toPayload = inputMap.toPayload;
+        // Assumes modes are valid (not null and part of the PageStore.Mode namespace).
+        return new Promise(function(resolve, reject) {
+            if (self._currentMode) {
+                throw new Error("Trying to change to mode " + toMode +
+                                " when the current mode is " + self._currentMode + ".");
+            }
+            self._currentMode = toMode;
+            // TODO: Should copy the payload.
+            self._currentPayload = toPayload;
+            resolve();
+        });
+    };
+
+
+    // TODO: Delete this function after creating the CHANG_MODE action.
+    StoreClass.prototype._removeMode = function(inputMap) {
+        var self = this,
+            fromMode = inputMap.fromMode;
+
+        return new Promise(function(resolve, reject) {
+            if (self._currentMode !== fromMode) {
+                throw new Error("Expected mode to be " + fromMode +
+                                " when the mode is " + self._currentMode + ".");
+            }
+            self._currentMode = null;
+            self._currentPayload = null;
+            resolve();
+        });
+    };
+
+
     StoreClass.prototype.actionHandler = function(name) {
         var self = this;
         switch (name) {
@@ -41,10 +77,7 @@ var PageStore = (function() {
                                      .then(
                                         // Success.
                                         function() {
-                                            if (self._currentMode !== PageStore.Mode.CREATE_COURSE) {
-                                                throw new Error("Cannot create a course " +
-                                                                "when not in CREATE_COURSE mode.");
-                                            } 
+                                            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
                                         },
                                         // Error.
                                         function(error) {
@@ -54,29 +87,12 @@ var PageStore = (function() {
                 };
             case Action.Name.ENTER_CREATE_COURSE_MODE:
                 return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        if (self._currentMode) {
-                            throw new Error("Attempting to change to mode: " +
-                                            PageStore.Mode.CREATE_COURSE + 
-                                            " when already in mode " + self._currentMode);
-                        }
-                        self._currentMode = PageStore.Mode.CREATE_COURSE;
-                        // TODO (brendan): Copy the payload.
-                        self._currentPayload = payload;
-                        resolve();
-                    });
+                    return self._addMode({ toMode: PageStore.Mode.CREATE_COURSE,
+                                           toPayload: payload });
                 };
             case Action.Name.CANCEL_CREATE_COURSE:
                 return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        if (self._currentMode !== PageStore.Mode.CREATE_COURSE) {
-                            throw new Error("Cannot cancel create course " +
-                                            "when not in CREATE_COURSE mode.");
-                        }
-                        self._currentMode = null;
-                        self._currentPayload = null;
-                        resolve();
-                    });
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
                 };
         };
     };
