@@ -139,6 +139,19 @@ var PageStore = (function() {
                                             throw error;
                                         });
                 };
+            case Action.Name.ENTER_NEW_QUESTION_MODE:
+                return function(payload) {
+                    return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,
+                                           toPayload: payload });
+                };
+            case Action.Name.CANCEL_CREATE_QUESTION:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
+                };
+            case Action.Name.SAVE_QUESTION_NEW:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
+                };
         };
     };
 
