@@ -859,7 +859,8 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         // Not a new question, so the initial state depends on the question's
         // current fields.
         return { solutionIndex: solutionIndex,
-                 questionMap: { options: this.props.question.getOptions() }};
+                 questionMap: { options: this.props.question.getOptions() },
+                 isEditing: false};
     }, 
 
 
@@ -905,10 +906,15 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                         // TODO: Modify styling to fade out
                         // save button.
                         <img className="question__icon--save"
-                             src="/img/icons/save.png" />;
+                             src="/img/icons/save.png" />,
+
+            cancelView = <img onClick={ this.onClickCancel }
+                                className="question__icon--cancel"
+                                src="/img/icons/cancel.png" />;
         return (
             <li className="question">
-                { saveView }
+                <div> { saveView } </div>
+                <div> { cancelView } </div>
                 <div className="question__content">
                     <input onChange={ this.onChangeQuestion }
                            type="text"
@@ -963,6 +969,20 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                     });
         }
         
+    },
+
+
+    onClickCancel: function() {
+        if (this.state.isEditing){
+            Action.send(Action.Name.CANCEL_QUESTION_EDIT,
+                    {
+                        examId: ExamStore.current().id,
+                        questionId: this.props.question.id,
+                    });
+        }
+        else {
+            Action.send(Action.Name.CANCEL_CREATE_QUESTION);
+        }
     },
 
 
@@ -1067,6 +1087,28 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         var questionMap = View.Util.copy(this.state.questionMap);
         questionMap.explanation = event.target.value.trim();
         this.setState({ questionMap: questionMap });
+    },
+
+
+    didBeginEditing: function(event) {
+        this.setState({isEditing: true});
+    },
+
+
+    didEndEditing: function(event) {
+        this.setState({isEditing: false});
+    },
+
+
+    componentWillMount: function() {
+        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+    },
+
+
+    componentWillUnmount: function() {
+        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
     }
 
     

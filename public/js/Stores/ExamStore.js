@@ -434,6 +434,23 @@ var ExamStore = (function() {
                                 throw error;
                             });
                 };
+        case Action.Name.CANCEL_QUESTION_EDIT:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                var question = self.questionForExam(payload.examId,
+                                                                    payload.questionId);
+                                question.isEditing(false);
+                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
+                        );
+            };
         case Action.Name.SAVE_QUESTION_EDIT:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
@@ -486,6 +503,20 @@ var ExamStore = (function() {
                                 throw error;
                             });
                 };
+        case Action.Name.CANCEL_CREATE_QUESTION:
+            return function(payload) {
+                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                        .then(
+                            // Success.
+                            function() {
+                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            }
+                        );
+            };
         case Action.Name.SAVE_QUESTION_NEW:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
@@ -627,6 +658,7 @@ var ExamStore = (function() {
                                             // Success.
                                             function(exam) {
                                                 self._examHash[exam.id] = exam;
+                                                self._questionHash[exam.id] = [];
                                                 self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                                                 self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
                                             },
