@@ -51,11 +51,6 @@ View.Header = React.createClass({
                     <img className="header__logo--unclickable" src="/img/logo-dark.png" />
                     <h1  className="header__title--unclickable">Coursaic</h1>
                     <nav className="main-nav">
-                        <div className="main-nav__item--unclickable">
-                            Logout
-                        <div className="main-nav__break"></div>
-                    </div>
-
                     <div className="main-nav__item--unclickable">
                         Welcome, {user.get('firstName')}
                     </div>
