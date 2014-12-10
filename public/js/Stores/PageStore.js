@@ -152,6 +152,19 @@ var PageStore = (function() {
                 return function(payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
                 };
+            case Action.Name.ENTER_CREATE_EXAM_MODE:
+                return function(payload) {
+                    return self._addMode({ toMode: PageStore.Mode.CREATE_EXAM,
+                                           toPayload: payload });
+                };
+            case Action.Name.CANCEL_CREATE_EXAM:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                };
+            case Action.Name.CREATE_EXAM:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                };
         };
     };
 
