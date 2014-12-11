@@ -83,6 +83,8 @@ View.Home_Img = React.createClass({
             <div className="home-image"></div>
         );
     }
+
+
 });
 
 
@@ -92,6 +94,7 @@ View.Home_Img = React.createClass({
  * The search bar for looking up courses.
  */
 View.Search = React.createClass({
+    
     render: function() {
         var searchText = "Search for " + this.props.alias + " classes...";
         return (
@@ -106,6 +109,8 @@ View.Search = React.createClass({
             </div>
         );
     }
+
+
 });
 
 
@@ -117,6 +122,7 @@ View.Search = React.createClass({
  * and courses to lookup.
  */
 View.Home_Content = React.createClass({
+
     render: function() {
         return (
             <div className="home-content content">
@@ -125,6 +131,8 @@ View.Home_Content = React.createClass({
             </div>
         );
     }
+
+
 });
 
 
@@ -135,6 +143,7 @@ View.Home_Content = React.createClass({
  * page.
  */
 View.Home_SideNav = React.createClass({
+
     render: function() {
         var enrolled = CourseStore.coursesForUser(UserStore.current()) || [];
         return (
@@ -146,15 +155,18 @@ View.Home_SideNav = React.createClass({
         );
     },
 
+
     componentWillMount: function() {
         CourseStore.addListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
         CourseStore.addListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
     },
 
+
     componentWillUnmount: function() {
         CourseStore.removeListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
         CourseStore.removeListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
     },
+
 
     onChange: function() {
         this.forceUpdate();
@@ -170,6 +182,7 @@ View.Home_SideNav = React.createClass({
  * tag, displayed on the home page.
  */
 View.Home_Body = React.createClass({
+
     render: function() {
         return (
             <div className="home-content__courses">
@@ -177,5 +190,7 @@ View.Home_Body = React.createClass({
             </div>
         );
     }
+
+    
 });
 
