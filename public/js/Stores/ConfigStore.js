@@ -88,31 +88,6 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
-            case Action.Name.ENTER_CREATE_COURSE_MODE:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.set({createCourse: 'true'}, {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.CREATE_COURSE:
-                // TODO: Make sure that the app is in
-                // createCourse mode in the first place.
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['createCourse'], {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.CANCEL_CREATE_COURSE:
-                // TODO: Make sure that the app is
-                // in create course mode in the first place.
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['createCourse'], {silent: true});
-                        resolve();
-                    });
-                };
             case Action.Name.PERFORM_QUESTION_EDIT:
                 return function(payload) {
                     // Get the promise for the exam display process.
@@ -336,20 +311,6 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.deleteQuestionId = function() {
         return Anchor.hashMap().deleteQuestionId || null;
-    };
-
-
-    /**
-     * Determine if the hash specifies that there is
-     * a course being created.
-     *
-     * @method isCreatingCourse
-     *
-     * @return {Boolean} True if there is a course
-     *  being created, false otherwise.
-     */
-    StoreClass.prototype.isCreatingCourse = function() {
-        return Anchor.hashMap().createCourse === 'true';
     };
 
 

@@ -205,29 +205,13 @@ var Course = Parse.Object.extend("Course", {
                         });
                     }
                 };
-            case Action.Name.ENTER_CREATE_COURSE_MODE:
-                return function(payload) {
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                            // Done waiting for ConfigStore to finish.
-                           .then(
-                            // Success.
-                            function() {
-                                self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
-                };
             case Action.Name.CREATE_COURSE:
                 return function(payload) {
                     // TODO: Note that if this fails,
                     // createCourse mode will be exited since this
                     // is getting called after the config store.
                     // Not strongly exception-safe.
-                    // TODO: Make sure that the app is in
-                    // createCourse mode in the first place.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                    return Dispatcher.waitFor([PageStore.dispatcherIndex])
                            // Wait for the config store to update the hash.
                            .then(
                             // Success.
@@ -283,30 +267,12 @@ var Course = Parse.Object.extend("Course", {
                                 // TODO: Maybe pass the course as a parameter
                                 // to this event.
                                 self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
-                                self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                             },
                             // Error.
                             function(error) {
                                 // TODO: Should I cancel create course mode?
                                 throw error;
                             });
-                };
-            case Action.Name.CANCEL_CREATE_COURSE:
-                // TODO: Make sure that the app is
-                // in create course mode in the first palce.
-                return function(payload) {
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                       // Wait for the ConfigStore to finish updating
-                       // the hash.
-                       .then(
-                        // Success.
-                        function() {
-                            self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        });
                 };
             case Action.Name.ENROLL_CURRENT_USER:
                 return function(payload) {

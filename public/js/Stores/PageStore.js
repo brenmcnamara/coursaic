@@ -13,7 +13,10 @@
 
 var PageStore = (function() {
 
-    var StoreClass = function() {};
+    var StoreClass = function() {
+
+        this.dispatcherIndex = 6;
+    };
 
     StoreClass.prototype =  new Store();
 
@@ -75,17 +78,7 @@ var PageStore = (function() {
                 };
             case Action.Name.CREATE_COURSE:
                 return function(payload) {
-                    return Dispatcher.waitFor([ CourseStore.dispatcherIndex ])
-                                     .then(
-                                        // Success.
-                                        function() {
-                                            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
-                                        },
-                                        // Error.
-                                        function(error) {
-                                            throw error;
-                                        });
-
+                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
                 };
             case Action.Name.ENTER_CREATE_COURSE_MODE:
                 return function(payload) {
