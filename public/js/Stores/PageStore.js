@@ -165,6 +165,19 @@ var PageStore = (function() {
                 return function(payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
                 };
+            case Action.Name.PERFORM_QUESTION_EDIT:
+                return function(payload) {
+                    return self._addMode({ toMode: PageStore.Mode.EDIT_QUESTION,
+                                           toPayload: payload });
+                };
+            case Action.Name.CANCEL_QUESTION_EDIT:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+                };
+            case Action.Name.SAVE_QUESTION_EDIT:
+                return function(payload) {
+                    return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+                };
         };
     };
 
