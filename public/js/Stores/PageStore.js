@@ -31,6 +31,7 @@ var PageStore = (function() {
             self._currentMode = toMode;
             // TODO: Should copy the payload.
             self._currentPayload = toPayload;
+            self.emit(new CAEvent(CAEvent.Name.CHANGED_MODE));
             resolve();
         });
     };
@@ -48,6 +49,7 @@ var PageStore = (function() {
             }
             self._currentMode = null;
             self._currentPayload = null;
+            self.emit(new CAEvent(CAEvent.Name.CHANGED_MODE));
             resolve();
         });
     };

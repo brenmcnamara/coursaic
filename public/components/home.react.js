@@ -29,7 +29,7 @@ View.Home_Root = React.createClass({
         // TODO: How can I avoid writing
         // all the html twice?
         var school = UserStore.current().get('school');
-        if (CourseStore.isCreateCourseMode()) {
+        if (PageStore.currentMode() === PageStore.Mode.CREATE_COURSE) {
             return (
                 <div className="main">
                     <View.Popup_Create_Course />
@@ -53,29 +53,18 @@ View.Home_Root = React.createClass({
     },
 
 
-    didBeginEditing: function() {
-        this.setState({ isEditing: true });
-    },
-
-
-    didEndEditing: function() {
-        this.setState({ isEditing: false });
+    changedMode: function() {
+        this.forceUpdate();
     },
 
 
     componentWillMount: function() {
-        CourseStore.addListener(CAEvent.Name.DID_BEGIN_EDITING,
-                                this.didBeginEditing);
-        CourseStore.addListener(CAEvent.Name.DID_END_EDITING,
-                                this.didEndEditing)
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
 
     componentWillUnmount: function() {
-        CourseStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING,
-                                   this.didBeginEditing);
-        CourseStore.removeListener(CAEvent.Name.DID_END_EDITING,
-                                   this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
 
 
