@@ -519,18 +519,6 @@ var Course = Parse.Object.extend("Course", {
 
 
         /**
-         * Check if the course store is in create course mode.
-         *
-         * @method isCreateCourseMode
-         *
-         * @return {Boolean} Create course mode.
-         */
-        StoreClass.prototype.isCreateCourseMode = function() {
-            return ConfigStore.isCreatingCourse();
-        };
-
-
-        /**
          * Get all the courses that a user is enrolled in.
          *
          * @method coursesForUser

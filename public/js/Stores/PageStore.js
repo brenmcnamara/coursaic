@@ -18,7 +18,7 @@ var PageStore = (function() {
         this.dispatcherIndex = 6;
     };
 
-    StoreClass.prototype =  new Store();
+    StoreClass.prototype = new Store();
 
     // TODO: Delete this function after creating the CHANGE_MODE action.
     StoreClass.prototype._addMode = function(inputMap) {
@@ -100,7 +100,19 @@ var PageStore = (function() {
                 };
             case Action.Name.DELETE_QUESTION:
                 return function(payload) {
-                    return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                    return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                                    // Done waiting for the exam store to delete
+                                    // the question.
+                                     .then(
+                                        // Success.
+                                        function() {
+                                            return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                                        },
+                                        // Error.
+                                        function(error) {
+                                            throw error;
+                                        });
+
                 };
             case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
                 return function(payload) {
@@ -145,7 +157,18 @@ var PageStore = (function() {
                 };
             case Action.Name.SAVE_QUESTION_NEW:
                 return function(payload) {
-                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
+                    return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                                    // Wait for the Exam Store to create the new
+                                    // question.
+                                     .then(
+                                        // Success.
+                                        function () {
+                                            return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION});
+                                        },
+                                        // Error.
+                                        function (error) {
+                                            throw error;
+                                        });
                 };
             case Action.Name.ENTER_CREATE_EXAM_MODE:
                 return function(payload) {
@@ -158,7 +181,17 @@ var PageStore = (function() {
                 };
             case Action.Name.CREATE_EXAM:
                 return function(payload) {
-                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                    return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                                     .then(
+                                        // Success.
+                                        function () {
+                                            return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                                        },
+                                        // Error.
+                                        function (error) {
+                                            throw error;
+                                        });
+
                 };
             case Action.Name.PERFORM_QUESTION_EDIT:
                 return function(payload) {
@@ -171,10 +204,21 @@ var PageStore = (function() {
                 };
             case Action.Name.SAVE_QUESTION_EDIT:
                 return function(payload) {
-                    return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+                    return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                                     .then(
+                                        // Success.
+                                        function () {
+                                            return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+                                        },
+                                        // Error.
+                                        function (error) {
+                                            throw error;
+                                        });
+
                 };
         };
     };
+
 
     /**
      * Get the current mode for the page.

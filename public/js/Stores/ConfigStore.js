@@ -88,116 +88,7 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
-            case Action.Name.PERFORM_QUESTION_EDIT:
-                return function(payload) {
-                    // Get the promise for the exam display process.
-                    return new Promise(function(resolve, rejected) {
-                        // Nothing to do yet. Might add stuff here
-                        if (!payload.questionId) {
-                            throw new Error("Trying to edit question without any question");
-                        }
-                        Anchor.set({pageKey: 'course', questionEditId: payload.questionId},
-                                   { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.CANCEL_QUESTION_EDIT:
-                // TODO: Make sure that the app is
-                // in create course mode in the first place.
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['questionEditId'], {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.SAVE_QUESTION_EDIT:
-                return function(payload) {
-                    // Get the promise for the exam display process.
-                    return new Promise(function(resolve, rejected) {
-                        // Nothing to do yet. Might add stuff here
-                        if (!payload.questionId) {
-                            throw new Error("Trying to save question without any question");
-                        }
-                        Anchor.unset(["questionEditId"],
-                                     { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.ENTER_NEW_QUESTION_MODE:
-                return function(payload) {
-                    // Get the promise for the exam display process.
-                    return new Promise(function(resolve, rejected) {
-                        // Nothing to do yet. Might add stuff here
-                        if (!payload.examId) {
-                            throw new Error("Trying to create a new question without an exam");
-                        }
-                        Anchor.set({pageKey: 'course', questionEditId: "new"},
-                                   {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.CANCEL_CREATE_QUESTION:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['questionEditId'], {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.SAVE_QUESTION_NEW:
-                return function(payload) {
-                    // Get the promise for the exam display process.
-                    return new Promise(function(resolve, rejected) {
-                        // Nothing to do yet. Might add stuff here
-                        if (!payload.questionMap.examId) {
-                            throw new Error("Trying to save a new question without an exam");
-                        }
-                        Anchor.unset(["questionEditId"],
-                                   {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.ENTER_DELETE_QUESTION_MODE:
-                return function(payload) {
-                    // Get the promise for the exam display process.
-                    return new Promise(function(resolve, rejected) {
-                        // Nothing to do yet. Might add stuff here
-                        if (!payload.deleteQuestionId) {
-                            throw new Error("Trying to delete question without any question");
-                        }
-                        Anchor.set({pageKey: 'course', deleteQuestionId: payload.deleteQuestionId},
-                                   {silent: true});
-                        resolve();
-                    });
-                }
-            case Action.Name.CANCEL_DELETE_QUESTION_MODE:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['deleteQuestionId'], {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.DELETE_QUESTION:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['deleteQuestionId'], {silent: true});
-                        resolve();
-                    });
-                };
-            case Action.Name.ENTER_CREATE_EXAM_MODE:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.set({ 'createExam': 'true' }, { silent: true });
-                        resolve();
-                    });
-                };
             case Action.Name.CREATE_EXAM:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['createExam'], { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.CANCEL_CREATE_EXAM:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
                         Anchor.unset(['createExam'], { silent: true });
@@ -311,20 +202,6 @@ var ConfigStore = (function() {
      */
     StoreClass.prototype.deleteQuestionId = function() {
         return Anchor.hashMap().deleteQuestionId || null;
-    };
-
-
-    /**
-     * Determine if the hash specified that
-     * there is an exam being created.
-     *
-     * @method isCreatingExam
-     *
-     * @return {Boolean} True if there is an exam being
-     *  created, false otherwise.
-     */
-    StoreClass.prototype.isCreatingExam = function() {
-        return Anchor.hashMap().createExam === 'true';
     };
 
 

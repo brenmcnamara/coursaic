@@ -29,10 +29,10 @@ View.Course_Root = React.createClass({
             enrollButton = (isEnrolled) ?
                            (<View.Course_Unenroll_Button />) :
                            (<View.Course_Enroll_Button />),
-            deleteQuestionPopup = (ExamStore.deleteQuestionId()) ?
+            deleteQuestionPopup = (PageStore.currentMode() === PageStore.Mode.DELETE_QUESTION) ?
                                   (<View.Popup_Delete_Question />) :
                                   (null)
-            createExamPopup = (ExamStore.isCreateExamMode()) ?
+            createExamPopup = (PageStore.currentMode() === PageStore.Mode.CREATE_EXAM) ?
                               (<View.Popup_Create_Exam />) :
                               (null);
 
@@ -51,15 +51,6 @@ View.Course_Root = React.createClass({
     },
 
 
-    didBeginEditing: function(event) {
-        this.forceUpdate();
-    },
-
-
-    didEndEditing: function(event) {
-        this.forceUpdate();
-    },
-
     onChange: function() {
         this.forceUpdate();
     },
@@ -67,16 +58,15 @@ View.Course_Root = React.createClass({
 
     componentWillMount: function() {
         CourseStore.addListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.onChange);
     },
 
 
     componentWillUnmount: function() {
         CourseStore.removeListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);
     }
+
 
 });
 
@@ -225,11 +215,7 @@ View.Course_Content = React.createClass({
 });
 
 
-View.Course_Content_Nav = React.createClass({
-
-    getInitialState: function() {
-        return {isEditing: false};
-    }, 
+View.Course_Content_Nav = React.createClass({ 
 
 
     render: function() {
@@ -237,7 +223,7 @@ View.Course_Content_Nav = React.createClass({
                 height: "30px",
                 margin: "-15px 0px 0px 9px"
             };
-        if(!this.state.isEditing) {
+        if(!PageStore.currentMode()) {
             return (
                 <div className="content__nav">
                     <ul className="main-options">
@@ -283,26 +269,18 @@ View.Course_Content_Nav = React.createClass({
         Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
     },
 
-
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
+    changedMode: function(event) {
+        this.forceUpdate();
     },
 
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
 
 
@@ -310,11 +288,6 @@ View.Course_Content_Nav = React.createClass({
 
 
 View.Exam_List = React.createClass({
-
-    getInitialState: function() {
-        return {isEditing: false};
-    }, 
-
 
     render: function() {
         // TODO: Add a "No Exams" list item if there are no exams.
@@ -363,13 +336,8 @@ View.Exam_List = React.createClass({
     },
 
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
+    changedMode: function(event) {
+        this.forceUpdate();
     },
 
 
@@ -381,8 +349,7 @@ View.Exam_List = React.createClass({
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         ExamStore.addListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
     },
 
@@ -390,8 +357,7 @@ View.Exam_List = React.createClass({
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         ExamStore.removeListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
     }
 
@@ -400,15 +366,10 @@ View.Exam_List = React.createClass({
 
 View.Exam_List_Item = React.createClass({
 
-    getInitialState: function() {
-        return {isEditing: false};
-    }, 
-
-
     render: function() {
         var exam = this.props.exam;
 
-        if (this.state.isEditing) {
+        if (PageStore.currentMode()) {
             return (
                 <li>{ exam.get('name') }</li>
             );
@@ -420,29 +381,25 @@ View.Exam_List_Item = React.createClass({
         }
     },
 
+
     handleClick: function(event) {
         Action.send(Action.Name.DISPLAY_EXAM,
                     {examId: this.props.exam.id})
     },
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-        
+
+    changedMode: function(event) {
+        this.forceUpdate();
     },
 
-    didEndEditing: function() {
-        this.setState({isEditing: false});
-    },
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
-
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
+
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
 
 
@@ -469,23 +426,29 @@ View.Course_Content_Body = React.createClass({
             )};      
     },
 
+
     didFetchExams: function() {
         this.forceUpdate();
     },
 
+
     didLoadExam: function() {
         this.forceUpdate();
     },
+
 
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     },
 
+
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         ExamStore.removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
     }
+
+
 });
 
 
@@ -504,6 +467,7 @@ View.Course_No_Exam = React.createClass({
             </div>
         );
     },
+
 
     didFetchExams: function() {
         this.forceUpdate();
@@ -599,7 +563,7 @@ View.Course_Exam_Questions = React.createClass({
                                                    UserStore.current()),
             listItems;
 
-        if (ExamStore.isCreateQuestionMode()) {
+        if (PageStore.currentMode() === PageStore.Mode.CREATE_QUESTION) {
             // In create question mode, set the first element
             // as a new question form..
             listItems = [(
@@ -611,7 +575,10 @@ View.Course_Exam_Questions = React.createClass({
         }
 
         questions.forEach(function(question) {
-            if (question.isEditing()) {
+            // Check if we are editing this question.
+            if (PageStore.currentMode() === PageStore.Mode.EDIT_QUESTION &&
+                PageStore.currentPayload().questionId === question.id) {
+
                 listItems.push(<View.Course_Exam_Question_Item_Editing key="new"
                                                                        question={ question } />);
             }
@@ -638,33 +605,26 @@ View.Course_Exam_Questions = React.createClass({
     },
 
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
-    },
-
-
     didCreateQuestion: function(event) {
+        this.forceUpdate();
+    },
+
+
+    changedMode: function(event) {
         this.forceUpdate();
     },
 
 
     componentWillMount: function() {
         ExamStore.addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         ExamStore.addListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     },
 
 
     componentWillUnmount: function() {
         ExamStore.removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         ExamStore.removeListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
     }
 
@@ -674,13 +634,9 @@ View.Course_Exam_Questions = React.createClass({
 
 View.Course_Exam_Questions_Add_Button = React.createClass({
 
-    getInitialState: function() {
-        return {isEditing: false};
-    }, 
-
     render: function() {
 
-        if (this.state.isEditing) {
+        if (PageStore.currentMode()) {
             return (
                 <button type="button"
                         className="button small-button--positive exam-info__my-questions__add-button">
@@ -699,40 +655,31 @@ View.Course_Exam_Questions_Add_Button = React.createClass({
         }
     },
 
+
+    changedMode: function(event) {
+        this.forceUpdate();
+    },
+
+
     onClick: function() {
         Action.send(Action.Name.ENTER_NEW_QUESTION_MODE, { examId: ExamStore.current().id });
     },
 
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
-    },
-
-
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
+
 
 });
 
 
 View.Course_Exam_Question_Item = React.createClass({
-
-    getInitialState: function() {
-        return {isEditing: false};
-    }, 
 
     render: function() {
         // NOTE: This is hard-coded for multiple-choice questions.
@@ -743,7 +690,7 @@ View.Course_Exam_Question_Item = React.createClass({
                 marginRight: '3px'
             };
 
-        if (this.state.isEditing) {
+        if (PageStore.currentMode()) {
             return (
                 <li className="question">
                     <img className="question__icon--edit" src="/img/icons/edit.png" />
@@ -797,25 +744,18 @@ View.Course_Exam_Question_Item = React.createClass({
     },
     
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
+    changedMode: function(event) {
+        this.forceUpdate();
     },
 
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        PageStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
 
 
@@ -859,8 +799,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         // Not a new question, so the initial state depends on the question's
         // current fields.
         return { solutionIndex: solutionIndex,
-                 questionMap: { options: this.props.question.getOptions() },
-                 isEditing: false};
+                 questionMap: { options: this.props.question.getOptions() } };
     }, 
 
 
@@ -949,7 +888,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         if (!this.isQuestionValid()) {
             throw new Error("Trying to save an invalid question.");
         }
-        if(ExamStore.isCreateQuestionMode()){
+        if (PageStore.currentMode() === PageStore.Mode.CREATE_QUESTION) {
             // Add the current exam to the question.
             map = View.Util.copy(this.state.questionMap);
             map.examId = ExamStore.current().id;
@@ -958,7 +897,9 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                         questionMap: map
                     });
         }
-        else{
+        // Assume the current mode is the QUESTION_EDIT
+        // mode.
+        else {
             // TODO: Modify so that examId is
             // inside the questionMap.
             Action.send(Action.Name.SAVE_QUESTION_EDIT,
@@ -1090,25 +1031,18 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
     },
 
 
-    didBeginEditing: function(event) {
-        this.setState({isEditing: true});
-    },
-
-
-    didEndEditing: function(event) {
-        this.setState({isEditing: false});
+    changedMode: function(event) {
+        this.forceUpdate();
     },
 
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+        ExamStore.removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
     }
 
     
