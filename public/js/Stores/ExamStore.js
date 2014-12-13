@@ -502,33 +502,6 @@ var ExamStore = (function() {
                         });
                 });
             };
-        case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
-            return function (payload) {
-                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        self.emit(new CAEvent(CAEvent.Name.DID_BEGIN_EDITING));
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            };
-        case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
-        case Action.Name.CANCEL_EXAM_RUN:
-            return function(payload) {
-                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                                 .then(
-                                    // Success.
-                                    function() {
-                                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
-                                    },
-                                    // Error.
-                                    function(error) {
-                                        throw error;
-                                    });            
-            };
         case Action.Name.SUBMIT_EXAM_RUN:
             return function(payload) {
                 return Dispatcher.waitFor([ConfigStore.dispatcherIndex])

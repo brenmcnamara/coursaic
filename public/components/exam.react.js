@@ -21,7 +21,7 @@ View.Exam_Root = React.createClass({
             );
         }
         else {
-            cancelExamPopup = (ExamStore.isCancelingExamRun()) ?
+            cancelExamPopup = (PageStore.currentMode() === PageStore.Mode.CANCEL_EXAM_RUN) ?
                               (<View.Popup_Cancel_Exam_Run />) :
                               (null);
             return (
@@ -41,15 +41,13 @@ View.Exam_Root = React.createClass({
 
 
     componentWillMount: function() {
-        ExamStore.addListener(CAEvent.Name.DID_BEGIN_EDITING, this.onChange);
-        ExamStore.addListener(CAEvent.Name.DID_END_EDITING, this.onChange);
+        ExamStore.addListener(CAEvent.Name.CHANGED_MODE, this.onChange);
         ExamStore.addListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
     },
 
 
     componentWillUnmount: function() {
-        ExamStore.removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.onChange);
-        ExamStore.removeListener(CAEvent.Name.DID_END_EDITING, this.onChange);
+        ExamStore.removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);        
         ExamStore.removeListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
     }
 

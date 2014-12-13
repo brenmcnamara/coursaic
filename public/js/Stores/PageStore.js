@@ -123,29 +123,6 @@ var PageStore = (function() {
                 return function(payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
                 };
-            case Action.Name.CANCEL_EXAM_RUN:
-                return function(payload) {
-                    return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                                     .then(
-                                        // Success.
-                                        function() {
-                                            return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
-                                        },
-                                        // Error.
-                                        function(error) {
-                                            throw error;
-                                        })
-                                     // Wait for the mode to change.
-                                     .then(
-                                        // Success.
-                                        function() {
-                                            self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
-                                        },
-                                        // Error.
-                                        function(error) {
-                                            throw error;
-                                        });
-                };
             case Action.Name.ENTER_NEW_QUESTION_MODE:
                 return function(payload) {
                     return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,

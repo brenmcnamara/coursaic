@@ -95,28 +95,6 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
-            case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.set({ 'cancelExam': 'true' }, { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['cancelExam'], { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.CANCEL_EXAM_RUN:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.unset(['cancelExam'], { silent: true });
-                        Anchor.set({'pageKey': 'course'}, { silent: true });
-                        resolve();
-                    });
-                };
             case Action.Name.SUBMIT_EXAM_RUN:
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
@@ -203,20 +181,6 @@ var ConfigStore = (function() {
     StoreClass.prototype.deleteQuestionId = function() {
         return Anchor.hashMap().deleteQuestionId || null;
     };
-
-
-    /**
-     * Determine if the hash specifies that a class
-     * is in the process of being canceled.
-     *
-     * @method isCancelingExamRun
-     *
-     * @return {Boolean} True if an exam run is being
-     *  canceled, false otherwise.
-     */
-     StoreClass.prototype.isCancelingExamRun = function() {
-        return Anchor.hashMap().cancelExam === 'true';
-     };
 
 
      StoreClass.prototype.isShowingExamResults = function() {
