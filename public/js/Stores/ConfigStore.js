@@ -75,6 +75,13 @@ var ConfigStore = (function() {
                         resolve();
                     });
                 };
+            case Action.Name.CANCEL_EXAM_RUN:
+                return function (payload) {
+                    return new Promise(function (resolve, reject) {
+                        Anchor.set({ pageKey: 'course' });
+                        resolve();
+                    });
+                };
             case Action.Name.DISPLAY_EXAM:
                 return function(payload) {
                     // Get the promise for the exam display process.
@@ -92,13 +99,6 @@ var ConfigStore = (function() {
                 return function(payload) {
                     return new Promise(function(resolve, reject) {
                         Anchor.unset(['createExam'], { silent: true });
-                        resolve();
-                    });
-                };
-            case Action.Name.SUBMIT_EXAM_RUN:
-                return function(payload) {
-                    return new Promise(function(resolve, reject) {
-                        Anchor.set({'examResults': 'true'}, { silent: true });
                         resolve();
                     });
                 };
@@ -151,41 +151,6 @@ var ConfigStore = (function() {
     StoreClass.prototype.examId = function() {
         return Anchor.hashMap().examId || null;
     };
-
-
-    /**
-     * Get the id of the question that is being edited
-     * on the current page.  
-     *
-     * @method questionEditId
-     *
-     * @return {String} The id of the question that
-     * is being deleted.
-     */
-    StoreClass.prototype.questionEditId = function() {
-        return Anchor.hashMap().questionEditId || null;
-    };
-
-
-    /**
-     * Get the id of the question that is being deleted
-     * on the current page.  Note that this is applicable
-     * for certain pageKey's, such as the 'course' pageKey.
-     *
-     * @method deleteQuestionId
-     *
-     * @return {String} The id of the exam for the current page.
-     *  If the page does not specify an exam id, then this will
-     *  return null.
-     */
-    StoreClass.prototype.deleteQuestionId = function() {
-        return Anchor.hashMap().deleteQuestionId || null;
-    };
-
-
-     StoreClass.prototype.isShowingExamResults = function() {
-        return Anchor.hashMap().examResults === 'true';
-     };
 
 
     return new StoreClass();

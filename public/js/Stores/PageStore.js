@@ -69,6 +69,9 @@ var PageStore = (function() {
                                      .then(
                                         // Success.
                                         function() {
+                                            if (payload.removeMode) {
+                                                self._removeMode({ fromMode: payload.removeMode });
+                                            }
                                             self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
                                         },
                                         // Error.
@@ -115,16 +118,39 @@ var PageStore = (function() {
 
                 };
             case Action.Name.ENTER_CANCEL_EXAM_RUN_MODE:
-                return function(payload) {
+                return function (payload) {
                     return self._addMode({ toMode: PageStore.Mode.CANCEL_EXAM_RUN,
                                            toPayload: payload });
                 };
             case Action.Name.EXIT_CANCEL_EXAM_RUN_MODE:
-                return function(payload) {
+                return function (payload) {
                     return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
                 };
+            case Action.Name.CANCEL_EXAM_RUN:
+                return function (payload) {
+                    return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
+                                     .then(
+                                        // Success.
+                                        function () {
+                                            return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
+                                        },
+                                        // Error.
+                                        function (error) {
+                                            throw error;
+                                        })
+
+                                       .then(
+                                        // Success
+                                        function () {
+                                            self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
+                                        },
+                                        // Failure
+                                        function (error) {
+                                            throw error;
+                                        });
+                };
             case Action.Name.ENTER_NEW_QUESTION_MODE:
-                return function(payload) {
+                return function (payload) {
                     return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,
                                            toPayload: payload });
                 };
@@ -193,6 +219,11 @@ var PageStore = (function() {
                                         });
 
                 };
+            case Action.Name.SUBMIT_EXAM_RUN:
+                return function (payload) {
+                    return self._addMode({ toMode: PageStore.Mode.VIEW_EXAM_RESULTS,
+                                           toPayload: payload });
+                };
         };
     };
 
@@ -233,6 +264,7 @@ PageStore.Mode = {
     CREATE_EXAM: 'CREATE_EXAM',
     CREATE_QUESTION: 'CREATE_QUESTION',
     DELETE_QUESTION: 'DELETE_QUESTION',
-    EDIT_QUESTION: 'EDIT_QUESTION'
+    EDIT_QUESTION: 'EDIT_QUESTION',
+    VIEW_EXAM_RESULTS: 'VIEW_EXAM_RESULTS'
 };
 

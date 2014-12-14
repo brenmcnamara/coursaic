@@ -249,33 +249,6 @@ var ExamStore = (function() {
 
 
     /**
-     * Indicates if the user is trying to cancel
-     * the current exam run.
-     *
-     * @method isCancelingExamRun
-     *
-     * @return {Boolean} True if the user is trying
-     *  to cancel the current exam run, false otherwise.
-     */
-    StoreClass.prototype.isCancelingExamRun = function() {
-        return ConfigStore.isCancelingExamRun();
-    };
-
-
-    /**
-     * Indicates if the page is showing exam results.
-     *
-     * @method isShowingExamResults
-     *
-     * @return {Boolean} True if the current page is showing
-     *  exam results, false otherwise.
-     */
-    StoreClass.prototype.isShowingExamResults = function() {
-        return ConfigStore.isShowingExamResults();
-    };
-
-
-    /**
      * Get the question with the specified id. First,
      *  gets the proper exam, and then loops through
      *  the questions in the exam until it finds the
@@ -377,7 +350,7 @@ var ExamStore = (function() {
             };
         case Action.Name.DISPLAY_EXAM:
             return function(payload) {
-                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
                         // Done waiting for the ConfigStore to update ExamHash.
                         .then(
                             // Success.
@@ -504,10 +477,10 @@ var ExamStore = (function() {
             };
         case Action.Name.SUBMIT_EXAM_RUN:
             return function(payload) {
-                return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
+                return Dispatcher.waitFor([ PageStore.dispatcherIndex ])
                                  .then(
                                     // Success.
-                                    function() {
+                                    function () {
                                         // Grade the exam and save it with the current exam run.
                                         var prop, guesses = payload.guesses;
                                         for (prop in guesses) {
@@ -519,7 +492,7 @@ var ExamStore = (function() {
                                         self.emit(new CAEvent(CAEvent.Name.DID_GRADE_EXAM_RUN));
                                     },
                                     // Error.
-                                    function(error) {
+                                    function (error) {
                                         throw error;
                                     });
             };

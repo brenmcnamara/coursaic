@@ -10,7 +10,7 @@ View.Exam_Root = React.createClass({
 
     render: function() {
         var cancelExamPopup;
-        if (ExamStore.isShowingExamResults()) {
+        if (PageStore.currentMode() === PageStore.Mode.VIEW_EXAM_RESULTS) {
             return (
                 <div className="main">
                     <View.Header isOpaque={ false } />
@@ -71,7 +71,8 @@ View.Back_Button = React.createClass({
 
     onClick: function() {
         Action.send(Action.Name.PERFORM_LOAD, { pageKey: 'course',
-                                                course: CourseStore.current().id });
+                                                course: CourseStore.current().id,
+                                                removeMode: PageStore.Mode.VIEW_EXAM_RESULTS });
     }
 
 

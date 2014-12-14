@@ -308,9 +308,7 @@ View.Popup_Cancel_Exam_Run = React.createClass({
 
 
     onYes: function(event) {
-        // Note: We do not have a CANCEL_EXAM action at the moment.
-        Action.send(Action.Name.PERFORM_LOAD,
-                    { pageKey: 'course', course: CourseStore.current().id });
+        Action.send(Action.Name.CANCEL_EXAM_RUN);
     },
 
 
