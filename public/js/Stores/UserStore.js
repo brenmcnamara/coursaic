@@ -25,10 +25,14 @@ var School = Parse.Object.extend("School"),
     UserStore = (function() {
 
         var StoreClass = function() {
-            this.dispatcherIndex = 3;
-            // A hash of id -> Parse.User
-            this._userHash = {};
-        };
+                this.dispatcherIndex = 3;
+                // A hash of id -> Parse.User
+                this._userHash = {};
+            },
+            // Reference to the StoreClass instance.
+            // This is set at the bottom of the file where
+            // the store class is first created.
+            self;
 
         StoreClass.prototype = new Store();
 
@@ -109,8 +113,6 @@ var School = Parse.Object.extend("School"),
          *  when the login process has completed.
          */
         StoreClass.prototype._login = function() {
-            var self = this;
-
             return new Promise(function(resolve, reject) {
                 // Callback after the user has logged in successfully.
                 var onDidLoginSuccess = function() {
@@ -165,28 +167,21 @@ var School = Parse.Object.extend("School"),
             }
         };
 
+        StoreClass.prototype.actionHandler = {
 
-        StoreClass.prototype.actionHandler = function(name) {
-            var self = this;
-            switch (name) {
-            case Action.Name.PERFORM_LOAD:
-            case Action.Name.CANCEL_EXAM_RUN:
-                return function(payload) {
-                    // TODO: Don't need to wrap this in a promise.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex])
-                                     .then(
-                                        // Success.
-                                        function() {
-                                            return self._login();
-                                        },
-                                        // Error.
-                                        function(error) {
-                                            throw error;
-                                        });
-                };
-            default:
-                return null;
+            PERFORM_LOAD: function (payload) {
+                return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
+                                 .then(
+                                    // Success.
+                                    function() {
+                                        return self._login();
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
             }
+
         };
 
 
@@ -211,7 +206,6 @@ var School = Parse.Object.extend("School"),
          *  fetching the author has completed.
          */
         StoreClass.prototype.fetchAuthorOfExam = function(exam) {
-            var self = this;
             return new Promise(function(resolve, reject) {
                 exam.get('author').fetch({
                     success: function(user) {
@@ -227,7 +221,7 @@ var School = Parse.Object.extend("School"),
         };
 
 
-        return new StoreClass();
+        return (self = new StoreClass());
 
     }());
 

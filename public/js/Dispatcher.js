@@ -145,7 +145,7 @@ var Dispatcher = (function() {
         // Go through the stores and register
         // action with each store.
         var storeCalls = stateMap.stores.reduce(function(memo, store) {
-            var callback = store.actionHandler(name);
+            var callback = store.actionHandler[name];
             if (callback) {
                 if (typeof callback !== 'function') {
                     throw new Error("Dispatcher will only register objects of type " +

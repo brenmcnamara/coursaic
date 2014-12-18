@@ -132,10 +132,188 @@ var Course = Parse.Object.extend("Course", {
             // a hash table of courses and changing related
             // methods.
             this._courses = [];
-        };
+        },
+            self;
 
         StoreClass.prototype = new Store();
 
+
+        StoreClass.prototype.actionHandler = {
+
+            PERFORM_LOAD: function (payload) {
+                switch (payload.pageKey) {
+                case 'home':
+                    // Fetch a page-worth of courses.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
+                            // Done waiting for the ConfigStore
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchPage();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+                case 'course':
+                case 'exam':
+                    // Wait for the User to be loaded.
+                    // Load all the information for the course.
+                    // NOTE: This is needed by the exam page key so that
+                    // the exam store can load the exam and question related
+                    // to the single exam of the course.
+                    // Just make sure the single course is loaded.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
+                           .then(
+                                // Success.
+                                function() {
+                                    var course;
+                                    // Get the course if the course does not
+                                    // already exist.
+                                    if (!payload.course) {
+                                        throw new Error("PERFORM_LOAD must provide course id in payload");
+                                    }
+                                    if (!self.courseWithId(payload.course)) {
+                                        // Don't have the course, need to fetch it.
+                                        course = new Course();
+                                        course.id = payload.course;
+                                        return self._fetchCourse(course);
+                                    }
+                                },
+
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                }
+                            );
+
+                default:
+                    return new Promise(function(resolve, reject) {
+                        resolve();
+                    });
+                }   
+            },
+
+
+            CREATE_COURSE: function (payload) {
+                // TODO: Note that if this fails,
+                // createCourse mode will be exited since this
+                // is getting called after the config store.
+                // Not strongly exception-safe.
+                return Dispatcher.waitFor([PageStore.dispatcherIndex])
+                       // Wait for the config store to update the hash.
+                       .then(
+                        // Success.
+                        function() {
+                            var course = new Course(),
+                                fieldId = payload.fieldId;
+                            // Set the field object on the payload so
+                            // it is added to the new course instance.
+                            payload.field = new Field();
+                            payload.field.id = fieldId;
+                            // Add the school of the current user.
+                            payload.school = UserStore.current().get('school');
+                            // Enroll the current user into the course.
+                            payload.enrolled = [UserStore.current()];
+                            // Remove the field id from the payload before
+                            // setting it on the course.
+                            delete payload.fieldId;
+                            course.set(payload);
+                            return new Promise(function(resolve, reject) {
+                                // TODO: Modify this using the
+                                // promise syntax.
+                                course.save({
+                                    success: function(course) {
+                                        self._courses.push(course);
+                                        // Pass along the course.
+                                        resolve(course);
+                                    },
+
+                                    error: function(error) {
+                                        throw error;
+                                    }
+                                });
+                            });
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
+                        // Wait for the course to be saved.
+                        .then(
+                        // Success.
+                        function(course) {
+                            return self._loadCourse(course);
+                        },
+                        // Error.
+                        function(error) {
+                            throw error;
+                        })
+                        // Wait for the course to be saved.
+                        .then(
+                        // Success.
+                        function() {
+                            // TODO: Maybe pass the course as a parameter
+                            // to this event.
+                            self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
+                        },
+                        // Error.
+                        function(error) {
+                            // TODO: Should I cancel create course mode?
+                            throw error;
+                        });
+            },
+
+
+            ENROLL_CURRENT_USER: function (payload) {
+                var course = this.courseWithId(payload.courseId);
+                // Note that this call will cause an error to occur
+                // if the user is already enrolled in the course.
+                course.addUser(UserStore.current());
+                return course.save()
+                             .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+            },
+
+
+            UNENROLL_CURRENT_USER: function (payload) {
+                var course = self.courseWithId(payload.courseId);
+                    course.removeUser(UserStore.current());
+                return course.save()
+                             .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+            }
+
+
+        };
+
+/*
         StoreClass.prototype.actionHandler = function(name) {
             var self = this;
             switch(name) {
@@ -310,7 +488,7 @@ var Course = Parse.Object.extend("Course", {
                 return null;
             }
         };
-
+*/
 
         /**
          * Create a query object used to fetch courses. This method
@@ -349,7 +527,6 @@ var Course = Parse.Object.extend("Course", {
          *  the course has successfully been fetched.
          */
         StoreClass.prototype._fetchCourse = function(course) {
-            var self = this;
             return new Promise(function(resolve, reject) {
                 course.fetch({
                     success: function() {
@@ -435,8 +612,6 @@ var Course = Parse.Object.extend("Course", {
          *  asynchronous call has returned.
          */
         StoreClass.prototype.fetchPage = function() {
-            var self = this;
-
             if (this._isFetching) {
                 throw new Error("Cannot fetch courses while a fetch is in progress.");
             }
@@ -563,6 +738,6 @@ var Course = Parse.Object.extend("Course", {
         };
 
 
-        return new StoreClass();
+        return (self = new StoreClass());
 
     }());

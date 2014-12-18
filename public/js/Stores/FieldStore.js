@@ -25,10 +25,43 @@ var Field = Parse.Object.extend("Field"),
         var StoreClass = function() {
             this._fieldHash = {};
             this.dispatcherIndex = 5;
-        };
+        }
+            self;
 
         StoreClass.prototype = new Store();
 
+        StoreClass.prototype.actionHandler = {
+
+            PERFORM_LOAD: function (payload) {
+                return Dispatcher.waitFor([UserStore.dispatcherIndex])
+                            
+                                .then(
+                                    // Success.
+                                    function() {
+                                        var query = new Parse.Query(Field);
+                                        query.find({
+                                            success: function(response) {
+                                                response.forEach(function(field) {
+                                                    // TODO: This is not equality safe.
+                                                    self._fieldHash[field.id] = field;
+                                                });
+                                            },
+
+                                            error: function(error) {
+                                                throw error;
+                                            }
+                                        });
+                                    },
+                                    // Error.
+                                    function(error) {
+                                        throw error;
+                                    });
+            }
+
+
+        };
+
+/*        
         StoreClass.prototype.actionHandler = function(name) {
             var self = this;
             switch (name) {
@@ -63,7 +96,7 @@ var Field = Parse.Object.extend("Field"),
             }
         };
 
-
+*/
         /**
          * Get all the fields that are currently in
          * the collection.
@@ -97,7 +130,6 @@ var Field = Parse.Object.extend("Field"),
          *  The failure callback will contain an error object.
          */
         StoreClass.prototype.fetchFieldForCourse = function(course) {
-            var self = this;
             return new Promise(function(resolve, reject) {
                 var oldField = course.get('field');
                 if (self._fieldHash[oldField.id]) {
@@ -122,6 +154,6 @@ var Field = Parse.Object.extend("Field"),
         };
 
 
-        return new StoreClass();
+        return (self = new StoreClass());
         
     }());
