@@ -61,42 +61,7 @@ var Field = Parse.Object.extend("Field"),
 
         };
 
-/*        
-        StoreClass.prototype.actionHandler = function(name) {
-            var self = this;
-            switch (name) {
-            case Action.Name.PERFORM_LOAD:
-                return function(payload) {
-                    return Dispatcher.waitFor([UserStore.dispatcherIndex])
-                            
-                            .then(
-                                // Success.
-                                function() {
-                                    var query = new Parse.Query(Field);
-                                    query.find({
-                                        success: function(response) {
-                                            response.forEach(function(field) {
-                                                // TODO: This is not equality safe.
-                                                self._fieldHash[field.id] = field;
-                                            });
-                                        },
 
-                                        error: function(error) {
-                                            throw error;
-                                        }
-                                    });
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-                };
-            default:
-                return null;
-            }
-        };
-
-*/
         /**
          * Get all the fields that are currently in
          * the collection.
