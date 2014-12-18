@@ -60,6 +60,12 @@ var PageStore = (function() {
 
     StoreClass.prototype.actionHandler = {
         
+        TO_MODE_DELETE_QUESTION: function (payload) {
+            return self._addMode({ toMode: PageStore.Mode.DELETE_QUESTION,
+                                   toPayload: payload });
+        },
+
+
         PERFORM_LOAD: function (payload) {
             return Dispatcher.waitFor([ UserStore.dispatcherIndex, CourseStore.dispatcherIndex,
                                         ExamStore.dispatcherIndex, FieldStore.dispatcherIndex ])
@@ -93,13 +99,6 @@ var PageStore = (function() {
 
         CANCEL_CREATE_COURSE: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
-        },
-
-
-        ENTER_DELETE_QUESTION_MODE: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.DELETE_QUESTION,
-                                   toPayload: payload });
-
         },
 
 

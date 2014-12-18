@@ -736,10 +736,10 @@ View.Course_Exam_Question_Item = React.createClass({
 
 
     onDelete: function(event) {
-        Action.send(Action.Name.ENTER_DELETE_QUESTION_MODE,
+        Action.send(Action.Name.TO_MODE_DELETE_QUESTION,
                     {
                         examId: ExamStore.current().id,
-                        deleteQuestionId: this.props.question.id
+                        questionId: this.props.question.id
                     });
     },
     

@@ -146,19 +146,6 @@ var ExamStore = (function() {
 
 
     /**
-     * Get the id of the question being deleted.
-     *
-     * @method deleteQuestionId
-     *
-     * @return {String} The id of a question being deleted.
-     *  This will be null if no question is being deleted.
-     */
-    StoreClass.prototype.deleteQuestionId = function() {
-        return ConfigStore.deleteQuestionId();
-    };
-
-
-    /**
      * Get all the questions for a particular exam. This
      * is a query method.
      *
@@ -422,12 +409,9 @@ var ExamStore = (function() {
 
         DELETE_QUESTION: function (payload) {
             return new Promise(function (resolve, reject) {
-                // Assuming the question information is cached in
-                // the payload for the PageStore.
-                var deleteQuestionId = PageStore.currentPayload().deleteQuestionId,
-                    question = self.questionForExam(payload.examId,
-                                                    deleteQuestionId),
-                    examId = payload.examId;
+                var questionId = PageStore.currentPayload().questionId,
+                    examId = PageStore.currentPayload().examId,
+                    question = self.questionForExam(examId, questionId);
 
                 question.destroy().then(
                       // Success.
@@ -440,7 +424,6 @@ var ExamStore = (function() {
                         else {
                             throw new Error("Cannot delete non-existent question");
                         }
-                        self.emit(new CAEvent(CAEvent.Name.DID_END_EDITING));
                         resolve();
                       },
 

@@ -277,20 +277,12 @@ View.Popup_Delete_Question = React.createClass({
 
 
     onYes: function(event) {
-        Action.send(Action.Name.DELETE_QUESTION,
-            {
-                examId: ExamStore.current().id,
-                deleteQuestionId: ExamStore.deleteQuestionId(),
-            });
+        Action.send(Action.Name.DELETE_QUESTION);
     },
 
 
     onNo: function(event) {
-        Action.send(Action.Name.CANCEL_DELETE_QUESTION_MODE,
-            {
-                examId: ExamStore.current().id,
-                deleteQuestionId: ConfigStore.deleteQuestionId(),
-            });
+        Action.send(Action.Name.CANCEL_DELETE_QUESTION_MODE);
     }
 
 
