@@ -60,6 +60,95 @@ var PageStore = (function() {
 
     StoreClass.prototype.actionHandler = {
 
+        CANCEL_EXAM_RUN: function (payload) {
+            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
+                             .then(
+                                // Success.
+                                function () {
+                                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
+                                },
+                                // Error.
+                                function (error) {
+                                    throw error;
+                                })
+
+                               .then(
+                                // Success
+                                function () {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
+                                },
+                                // Failure
+                                function (error) {
+                                    throw error;
+                                });
+        },
+
+
+        CREATE_COURSE: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
+        },
+
+
+        CREATE_EXAM: function (payload) {
+            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                             .then(
+                                // Success.
+                                function () {
+                                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                                },
+                                // Error.
+                                function (error) {
+                                    throw error;
+                                });
+        },
+
+
+        CREATE_QUESTION: function (payload) {
+            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                            // Wait for the Exam Store to create the new
+                            // question.
+                             .then(
+                                // Success.
+                                function () {
+                                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION});
+                                },
+                                // Error.
+                                function (error) {
+                                    throw error;
+                                });
+        },
+
+
+        DELETE_QUESTION: function (payload) {
+            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                            // Done waiting for the exam store to delete
+                            // the question.
+                             .then(
+                                // Success.
+                                function() {
+                                    return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+        },
+
+
+        EDIT_QUESTION: function (payload) {
+            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
+                             .then(
+                                // Success.
+                                function () {
+                                    return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+                                },
+                                // Error.
+                                function (error) {
+                                    throw error;
+                                });
+        },
+
+
         FROM_MODE_CANCEL_EXAM_RUN: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
         },
@@ -87,6 +176,31 @@ var PageStore = (function() {
 
         FROM_MODE_EDIT_QUESTION: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
+        },
+
+
+        PERFORM_LOAD: function (payload) {
+            return Dispatcher.waitFor([ UserStore.dispatcherIndex, CourseStore.dispatcherIndex,
+                                        ExamStore.dispatcherIndex, FieldStore.dispatcherIndex ])
+
+                             .then(
+                                // Success.
+                                function() {
+                                    if (payload.removeMode) {
+                                        self._removeMode({ fromMode: payload.removeMode });
+                                    }
+                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+        },
+
+
+        SUBMIT_EXAM_RUN: function (payload) {
+            return self._addMode({ toMode: PageStore.Mode.VIEW_EXAM_RESULTS,
+                                   toPayload: payload });
         },
 
 
@@ -123,120 +237,6 @@ var PageStore = (function() {
 
         TO_MODE_EDIT_QUESTION: function (payload) {
             return self._addMode({ toMode: PageStore.Mode.EDIT_QUESTION,
-                                   toPayload: payload });
-        },
-
-
-        PERFORM_LOAD: function (payload) {
-            return Dispatcher.waitFor([ UserStore.dispatcherIndex, CourseStore.dispatcherIndex,
-                                        ExamStore.dispatcherIndex, FieldStore.dispatcherIndex ])
-
-                             .then(
-                                // Success.
-                                function() {
-                                    if (payload.removeMode) {
-                                        self._removeMode({ fromMode: payload.removeMode });
-                                    }
-                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-        },
-
-
-        CREATE_COURSE: function (payload) {
-            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
-        },
-
-
-        DELETE_QUESTION: function (payload) {
-            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
-                            // Done waiting for the exam store to delete
-                            // the question.
-                             .then(
-                                // Success.
-                                function() {
-                                    return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-        },
-
-
-        CANCEL_EXAM_RUN: function (payload) {
-            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                             .then(
-                                // Success.
-                                function () {
-                                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
-                                },
-                                // Error.
-                                function (error) {
-                                    throw error;
-                                })
-
-                               .then(
-                                // Success
-                                function () {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
-                                },
-                                // Failure
-                                function (error) {
-                                    throw error;
-                                });
-        },
-
-
-        CREATE_QUESTION: function (payload) {
-            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
-                            // Wait for the Exam Store to create the new
-                            // question.
-                             .then(
-                                // Success.
-                                function () {
-                                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION});
-                                },
-                                // Error.
-                                function (error) {
-                                    throw error;
-                                });
-        },
-
-
-        CREATE_EXAM: function (payload) {
-            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
-                             .then(
-                                // Success.
-                                function () {
-                                    return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
-                                },
-                                // Error.
-                                function (error) {
-                                    throw error;
-                                });
-        },
-
-
-        EDIT_QUESTION: function (payload) {
-            return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
-                             .then(
-                                // Success.
-                                function () {
-                                    return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
-                                },
-                                // Error.
-                                function (error) {
-                                    throw error;
-                                });
-        },
-
-
-        SUBMIT_EXAM_RUN: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.VIEW_EXAM_RESULTS,
                                    toPayload: payload });
         }
 
