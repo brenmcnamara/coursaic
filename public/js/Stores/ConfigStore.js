@@ -110,38 +110,6 @@ var ConfigStore = (function() {
     };
 
 
-    /**
-     * Get the id of the course representing
-     * the current page. Note that this is only
-     * applicable to a pageKey of 'course'.
-     *
-     * @method courseId
-     *
-     * @return {String} The id of the course for the current
-     * page. If the page does not specify a course id, then this
-     * will return null.
-     */
-    StoreClass.prototype.courseId = function() {
-        return Anchor.hashMap().course || null;
-    };
-
-
-    /**
-     * Get the id of the exam that is being presented
-     * on the current page.  Note that this is applicable
-     * for certain pageKey's, such as the 'course' pageKey.
-     *
-     * @method examId
-     *
-     * @return {String} The id of the exam for the current page.
-     *  If the page does not specify an exam id, then this will
-     *  return null.
-     */
-    StoreClass.prototype.examId = function() {
-        return Anchor.hashMap().examId || null;
-    };
-
-
     return (self = new StoreClass());
 
 }());
