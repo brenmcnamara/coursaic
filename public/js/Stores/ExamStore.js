@@ -267,6 +267,136 @@ var ExamStore = (function() {
 
     StoreClass.prototype.actionHandler = {
 
+        CREATE_EXAM: function (payload) {
+            console.log("In ExamStore.");
+            return new Promise(function (resolve, reject) {
+                var examMap = payload.examMap,
+                    exam = new Exam();
+
+                examMap.course = CourseStore.courseWithId(examMap.courseId);
+                examMap.author = UserStore.current();
+
+                delete examMap.courseId;
+                
+                exam.set(examMap);
+                exam.save()
+                    .then(
+                     // Success.
+                    function (exam) {
+                        self._examHash[exam.id] = exam;
+                        self._questionHash[exam.id] = [];
+                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
+                        resolve();
+                    },
+                    // Error.
+                    function (error) {
+                        throw error;
+                    });
+            });
+        },
+
+
+
+        CREATE_QUESTION: function (payload) {
+            return new Promise(function (resolve, reject) {
+                var question = new Question(),
+                    options = payload.questionMap.options,
+                    saveOptions = {},
+                    examId = payload.questionMap.examId;
+                question.setOptions(options);
+
+
+                payload.questionMap.author = UserStore.current();
+                payload.questionMap.exam = self._examHash[examId];
+                // Delete any fields of the questionMap that should
+                // not be saved with the question.
+                delete payload.questionMap.options;
+                delete payload.questionMap.examId;
+                question.set(payload.questionMap);
+                question.save().then(
+                      // Success.
+                      function (question) {
+                        self._questionHash[examId].push(question);
+                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
+                        resolve();
+                      },
+
+                      function(error) {
+                      throw error;
+                });
+            });
+        },
+
+
+        DELETE_QUESTION: function (payload) {
+            return new Promise(function (resolve, reject) {
+                var questionId = PageStore.currentPayload().questionId,
+                    examId = PageStore.currentPayload().examId,
+                    question = self.questionForExam(examId, questionId);
+
+                question.destroy().then(
+                      // Success.
+                      function (question) {
+                        var spliceIndex;
+                        spliceIndex = self._questionHash[examId].indexOf(question);
+                        if (spliceIndex != -1) {
+                            self._questionHash[examId].splice(spliceIndex, 1);
+                        }
+                        else {
+                            throw new Error("Cannot delete non-existent question");
+                        }
+                        resolve();
+                      },
+
+                      function (error) {
+                      throw error;
+                });
+            });
+        },
+
+
+        DISPLAY_EXAM: function (payload) {
+            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
+                            // Done waiting for the ConfigStore to update ExamHash.
+                            .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
+                                },
+                                // Error.
+                                function(err) {
+                                    throw error;
+                                });
+        },
+
+
+        EDIT_QUESTION: function (payload) {
+            return new Promise(function (resolve, reject) {
+                var question = self.questionForExam(PageStore.currentPayload().examId,
+                                                    PageStore.currentPayload().questionId),
+                    options = payload.questionMap.options,
+                    saveOptions = {};
+                if (options) {
+                    question.setOptions(options);
+                }
+                // Remove the options from the questionMap
+                // because they must be added in a particular
+                // way, as illustrated above.
+                delete payload.questionMap.options;
+                question.set(payload.questionMap);
+                question.save().then(
+                    // Success.
+                    function () {
+                        resolve();
+                    },
+                    // Error.
+                    function (error) {
+                        throw error;
+                    });
+            });
+        },
+
+
         PERFORM_LOAD: function (payload) {
             // The exams are loaded only when loading a course
             // page.
@@ -334,134 +464,6 @@ var ExamStore = (function() {
         },
 
 
-        DISPLAY_EXAM: function (payload) {
-            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                            // Done waiting for the ConfigStore to update ExamHash.
-                            .then(
-                                // Success.
-                                function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
-                                },
-                                // Error.
-                                function(err) {
-                                    throw error;
-                                });
-        },
-
-
-        EDIT_QUESTION: function (payload) {
-            return new Promise(function (resolve, reject) {
-                var question = self.questionForExam(PageStore.currentPayload().examId,
-                                                    PageStore.currentPayload().questionId),
-                    options = payload.questionMap.options,
-                    saveOptions = {};
-                if (options) {
-                    question.setOptions(options);
-                }
-                // Remove the options from the questionMap
-                // because they must be added in a particular
-                // way, as illustrated above.
-                delete payload.questionMap.options;
-                question.set(payload.questionMap);
-                question.save().then(
-                    // Success.
-                    function () {
-                        resolve();
-                    },
-                    // Error.
-                    function (error) {
-                        throw error;
-                    });
-            });
-        },
-
-
-        CREATE_QUESTION: function (payload) {
-            return new Promise(function (resolve, reject) {
-                var question = new Question(),
-                    options = payload.questionMap.options,
-                    saveOptions = {},
-                    examId = payload.questionMap.examId;
-                question.setOptions(options);
-
-
-                payload.questionMap.author = UserStore.current();
-                payload.questionMap.exam = self._examHash[examId];
-                // Delete any fields of the questionMap that should
-                // not be saved with the question.
-                delete payload.questionMap.options;
-                delete payload.questionMap.examId;
-                question.set(payload.questionMap);
-                question.save().then(
-                      // Success.
-                      function (question) {
-                        self._questionHash[examId].push(question);
-                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
-                        resolve();
-                      },
-
-                      function(error) {
-                      throw error;
-                });
-            });
-        },
-
-
-        DELETE_QUESTION: function (payload) {
-            return new Promise(function (resolve, reject) {
-                var questionId = PageStore.currentPayload().questionId,
-                    examId = PageStore.currentPayload().examId,
-                    question = self.questionForExam(examId, questionId);
-
-                question.destroy().then(
-                      // Success.
-                      function (question) {
-                        var spliceIndex;
-                        spliceIndex = self._questionHash[examId].indexOf(question);
-                        if (spliceIndex != -1) {
-                            self._questionHash[examId].splice(spliceIndex, 1);
-                        }
-                        else {
-                            throw new Error("Cannot delete non-existent question");
-                        }
-                        resolve();
-                      },
-
-                      function (error) {
-                      throw error;
-                });
-            });
-        },
-
-
-        CREATE_EXAM: function (payload) {
-            console.log("In ExamStore.");
-            return new Promise(function (resolve, reject) {
-                var examMap = payload.examMap,
-                    exam = new Exam();
-
-                examMap.course = CourseStore.courseWithId(examMap.courseId);
-                examMap.author = UserStore.current();
-
-                delete examMap.courseId;
-                
-                exam.set(examMap);
-                exam.save()
-                    .then(
-                     // Success.
-                    function (exam) {
-                        self._examHash[exam.id] = exam;
-                        self._questionHash[exam.id] = [];
-                        self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
-                        resolve();
-                    },
-                    // Error.
-                    function (error) {
-                        throw error;
-                    });
-            });
-        },
-
         SUBMIT_EXAM_RUN: function (payload) {
             return Dispatcher.waitFor([ PageStore.dispatcherIndex ])
                  .then(
@@ -484,6 +486,7 @@ var ExamStore = (function() {
         }
 
     };
+
 
     return (self = new StoreClass());
 
