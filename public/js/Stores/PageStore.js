@@ -61,26 +61,29 @@ var PageStore = (function() {
     StoreClass.prototype.actionHandler = {
 
         CANCEL_EXAM_RUN: function (payload) {
-            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                             .then(
-                                // Success.
-                                function () {
-                                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
-                                },
-                                // Error.
-                                function (error) {
-                                    throw error;
-                                })
+            return new Promise(function (resolve, reject) { 
+                Anchor.set({ pageKey: 'course' }, { silent: true });
+                resolve();
+            })
+             .then(
+                // Success.
+                function () {
+                    return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
+                },
+                // Error.
+                function (error) {
+                    throw error;
+                })
 
-                               .then(
-                                // Success
-                                function () {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
-                                },
-                                // Failure
-                                function (error) {
-                                    throw error;
-                                });
+               .then(
+                // Success
+                function () {
+                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD));
+                },
+                // Failure
+                function (error) {
+                    throw error;
+                });
         },
 
 

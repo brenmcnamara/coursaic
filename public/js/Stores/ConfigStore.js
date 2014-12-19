@@ -30,13 +30,6 @@ var ConfigStore = (function() {
 
     StoreClass.prototype.actionHandler = {
 
-        CANCEL_EXAM_RUN: function (payload) {
-            return new Promise(function (resolve, reject) {
-                Anchor.set({ pageKey: 'course' });
-                resolve();
-            });
-        },
-
 
         DISPLAY_EXAM: function (payload) {
             // Get the promise for the exam display process.
