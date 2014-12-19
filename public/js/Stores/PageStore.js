@@ -60,6 +60,11 @@ var PageStore = (function() {
 
     StoreClass.prototype.actionHandler = {
 
+        FROM_MODE_CANCEL_EXAM_RUN: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
+        },
+
+
         FROM_MODE_CREATE_EXAM: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
         },
@@ -67,6 +72,12 @@ var PageStore = (function() {
 
         FROM_MODE_DELETE_QUESTION: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+        },
+
+
+        TO_MODE_CANCEL_EXAM_RUN: function (payload) {
+            return self._addMode({ toMode: PageStore.Mode.CANCEL_EXAM_RUN,
+                                   toPayload: payload });
         },
 
 
@@ -131,17 +142,6 @@ var PageStore = (function() {
                                 function(error) {
                                     throw error;
                                 });
-        },
-
-
-        ENTER_CANCEL_EXAM_RUN_MODE: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.CANCEL_EXAM_RUN,
-                                   toPayload: payload });
-        },
-
-
-        EXIT_CANCEL_EXAM_RUN_MODE: function (payload) {
-            return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN });
         },
 
 

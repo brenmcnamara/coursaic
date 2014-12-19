@@ -305,7 +305,7 @@ View.Popup_Cancel_Exam_Run = React.createClass({
 
 
     onNo: function(event) {
-        Action.send(Action.Name.EXIT_CANCEL_EXAM_RUN_MODE);
+        Action.send(Action.Name.FROM_MODE_CANCEL_EXAM_RUN);
     }
 
 

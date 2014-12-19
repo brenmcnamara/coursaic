@@ -357,7 +357,7 @@ View.Exam_Form_Buttons = React.createClass({
 
 
     onClickCancel: function() {
-        Action.send(Action.Name.ENTER_CANCEL_EXAM_RUN_MODE, { examId: ExamStore.current().id });
+        Action.send(Action.Name.TO_MODE_CANCEL_EXAM_RUN, { examId: ExamStore.current().id });
     }
 
 
