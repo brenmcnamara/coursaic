@@ -282,7 +282,7 @@ View.Popup_Delete_Question = React.createClass({
 
 
     onNo: function(event) {
-        Action.send(Action.Name.CANCEL_DELETE_QUESTION_MODE);
+        Action.send(Action.Name.FROM_MODE_DELETE_QUESTION);
     }
 
 

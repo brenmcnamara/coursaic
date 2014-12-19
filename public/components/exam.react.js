@@ -35,6 +35,7 @@ View.Exam_Root = React.createClass({
         }
     },
 
+
     onChange: function(event) {
         this.forceUpdate();
     },

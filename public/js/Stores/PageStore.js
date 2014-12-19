@@ -60,6 +60,11 @@ var PageStore = (function() {
 
     StoreClass.prototype.actionHandler = {
         
+        FROM_MODE_DELETE_QUESTION: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+        },
+
+
         TO_MODE_DELETE_QUESTION: function (payload) {
             return self._addMode({ toMode: PageStore.Mode.DELETE_QUESTION,
                                    toPayload: payload });
@@ -99,11 +104,6 @@ var PageStore = (function() {
 
         CANCEL_CREATE_COURSE: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
-        },
-
-
-        CANCEL_DELETE_QUESTION_MODE: function (payload) {
-            return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
         },
 
 
@@ -244,6 +244,8 @@ var PageStore = (function() {
 
 
     };
+
+
     /**
      * Get the current mode for the page.
      *
