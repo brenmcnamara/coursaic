@@ -75,6 +75,11 @@ var PageStore = (function() {
         },
 
 
+        FROM_MODE_CREATE_QUESTION: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
+        },
+
+        
         FROM_MODE_DELETE_QUESTION: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
         },
@@ -89,6 +94,12 @@ var PageStore = (function() {
         TO_MODE_CREATE_COURSE: function (payload) {
             console.log("Create course mode.");
             return self._addMode({ toMode: PageStore.Mode.CREATE_COURSE,
+                                   toPayload: payload });
+        },
+
+
+        TO_MODE_CREATE_QUESTION: function (payload) {
+            return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,
                                    toPayload: payload });
         },
 
@@ -127,9 +138,6 @@ var PageStore = (function() {
         CREATE_COURSE: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
         },
-
-
-
 
 
         DELETE_QUESTION: function (payload) {
@@ -172,16 +180,7 @@ var PageStore = (function() {
         },
 
 
-        CANCEL_CREATE_QUESTION: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,
-                                   toPayload: payload });
-        },
 
-
-        ENTER_NEW_QUESTION_MODE: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.CREATE_QUESTION,
-                                   toPayload: payload });
-        },
 
 
         SAVE_QUESTION_NEW: function (payload) {

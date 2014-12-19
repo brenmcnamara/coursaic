@@ -662,7 +662,7 @@ View.Course_Exam_Questions_Add_Button = React.createClass({
 
 
     onClick: function() {
-        Action.send(Action.Name.ENTER_NEW_QUESTION_MODE, { examId: ExamStore.current().id });
+        Action.send(Action.Name.TO_MODE_CREATE_QUESTION, { examId: ExamStore.current().id });
     },
 
 
@@ -922,7 +922,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
                     });
         }
         else {
-            Action.send(Action.Name.CANCEL_CREATE_QUESTION);
+            Action.send(Action.Name.FROM_MODE_CREATE_QUESTION);
         }
     },
 
