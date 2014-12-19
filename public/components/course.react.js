@@ -266,7 +266,7 @@ View.Course_Content_Nav = React.createClass({
 
     
     onClickCreateExam: function(event) {
-        Action.send(Action.Name.ENTER_CREATE_EXAM_MODE);
+        Action.send(Action.Name.TO_MODE_CREATE_EXAM);
     },
 
     changedMode: function(event) {

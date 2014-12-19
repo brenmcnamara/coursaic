@@ -259,7 +259,7 @@ View.Popup_Create_Exam = React.createClass({
 
 
     onClickCancel: function(event) {
-        Action.send(Action.Name.CANCEL_CREATE_EXAM);
+        Action.send(Action.Name.FROM_MODE_CREATE_EXAM);
     }
 
 
