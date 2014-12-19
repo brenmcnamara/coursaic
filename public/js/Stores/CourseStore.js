@@ -140,73 +140,6 @@ var Course = Parse.Object.extend("Course", {
 
         StoreClass.prototype.actionHandler = {
 
-            PERFORM_LOAD: function (payload) {
-                switch (payload.pageKey) {
-                case 'home':
-                    // Fetch a page-worth of courses.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
-                                               UserStore.dispatcherIndex])
-                            // Done waiting for the ConfigStore
-                           .then(
-                            // Success.
-                            function() {
-                                return self.fetchPage();
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            })
-                           // Finished getting the next set of courses.
-                           .then(
-                                // Success.
-                                function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-                case 'course':
-                case 'exam':
-                    // Wait for the User to be loaded.
-                    // Load all the information for the course.
-                    // NOTE: This is needed by the exam page key so that
-                    // the exam store can load the exam and question related
-                    // to the single exam of the course.
-                    // Just make sure the single course is loaded.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
-                                               UserStore.dispatcherIndex])
-                           .then(
-                                // Success.
-                                function() {
-                                    var course;
-                                    // Get the course if the course does not
-                                    // already exist.
-                                    if (!payload.course) {
-                                        throw new Error("PERFORM_LOAD must provide course id in payload");
-                                    }
-                                    if (!self.courseWithId(payload.course)) {
-                                        // Don't have the course, need to fetch it.
-                                        course = new Course();
-                                        course.id = payload.course;
-                                        return self._fetchCourse(course);
-                                    }
-                                },
-
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                }
-                            );
-
-                default:
-                    return new Promise(function(resolve, reject) {
-                        resolve();
-                    });
-                }   
-            },
-
-
             CREATE_COURSE: function (payload) {
                 // TODO: Note that if this fails,
                 // createCourse mode will be exited since this
@@ -292,6 +225,73 @@ var Course = Parse.Object.extend("Course", {
                                 function(error) {
                                     throw error;
                                 });
+            },
+
+
+            PERFORM_LOAD: function (payload) {
+                switch (payload.pageKey) {
+                case 'home':
+                    // Fetch a page-worth of courses.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
+                            // Done waiting for the ConfigStore
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchPage();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+                case 'course':
+                case 'exam':
+                    // Wait for the User to be loaded.
+                    // Load all the information for the course.
+                    // NOTE: This is needed by the exam page key so that
+                    // the exam store can load the exam and question related
+                    // to the single exam of the course.
+                    // Just make sure the single course is loaded.
+                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
+                                               UserStore.dispatcherIndex])
+                           .then(
+                                // Success.
+                                function() {
+                                    var course;
+                                    // Get the course if the course does not
+                                    // already exist.
+                                    if (!payload.course) {
+                                        throw new Error("PERFORM_LOAD must provide course id in payload");
+                                    }
+                                    if (!self.courseWithId(payload.course)) {
+                                        // Don't have the course, need to fetch it.
+                                        course = new Course();
+                                        course.id = payload.course;
+                                        return self._fetchCourse(course);
+                                    }
+                                },
+
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                }
+                            );
+
+                default:
+                    return new Promise(function(resolve, reject) {
+                        resolve();
+                    });
+                }   
             },
 
 
