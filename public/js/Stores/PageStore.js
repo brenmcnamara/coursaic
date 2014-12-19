@@ -137,6 +137,20 @@ var PageStore = (function() {
                                 });
         },
 
+        // TODO: Get rid of this action.
+        DISPLAY_EXAM: function (payload) {
+            return new Promise(function(resolve, rejected) {
+                // Nothing to do yet. Might add stuff here
+                if (!payload.examId) {
+                    throw new Error("Displayed exam without any exam");
+                }
+                Anchor.set({pageKey: 'course', examId: payload.examId},
+                           {silent: true});
+                self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
+                resolve();
+            });
+        },
+
 
         EDIT_QUESTION: function (payload) {
             return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])

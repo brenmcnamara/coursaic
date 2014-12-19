@@ -30,20 +30,6 @@ var ConfigStore = (function() {
 
     StoreClass.prototype.actionHandler = {
 
-
-        DISPLAY_EXAM: function (payload) {
-            // Get the promise for the exam display process.
-            return new Promise(function(resolve, rejected) {
-                // Nothing to do yet. Might add stuff here
-                if (!payload.examId) {
-                    throw new Error("Displayed exam without any exam");
-                }
-                Anchor.set({pageKey: 'course', examId: payload.examId},
-                           {silent: true});
-                resolve();
-            });
-        }
-
     };
 
 

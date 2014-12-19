@@ -353,22 +353,7 @@ var ExamStore = (function() {
                 });
             });
         },
-
-
-        DISPLAY_EXAM: function (payload) {
-            return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                            // Done waiting for the ConfigStore to update ExamHash.
-                            .then(
-                                // Success.
-                                function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_LOAD_EXAM));
-                                },
-                                // Error.
-                                function(err) {
-                                    throw error;
-                                });
-        },
-
+        
 
         EDIT_QUESTION: function (payload) {
             return new Promise(function (resolve, reject) {
