@@ -349,10 +349,10 @@ var ExamStore = (function() {
         },
 
 
-        SAVE_QUESTION_EDIT: function (payload) {
+        EDIT_QUESTION: function (payload) {
             return new Promise(function (resolve, reject) {
-                var question = self.questionForExam(payload.examId,
-                                                    payload.questionId),
+                var question = self.questionForExam(PageStore.currentPayload().examId,
+                                                    PageStore.currentPayload().questionId),
                     options = payload.questionMap.options,
                     saveOptions = {};
                 if (options) {
@@ -376,7 +376,7 @@ var ExamStore = (function() {
         },
 
 
-        SAVE_QUESTION_NEW: function (payload) {
+        CREATE_QUESTION: function (payload) {
             return new Promise(function (resolve, reject) {
                 var question = new Question(),
                     options = payload.questionMap.options,

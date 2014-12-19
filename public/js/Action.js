@@ -25,16 +25,12 @@ Action.Name = {
 
     CREATE_COURSE: 'CREATE_COURSE',
 
-    SAVE_QUESTION_EDIT: 'SAVE_QUESTION_EDIT',
+    EDIT_QUESTION: 'EDIT_QUESTION',
 
-    // Change the enrollment status of the current
-    // user for a particular course. The id of the course
-    // to change the enrollment status for should be provided
-    // in the payload of the action.
     ENROLL_CURRENT_USER: 'ENROLL_CURRENT_USER',
     UNENROLL_CURRENT_USER: 'UNENROLL_CURRENT_USER',
 
-    SAVE_QUESTION_NEW: 'SAVE_QUESTION_NEW',
+    CREATE_QUESTION: 'CREATE_QUESTION',
     
     FROM_MODE_CANCEL_EXAM_RUN: 'FROM_MODE_CANCEL_EXAM_RUN',
     FROM_MODE_CREATE_COURSE: 'FROM_MODE_CREATE_COURSE',

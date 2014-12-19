@@ -191,7 +191,7 @@ var PageStore = (function() {
         },
 
 
-        SAVE_QUESTION_NEW: function (payload) {
+        CREATE_QUESTION: function (payload) {
             return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
                             // Wait for the Exam Store to create the new
                             // question.
@@ -221,7 +221,7 @@ var PageStore = (function() {
         },
 
 
-        SAVE_QUESTION_EDIT: function (payload) {
+        EDIT_QUESTION: function (payload) {
             return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
                              .then(
                                 // Success.

@@ -892,7 +892,7 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
             // Add the current exam to the question.
             map = View.Util.copy(this.state.questionMap);
             map.examId = ExamStore.current().id;
-            Action.send(Action.Name.SAVE_QUESTION_NEW,
+            Action.send(Action.Name.CREATE_QUESTION,
                     {
                         questionMap: map
                     });
@@ -902,10 +902,8 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
         else {
             // TODO: Modify so that examId is
             // inside the questionMap.
-            Action.send(Action.Name.SAVE_QUESTION_EDIT,
+            Action.send(Action.Name.EDIT_QUESTION,
                     {
-                        examId: ExamStore.current().id,
-                        questionId: this.props.question.id,
                         questionMap: this.state.questionMap
                     });
         }
