@@ -727,7 +727,7 @@ View.Course_Exam_Question_Item = React.createClass({
 
     
     onEdit: function(event) {
-        Action.send(Action.Name.PERFORM_QUESTION_EDIT,
+        Action.send(Action.Name.TO_MODE_EDIT_QUESTION,
                     {
                         examId: ExamStore.current().id,
                         questionId: this.props.question.id
@@ -914,12 +914,8 @@ View.Course_Exam_Question_Item_Editing = React.createClass({
 
 
     onClickCancel: function() {
-        if (this.state.isEditing){
-            Action.send(Action.Name.CANCEL_QUESTION_EDIT,
-                    {
-                        examId: ExamStore.current().id,
-                        questionId: this.props.question.id,
-                    });
+        if (PageStore.currentMode() === PageStore.Mode.EDIT_QUESTION) {
+            Action.send(Action.Name.FROM_MODE_EDIT_QUESTION);
         }
         else {
             Action.send(Action.Name.FROM_MODE_CREATE_QUESTION);

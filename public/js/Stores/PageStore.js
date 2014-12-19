@@ -79,9 +79,14 @@ var PageStore = (function() {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION });
         },
 
-        
+
         FROM_MODE_DELETE_QUESTION: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+        },
+
+
+        FROM_MODE_EDIT_QUESTION: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
         },
 
 
@@ -112,6 +117,12 @@ var PageStore = (function() {
 
         TO_MODE_DELETE_QUESTION: function (payload) {
             return self._addMode({ toMode: PageStore.Mode.DELETE_QUESTION,
+                                   toPayload: payload });
+        },
+
+
+        TO_MODE_EDIT_QUESTION: function (payload) {
+            return self._addMode({ toMode: PageStore.Mode.EDIT_QUESTION,
                                    toPayload: payload });
         },
 
@@ -180,9 +191,6 @@ var PageStore = (function() {
         },
 
 
-
-
-
         SAVE_QUESTION_NEW: function (payload) {
             return Dispatcher.waitFor([ ExamStore.dispatcherIndex ])
                             // Wait for the Exam Store to create the new
@@ -210,17 +218,6 @@ var PageStore = (function() {
                                 function (error) {
                                     throw error;
                                 });
-        },
-
-
-        PERFORM_QUESTION_EDIT: function (payload) {
-            return self._addMode({ toMode: PageStore.Mode.EDIT_QUESTION,
-                                   toPayload: payload });
-        },
-
-
-        CANCEL_QUESTION_EDIT: function (payload) {
-            return self._removeMode({ fromMode: PageStore.Mode.EDIT_QUESTION });
         },
 
 
