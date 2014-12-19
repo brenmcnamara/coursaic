@@ -65,6 +65,11 @@ var PageStore = (function() {
         },
 
 
+        FROM_MODE_CREATE_COURSE: function (payload) {
+            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
+        },
+
+
         FROM_MODE_CREATE_EXAM: function (payload) {
             return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
         },
@@ -77,6 +82,13 @@ var PageStore = (function() {
 
         TO_MODE_CANCEL_EXAM_RUN: function (payload) {
             return self._addMode({ toMode: PageStore.Mode.CANCEL_EXAM_RUN,
+                                   toPayload: payload });
+        },
+
+
+        TO_MODE_CREATE_COURSE: function (payload) {
+            console.log("Create course mode.");
+            return self._addMode({ toMode: PageStore.Mode.CREATE_COURSE,
                                    toPayload: payload });
         },
 
@@ -117,16 +129,7 @@ var PageStore = (function() {
         },
 
 
-        ENTER_CREATE_COURSE_MODE: function (payload) {
-            console.log("Create course mode.");
-            return self._addMode({ toMode: PageStore.Mode.CREATE_COURSE,
-                                   toPayload: payload });
-        },
 
-
-        CANCEL_CREATE_COURSE: function (payload) {
-            return self._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
-        },
 
 
         DELETE_QUESTION: function (payload) {

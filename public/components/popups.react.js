@@ -148,12 +148,12 @@ View.Popup_Create_Course = React.createClass({
 
 
     onClickCancel: function() {
-        Action.send(Action.Name.CANCEL_CREATE_COURSE);
+        Action.send(Action.Name.FROM_MODE_CREATE_COURSE);
     },
 
 
     onClickBackground: function() {
-        Action.send(Action.Name.CANCEL_CREATE_COURSE);
+        Action.send(Action.Name.FROM_MODE_CREATE_COURSE);
     }
 
 

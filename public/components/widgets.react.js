@@ -54,7 +54,7 @@ View.MainOption_CreateCourse = React.createClass({
     },
 
     didClick: function(event) {
-        Action.send(Action.Name.ENTER_CREATE_COURSE_MODE);
+        Action.send(Action.Name.TO_MODE_CREATE_COURSE);
     }
 
 });
