@@ -407,8 +407,8 @@ var ExamStore = (function() {
                 // Wait for the course to get loaded, then
                 // load all the exams for the course and questions
                 // for the exam.
-                return Dispatcher.waitFor([UserStore.dispatcherIndex,
-                                           CourseStore.dispatcherIndex])
+                return Dispatcher.waitFor([ UserStore.dispatcherIndex,
+                                            CourseStore.dispatcherIndex ])
                     // After the CourseStore has finished.
                     .then(
                         // Success.

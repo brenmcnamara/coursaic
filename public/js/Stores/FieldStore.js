@@ -33,7 +33,7 @@ var Field = Parse.Object.extend("Field"),
         StoreClass.prototype.actionHandler = {
 
             PERFORM_LOAD: function (payload) {
-                return Dispatcher.waitFor([UserStore.dispatcherIndex])
+                return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
                             
                                 .then(
                                     // Success.

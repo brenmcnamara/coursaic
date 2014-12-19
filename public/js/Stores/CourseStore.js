@@ -232,9 +232,8 @@ var Course = Parse.Object.extend("Course", {
                 switch (payload.pageKey) {
                 case 'home':
                     // Fetch a page-worth of courses.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
-                                               UserStore.dispatcherIndex])
-                            // Done waiting for the ConfigStore
+                    return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
+                            // Done waiting for the User Store.
                            .then(
                             // Success.
                             function() {
@@ -262,15 +261,14 @@ var Course = Parse.Object.extend("Course", {
                     // the exam store can load the exam and question related
                     // to the single exam of the course.
                     // Just make sure the single course is loaded.
-                    return Dispatcher.waitFor([ConfigStore.dispatcherIndex,
-                                               UserStore.dispatcherIndex])
+                    return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
                            .then(
                                 // Success.
                                 function() {
                                     var course;
                                     // Get the course if the course does not
                                     // already exist.
-                                    if (!payload.course) {
+                                    if (! payload.course) {
                                         throw new Error("PERFORM_LOAD must provide course id in payload");
                                     }
                                     if (!self.courseWithId(payload.course)) {

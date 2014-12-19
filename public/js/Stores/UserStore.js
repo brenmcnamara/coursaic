@@ -170,16 +170,7 @@ var School = Parse.Object.extend("School"),
         StoreClass.prototype.actionHandler = {
 
             PERFORM_LOAD: function (payload) {
-                return Dispatcher.waitFor([ ConfigStore.dispatcherIndex ])
-                                 .then(
-                                    // Success.
-                                    function() {
-                                        return self._login();
-                                    },
-                                    // Error.
-                                    function(error) {
-                                        throw error;
-                                    });
+                return self._login();
             }
 
         };
