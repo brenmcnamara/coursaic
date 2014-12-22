@@ -10,10 +10,8 @@
          indent:4, maxerr:50, newcap:true,
          nomen:true, plusplus:true, regexp:true,
          sloppy:true, vars:true, white:true,
-         maxlen:100
+         maxlen:100, node:true
 */
-
-/*global Dispatcher */
 
 var Dispatcher = require('./Dispatcher.js').Dispatcher,
 
@@ -103,4 +101,7 @@ Action.send = function(name, payload) {
     Dispatcher.dispatch(name, payload);
 };
 
-exports.Action = Action;
+module.exports = {
+    Action: Action
+};
+

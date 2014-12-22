@@ -245,7 +245,10 @@ var Dispatcher = (function() {
     };
 
 
-    return { register: register, registerStores: registerStores, dispatch: dispatch, waitFor: waitFor };
+    return { register: register,
+             registerStores: registerStores,
+             dispatch: dispatch,
+             waitFor: waitFor };
 
 }());
 
