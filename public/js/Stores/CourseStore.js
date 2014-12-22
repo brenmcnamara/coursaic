@@ -9,7 +9,11 @@
          maxlen:100
 */
 
-/*global FB, Parse, Action, CAEvent */
+var Store = require('./Store.js').Store,
+    Stores = require('../Stores'),
+    Field = require('./FieldStore.js').Field,
+    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    CAEvent = require('../Event.js').CAEvent,
 
 /**
  * A Course object.
@@ -17,7 +21,7 @@
  * @class Course
  * @constructor
  */
-var Course = Parse.Object.extend("Course", {
+    Course = Parse.Object.extend("Course", {
 
         /**
          * Check the number of people enrolled in a particular
@@ -145,7 +149,7 @@ var Course = Parse.Object.extend("Course", {
                 // createCourse mode will be exited since this
                 // is getting called after the config store.
                 // Not strongly exception-safe.
-                return Dispatcher.waitFor([PageStore.dispatcherIndex])
+                return Dispatcher.waitFor([ Stores.PageStore().dispatcherIndex ])
                        // Wait for the config store to update the hash.
                        .then(
                         // Success.
@@ -157,9 +161,9 @@ var Course = Parse.Object.extend("Course", {
                             payload.field = new Field();
                             payload.field.id = fieldId;
                             // Add the school of the current user.
-                            payload.school = UserStore.current().get('school');
+                            payload.school = Stores.UserStore().current().get('school');
                             // Enroll the current user into the course.
-                            payload.enrolled = [UserStore.current()];
+                            payload.enrolled = [ Stores.UserStore().current() ];
                             // Remove the field id from the payload before
                             // setting it on the course.
                             delete payload.fieldId;
@@ -211,10 +215,10 @@ var Course = Parse.Object.extend("Course", {
 
 
             ENROLL_CURRENT_USER: function (payload) {
-                var course = this.courseWithId(payload.courseId);
+                var course = self.courseWithId(payload.courseId);
                 // Note that this call will cause an error to occur
                 // if the user is already enrolled in the course.
-                course.addUser(UserStore.current());
+                course.addUser(Stores.UserStore().current());
                 return course.save()
                              .then(
                                 // Success.
@@ -232,7 +236,7 @@ var Course = Parse.Object.extend("Course", {
                 switch (payload.pageKey) {
                 case 'home':
                     // Fetch a page-worth of courses.
-                    return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
+                    return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             // Done waiting for the User Store.
                            .then(
                             // Success.
@@ -261,7 +265,7 @@ var Course = Parse.Object.extend("Course", {
                     // the exam store can load the exam and question related
                     // to the single exam of the course.
                     // Just make sure the single course is loaded.
-                    return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
+                    return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                            .then(
                                 // Success.
                                 function() {
@@ -295,7 +299,7 @@ var Course = Parse.Object.extend("Course", {
 
             UNENROLL_CURRENT_USER: function (payload) {
                 var course = self.courseWithId(payload.courseId);
-                    course.removeUser(UserStore.current());
+                    course.removeUser(Stores.UserStore().current());
                 return course.save()
                              .then(
                                 // Success.
@@ -328,7 +332,7 @@ var Course = Parse.Object.extend("Course", {
         StoreClass.prototype._createCourseQuery = function(requestMap) {
             var query = new Parse.Query(Course);
             // Only get schools for the user.
-            query.equalTo('school', UserStore.current().get('school'));
+            query.equalTo('school', Stores.UserStore().current().get('school'));
             query.limit(requestMap.limit);
             query.skip(requestMap.skip);
 
@@ -395,7 +399,7 @@ var Course = Parse.Object.extend("Course", {
          */
         StoreClass.prototype._loadCourse = function(course) {
             var 
-                fieldPromise = FieldStore.fetchFieldForCourse(course),
+                fieldPromise = Stores.FieldStore().fetchFieldForCourse(course),
 
                 schoolPromise = new Promise(function(resolve, reject) {
                     course.get('school').fetch({
@@ -544,8 +548,8 @@ var Course = Parse.Object.extend("Course", {
             // TODO: Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
-            return (ConfigStore.courseId()) ?
-                    this.courseWithId(ConfigStore.courseId()) :
+            return (Stores.ConfigStore().courseId()) ?
+                    this.courseWithId(Stores.ConfigStore().courseId()) :
                     null;
         };
 
@@ -563,3 +567,8 @@ var Course = Parse.Object.extend("Course", {
         return (self = new StoreClass());
 
     }());
+
+
+module.exports.CourseStore = CourseStore;
+module.exports.Course = Course;
+

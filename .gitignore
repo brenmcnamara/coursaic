@@ -3,3 +3,5 @@ node_modules/*
 .jshintignore
 .DS_Store
 npm-debug.log
+bundle.js
+public/build/*

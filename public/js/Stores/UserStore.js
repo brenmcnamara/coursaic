@@ -1,5 +1,5 @@
 /**
- * ConfigStore.js
+ * UserStore.js
  */
 
 /*jslint browser:true, continue:false, devel:true,
@@ -12,8 +12,13 @@
 /*global Parse, Action, CAEvent, Store */
 
 
+var Store = require('./Store.js').Store,
+    Stores = require('../Stores'),
+    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    CAEvent = require('../Event.js').CAEvent,
 
-var School = Parse.Object.extend("School"),
+    School = Parse.Object.extend("School"),
+
 
     /**
      * The Store that manages all user data as
@@ -61,6 +66,7 @@ var School = Parse.Object.extend("School"),
                         params = {fields: 'first_name,last_name,picture.type(square)'};
                         // TODO: Make sure to handle errors coming back from
                         // the facebook api.
+                        /*
                         FB.api("/me", params, function(response) {
 
                             user.set("firstName", response.first_name);
@@ -72,6 +78,8 @@ var School = Parse.Object.extend("School"),
                             user.save();
                             resolve();
                         });
+                        */
+                        resolve();
                     }
                     else {
                         resolve();
@@ -216,3 +224,5 @@ var School = Parse.Object.extend("School"),
 
     }());
 
+module.exports.UserStore = UserStore;
+module.exports.School = School;

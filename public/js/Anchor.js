@@ -250,3 +250,6 @@ var Anchor = (function() {
 
 }());
 
+
+exports.Anchor = Anchor;
+

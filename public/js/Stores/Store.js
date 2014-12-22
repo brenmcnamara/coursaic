@@ -13,13 +13,15 @@
 
 /*global */
 
+var CAEvent = require('../Event.js').CAEvent,
+
 /**
  * The parent class for all stores.
  *
  * @class Store
  * @constructor
  */
-var Store = function() {};
+    Store = function() {};
 
 /**
  * A table that maps callbacks to
@@ -130,3 +132,4 @@ Store.prototype.actionHandler = function(name) {
     throw new Error("actionHandler should be implemented by store.");
 };
 
+exports.Store = Store;

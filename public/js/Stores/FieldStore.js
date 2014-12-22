@@ -9,9 +9,13 @@
          maxlen:100
 */
 
-/*global Store */
+var Store = require('./Store').Store,
+    Stores = require('../Stores'),
+    Dispatcher = require('../Dispatcher.js').Dispatcher,
 
-var Field = Parse.Object.extend("Field"),
+    CAEvent = require('../Event.js').CAEvent,
+    
+    Field = Parse.Object.extend("Field"),
 
     FieldStore = (function() {
 
@@ -23,9 +27,9 @@ var Field = Parse.Object.extend("Field"),
          * @constructor
          */
         var StoreClass = function() {
-            this._fieldHash = {};
-            this.dispatcherIndex = 5;
-        }
+                this._fieldHash = {};
+                this.dispatcherIndex = 5;
+            },
             self;
 
         StoreClass.prototype = new Store();
@@ -33,7 +37,7 @@ var Field = Parse.Object.extend("Field"),
         StoreClass.prototype.actionHandler = {
 
             PERFORM_LOAD: function (payload) {
-                return Dispatcher.waitFor([ UserStore.dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             
                                 .then(
                                     // Success.
@@ -122,3 +126,7 @@ var Field = Parse.Object.extend("Field"),
         return (self = new StoreClass());
         
     }());
+
+module.exports.FieldStore = FieldStore;
+module.exports.Field = Field;
+

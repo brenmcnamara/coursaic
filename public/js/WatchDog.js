@@ -2,38 +2,43 @@
  * WatchDog.js
  */
 
-var WatchDog = (function() {
+var Action = require('./Action.js').Action,
+    Anchor = require('./Anchor.js').Anchor,
 
-    /* DECLARATION */
+    WatchDog = (function() {
 
-    var
+        /* DECLARATION */
 
-    /**
-     * Begin watching for page events. This method
-     * will convert page events to actions. The page
-     * events monitored will be events that cannot
-     * be monitored by React.
-     *
-     * @method watch
-     */
-        watch;
+        var
 
-    /* IMPLEMENTATION */
+        /**
+         * Begin watching for page events. This method
+         * will convert page events to actions. The page
+         * events monitored will be events that cannot
+         * be monitored by React.
+         *
+         * @method watch
+         */
+            watch;
 
-    watch = function() {
-        Anchor.onChange(function(hash) {
-            switch (hash.pageKey) {
-            case 'course':
-                Action.send(Action.Name.PERFORM_LOAD,
-                            {updateHash: false, pageKey: 'course', course: hash.course});
-                break;
-            default:
-                Action.send(Action.Name.PERFORM_LOAD,
-                            {updateHash: false, pageKey: hash.pageKey});
-            }
-        });
-    };
+        /* IMPLEMENTATION */
 
-    return { watch: watch };
+        watch = function() {
+            Anchor.onChange(function(hash) {
+                switch (hash.pageKey) {
+                case 'course':
+                    Action.send(Action.Name.PERFORM_LOAD,
+                                { updateHash: false, pageKey: 'course', course: hash.course });
+                    break;
+                default:
+                    Action.send(Action.Name.PERFORM_LOAD,
+                                { updateHash: false, pageKey: hash.pageKey });
+                }
+            });
+        };
 
-}());
+        return { watch: watch };
+
+    }());
+
+exports.WatchDog = WatchDog;

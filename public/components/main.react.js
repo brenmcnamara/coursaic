@@ -1,118 +1,86 @@
-/**
- * main.react.js
- *
- * The file that sets up the View namespace
- * and module.
- */
 
-/**
- * Dependencies
- *  - React framework
- */
-View = {};
 
-View.Util = {
-    /**
-     * Make a deep copy of the object.
-     *
-     * @method copy
-     * 
-     * @param obj {Object} The object to be copied.
-     *
-     * @return {Object} A deep copy of the object.
-     */
-    copy: function(obj) {
-        var prop, objCopy;
-        switch (typeof obj) {
-        case 'string':
-        case 'number':
-            return obj;
-        case 'function':
-            // Just leave functions by reference
-            return obj;
-        case 'object':
-            if (!obj) {
-                // it is null
-                return null;
-            }
-            else if (Array.isArray(obj)) {
-                return obj.slice();
-            }
-            objCopy = {};
-            for (prop in obj) {
-                if (obj.hasOwnProperty(prop)) {
-                    objCopy[prop] = View.Util.copy(obj[prop]);
-                }
-            }
-            return objCopy;
-        default:
-            return obj;
+var React = require('react'),
+    
+    PageStore = require('../js/Stores/PageStore.js').PageStore,
+    ConfigStore = require('../js/Stores/ConfigStore').ConfigStore,
+
+    HomeLayout = require('./home.react.js').HomeLayout,
+    CourseLayout = require('./course.react.js').CourseLayout,
+    ExamLayout = require('./exam.react.js').ExamLayout,
+
+    CAEvent = require('../js/Event.js').CAEvent,
+
+    render = function(key, params) {
+        unmountRoot();
+        switch (key) {
+            case 'home':
+                React.renderComponent(HomeLayout.Home_Root(params),
+                                      document.getElementsByTagName('body')[0]);
+                break;
+            case 'course':
+                React.renderComponent(CourseLayout.Course_Root(params),
+                                      document.getElementsByTagName('body')[0]);
+                break;
+            case 'exam':
+                React.renderComponent(ExamLayout.Exam_Root(params),
+                                      document.getElementsByTagName('body')[0]);
+                break;
+            default:
+                console.error("Unrecognized page key " + key);
+                throw new Error("Trying to render page with unrecognized key " + key);
         }
-    }
-};
+    },
 
-View.render = function(key, params) {
-    View._unmountRoot();
-    switch (key) {
-        case 'home':
-            React.renderComponent(View.Home_Root(params),
-                                  document.getElementsByTagName('body')[0]);
-            break;
+
+    /**
+     * Unmount the root element
+     *
+     * @method _unmountRoot
+     * @private
+     *
+     * @return {Boolean} true if an element was
+     * unmounted, false otherwise.
+     */
+    unmountRoot = function() {
+        var result;
+        try {
+            result = React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+        }
+        catch (e) {
+            console.error(e);
+            throw e;
+        }
+        return result;
+    },
+
+
+    /**
+     * Called when the page is first loaded.
+     *
+     * @static
+     * @private
+     * @method _onLoad
+     */
+    onLoad = function(event) {
+        switch (ConfigStore.pageKey()) {
         case 'course':
-            React.renderComponent(View.Course_Root(params),
-                                  document.getElementsByTagName('body')[0]);
-            break;
-        case 'exam':
-            React.renderComponent(View.Exam_Root(params),
-                                  document.getElementsByTagName('body')[0]);
+            render('course', { courseId: ConfigStore.courseId() });
             break;
         default:
-            console.error("Unrecognized page key " + key);
-            throw new Error("Trying to render page with unrecognized key " + key);
+            render(ConfigStore.pageKey());
+        }
+    };
+
+
+module.exports = {
+
+    loadOnEvent: function (event) {
+        PageStore.addListener(event, onLoad);
     }
 };
 
 
-/**
- * Unmount the root element
- *
- * @method _unmountRoot
- * @private
- *
- * @return {Boolean} true if an element was
- * unmounted, false otherwise.
- */
-View._unmountRoot = function() {
-    var result;
-    try {
-        result = React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-    }
-    catch (e) {
-        console.error(e);
-        throw e;
-    }
-    return result;
-};
-
-
-/**
- * Called when the page is first loaded.
- *
- * @static
- * @private
- * @method _onLoad
- */
-View._onLoad = function(event) {
-    switch (ConfigStore.pageKey()) {
-    case 'course':
-        View.render('course', { courseId: ConfigStore.courseId() });
-        break;
-    default:
-        View.render(ConfigStore.pageKey());
-    }
-};
-
-UserStore.addListener(CAEvent.Name.DID_LOAD, View._onLoad);
 
 
 

@@ -22,71 +22,14 @@
     <link rel="stylesheet" type="text/css" href="/css/main.course.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.exam.css" />
 
-    <!-- Third-Party Scripts -->
+    <!-- Scripts -->
     <script type="text/javascript" src="https://www.promisejs.org/polyfills/promise-6.0.0.min.js"></script>
-    <script type="text/javascript" src="/lib/parse/parse.1.3.0.js"></script>
-    <script type="text/javascript" src="/lib/react/react.js"></script>
-    <script type="text/javascript" src="/lib/react/JSXTransformer.js"></script>
-
-    <!-- My Scripts -->
-    
-    <script type="text/javascript">
-        // TODO: Move this into its own file.
-        // Setup the formatter namespace.
-        var Formatter = {};
-    </script>
-    <script type="text/javascript" src="/js/Formatter.Text.js"></script>
-    
-    <script type="text/javascript" src="/js/Event.js"></script>
-    <script type="text/javascript" src="/js/Anchor.js"></script>
-    <script type="text/javascript" src="/js/WatchDog.js"></script>
-
-    <script type="text/javascript" src="/js/Exam.js"></script>
-    <script type="text/javascript" src="/js/Stores/Store.js"></script>
-    <script type="text/javascript" src="/js/Stores/ConfigStore.js"></script>
-    <script type="text/javascript" src="/js/Stores/FieldStore.js"></script>
-    <script type="text/javascript" src="/js/Stores/CourseStore.js"></script>
-    <script type="text/javascript" src="/js/Stores/UserStore.js"></script>
-    <script type="text/javascript" src="/js/Stores/ExamStore.js"></script>
-    <script type="text/javascript" src="/js/Stores/PageStore.js"></script>
-
-    <script type="text/javascript" src="/js/Dispatcher.js"></script>
-    <script type="text/javascript" src="/js/Action.js"></script>
-    
-    <!-- React Components -->
-    <script type="text/javascript" src="/components/main.react.js"></script>
-    <script type="text/jsx" src="/components/widgets.react.js"></script>
-    <script type="text/jsx" src="/components/popups.react.js"></script>
-    <script type="text/jsx" src="/components/header.react.js"></script>
-    <script type="text/jsx" src="/components/home.react.js"></script>
-    <script type="text/jsx" src="/components/course.react.js"></script>
-    <script type="text/jsx" src="/components/exam.react.js"></script>
+    <script type="text/javascript" src="lib/parse/parse.1.3.0.js"></script>
+    <script type="text/javascript" src="js/bundle.js"></script>
 
 </head>
 
 <body>
-    <!-- HTML dynamically added via React js -->
-    <script>
-        Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
-        window.fbAsyncInit = function() {
-            Parse.FacebookUtils.init({ // this line replaces FB.init({
-                    appId      : <%= facebook_id %>, // Facebook App ID
-                    cookie     : true, // enable cookies to allow Parse to access the session
-                    xfbml      : true,
-                    version    : 'v2.1'
-            });
-            WatchDog.watch();
-            Action.register();
-            Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
-        };
 
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
 </body>
 </html>

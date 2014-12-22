@@ -185,3 +185,8 @@ Question.Type = {
     MULTI_CHOICE: 1
 };
 
+module.exports = {
+    Question: Question,
+    Exam: Exam,
+    ExamRun: ExamRun
+};

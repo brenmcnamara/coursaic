@@ -13,9 +13,11 @@
          maxlen:100
 */
 
-/*global Dispather */
+/*global Dispatcher */
 
-var Action = {};
+var Dispatcher = require('./Dispatcher.js').Dispatcher,
+
+    Action = {};
 
 Action.Name = {
 
@@ -101,3 +103,4 @@ Action.send = function(name, payload) {
     Dispatcher.dispatch(name, payload);
 };
 
+exports.Action = Action;

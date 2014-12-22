@@ -9,7 +9,6 @@
          maxlen:100
 */
 
-/*global Action, Anchor, UserStore, CourseStore, ConfigStore */
 
 /**
  * The dispatcher that manages
@@ -53,6 +52,8 @@ var Dispatcher = (function() {
      *  register.
      */
         register,
+
+        registerStores,
 
     /**
      * Dispatch an action through to the stores.
@@ -101,11 +102,7 @@ var Dispatcher = (function() {
             // these regerences can be used
             // for performing generic algorithms
             // over each store.
-            // TODO: Should have a way for UserStores
-            // to get registered when the app is initialized.
-            stores: [ ConfigStore, CourseStore, 
-                      UserStore, ExamStore,
-                      FieldStore, PageStore ],
+            stores: [ ],
             
             // A list of all resolves that are on the
             // wait list. This is a map of
@@ -158,6 +155,11 @@ var Dispatcher = (function() {
         }, []);
 
         stateMap.actionHash[name] = storeCalls;
+    };
+
+
+    registerStores = function(stores) {
+        stateMap.stores = stores.slice();
     };
 
 
@@ -243,7 +245,8 @@ var Dispatcher = (function() {
     };
 
 
-    return {register: register, dispatch: dispatch, waitFor: waitFor};
+    return { register: register, registerStores: registerStores, dispatch: dispatch, waitFor: waitFor };
 
 }());
 
+exports.Dispatcher = Dispatcher;

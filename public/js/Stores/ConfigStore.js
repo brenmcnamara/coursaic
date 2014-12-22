@@ -9,18 +9,20 @@
          maxlen:100
 */
 
-/*global Action, CAEvent */
+var Store = require('./Store').Store,
+    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    Anchor = require('../Anchor.js').Anchor,
 
-/**
- * Contains all the major state for the current
- * page that defines the type of page it is, and
- * the major attributes of the page.
- *
- * @module Store
- * @class ConfigStore
- */
-var ConfigStore = (function() {
-
+    /**
+     * Contains all the major state for the current
+     * page that defines the type of page it is, and
+     * the major attributes of the page.
+     *
+     * @module Store
+     * @class ConfigStore
+     */
+    ConfigStore = (function() {
+    
     var StoreClass = function() {
             this.dispatcherIndex = 1;
         },
@@ -60,3 +62,5 @@ var ConfigStore = (function() {
 
 }());
 
+
+module.exports.ConfigStore = ConfigStore;

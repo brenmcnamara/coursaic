@@ -74,3 +74,4 @@ CAEvent.Name = {
     CHANGED_MODE: 'CHANGED_MODE'
 };
 
+exports.CAEvent = CAEvent;
