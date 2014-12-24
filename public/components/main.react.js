@@ -1,4 +1,4 @@
-
+/** @jsx React.DOM */
 
 var React = require('react'),
     
@@ -15,16 +15,16 @@ var React = require('react'),
         unmountRoot();
         switch (key) {
             case 'home':
-                React.renderComponent(HomeLayout.Home_Root(params),
-                                      document.getElementsByTagName('body')[0]);
+                React.render(<HomeLayout.Home_Root />
+                             document.getElementsByTagName('body')[0]);
                 break;
             case 'course':
-                React.renderComponent(CourseLayout.Course_Root(params),
-                                      document.getElementsByTagName('body')[0]);
+                React.render(<CourseLayout.Course_Root courseId = { params.courseId } />
+                             document.getElementsByTagName('body')[0]);
                 break;
             case 'exam':
-                React.renderComponent(ExamLayout.Exam_Root(params),
-                                      document.getElementsByTagName('body')[0]);
+                React.render(<ExamLayout.Exam_Root />
+                             document.getElementsByTagName('body')[0]);
                 break;
             default:
                 console.error("Unrecognized page key " + key);
