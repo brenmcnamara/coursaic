@@ -17,13 +17,22 @@ module.exports = function (grunt) {
                 transform: [ require('grunt-react').browserify ]
             },
 
-            dev: {
+            watch: {
                 src: ['./public/js/**/*.js'],
                 dest: './public/build/bundle.js',
 
                 options: {
                     ignore: ['./public/js/**/*.spec.js'],
                     watch: true
+                }
+            },
+
+            build: {
+                src: ['./public/js/**/*.js'],
+                dest: './public/build/bundle.js',
+
+                options: {
+                    ignore: ['./public/js/**/*.spec.js']
                 }
             }
         },
@@ -37,10 +46,15 @@ module.exports = function (grunt) {
 
         execute: {
             app: {
-                target: {
-                    src: ['app.js'],
-                }
+                src: ['app.js'],
             }
+        },
+
+        concurrent: {
+            options: {
+                logConcurrentOutput: true
+            },
+            watchThenExecute: ['continuousBuild', 'execute:app']
         }
 
     });
@@ -51,8 +65,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-execute');
+    grunt.loadNpmTasks('grunt-concurrent');
 
     grunt.registerTask('test', ['jshint', 'jasmine_node']);
-    grunt.registerTask('build', ['browserify', 'watch', 'execute:app']);
+    grunt.registerTask('staticBuild', ['browserify:build']);
+    grunt.registerTask('continuousBuild', ['browserify:watch', 'watch']);
+
+    grunt.registerTask('dev', ['concurrent:watchThenExecute']);
+    grunt.registerTask('default', ['staticBuild', 'execute:app']);
 
 };

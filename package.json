@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "grunt build",
+    "start": "grunt",
     "test": "grunt test"
   },
   "devDependencies": {
@@ -14,7 +14,8 @@
     "grunt-react": "~0.10.0",
     "grunt-watchify": "~0.1.0",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-execute": "~0.2.2"
+    "grunt-execute": "~0.2.2",
+    "grunt-concurrent": "~1.0.0"
   },
   "dependencies": {
     "ejs": "~0.7.1",

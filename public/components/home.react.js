@@ -28,12 +28,10 @@ var React = require('react'),
     Home_Root = React.createClass({
 
         render: function() {
-            console.log("Rendering home root");
             // TODO: How can I avoid writing
             // all the html twice?
             var school = Stores.UserStore().current().get('school');
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_COURSE) {
-                console.log("Case 1");
                 return (
                     <div className="main">
                         <PopupsLayout.Popup_Create_Course />
@@ -45,7 +43,6 @@ var React = require('react'),
                 );        
             }
             else {
-                console.log("Case 2");
                 return (
                     <div className="main">
                         <HeaderLayout.Header isOpaque={ true } />
