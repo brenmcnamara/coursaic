@@ -15,7 +15,7 @@ var Store = require('./Store').Store,
 
     CAEvent = require('../Event.js').CAEvent,
     
-    Field = Parse.Object.extend("Field"),
+    Field = require('./models.js').Field,
 
     FieldStore = (function() {
 

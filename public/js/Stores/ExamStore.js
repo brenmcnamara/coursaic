@@ -15,13 +15,10 @@ var Store = require('./Store').Store,
     Dispatcher = require('../Dispatcher.js').Dispatcher,
     CAEvent = require('../Event.js').CAEvent,
 
-    Question = require('../Exam.js').Question,
-    Exam = require('../Exam.js').Exam,
-    ExamRun = require('../Exam.js').ExamRun,
+    Question = require('./models.js').Question,
+    Exam = require('./models.js').Exam,
+    ExamRun = require('./models.js').ExamRun,
 
-/**
- * ExamStore.js
- */
     ExamStore = (function() {
 
         var StoreClass = function() {

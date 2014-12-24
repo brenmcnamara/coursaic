@@ -1,15 +1,144 @@
 /**
- * Exam.js
- *
- * File describing the format of exams.
+ * models.js
+ *  File containing all the models used
+ *  by the application.
  */
 
+/*global Parse */
 
 var
 
     /**
+     * Represents a single user.
+     *
+     * @module Models
+     * @class User
+     */
+    User = Parse.User,
+
+    /**
+     * Represents a single field.
+     *
+     * @module Models
+     * @class Field
+     */
+    Field = Parse.Object.extend("Field"),
+
+    /**
+     * Represents a single course.
+     *
+     * @module Models
+     * @class Course
+     */
+    Course = Parse.Object.extend("Course", {
+
+        /**
+         * Check the number of people enrolled in a particular
+         * course.
+         *
+         * @method enrollCount
+         *
+         * @return {Number} The enroll count of the course.
+         */
+        enrollCount: function() {
+            return (this.get('enrolled') || []).length;        
+        },
+
+
+        /**
+         * See if a user is enrolled in a particular
+         * course.
+         *
+         * @method isEnrolled
+         *
+         * @param user {User} The user to check for
+         *  enrollment.
+         *
+         * @return {Boolean} True if the user is enrolled in
+         *  the course, false otherwise.
+         */
+        isEnrolled: function(user) {
+            var enrolled = (this.get('enrolled') || []),
+                i, n;
+
+            for (i = 0, n = enrolled.length; i < n; ++i) {
+                if (user.id === enrolled[i].id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+
+        /**
+         * Add a user to the course so that he/she is
+         * now enrolled. This method does not perform
+         * any persistence.
+         *
+         * @method addUser
+         *
+         * @param user {User} The user to add.
+         *
+         * @throw An error if the user is already added
+         *  to this course.
+         */
+        addUser: function(user) {
+            var enrolled;
+            if (this.isEnrolled(user)) {
+                throw new Error("Could not find user " + user.id + " while" +
+                                "adding to course " + this.id);
+            }
+            enrolled = this.get('enrolled') || [];
+            enrolled.push(user);
+            this.set('enrolled', enrolled);
+        },
+
+
+        /**
+         * Remove a user from the course so that he/she
+         * is no longer enrolled. THis method does not
+         * perform any persistence.
+         *
+         * @method removeUser
+         *
+         * @param user {User} The user to remove.
+         *
+         * @throw An erro if the user is not already
+         *  enrolled in the course.
+         */
+        removeUser: function(user) {
+            var enrolled = this.get('enrolled') || [],
+                i, n, indexOfUser = -1;
+            for (i = 0, n = enrolled.length; i < n && indexOfUser < 0; ++i) {
+                if (enrolled[i].id === user.id) {
+                    indexOfUser = i;
+                }
+            }
+            if (indexOfUser < 0) {
+                throw new Error("Could not find user " + user.id + " while " +
+                                "removing from course " + this.id);
+            }
+            enrolled = enrolled.slice(0, indexOfUser)
+                               .concat(enrolled.slice(indexOfUser + 1, n));
+            this.set('enrolled', enrolled);
+        }
+
+
+    }),
+
+    /**
+     * Represents a single school.
+     *
+     * @module Models
+     * @class School
+     */
+    School = Parse.Object.extend("School"),
+
+
+    /**
      * A class representing a question on an exam.
      *
+     * @module Models
      * @class Question
      */
     Question = Parse.Object.extend("Question", {
@@ -78,6 +207,7 @@ var
      * A class representing an exam that someone
      * can take.
      *
+     * @module Models
      * @class Exam
      */
     Exam = Parse.Object.extend("Exam"),
@@ -87,6 +217,7 @@ var
      * A class that represents an instance of
      * an exam that someone can take.
      *
+     * @module Models
      * @class ExamRun
      * @constructor
      *
@@ -177,7 +308,8 @@ ExamRun.prototype.grade = function() {
  * A mapping of the types of questions that
  * are possible.
  *
- * @module Question
+ * @module Models
+ * @submodule Question
  * @property Type
  * @type Object
  */
@@ -186,7 +318,13 @@ Question.Type = {
 };
 
 module.exports = {
-    Question: Question,
+
+    Course: Course,
     Exam: Exam,
-    ExamRun: ExamRun
+    ExamRun: ExamRun,
+    Field: Field,
+    Question: Question,
+    School: School,
+    User: User
+
 };

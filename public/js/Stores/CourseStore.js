@@ -11,111 +11,11 @@
 
 var Store = require('./Store.js').Store,
     Stores = require('../Stores'),
-    Field = require('./FieldStore.js').Field,
     Dispatcher = require('../Dispatcher.js').Dispatcher,
     CAEvent = require('../Event.js').CAEvent,
 
-/**
- * A Course object.
- *
- * @class Course
- * @constructor
- */
-    Course = Parse.Object.extend("Course", {
-
-        /**
-         * Check the number of people enrolled in a particular
-         * course.
-         *
-         * @method enrollCount
-         *
-         * @return {Number} The enroll count of the course.
-         */
-        enrollCount: function() {
-            return (this.get('enrolled') || []).length;        
-        },
-
-
-        /**
-         * See if a user is enrolled in a particular
-         * course.
-         *
-         * @method isEnrolled
-         *
-         * @param user {User} The user to check for
-         *  enrollment.
-         *
-         * @return {Boolean} True if the user is enrolled in
-         *  the course, false otherwise.
-         */
-        isEnrolled: function(user) {
-            var enrolled = (this.get('enrolled') || []),
-                i, n;
-
-            for (i = 0, n = enrolled.length; i < n; ++i) {
-                if (user.id === enrolled[i].id) {
-                    return true;
-                }
-            }
-            return false;
-        },
-
-
-        /**
-         * Add a user to the course so that he/she is
-         * now enrolled. This method does not perform
-         * any persistence.
-         *
-         * @method addUser
-         *
-         * @param user {User} The user to add.
-         *
-         * @throw An error if the user is already added
-         *  to this course.
-         */
-        addUser: function(user) {
-            var enrolled;
-            if (this.isEnrolled(user)) {
-                throw new Error("Could not find user " + user.id + " while" +
-                                "adding to course " + this.id);
-            }
-            enrolled = this.get('enrolled') || [];
-            enrolled.push(user);
-            this.set('enrolled', enrolled);
-        },
-
-
-        /**
-         * Remove a user from the course so that he/she
-         * is no longer enrolled. THis method does not
-         * perform any persistence.
-         *
-         * @method removeUser
-         *
-         * @param user {User} The user to remove.
-         *
-         * @throw An erro if the user is not already
-         *  enrolled in the course.
-         */
-        removeUser: function(user) {
-            var enrolled = this.get('enrolled') || [],
-                i, n, indexOfUser = -1;
-            for (i = 0, n = enrolled.length; i < n && indexOfUser < 0; ++i) {
-                if (enrolled[i].id === user.id) {
-                    indexOfUser = i;
-                }
-            }
-            if (indexOfUser < 0) {
-                throw new Error("Could not find user " + user.id + " while " +
-                                "removing from course " + this.id);
-            }
-            enrolled = enrolled.slice(0, indexOfUser)
-                               .concat(enrolled.slice(indexOfUser + 1, n));
-            this.set('enrolled', enrolled);
-        }
-
-
-    }),
+    Field = require('./models.js').Field,
+    Course = require('./models.js').Course,
     
 
     /**

@@ -15,15 +15,15 @@ var React = require('react'),
         unmountRoot();
         switch (key) {
             case 'home':
-                React.render(<HomeLayout.Home_Root />
+                React.render(React.createFactory(HomeLayout.Home_Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'course':
-                React.render(<CourseLayout.Course_Root courseId = { params.courseId } />
+                React.render(React.createFactory(CourseLayout.Course_Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'exam':
-                React.render(<ExamLayout.Exam_Root />
+                React.render(React.createFactory(ExamLayout.Exam_Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             default:
