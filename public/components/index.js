@@ -2,14 +2,12 @@
 
 var React = require('react'),
     
-    PageStore = require('../js/Stores/PageStore.js').PageStore,
-    ConfigStore = require('../js/Stores/ConfigStore').ConfigStore,
+    PageStore = require('../js/Stores/PageStore.js'),
+    ConfigStore = require('../js/Stores/ConfigStore'),
 
     HomeLayout = require('./home.react.js').HomeLayout,
     CourseLayout = require('./course.react.js').CourseLayout,
     ExamLayout = require('./exam.react.js').ExamLayout,
-
-    CAEvent = require('../js/Event.js').CAEvent,
 
     render = function(key, params) {
         unmountRoot();

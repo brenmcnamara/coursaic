@@ -469,6 +469,5 @@ var Store = require('./Store.js').Store,
     }());
 
 
-module.exports.CourseStore = CourseStore;
-module.exports.Course = Course;
+module.exports = CourseStore;
 

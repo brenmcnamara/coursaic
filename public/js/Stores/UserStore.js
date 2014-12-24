@@ -224,5 +224,4 @@ var Store = require('./Store.js').Store,
 
     }());
 
-module.exports.UserStore = UserStore;
-module.exports.School = School;
+module.exports = UserStore;

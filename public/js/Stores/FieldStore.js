@@ -127,6 +127,5 @@ var Store = require('./Store').Store,
         
     }());
 
-module.exports.FieldStore = FieldStore;
-module.exports.Field = Field;
+module.exports = FieldStore;
 

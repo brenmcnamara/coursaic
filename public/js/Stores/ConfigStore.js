@@ -63,4 +63,4 @@ var Store = require('./Store').Store,
 }());
 
 
-module.exports.ConfigStore = ConfigStore;
+module.exports = ConfigStore;

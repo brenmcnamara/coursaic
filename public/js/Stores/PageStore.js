@@ -335,5 +335,5 @@ var Store = require('./Store').Store,
     };
 
 
-module.exports.PageStore = PageStore;
+module.exports = PageStore;
 

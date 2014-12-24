@@ -481,5 +481,5 @@ var Store = require('./Store').Store,
     }());
 
 
-module.exports.ExamStore = ExamStore;
+module.exports = ExamStore;
 
