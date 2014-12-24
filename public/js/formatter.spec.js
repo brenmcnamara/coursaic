@@ -6,7 +6,7 @@
 
   /*global describe, it, expect */
 
-var Formatter = require('./Formatter.Date.js').Formatter;
+var Formatter = require('./formatter.js');
 
 describe("Date Formatter", function() {
 
@@ -166,5 +166,32 @@ describe("Date Formatter", function() {
         expect(Formatter.Date.format(december)).toMatch(/^Dec\./);
     });
 
+
+});
+
+
+describe("Text Formatter", function() {
+
+    "use strict";
+
+    it("should truncate any text that is passed the truncation character.", function() {
+        var text = "Here is some text to truncate";
+        expect(Formatter.Text.truncate(text, {maxlen: 10})).toBe("Here is so...");
+    });
+
+    it("should not truncate anything if the text length equals maxlen.", function() {
+        var text = "Should not truncate this";
+        expect(Formatter.Text.truncate(text, {maxlen: text.length})).toBe(text);
+    });
+
+    it("should trim any whitespace before truncating.", function() {
+        var text = "   Whitespace all around    ";
+        expect(Formatter.Text.truncate(text, {maxlen: 22})).toBe("Whitespace all around");
+    });
+
+    it("should remove any periods at the end when truncating.", function() {
+        var text = "Periods at end...";
+        expect(Formatter.Text.truncate(text, {maxlen: 16})).toBe("Periods at end...");
+    });
 
 });

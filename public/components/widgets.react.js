@@ -20,7 +20,7 @@ var React = require('react'),
     Action = require('../js/Action.js').Action,
     CAEvent = require('../js/Event.js').CAEvent,
 
-    Formatter = require('../js/Formatter.Text.js').Formatter,
+    Formatter = require('../js/formatter.js'),
 
     /**
      * MainOption

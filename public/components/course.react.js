@@ -22,7 +22,7 @@ var React = require('react'),
 
     Stores = require('../js/Stores'),
 
-    Formatter = require('../js/Formatter.Text.js').Formatter,
+    Formatter = require('../js/formatter.js'),
 
     Action = require('../js/Action.js').Action,
     CAEvent = require('../js/Event.js').CAEvent,
