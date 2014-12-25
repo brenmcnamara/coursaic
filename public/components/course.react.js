@@ -30,18 +30,20 @@ var React = require('react'),
     Util = require('../js/Util.js').Util,
 
     /**
-     * Course_Root
-     *
      * The root element on the Course
      * page.
+     * 
+     * @module Layout
+     * @submodule Course
+     * @class Root
      */
-    Course_Root = React.createClass({
+    Root = React.createClass({
         
         render: function() {
             var isEnrolled = Stores.CourseStore().current().isEnrolled(Stores.UserStore().current()),
                 enrollButton = (isEnrolled) ?
-                               (<Course_Unenroll_Button />) :
-                               (<Course_Enroll_Button />),
+                               (<UnenrollButton />) :
+                               (<EnrollButton />),
                 deleteQuestionPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.DELETE_QUESTION) ?
                                       (<PopupsLayout.Popup_Delete_Question />) :
                                       (null)
@@ -55,10 +57,10 @@ var React = require('react'),
                     { deleteQuestionPopup }
                     <HeaderLayout.Header isOpaque={ false } />
                     <HeaderLayout.Header_Fill isOpaque={ false } />
-                    <Course_Dashboard />
-                    <Course_Summary />
+                    <Dashboard />
+                    <Summary />
                     { enrollButton }
-                    <Course_Content />
+                    <Content />
                 </div>
             );
         },
@@ -85,13 +87,15 @@ var React = require('react'),
 
 
     /**
-     * Course_Dashboard
-     *
      * The dashboard under the header element
      * containing any other aside information
      * for the course.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Dashboard
      */
-    Course_Dashboard = React.createClass({
+    Dashboard = React.createClass({
         
         render: function() {
             var course = Stores.CourseStore().current(),
@@ -108,10 +112,18 @@ var React = require('react'),
         }
 
 
-    });
+    }),
 
 
-    Course_Summary = React.createClass({
+    /**
+     * A box containing basic information
+     * of the course.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Summary
+     */
+    Summary = React.createClass({
 
         render: function() {
             var course = Stores.CourseStore().current(),
@@ -171,7 +183,15 @@ var React = require('react'),
     }),
 
 
-    Course_Enroll_Button = React.createClass({
+    /**
+     * The enroll button allowing a user to enroll in a
+     * course.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class EnrollButton
+     */
+    EnrollButton = React.createClass({
 
         render: function() {
             return (
@@ -192,7 +212,15 @@ var React = require('react'),
     }),
 
 
-    Course_Unenroll_Button = React.createClass({
+    /**
+     * The unenroll button allowing a user to unenroll
+     * from a course.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class UnenrollButton
+     */
+    UnenrollButton = React.createClass({
 
         render: function() {
             return (
@@ -213,13 +241,20 @@ var React = require('react'),
     }),
 
 
-    Course_Content = React.createClass({
+    /**
+     * The main content for the course page.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Content
+     */
+    Content = React.createClass({
 
         render: function() {
             return (
                 <div className="content course-content">
-                    <Course_Content_Nav />
-                    <Course_Content_Body />
+                    <Navigation />
+                    <Body />
                 </div>
             );
         }
@@ -228,7 +263,14 @@ var React = require('react'),
     }),
 
 
-    Course_Content_Nav = React.createClass({ 
+    /**
+     * The main navigation menu for the course page.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Navigation
+     */
+    Navigation = React.createClass({ 
 
 
         render: function() {
@@ -252,7 +294,7 @@ var React = require('react'),
 
                         <div className="divide"></div>
 
-                        <Exam_List />
+                        <Navigation_ExamList />
 
                     </div>
                 );
@@ -272,7 +314,7 @@ var React = require('react'),
 
                         <div className="divide"></div>
 
-                        <Exam_List />
+                        <Navigation_ExamList />
 
                     </div>
                 );
@@ -302,23 +344,36 @@ var React = require('react'),
     }),
 
 
-    Exam_List = React.createClass({
+    /**
+     * The list of exams in the navigation menu.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Navigation_ExamList
+     */
+    Navigation_ExamList = React.createClass({
 
         render: function() {
             // TODO: Add a "No Exams" list item if there are no exams.
             var PIXEL_SPACE_BETWEEN_EXAMS = 28,
                 PIXEL_SPACE_TO_FIRST_EXAM = 27,
+
                 course = Stores.CourseStore().current(),
+
                 selectedExamIndex = -1,
+
                 examList = Stores.ExamStore().examsForCourse(course).map(function(exam, index) {
                     if (Stores.ExamStore().current() && exam.id === Stores.ExamStore().current().id) {
                         selectedExamIndex = index;
                     }
-                    return <Exam_List_Item key={ exam.id } exam={ exam } />
+                    return <Navigation_ExamList_Item key={ exam.id } exam={ exam } />
                 }),
+
                 displayStyle = (selectedExamIndex === -1) ? "none" : "initial",
-                selectedExamBarPixelPosition = (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) +
-                                                                     PIXEL_SPACE_TO_FIRST_EXAM,
+
+                selectedExamBarPixelPosition = 
+                    (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) + PIXEL_SPACE_TO_FIRST_EXAM,
+
                 selectionBarStyle = {
                     top: selectedExamBarPixelPosition.toString() +"px",
                     display: displayStyle,
@@ -339,6 +394,7 @@ var React = require('react'),
                 </div>
             );
         },
+
 
         // Event handler for when exams are fetched.
         didFetchExams: function(event) {
@@ -379,7 +435,15 @@ var React = require('react'),
     }),
 
 
-    Exam_List_Item = React.createClass({
+    /**
+     * A single list item in the exam list of the course page's
+     * main navigation.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Navigation_ExamList_Item
+     */
+    Navigation_ExamList_Item = React.createClass({
 
         render: function() {
             var exam = this.props.exam;
@@ -421,7 +485,15 @@ var React = require('react'),
     }),
 
 
-    Course_Content_Body = React.createClass({
+    /**
+     * The element containing the main content for the course
+     * page.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body
+     */
+    Body = React.createClass({
 
         render: function() {
             // If there is a current exam, present
@@ -430,13 +502,13 @@ var React = require('react'),
             if (Stores.ExamStore().current()) {
                 return (
                     <div className="content__body">
-                        <Course_Exam />
+                        <Body_Exam />
                     </div>
                 )}
             else {
                 return (
                     <div className="content__body">
-                        <Course_No_Exam />
+                        <Body_Default />
                     </div>
                 )};      
         },
@@ -467,7 +539,14 @@ var React = require('react'),
     }),
 
 
-    Course_No_Exam = React.createClass({
+    /**
+     * The default content that is shown by the body element.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Default
+     */
+    Body_Default = React.createClass({
 
         render: function() {
             var examCount = Stores.ExamStore().examsForCourse(Stores.CourseStore().current()).length,
@@ -499,8 +578,15 @@ var React = require('react'),
     }),
 
 
-    // TODO: Change this to Course_Exam_Info
-    Course_Exam = React.createClass({
+    /**
+     * The exam content that is shown inside the body element
+     * of the course page.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam
+     */
+    Body_Exam = React.createClass({
         
         render: function() {
             // Get the current exam.
@@ -549,7 +635,7 @@ var React = require('react'),
                     </div>
 
                     <div className="exam-info">
-                        <Course_Exam_Questions />
+                        <Body_Exam_QuestionList />
                     </div>
                 </div>
             );
@@ -569,11 +655,17 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Questions = React.createClass({
+    /**
+     * The list of questions that the user created, displayed inside
+     * the Body_Exam element.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList
+     */
+    Body_Exam_QuestionList = React.createClass({
 
         render: function() {
-            // TODO: Consider breaking up DID_FETCH_EXAMS
-            // into 2 events: DID_FETCH_EXAMS and DID_FETCH_QUESTIONS
             var questions = Stores.ExamStore().questionsForExam(Stores.ExamStore().current(),
                                                                 Stores.UserStore().current()),
                 listItems;
@@ -581,9 +673,7 @@ var React = require('react'),
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_QUESTION) {
                 // In create question mode, set the first element
                 // as a new question form..
-                listItems = [(
-                    <Course_Exam_Question_Item_Editing key="new" />
-                )];
+                listItems = [<Body_Exam_QuestionList_MultiChoiceEditing key="new" />];
             }
             else {
                 listItems = [];
@@ -594,19 +684,21 @@ var React = require('react'),
                 if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.EDIT_QUESTION &&
                     Stores.PageStore().currentPayload().questionId === question.id) {
 
-                    listItems.push(<Course_Exam_Question_Item_Editing key="new"
-                                                                      question={ question } />);
+                    listItems.push(<Body_Exam_QuestionList_MultiChoiceEditing
+                                                                key="new"
+                                                                question={ question } />);
                 }
                 else {
-                    listItems.push(<Course_Exam_Question_Item key={ question.id }
-                                                              question={ question } />);
+                    listItems.push(<Body_Exam_QuestionList_MultiChoice
+                                                                key={ question.id }
+                                                                question={ question } />);
                 }
             });
 
             return (
                 <div className="exam-info__my-questions">
                     <span className="exam-info__my-questions__title">My Questions</span>
-                    <Course_Exam_Questions_Add_Button />
+                    <Body_Exam_QuestionList_AddButton />
                     <ul className="exam-info__my-questions__question-list question-list">
                          { listItems }
                     </ul>
@@ -647,7 +739,15 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Questions_Add_Button = React.createClass({
+    /**
+     * The add button in the question list, allowing users to create
+     * new questions.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_AddButton
+     */
+    Body_Exam_QuestionList_AddButton = React.createClass({
 
         render: function() {
 
@@ -694,7 +794,16 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Question_Item = React.createClass({
+    /**
+     * A list item in the question list of an exam. This represents
+     * a question that is a multiple choice question.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoice.
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoice = React.createClass({
 
         render: function() {
             // NOTE: This is hard-coded for multiple-choice questions.
@@ -712,7 +821,7 @@ var React = require('react'),
                         <img className="question__icon--delete" src="/img/icons/delete.png" />
                         <div className="question__content">
                             <div className="question__ask">{ question.get('question') }</div>
-                            <Course_Exam_Question_MultiChoice_Option question={ question } />
+                            <Body_Exam_QuestionList_MultiChoice_Option question={ question } />
                         </div>
                         <div className="question__explain">
                             <span style= { explanationStyle }>Explanation:</span>
@@ -731,7 +840,7 @@ var React = require('react'),
                              className="question__icon--delete" src="/img/icons/delete.png" />
                         <div className="question__content">
                             <div className="question__ask">{ question.get('question') }</div>
-                            <Course_Exam_Question_MultiChoice_Option question={ question } />
+                            <Body_Exam_QuestionList_MultiChoice_Option question={ question } />
                         </div>
                         <div className="question__explain">
                             <span style= { explanationStyle }>Explanation:</span>
@@ -779,7 +888,16 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Question_Item_Editing = React.createClass({
+    /**
+     * A multiple choice item in an exam's question list. This is for
+     * multiple choice questions that are being edited.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoiceEditing
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoiceEditing = React.createClass({
 
         getInitialState: function() {
             // Find the index of the solution.
@@ -877,7 +995,7 @@ var React = require('react'),
                                placeholder="Ask a question (i.e. Why is the sky blue?)."
                                defaultValue={ questionText }
                                className="question__ask" />
-                        <Course_Exam_Question_MultiChoice_Option_Editing 
+                        <Body_Exam_QuestionList_MultiChoiceEditing_Option
                                                         onChangeText={ this.onChangeTextForOption }
                                                         onChangeRadio={ this.onChangeRadioForOption }
                                                         questionId={ questionId }
@@ -1060,17 +1178,24 @@ var React = require('react'),
     }),
 
 
-    // TODO: Fix naming of these React classes to make them
-    // shorter and more clear.
-    Course_Exam_Question_MultiChoice_Option = React.createClass({
+    /**
+     * A multiple choice option for a question in an exam.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoice_Option
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoice_Option = React.createClass({
 
         render: function() {
             var question = this.props.question,
                 listItems = question.getOptions().map(function(option, index) {
                     var isCorrect = question.isCorrect(option);
-                    return <Course_Exam_Question_MultiChoice_Option_Item key={ index }
-                                                                         option={ option }
-                                                                         isCorrect={ isCorrect } />;
+                    return <Body_Exam_QuestionList_MultiChoice_Option_Item
+                                                        key={ index }
+                                                        option={ option }
+                                                        isCorrect={ isCorrect } />;
                 });
 
             return (
@@ -1083,7 +1208,17 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Question_MultiChoice_Option_Editing = React.createClass({
+    /**
+     * A multiple choice item in the list of questions that a
+     * user has created. This element will allow the user to
+     * edit the multiple choice option.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoiceEditing_Option
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoiceEditing_Option = React.createClass({
 
         render: function() {
             var self = this,
@@ -1092,7 +1227,7 @@ var React = require('react'),
                     var isCorrect = self.isCorrect(option),
                         key = self.props.questionId + '-' + index.toString();
                     // TODO: Shorten this line.
-                    return <Course_Exam_Question_MultiChoice_Option_Item_Editing 
+                    return <Body_Exam_QuestionList_MultiChoiceEditing_Option_Item
                                                                 onChangeText={ self.onChangeText }
                                                                 onChangeRadio={ self.onChangeRadio}
                                                                 name={ name }
@@ -1140,7 +1275,15 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Question_MultiChoice_Option_Item = React.createClass({
+    /**
+     *  A single multiple choice option for a question.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoice_Option_Item
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoice_Option_Item = React.createClass({
 
         render: function() {
             var questionClass = (this.props.isCorrect) ?
@@ -1154,7 +1297,16 @@ var React = require('react'),
     }),
 
 
-    Course_Exam_Question_MultiChoice_Option_Item_Editing = React.createClass({
+    /**
+     *  A single multiple choice option for a question. This sets the
+     *  mutliple choice option so that it can be edited.
+     *
+     * @module Layout
+     * @submodule Course
+     * @class Body_Exam_QuestionList_MultiChoiceEditing_Option_Item
+     * @private
+     */
+    Body_Exam_QuestionList_MultiChoiceEditing_Option_Item = React.createClass({
 
         getInitialState: function() {
             return {option: this.props.option, isCorrect: this.props.isCorrect};
@@ -1216,7 +1368,7 @@ var React = require('react'),
     });
 
 
-exports.CourseLayout = {
-    Course_Root: Course_Root,
+module.exports = {
+    Root: Root
 };
 

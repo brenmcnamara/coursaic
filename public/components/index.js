@@ -6,7 +6,7 @@ var React = require('react'),
     ConfigStore = require('../js/Stores/ConfigStore'),
 
     HomeLayout = require('./home.react.js').HomeLayout,
-    CourseLayout = require('./course.react.js').CourseLayout,
+    CourseLayout = require('./course.react.js'),
     ExamLayout = require('./exam.react.js').ExamLayout,
 
     render = function(key, params) {
@@ -17,7 +17,7 @@ var React = require('react'),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'course':
-                React.render(React.createFactory(CourseLayout.Course_Root)(params),
+                React.render(React.createFactory(CourseLayout.Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'exam':
