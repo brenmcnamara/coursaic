@@ -10,7 +10,7 @@
 var React = require('react'),
     
     WidgetsLayout = require('./widgets.react.js'),
-    PopupsLayout = require('./popups.react.js').PopupsLayout,
+    PopupsLayout = require('./popups.react.js'),
     HeaderLayout = require('./header.react.js'),
 
     Stores = require('../js/Stores'),
@@ -38,7 +38,7 @@ var React = require('react'),
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_COURSE) {
                 return (
                     <div className="main">
-                        <PopupsLayout.Popup_Create_Course />
+                        <PopupsLayout.CreateCourse />
                         <HeaderLayout.Header isOpaque={ true } />
                         <HeaderLayout.HeaderFill isOpaque={ true } />
                         <Home_Img />

@@ -18,7 +18,7 @@
 var React = require('react'),
 
     HeaderLayout = require('./header.react.js'),
-    PopupsLayout = require('./popups.react.js').PopupsLayout,
+    PopupsLayout = require('./popups.react.js'),
 
     Stores = require('../js/Stores'),
 
@@ -45,10 +45,10 @@ var React = require('react'),
                                (<UnenrollButton />) :
                                (<EnrollButton />),
                 deleteQuestionPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.DELETE_QUESTION) ?
-                                      (<PopupsLayout.Popup_Delete_Question />) :
+                                      (<PopupsLayout.DeleteQuestion />) :
                                       (null)
                 createExamPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_EXAM) ?
-                                  (<PopupsLayout.Popup_Create_Exam />) :
+                                  (<PopupsLayout.CreateExam />) :
                                   (null);
 
             return (

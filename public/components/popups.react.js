@@ -1,6 +1,11 @@
 /** @jsx React.DOM */
 
-
+/**
+ * popups.react.js
+ *
+ * All React Components targeted
+ * specifically for the home page.
+ */
     
 var React = require('react'),
     Stores = require('../js/Stores'),
@@ -10,12 +15,13 @@ var React = require('react'),
     Action = require('../js/Action.js').Action,
 
     /**
-     * popups.react.js
+     * A popup form for creating a course.
      *
-     * All React Components targeted
-     * specifically for the home page.
+     * @module Layout
+     * @submodule Popup
+     * @class CreateCourse
      */
-    Popup_Create_Course = React.createClass({
+    CreateCourse = React.createClass({
 
         getInitialState: function() {
             var fields = Stores.FieldStore().fields();
@@ -168,7 +174,14 @@ var React = require('react'),
     }),
 
 
-    Popup_Create_Exam = React.createClass({
+    /**
+     * A popup form for creating an exam.
+     *
+     * @module Layout
+     * @submodule Popup
+     * @class CreateExam
+     */
+    CreateExam = React.createClass({
 
         getInitialState: function() {
             return { examMap: {} };
@@ -274,13 +287,21 @@ var React = require('react'),
     }),
 
 
-    Popup_Delete_Question = React.createClass({
+    /**
+     * A popup inquiring if the user is sure
+     * he/she wants to delete a particular question.
+     *
+     * @module Layout
+     * @submodule Popup
+     * @class DeleteQuestion
+     */
+    DeleteQuestion = React.createClass({
 
         render: function() {
-            return <Popup_Confirm header="Deleting Question"
-                                  message="Are you sure you would like to delete this question?"
-                                  onYes={ this.onYes }
-                                  onNo={ this.onNo } />
+            return <Confirm header="Deleting Question"
+                            message="Are you sure you would like to delete this question?"
+                            onYes={ this.onYes }
+                            onNo={ this.onNo } />
         },
 
 
@@ -297,13 +318,21 @@ var React = require('react'),
     }),
 
 
-    Popup_Cancel_Exam_Run = React.createClass({
+    /**
+     * A popup inquiring if the user is sure he/she
+     * wants to cancel the current exam run.
+     *
+     * @module Layout
+     * @submodule Popup
+     * @class CancelExamRun
+     */
+    CancelExamRun = React.createClass({
 
         render: function() {
-            return <Popup_Confirm header="Cancel Your Exam"
-                                  message="Are you sure you would like to cancel taking this exam?"
-                                  onYes={ this.onYes }
-                                  onNo={ this.onNo } />
+            return <Confirm header="Cancel Your Exam"
+                            message="Are you sure you would like to cancel taking this exam?"
+                            onYes={ this.onYes }
+                            onNo={ this.onNo } />
         },
 
 
@@ -320,7 +349,15 @@ var React = require('react'),
     }),
 
 
-    Popup_Confirm = React.createClass({
+    /**
+     * A popup confirmation menu that provides
+     * a message with a yes/no inquery for the user.
+     *
+     * @module Layout
+     * @submodule Popup
+     * @class Confirm
+     */
+    Confirm = React.createClass({
 
         render: function() {
             return (
@@ -357,9 +394,9 @@ var React = require('react'),
     });
 
 
-exports.PopupsLayout = {
-    Popup_Delete_Question: Popup_Delete_Question,
-    Popup_Create_Exam: Popup_Create_Exam,
-    Popup_Create_Course: Popup_Create_Course,
-    Popup_Cancel_Exam_Run: Popup_Cancel_Exam_Run,
+module.exports = {
+    DeleteQuestion: DeleteQuestion,
+    CreateExam: CreateExam,
+    CreateCourse: CreateCourse,
+    CancelExamRun: CancelExamRun,
 };

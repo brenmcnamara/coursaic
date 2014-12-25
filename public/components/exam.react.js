@@ -7,7 +7,7 @@ var React = require('react'),
 
     HeaderLayout = require('./header.react.js'),
     WidgetsLayout = require('./widgets.react.js'),
-    PopupsLayout = require('./popups.react.js').PopupsLayout,
+    PopupsLayout = require('./popups.react.js'),
 
     Action = require('../js/Action.js').Action,
     CAEvent = require('../js/Event.js').CAEvent,
@@ -35,7 +35,7 @@ var React = require('react'),
             }
             else {
                 cancelExamPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CANCEL_EXAM_RUN) ?
-                                  (<PopupsLayout.Popup_Cancel_Exam_Run />) :
+                                  (<PopupsLayout.CancelExamRun />) :
                                   (null);
                 return (
                     <div className="main">
