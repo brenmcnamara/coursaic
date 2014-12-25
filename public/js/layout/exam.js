@@ -12,7 +12,7 @@ var React = require('react'),
     Action = require('../Action.js').Action,
     CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../util.js').Util,
+    Util = require('../util.js'),
 
     /*
      * The root element of the exam page.

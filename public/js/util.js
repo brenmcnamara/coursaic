@@ -1,5 +1,8 @@
 /**
  * Util.js
+ *
+ * Contains utility functions that may be
+ * used by this project.
  */
 
 
@@ -46,4 +49,4 @@ var Util = {
 };
 
 
-exports.Util = Util;
+module.exports = Util;
