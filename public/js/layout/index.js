@@ -21,7 +21,7 @@ var React = require('react'),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'exam':
-                React.render(React.createFactory(ExamLayout.Exam_Root)(params),
+                React.render(React.createFactory(ExamLayout.Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             default:

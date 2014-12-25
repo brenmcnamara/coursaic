@@ -29,12 +29,6 @@ var
         // at a time.
         locked: false,
 
-        // A mapping of actions to callbacks.
-        // When an action is dispatched,
-        // all the callbacks for that action
-        // are executed.
-        actionHash: {},
-
         // A reference to each store
         // for the dispatcher to use
         // and iterate. Stores can also
@@ -130,6 +124,39 @@ var
 
     registerStores = function(stores) {
         stateMap.stores = stores.slice();
+        // Assign a dispatcherIndex to each store.
+        stateMap.stores.forEach(function (store, index) {
+            store.dispatcherIndex = (index + 1);
+        });
+    },
+
+
+    /**
+     * Generate the action handlers for a particular action.
+     * This is an array of objects, each object containing an
+     * index field and a callback field. The index is the dispatcherIndex
+     * of the store that is handling the action and the callback is the
+     * stores callback for the action.
+     *
+     * @method actionHandler
+     * @private
+     * @param name {Action.Name} The name of the action.
+     *
+     * @return { Array } An array of actionHandler objects.
+     */
+    actionHandlers = function (name) {
+        return stateMap.stores.reduce(function(memo, store) {
+            var callback = store.actionHandler[name];
+            if (callback) {
+                if (typeof callback !== 'function') {
+                    throw new Error("Dispatcher will only register objects of type " +
+                                    "'function' from actionHandler. Cannot register " +
+                                    name + " from store with index " + store.dispatcherIndex);
+                }
+                memo.push({'index': store.dispatcherIndex, 'callback': callback});
+            }
+            return memo;
+        }, []);
     },
 
 
@@ -154,7 +181,7 @@ var
     dispatch = function(name, payload) {
         // Get the callbacks for the action.
         var self = this,
-            storeCalls = stateMap.actionHash[name],
+            storeCalls = actionHandlers(name),
             promises;
 
         if (!storeCalls) {

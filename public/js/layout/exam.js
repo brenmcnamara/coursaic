@@ -207,13 +207,13 @@ var React = require('react'),
                                                                           isCorrect={ true } />;
                     }
                     else if (option === self.props.guess) {
-                        return <Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
-                                                                              isIncorrect={ true }
-                                                                              option={ option } />; 
+                        return <ExamResults_SolutionList_MultiChoice_Item  key={ key }
+                                                                           isIncorrect={ true }
+                                                                           option={ option } />; 
                     }
                     else {
-                        return <Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
-                                                                              option={ option } />
+                        return <ExamResults_SolutionList_MultiChoice_Item  key={ key }
+                                                                           option={ option } />
                     }
                 });
             return (
@@ -318,7 +318,7 @@ var React = require('react'),
      * @class ExamForm_Question_List
      * @private
      */
-    ExamForm_Question_List = React.createClass({
+    ExamForm_QuestionList = React.createClass({
 
         render: function() {
             var self = this,
@@ -328,10 +328,11 @@ var React = require('react'),
             if (examRun) {
                 questionList = examRun.questions().map(function(question, index) {
                         var key = "ExamQuestion-" + question.id;
-                        return <ExamForm_Question onChange={ self.onChangeQuestion }
-                                                  index={ index }
-                                                  question={ question }
-                                                  key={ key } />
+                        return <ExamForm_QuestionList_MultiChoice
+                                                onChange={ self.onChangeQuestion }
+                                                index={ index }
+                                                question={ question }
+                                                key={ key } />
                     });
                 return (
                     <ul className="exam__question-list">
