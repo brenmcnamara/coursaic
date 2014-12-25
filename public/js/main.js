@@ -1,6 +1,6 @@
 
 var WatchDog = require('./WatchDog.js').WatchDog,
-    Dispatcher = require('./Dispatcher.js').Dispatcher,
+    Dispatcher = require('./dispatcher.js'),
     Stores = require('./Stores'),
     Action = require('./Action.js').Action,
     CAEvent = require('./Event.js').CAEvent,

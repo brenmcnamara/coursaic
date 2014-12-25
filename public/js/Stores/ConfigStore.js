@@ -10,7 +10,7 @@
 */
 
 var Store = require('./Store').Store,
-    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    Dispatcher = require('../dispatcher.js'),
     Anchor = require('../Anchor.js').Anchor,
 
     /**

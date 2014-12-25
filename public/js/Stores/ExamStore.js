@@ -12,7 +12,7 @@
 var Store = require('./Store').Store,
     Stores = require('../Stores'),
 
-    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    Dispatcher = require('../dispatcher.js'),
     CAEvent = require('../Event.js').CAEvent,
 
     Question = require('./models.js').Question,

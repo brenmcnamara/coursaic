@@ -252,4 +252,4 @@ var Dispatcher = (function() {
 
 }());
 
-exports.Dispatcher = Dispatcher;
+module.exports = Dispatcher;

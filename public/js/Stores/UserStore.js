@@ -14,7 +14,7 @@
 
 var Store = require('./Store.js').Store,
     Stores = require('../Stores'),
-    Dispatcher = require('../Dispatcher.js').Dispatcher,
+    Dispatcher = require('../dispatcher.js'),
     CAEvent = require('../Event.js').CAEvent,
 
     School = Parse.Object.extend("School"),

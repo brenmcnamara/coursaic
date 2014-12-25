@@ -13,7 +13,7 @@
          maxlen:100, node:true
 */
 
-var Dispatcher = require('./Dispatcher.js').Dispatcher,
+var Dispatcher = require('./dispatcher.js'),
 
     Action = {};
 
