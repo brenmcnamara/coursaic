@@ -19,13 +19,15 @@ var React = require('react'),
     CAEvent = require('../js/Event.js').CAEvent,
 
     /**
-     * Root_Home
-     *
      * The root element for the home page. All other
      * elements on the home page will exist inside
      * this element.
+     *
+     * @module Layout
+     * @submodule Home
+     * @class Root
      */
-    Home_Root = React.createClass({
+    Root = React.createClass({
 
         render: function() {
             // TODO: How can I avoid writing
@@ -38,7 +40,7 @@ var React = require('react'),
                         <HeaderLayout.Header isOpaque={ true } />
                         <HeaderLayout.Header_Fill isOpaque={ true } />
                         <Home_Img />
-                        <Home_Content />
+                        <Content />
                     </div>
                 );        
             }
@@ -48,7 +50,7 @@ var React = require('react'),
                         <HeaderLayout.Header isOpaque={ true } />
                         <HeaderLayout.Header_Fill isOpaque={ true } />
                         <Home_Img />
-                        <Home_Content />
+                        <Content />
                     </div>
                 );
             }
@@ -74,10 +76,12 @@ var React = require('react'),
 
 
     /**
-     * Home_Img
-     *
      * The decorative image on the home
      * page.
+     *
+     * @module Layout
+     * @submodule Home
+     * @class Home_Img
      */
     Home_Img = React.createClass({
         
@@ -92,45 +96,21 @@ var React = require('react'),
 
 
     /**
-     * Search
-     *
-     * The search bar for looking up courses.
-     */
-    Search = React.createClass({
-        
-        render: function() {
-            var searchText = "Search for " + this.props.alias + " classes...";
-            return (
-                <div className="home-search">
-                    <div className="search">
-                        <input type="text"
-                               placeholder={searchText}
-                               className="search__input" />
-
-                        <img className="search__submit" src="/img/icons/search.png" />
-                    </div>
-                </div>
-            );
-        }
-
-
-    }),
-
-
-    /**
-     * Home_Content
-     *
      * All the major content on the
      * home page, including side navigation
      * and courses to lookup.
+     *
+     * @module Layout
+     * @submodule Home
+     * @class Content
      */
-    Home_Content = React.createClass({
+    Content = React.createClass({
 
         render: function() {
             return (
                 <div className="home-content content">
-                    <Home_SideNav />
-                    <Home_Body />
+                    <Navigation />
+                    <Body />
                 </div>
             );
         }
@@ -140,12 +120,14 @@ var React = require('react'),
 
 
     /**
-     * Home_SideNav
+     * The navigation element on the home page.
      *
-     * The Side Navigation on the home
-     * page.
+     * @module Layout
+     * @submodule Home
+     * @class Navigation
+     * @private
      */
-    Home_SideNav = React.createClass({
+    Navigation = React.createClass({
 
         render: function() {
             var enrolled = Stores.CourseStore().coursesForUser(Stores.UserStore().current()) || [];
@@ -179,12 +161,15 @@ var React = require('react'),
 
 
     /**
-     * Home_Body
-     *
      * The central markup inside the content
      * tag, displayed on the home page.
+     *
+     * @module Layout
+     * @submodule Home
+     * @class Body
+     * @private
      */
-    Home_Body = React.createClass({
+    Body = React.createClass({
 
         render: function() {
             return (
@@ -198,6 +183,6 @@ var React = require('react'),
     });
 
 
-exports.HomeLayout = {
-    Home_Root: Home_Root
+module.exports = {
+    Root: Root
 };

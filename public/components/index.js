@@ -5,7 +5,7 @@ var React = require('react'),
     PageStore = require('../js/Stores/PageStore.js'),
     ConfigStore = require('../js/Stores/ConfigStore'),
 
-    HomeLayout = require('./home.react.js').HomeLayout,
+    HomeLayout = require('./home.react.js'),
     CourseLayout = require('./course.react.js'),
     ExamLayout = require('./exam.react.js').ExamLayout,
 
@@ -13,7 +13,7 @@ var React = require('react'),
         unmountRoot();
         switch (key) {
             case 'home':
-                React.render(React.createFactory(HomeLayout.Home_Root)(params),
+                React.render(React.createFactory(HomeLayout.Root)(params),
                              document.getElementsByTagName('body')[0]);
                 break;
             case 'course':
