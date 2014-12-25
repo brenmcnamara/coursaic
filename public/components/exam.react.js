@@ -15,11 +15,13 @@ var React = require('react'),
     Util = require('../js/Util.js').Util,
 
     /*
-     * exam.react.js
+     * The root element of the exam page.
      *
-     * The components for the exam page.
+     * @module Layout
+     * @submodule Exam
+     * @class Root
      */
-    Exam_Root = React.createClass({
+    Root = React.createClass({
 
         render: function() {
             var cancelExamPopup;
@@ -28,8 +30,8 @@ var React = require('react'),
                     <div className="main">
                         <HeaderLayout.Header isOpaque={ false } />
                         <HeaderLayout.HeaderFill isOpaque={ false } />
-                        <Back_Button />
-                        <Exam_Results />
+                        <BackButton />
+                        <ExamResults />
                     </div>
                 );
             }
@@ -42,7 +44,7 @@ var React = require('react'),
                         { cancelExamPopup }
                         <HeaderLayout.Header isOpaque={ false } />
                         <HeaderLayout.HeaderFill isOpaque={ false } />
-                        <Exam_Form />
+                        <ExamForm />
                     </div>
                 );  
             }
@@ -70,7 +72,16 @@ var React = require('react'),
 
 
 
-    Back_Button = React.createClass({
+    /**
+     * The back button that shows up on the exam page. Used to
+     * navigate back to the course page.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class BackButton
+     * @private
+     */
+    BackButton = React.createClass({
 
         render: function() {
             return (
@@ -93,16 +104,24 @@ var React = require('react'),
     }),
 
 
-    Exam_Results = React.createClass({
+    /**
+     * The results of taking an exam.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamResults
+     * @private
+     */
+    ExamResults = React.createClass({
 
         render: function() {
             var exam = Stores.ExamStore().current();
             return (
                 <div className="exam-run-results">
                     <h1 className="exam__title">{ exam.get('name') }</h1>
-                    <Exam_Score />
+                    <ExamScore />
                     <WidgetsLayout.DivideFull />
-                    <Exam_Results_Solutions_List />
+                    <ExamResults_SolutionList />
                 </div>
             );
         }
@@ -111,7 +130,15 @@ var React = require('react'),
     }),
 
 
-    Exam_Score = React.createClass({
+    /**
+     * The element showing the score the user got
+     * on an exam.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamScore
+     */
+    ExamScore = React.createClass({
 
         render: function() {
             var examRun = Stores.ExamStore().currentExamRun(),
@@ -129,16 +156,24 @@ var React = require('react'),
     }),
 
 
-    Exam_Results_Solutions_List = React.createClass({
+    /**
+     * The list of solution for the exam the user
+     * has just taken.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamResults_SolutionList
+     */
+    ExamResults_SolutionList = React.createClass({
 
         render: function() {
             var examRun = Stores.ExamStore().currentExamRun(),
                 solutions = examRun.questions().map(function(question, index) {
                     var guess = examRun.guessAtIndex(index),
                         key = question.id + "-" + index.toString();
-                    return <Exam_Results_Solutions_List_Item question={ question }
-                                                             guess={ guess }
-                                                             key={ key } />;
+                    return <ExamResults_SolutionList_MultiChoice   question={ question }
+                                                                   guess={ guess }
+                                                                   key={ key } />;
                 });
 
             return (
@@ -150,9 +185,16 @@ var React = require('react'),
     }),
 
 
-    // TODO: This item is mutli-choice specific,
-    // should change the name to specify that.
-    Exam_Results_Solutions_List_Item = React.createClass({
+    /**
+     * A single mutliple choice solution to the results
+     * of an exam
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamResults_SolutionList_MultiChoice
+     * @private
+     */
+    ExamResults_SolutionList_MultiChoice = React.createClass({
 
         render: function() {
             var self = this,
@@ -160,9 +202,9 @@ var React = require('react'),
                 options = question.getOptions().map(function(option, index) {
                     var key = question.id + "-option-" + index.toString();
                     if (question.isCorrect(option)) {
-                        return <Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
-                                                                              option={ option }
-                                                                              isCorrect={ true } />;
+                        return <ExamResults_SolutionList_MultiChoice_Item key={ key }
+                                                                          option={ option }
+                                                                          isCorrect={ true } />;
                     }
                     else if (option === self.props.guess) {
                         return <Exam_Results_Solutions_List_Multi_Choice_Item key={ key }
@@ -192,7 +234,16 @@ var React = require('react'),
     }),
 
 
-    Exam_Results_Solutions_List_Multi_Choice_Item = React.createClass({
+    /**
+     * An single multiple choice item for a multiple choice
+     * question in the results of taking an exam.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamResults_SolutionList_MultiChoice_Item
+     * @private
+     */
+    ExamResults_SolutionList_MultiChoice_Item = React.createClass({
 
         render: function() {
             var itemType;
@@ -215,7 +266,16 @@ var React = require('react'),
     });
 
 
-    Exam_Form = React.createClass({
+    /**
+     * The form of questions that the user
+     * interacts with to take an exam.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm
+     * @private
+     */
+    ExamForm = React.createClass({
 
         getInitialState: function() {
             return { guesses: {} };
@@ -228,8 +288,8 @@ var React = require('react'),
                 <div className="exam">
                     <h1 className="exam__title">{ exam.get('name') }</h1>
                     <WidgetsLayout.DivideFull />
-                    <Exam_Form_Question_List onChange={ this.onChangeQuestion } />
-                    <Exam_Form_Buttons onSubmit={ this.onSubmit } />
+                    <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
+                    <ExamForm_Buttons onSubmit={ this.onSubmit } />
                 </div>
             );
         },
@@ -250,7 +310,15 @@ var React = require('react'),
     }),
 
 
-    Exam_Form_Question_List = React.createClass({
+    /**
+     * The list of questions in the exam form.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_Question_List
+     * @private
+     */
+    ExamForm_Question_List = React.createClass({
 
         render: function() {
             var self = this,
@@ -260,10 +328,10 @@ var React = require('react'),
             if (examRun) {
                 questionList = examRun.questions().map(function(question, index) {
                         var key = "ExamQuestion-" + question.id;
-                        return <Exam_Form_Question onChange={ self.onChangeQuestion }
-                                                   index={ index }
-                                                   question={ question }
-                                                   key={ key } />
+                        return <ExamForm_Question onChange={ self.onChangeQuestion }
+                                                  index={ index }
+                                                  question={ question }
+                                                  key={ key } />
                     });
                 return (
                     <ul className="exam__question-list">
@@ -298,7 +366,15 @@ var React = require('react'),
     }),
 
 
-    Exam_Form_Question = React.createClass({
+    /**
+     * A multiple choice question in the exam form.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_QuestionList_MultiChoice
+     * @private
+     */
+    ExamForm_QuestionList_MultiChoice = React.createClass({
 
         render: function() {
             var self = this,
@@ -307,10 +383,10 @@ var React = require('react'),
                 optionList = options.map(function(option, index) {
                     var key = question.id + "-option-" + index.toString(),
                         name = question.id;
-                    return <Exam_Form_Question_Multi_Choice_Item onChangeItem={ self.onChangeItem }
-                                                                 option={ option }
-                                                                 key={ key }
-                                                                 name={ name } />;
+                    return <ExamForm_Question_MultiChoice_Item onChangeItem={ self.onChangeItem }
+                                                               option={ option }
+                                                               key={ key }
+                                                               name={ name } />;
                 });
 
             return (
@@ -332,7 +408,15 @@ var React = require('react'),
     }),
 
 
-    Exam_Form_Question_Multi_Choice_Item = React.createClass({
+    /**
+     * A single option in a multiple choice question of an
+     * exam that is in the the question list.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_Question_MultiChoice_Item
+     */
+    ExamForm_Question_MultiChoice_Item = React.createClass({
 
         render: function() {
             var option = this.props.option,
@@ -355,7 +439,16 @@ var React = require('react'),
     }),
 
 
-    Exam_Form_Buttons = React.createClass({
+    /**
+     * The set of buttons that the user can interact with at
+     * the bottom of the exam form.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_Buttons
+     * @private
+     */
+    ExamForm_Buttons = React.createClass({
 
         render: function() {
             return (
@@ -377,6 +470,7 @@ var React = require('react'),
 
     });
 
-module.exports.ExamLayout = {
-    Exam_Root: Exam_Root
+
+module.exports = {
+    Root: Root
 };

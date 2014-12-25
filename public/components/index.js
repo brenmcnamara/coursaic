@@ -7,7 +7,7 @@ var React = require('react'),
 
     HomeLayout = require('./home.react.js'),
     CourseLayout = require('./course.react.js'),
-    ExamLayout = require('./exam.react.js').ExamLayout,
+    ExamLayout = require('./exam.react.js'),
 
     render = function(key, params) {
         unmountRoot();
