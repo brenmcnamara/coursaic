@@ -10,13 +10,52 @@
 */
 
 
-/**
- * The dispatcher that manages
- * traffic-control for actions.
- */
-var Dispatcher = (function() {
 
-    /* DECLARATION */
+
+
+var
+
+    /**
+     * Contains all the state for the dispatcher.
+     *
+     * @private
+     * @property stateMap
+     * @type Object
+     */
+    stateMap = {
+        // Indicates if the dispatcher
+        // is locked due to a propogating
+        // event. Only 1 event can fire
+        // at a time.
+        locked: false,
+
+        // A mapping of actions to callbacks.
+        // When an action is dispatched,
+        // all the callbacks for that action
+        // are executed.
+        actionHash: {},
+
+        // A reference to each store
+        // for the dispatcher to use
+        // and iterate. Stores can also
+        // be referenced directly, but
+        // these regerences can be used
+        // for performing generic algorithms
+        // over each store.
+        stores: [ ],
+        
+        // A list of all resolves that are on the
+        // wait list. This is a map of
+        // dispatcherIndex -> Array of resolve callbacks.
+        waitHash_resolve: {},
+
+        // A list of all rejects that are on the
+        // wait list. This is a map of
+        // dispatcherIndex -> Array of reject callbacks.
+        waitHash_reject: {}
+
+    },
+
 
     /**
      * Coordinates synchronizing store calls during
@@ -37,7 +76,25 @@ var Dispatcher = (function() {
      *  all the stores in the waitFor list are done
      *  executing.
      */
-    var waitFor,
+    waitFor = function(waitList) {
+        return Promise.all(waitList.map(function(dispatcherIndex) {
+            return new Promise(function(resolve, reject) {
+                // Assume that the waitHash_resolve and waitHash_reject
+                // lists are symmetric. If an element in waitHash_resolve
+                // exists, then an element in waitHash_reject
+                // must also exist.
+                if (stateMap.waitHash_resolve[dispatcherIndex]) {
+                    stateMap.waitHash_resolve[dispatcherIndex].push(resolve);
+                    stateMap.waitHash_reject[dispatcherIndex].push(reject);
+                }
+                else {
+                    stateMap.waitHash_resolve[dispatcherIndex] = [resolve];
+                    stateMap.waitHash_reject[dispatcherIndex] = [reject];
+                }
+            });
+        }));
+    },
+
 
     /**
      * Register an action with the store. If an action
@@ -51,9 +108,30 @@ var Dispatcher = (function() {
      * @param name {String} The name of the action to
      *  register.
      */
-        register,
+    register = function(name) {
+        // Go through the stores and register
+        // action with each store.
+        var storeCalls = stateMap.stores.reduce(function(memo, store) {
+            var callback = store.actionHandler[name];
+            if (callback) {
+                if (typeof callback !== 'function') {
+                    throw new Error("Dispatcher will only register objects of type " +
+                                    "'function' from actionHandler. Cannot register " +
+                                    name + " from store with index " + store.dispatcherIndex);
+                }
+                memo.push({'index': store.dispatcherIndex, 'callback': callback});
+            }
+            return memo;
+        }, []);
 
-        registerStores,
+        stateMap.actionHash[name] = storeCalls;
+    },
+
+
+    registerStores = function(stores) {
+        stateMap.stores = stores.slice();
+    },
+
 
     /**
      * Dispatch an action through to the stores.
@@ -73,96 +151,6 @@ var Dispatcher = (function() {
      * @throw If the action has not yet been
      *  registered.
      */
-        dispatch,
-
-    /**
-     * Contains all the state for the dispatcher.
-     *
-     * @private
-     * @property stateMap
-     * @type Object
-     */
-        stateMap = {
-            // Indicates if the dispatcher
-            // is locked due to a propogating
-            // event. Only 1 event can fire
-            // at a time.
-            locked: false,
-
-            // A mapping of actions to callbacks.
-            // When an action is dispatched,
-            // all the callbacks for that action
-            // are executed.
-            actionHash: {},
-
-            // A reference to each store
-            // for the dispatcher to use
-            // and iterate. Stores can also
-            // be referenced directly, but
-            // these regerences can be used
-            // for performing generic algorithms
-            // over each store.
-            stores: [ ],
-            
-            // A list of all resolves that are on the
-            // wait list. This is a map of
-            // dispatcherIndex -> Array of resolve callbacks.
-            waitHash_resolve: {},
-
-            // A list of all rejects that are on the
-            // wait list. This is a map of
-            // dispatcherIndex -> Array of reject callbacks.
-            waitHash_reject: {}
-
-        };
-
-    /* IMPLEMENTATION */
-
-    waitFor = function(waitList) {
-        return Promise.all(waitList.map(function(dispatcherIndex) {
-            return new Promise(function(resolve, reject) {
-                // Assume that the waitHash_resolve and waitHash_reject
-                // lists are symmetric. If an element in waitHash_resolve
-                // exists, then an element in waitHash_reject
-                // must also exist.
-                if (stateMap.waitHash_resolve[dispatcherIndex]) {
-                    stateMap.waitHash_resolve[dispatcherIndex].push(resolve);
-                    stateMap.waitHash_reject[dispatcherIndex].push(reject);
-                }
-                else {
-                    stateMap.waitHash_resolve[dispatcherIndex] = [resolve];
-                    stateMap.waitHash_reject[dispatcherIndex] = [reject];
-                }
-            });
-        }));
-    };
-
-
-    register = function(name) {
-        // Go through the stores and register
-        // action with each store.
-        var storeCalls = stateMap.stores.reduce(function(memo, store) {
-            var callback = store.actionHandler[name];
-            if (callback) {
-                if (typeof callback !== 'function') {
-                    throw new Error("Dispatcher will only register objects of type " +
-                                    "'function' from actionHandler. Cannot register " +
-                                    name + " from store with index " + store.dispatcherIndex);
-                }
-                memo.push({'index': store.dispatcherIndex, 'callback': callback});
-            }
-            return memo;
-        }, []);
-
-        stateMap.actionHash[name] = storeCalls;
-    };
-
-
-    registerStores = function(stores) {
-        stateMap.stores = stores.slice();
-    };
-
-
     dispatch = function(name, payload) {
         // Get the callbacks for the action.
         var self = this,
@@ -245,11 +233,10 @@ var Dispatcher = (function() {
     };
 
 
-    return { register: register,
-             registerStores: registerStores,
-             dispatch: dispatch,
-             waitFor: waitFor };
+module.exports = {
+    dispatch: dispatch,
+    register: register,
+    registerStores: registerStores,
+    waitFor: waitFor
+};
 
-}());
-
-module.exports = Dispatcher;
