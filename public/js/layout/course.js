@@ -27,7 +27,7 @@ var React = require('react'),
     Action = require('../Action.js').Action,
     CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../Util.js').Util,
+    Util = require('../util.js').Util,
 
     /**
      * The root element on the Course

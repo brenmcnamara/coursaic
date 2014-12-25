@@ -11,7 +11,7 @@ var React = require('react'),
     Stores = require('../Stores'),
     CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../Util.js').Util,
+    Util = require('../util.js').Util,
     Action = require('../Action.js').Action,
 
     /**
