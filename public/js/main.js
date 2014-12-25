@@ -17,9 +17,8 @@ window.fbAsyncInit = function() {
 
     View.loadOnEvent(CAEvent.Name.DID_LOAD);
     WatchDog.watch();
-    Dispatcher.registerStores([ Stores.ConfigStore(), Stores.CourseStore(), Stores.ExamStore(), 
-                                Stores.FieldStore(), Stores.PageStore(), Stores.UserStore() ]);
-    Action.register();
+    Dispatcher.register([ Stores.ConfigStore(), Stores.CourseStore(), Stores.ExamStore(), 
+                          Stores.FieldStore(), Stores.PageStore(), Stores.UserStore() ]);
     Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
 };
 

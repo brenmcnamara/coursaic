@@ -91,38 +91,14 @@ var
 
 
     /**
-     * Register an action with the store. If an action
-     * was already registered with the store, this will
-     * clear any state that was previously registered.
-     * All actions must be registered before they are
-     * dispatched.
+     * Register a list of stores with the dispatcher.
      *
      * @method register
      *
-     * @param name {String} The name of the action to
-     *  register.
+     * @param name {Array} An array of stores to get tracked
+     *  by the dispatcher.
      */
-    register = function(name) {
-        // Go through the stores and register
-        // action with each store.
-        var storeCalls = stateMap.stores.reduce(function(memo, store) {
-            var callback = store.actionHandler[name];
-            if (callback) {
-                if (typeof callback !== 'function') {
-                    throw new Error("Dispatcher will only register objects of type " +
-                                    "'function' from actionHandler. Cannot register " +
-                                    name + " from store with index " + store.dispatcherIndex);
-                }
-                memo.push({'index': store.dispatcherIndex, 'callback': callback});
-            }
-            return memo;
-        }, []);
-
-        stateMap.actionHash[name] = storeCalls;
-    },
-
-
-    registerStores = function(stores) {
+    register = function(stores) {
         stateMap.stores = stores.slice();
         // Assign a dispatcherIndex to each store.
         stateMap.stores.forEach(function (store, index) {
@@ -263,7 +239,6 @@ var
 module.exports = {
     dispatch: dispatch,
     register: register,
-    registerStores: registerStores,
     waitFor: waitFor
 };
 
