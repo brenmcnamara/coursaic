@@ -9,16 +9,16 @@
 
 var React = require('react'),
     
-    WidgetsLayout = require('./widgets.react.js'),
-    PopupsLayout = require('./popups.react.js'),
-    HeaderLayout = require('./header.react.js'),
+    WidgetsLayout = require('./widgets.js'),
+    PopupsLayout = require('./popups.js'),
+    HeaderLayout = require('./header.js'),
 
-    Stores = require('../js/Stores'),
+    Stores = require('../Stores'),
 
-    Action = require('../js/Action.js').Action,
-    CAEvent = require('../js/Event.js').CAEvent,
+    Action = require('../Action.js').Action,
+    CAEvent = require('../Event.js').CAEvent,
 
-    Formatter = require('../js/formatter.js'),
+    Formatter = require('../formatter.js'),
 
     /**
      * The root element for the home page. All other

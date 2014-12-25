@@ -17,17 +17,17 @@
 
 var React = require('react'),
 
-    HeaderLayout = require('./header.react.js'),
-    PopupsLayout = require('./popups.react.js'),
+    HeaderLayout = require('./header.js'),
+    PopupsLayout = require('./popups.js'),
 
-    Stores = require('../js/Stores'),
+    Stores = require('../Stores'),
 
-    Formatter = require('../js/formatter.js'),
+    Formatter = require('../formatter.js'),
 
-    Action = require('../js/Action.js').Action,
-    CAEvent = require('../js/Event.js').CAEvent,
+    Action = require('../Action.js').Action,
+    CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../js/Util.js').Util,
+    Util = require('../Util.js').Util,
 
     /**
      * The root element on the Course

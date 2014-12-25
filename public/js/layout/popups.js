@@ -8,11 +8,11 @@
  */
     
 var React = require('react'),
-    Stores = require('../js/Stores'),
-    CAEvent = require('../js/Event.js').CAEvent,
+    Stores = require('../Stores'),
+    CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../js/Util.js').Util,
-    Action = require('../js/Action.js').Action,
+    Util = require('../Util.js').Util,
+    Action = require('../Action.js').Action,
 
     /**
      * A popup form for creating a course.

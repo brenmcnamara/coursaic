@@ -3,16 +3,16 @@
 
 var React = require('react'),
     
-    Stores = require('../js/Stores'),
+    Stores = require('../Stores'),
 
-    HeaderLayout = require('./header.react.js'),
-    WidgetsLayout = require('./widgets.react.js'),
-    PopupsLayout = require('./popups.react.js'),
+    HeaderLayout = require('./header.js'),
+    WidgetsLayout = require('./widgets.js'),
+    PopupsLayout = require('./popups.js'),
 
-    Action = require('../js/Action.js').Action,
-    CAEvent = require('../js/Event.js').CAEvent,
+    Action = require('../Action.js').Action,
+    CAEvent = require('../Event.js').CAEvent,
 
-    Util = require('../js/Util.js').Util,
+    Util = require('../Util.js').Util,
 
     /*
      * The root element of the exam page.

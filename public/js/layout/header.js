@@ -9,10 +9,10 @@
 
 var React = require('react'),
     
-    Stores = require('../js/Stores'),
+    Stores = require('../Stores'),
 
-    Action = require('../js/Action.js').Action,
-    CAEvent = require('../js/Event.js').CAEvent,
+    Action = require('../Action.js').Action,
+    CAEvent = require('../Event.js').CAEvent,
 
     /**
      * The header element that shows at the top

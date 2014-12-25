@@ -4,7 +4,7 @@ var WatchDog = require('./WatchDog.js').WatchDog,
     Stores = require('./Stores'),
     Action = require('./Action.js').Action,
     CAEvent = require('./Event.js').CAEvent,
-    View = require('../components');
+    View = require('./layout');
 
 Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
 window.fbAsyncInit = function() {
