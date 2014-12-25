@@ -6,7 +6,7 @@ var React = require('react'),
     Stores = require('../js/Stores'),
 
     HeaderLayout = require('./header.react.js').HeaderLayout,
-    WidgetsLayout = require('./widgets.react.js').WidgetsLayout,
+    WidgetsLayout = require('./widgets.react.js'),
     PopupsLayout = require('./popups.react.js').PopupsLayout,
 
     Action = require('../js/Action.js').Action,
@@ -101,7 +101,7 @@ var React = require('react'),
                 <div className="exam-run-results">
                     <h1 className="exam__title">{ exam.get('name') }</h1>
                     <Exam_Score />
-                    <WidgetsLayout.Divide_Full />
+                    <WidgetsLayout.DivideFull />
                     <Exam_Results_Solutions_List />
                 </div>
             );
@@ -227,7 +227,7 @@ var React = require('react'),
             return (
                 <div className="exam">
                     <h1 className="exam__title">{ exam.get('name') }</h1>
-                    <WidgetsLayout.Divide_Full />
+                    <WidgetsLayout.DivideFull />
                     <Exam_Form_Question_List onChange={ this.onChangeQuestion } />
                     <Exam_Form_Buttons onSubmit={ this.onSubmit } />
                 </div>
