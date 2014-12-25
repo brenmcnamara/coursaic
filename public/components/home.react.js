@@ -11,7 +11,7 @@ var React = require('react'),
     
     WidgetsLayout = require('./widgets.react.js'),
     PopupsLayout = require('./popups.react.js').PopupsLayout,
-    HeaderLayout = require('./header.react.js').HeaderLayout,
+    HeaderLayout = require('./header.react.js'),
 
     Stores = require('../js/Stores'),
 
@@ -40,7 +40,7 @@ var React = require('react'),
                     <div className="main">
                         <PopupsLayout.Popup_Create_Course />
                         <HeaderLayout.Header isOpaque={ true } />
-                        <HeaderLayout.Header_Fill isOpaque={ true } />
+                        <HeaderLayout.HeaderFill isOpaque={ true } />
                         <Home_Img />
                         <Content />
                     </div>
@@ -50,7 +50,7 @@ var React = require('react'),
                 return (
                     <div className="main">
                         <HeaderLayout.Header isOpaque={ true } />
-                        <HeaderLayout.Header_Fill isOpaque={ true } />
+                        <HeaderLayout.HeaderFill isOpaque={ true } />
                         <Home_Img />
                         <Content />
                     </div>

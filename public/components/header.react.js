@@ -7,12 +7,6 @@
  * the header.
  */
 
-/*
- * Dependencies:
- *  - react js
- *  - View namespace
- */
-
 var React = require('react'),
     
     Stores = require('../js/Stores'),
@@ -21,9 +15,12 @@ var React = require('react'),
     CAEvent = require('../js/Event.js').CAEvent,
 
     /**
-     * Header
+     * The header element that shows at the top
+     * of every page.
      *
-     * The header for any page.
+     * @module Layout
+     * @submodule Header
+     * @class Header
      */
     Header = React.createClass({
 
@@ -110,13 +107,15 @@ var React = require('react'),
 
 
     /**
-     * Header_Fill
-     *
      * The filler that helps move elements outside
      * of the header down so they are not hidden
      * by the header.
+     *
+     * @module Layout
+     * @submodule Header
+     * @class HeaderFill
      */
-    Header_Fill = React.createClass({
+    HeaderFill = React.createClass({
         
         render: function() {
             var fillType = (this.props.isOpaque) ?
@@ -130,8 +129,8 @@ var React = require('react'),
     });
 
 
-exports.HeaderLayout = {
+module.exports = {
     Header: Header,
-    Header_Fill: Header_Fill
+    HeaderFill: HeaderFill
 };
 

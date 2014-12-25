@@ -5,7 +5,7 @@ var React = require('react'),
     
     Stores = require('../js/Stores'),
 
-    HeaderLayout = require('./header.react.js').HeaderLayout,
+    HeaderLayout = require('./header.react.js'),
     WidgetsLayout = require('./widgets.react.js'),
     PopupsLayout = require('./popups.react.js').PopupsLayout,
 
@@ -27,7 +27,7 @@ var React = require('react'),
                 return (
                     <div className="main">
                         <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.Header_Fill isOpaque={ false } />
+                        <HeaderLayout.HeaderFill isOpaque={ false } />
                         <Back_Button />
                         <Exam_Results />
                     </div>
@@ -41,7 +41,7 @@ var React = require('react'),
                     <div className="main">
                         { cancelExamPopup }
                         <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.Header_Fill isOpaque={ false } />
+                        <HeaderLayout.HeaderFill isOpaque={ false } />
                         <Exam_Form />
                     </div>
                 );  

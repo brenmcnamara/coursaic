@@ -17,7 +17,7 @@
 
 var React = require('react'),
 
-    HeaderLayout = require('./header.react.js').HeaderLayout,
+    HeaderLayout = require('./header.react.js'),
     PopupsLayout = require('./popups.react.js').PopupsLayout,
 
     Stores = require('../js/Stores'),
@@ -56,7 +56,7 @@ var React = require('react'),
                     { createExamPopup }
                     { deleteQuestionPopup }
                     <HeaderLayout.Header isOpaque={ false } />
-                    <HeaderLayout.Header_Fill isOpaque={ false } />
+                    <HeaderLayout.HeaderFill isOpaque={ false } />
                     <Dashboard />
                     <Summary />
                     { enrollButton }
