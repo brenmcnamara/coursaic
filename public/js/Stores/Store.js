@@ -108,4 +108,25 @@ Store.prototype.emit = function(event) {
 };
 
 
+// Temporary method.
+Store.prototype.performAction = function(name, payload) {
+    var self = this;
+    var operation = function (name, payload) {
+        return self.actionHandler[name](payload);
+    };
+
+    if (arguments.length === 1) {
+        // Curry this method.
+        return function (payload) {
+            return operation(name, payload);
+        };
+    }
+    // Assume this has 2 arguments.
+    return operation(name, payload);
+
+};
+
+Store.prototype.doesHandleAction = function(name) {
+    return !!this.actionHandler[name];
+};
 exports.Store = Store;

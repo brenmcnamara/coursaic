@@ -1,5 +1,5 @@
 /**
- * FieldStore.js
+ * CourseStore.js
  */
 
 /*jslint browser:true, continue:false, devel:true,
@@ -9,14 +9,12 @@
          maxlen:100
 */
 
-var Store = require('./Store.js').Store,
-    Stores = require('../Stores'),
+var Stores = require('../Stores'),
     Dispatcher = require('../dispatcher.js'),
     CAEvent = require('../Event.js').CAEvent,
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,
-    
 
     /**
      * A Store containing all data related to
@@ -25,26 +23,20 @@ var Store = require('./Store.js').Store,
      * @module Store
      * @class CourseStore
      */
-    CourseStore = (function() {
+    CourseStore = Stores.Factory.createStore({
 
-        var StoreClass = function() {
-            this.dispatcherIndex = 2;
+        initialize: function () {
             this._isFetching = false;
             this._page = 0;
             this._limit = 30;
-            // TODO: Consider turning this into
-            // a hash table of courses and changing related
-            // methods.
+
             this._courses = [];
         },
-            self;
 
-        StoreClass.prototype = new Store();
-
-
-        StoreClass.prototype.actionHandler = {
+        actionHandler: {
 
             CREATE_COURSE: function (payload) {
+                var self = this;
                 // TODO: Note that if this fails,
                 // createCourse mode will be exited since this
                 // is getting called after the config store.
@@ -104,7 +96,7 @@ var Store = require('./Store.js').Store,
                         function() {
                             // TODO: Maybe pass the course as a parameter
                             // to this event.
-                            self.emit(new CAEvent(CAEvent.Name.DID_CREATE_COURSE));
+                            self.emit(CAEvent.Name.DID_CREATE_COURSE);
                         },
                         // Error.
                         function(error) {
@@ -115,7 +107,8 @@ var Store = require('./Store.js').Store,
 
 
             ENROLL_CURRENT_USER: function (payload) {
-                var course = self.courseWithId(payload.courseId);
+                var self = this,
+                    course = self.courseWithId(payload.courseId);
                 // Note that this call will cause an error to occur
                 // if the user is already enrolled in the course.
                 course.addUser(Stores.UserStore().current());
@@ -123,7 +116,7 @@ var Store = require('./Store.js').Store,
                              .then(
                                 // Success.
                                 function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                    self.emit(CAEvent.Name.DID_CHANGE_ENROLLMENT);
                                 },
                                 // Error.
                                 function(error) {
@@ -133,6 +126,7 @@ var Store = require('./Store.js').Store,
 
 
             PERFORM_LOAD: function (payload) {
+                var self = this;
                 switch (payload.pageKey) {
                 case 'home':
                     // Fetch a page-worth of courses.
@@ -151,7 +145,7 @@ var Store = require('./Store.js').Store,
                            .then(
                                 // Success.
                                 function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_FETCH_COURSES))
+                                    self.emit(CAEvent.Name.DID_FETCH_COURSES)
                                 },
                                 // Error.
                                 function(error) {
@@ -193,35 +187,34 @@ var Store = require('./Store.js').Store,
                     return new Promise(function(resolve, reject) {
                         resolve();
                     });
-                }   
+                }
             },
 
 
             UNENROLL_CURRENT_USER: function (payload) {
-                var course = self.courseWithId(payload.courseId);
+                var self = this,
+                    course = self.courseWithId(payload.courseId);
                     course.removeUser(Stores.UserStore().current());
                 return course.save()
                              .then(
                                 // Success.
                                 function() {
-                                    self.emit(new CAEvent(CAEvent.Name.DID_CHANGE_ENROLLMENT));
+                                    self.emit(CAEvent.Name.DID_CHANGE_ENROLLMENT);
                                 },
                                 // Error.
                                 function(error) {
                                     throw error;
                                 });
             }
-
-
-        };
+        },
 
 
         /**
          * Create a query object used to fetch courses. This method
          * should only be called after a User has been logged in.
          *
-         * @private
          * @method _createQuery
+         * @private
          *
          * @param requestMap {Object} The request parameters
          *  to configure the requests.
@@ -229,7 +222,7 @@ var Store = require('./Store.js').Store,
          * @return {Parse.Query} The query to perform
          *  a network request.
          */
-        StoreClass.prototype._createCourseQuery = function(requestMap) {
+        _createCourseQuery: function(requestMap) {
             var query = new Parse.Query(Course);
             // Only get schools for the user.
             query.equalTo('school', Stores.UserStore().current().get('school'));
@@ -237,7 +230,7 @@ var Store = require('./Store.js').Store,
             query.skip(requestMap.skip);
 
             return query;
-        };
+        },
 
 
         /**
@@ -252,7 +245,7 @@ var Store = require('./Store.js').Store,
          * @return {Promise} A promise that is executed when
          *  the course has successfully been fetched.
          */
-        StoreClass.prototype._fetchCourse = function(course) {
+        _fetchCourse: function(course) {
             return new Promise(function(resolve, reject) {
                 course.fetch({
                     success: function() {
@@ -274,7 +267,7 @@ var Store = require('./Store.js').Store,
                     }
                 });
             });
-        };
+        },
 
 
         /**
@@ -297,7 +290,7 @@ var Store = require('./Store.js').Store,
          *  that was loaded. The failure callback will contain
          *  the error describing the failure.
          */
-        StoreClass.prototype._loadCourse = function(course) {
+        _loadCourse: function(course) {
             var 
                 fieldPromise = Stores.FieldStore().fetchFieldForCourse(course),
 
@@ -326,7 +319,7 @@ var Store = require('./Store.js').Store,
                             function(error) {
                                 throw error;
                             });
-        };
+        },
 
 
         /**
@@ -337,7 +330,8 @@ var Store = require('./Store.js').Store,
          * @return {Promise} A promise that executed when the
          *  asynchronous call has returned.
          */
-        StoreClass.prototype.fetchPage = function() {
+        fetchPage: function() {
+            var self = this;
             if (this._isFetching) {
                 throw new Error("Cannot fetch courses while a fetch is in progress.");
             }
@@ -393,7 +387,7 @@ var Store = require('./Store.js').Store,
                     }
                 });
             });
-        };
+        },
 
 
         /**
@@ -408,7 +402,7 @@ var Store = require('./Store.js').Store,
          *  course object does not exist in the collection, this will return
          *  null.
          */
-        StoreClass.prototype.courseWithId = function(course_id) {
+        courseWithId: function(course_id) {
             var i, n;
             for (i = 0, n = this._courses.length; i < n; ++i) {
                 if (this._courses[i].id === course_id) {
@@ -416,7 +410,7 @@ var Store = require('./Store.js').Store,
                 }
             }
             return null;
-        };
+        },
 
 
         /**
@@ -429,11 +423,11 @@ var Store = require('./Store.js').Store,
          * @return {Array} An array of courses that the user is
          *  enrolled in.
          */
-        StoreClass.prototype.coursesForUser = function(user) {
+        coursesForUser: function(user) {
             return this._courses.filter(function(course) {
                 return course.isEnrolled(user);
             });
-        };
+        },
 
 
         /**
@@ -444,30 +438,28 @@ var Store = require('./Store.js').Store,
          * @return {Course} The current course. If the pageKey
          *  is not 'course', this will return null.
          */
-        StoreClass.prototype.current = function() {
+        current: function() {
             // TODO: Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
             return (Stores.ConfigStore().courseId()) ?
                     this.courseWithId(Stores.ConfigStore().courseId()) :
                     null;
-        };
+        },
 
 
-        StoreClass.prototype.forEach = function(callback) {
+        forEach: function(callback) {
             this._courses.forEach(callback);
-        };
+        },
 
 
-        StoreClass.prototype.map = function(callback) {
+        map: function(callback) {
             return this._courses.map(callback);
-        };
+        }
 
 
-        return (self = new StoreClass());
-
-    }());
+    });
 
 
-module.exports = CourseStore;
+module.exports = new CourseStore();
 

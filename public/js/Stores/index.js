@@ -5,6 +5,7 @@
  * references to all stores.
  */
 
+// Cache contains cached stores.
 var cache = {};
 
 module.exports = {
@@ -54,7 +55,9 @@ module.exports = {
             cache.UserStore = require('./UserStore.js');
         }
         return cache.UserStore;
-    }
+    },
 
+
+    Factory: require('./factory.js')
 
 };

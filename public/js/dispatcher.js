@@ -119,8 +119,9 @@ var
      */
     actionHandlers = function (name) {
         return stateMap.stores.reduce(function(memo, store) {
-            var callback = store.actionHandler[name];
-            if (callback) {
+            var callback;
+            if (store.doesHandleAction(name)) {
+                callback = store.performAction(name);
                 if (typeof callback !== 'function') {
                     throw new Error("Dispatcher will only register objects of type " +
                                     "'function' from actionHandler. Cannot register " +
