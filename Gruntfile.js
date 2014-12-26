@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         jshint: {
-            all: ['Gruntfile.js', 'public/js/*.js']
+            all: ['Gruntfile.js', 'public/js/**/*.js']
         },
         
         jasmine_node: {

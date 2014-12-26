@@ -2,14 +2,7 @@
  * UserStore.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
-/*global Parse, Action, CAEvent, Store */
+/*global Parse, Action, Store */
 
 
 var Stores = require('../stores'),

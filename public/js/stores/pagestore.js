@@ -65,7 +65,7 @@ var Dispatcher = require('../dispatcher.js'),
                  .then(
                     // Success.
                     function () {
-                        return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN})
+                        return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN});
                     },
                     // Error.
                     function (error) {
@@ -95,7 +95,8 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     // Success.
                                     function () {
-                                        return self._removeMode({ fromMode: PageStore.Mode.CREATE_EXAM });
+                                        return self._removeMode(
+                                                    { fromMode: PageStore.Mode.CREATE_EXAM });
                                     },
                                     // Error.
                                     function (error) {
@@ -112,7 +113,8 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     // Success.
                                     function () {
-                                        return self._removeMode({ fromMode: PageStore.Mode.CREATE_QUESTION});
+                                        return self._removeMode(
+                                                    { fromMode: PageStore.Mode.CREATE_QUESTION});
                                     },
                                     // Error.
                                     function (error) {
@@ -129,7 +131,8 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     // Success.
                                     function() {
-                                        return self._removeMode({ fromMode: PageStore.Mode.DELETE_QUESTION });
+                                        return self._removeMode(
+                                                    { fromMode: PageStore.Mode.DELETE_QUESTION });
                                     },
                                     // Error.
                                     function(error) {
@@ -159,7 +162,8 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     // Success.
                                     function () {
-                                        return self._removeMode({ fromMode: this.Mode.EDIT_QUESTION });
+                                        return self._removeMode(
+                                                    { fromMode: this.Mode.EDIT_QUESTION });
                                     },
                                     // Error.
                                     function (error) {

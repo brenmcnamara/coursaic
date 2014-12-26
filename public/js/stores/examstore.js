@@ -74,49 +74,6 @@ var Stores = require('../stores'),
 
 
         /**
-         * Get all the exams for a given course. This method
-         * will get the base data for an exam and asynchronously
-         * provide an array of exams in a promise. _loadExam should
-         * be called after to finish loading any exam. The exam that
-         * are fetched are automatically added to the exam hash.
-         *
-         * @method _fetchExamsForCourse
-         * @private
-         *
-         * @param course {Course} The course to get the exams
-         *  for.
-         *
-         * @return {Promise} A promise that is executed when fetching
-         *  has completed.
-         */
-        _fetchExamsForCourse: function(course) {
-            var self = this,
-                query = new Parse.Query(Exam);
-
-            query.equalTo('course', course);
-
-            return new Promise(function(resolve, reject) {
-                query.find({
-                    success: function(response) {
-                        response = response || [];
-                        response.forEach(function(exam) {
-                            // Set the course since we know
-                            // it based on the query.
-                            exam.set('course', course);
-                            self._examHash[exam.id] = exam;
-                        });
-                        resolve(response);
-                    },
-
-                    error: function(error) {
-                        throw error;
-                    }
-                });
-            });
-        },
-
-
-        /**
          * Get all the data for a given exam, this includes
          * the creator of the exam, the questions, etc...
          *
@@ -186,39 +143,6 @@ var Stores = require('../stores'),
             randomQuestions = allQuestions;
 
             return new ExamRun(randomQuestions);
-        },
-
-
-        /**
-         * Get all the questions for a particular exam. This
-         * is a query method.
-         *
-         * @method questionsForExam
-         *
-         * @param exam {Exam} The exam to get the questions for.
-         *
-         * @param user {User} The user to get the questions for.
-         *  This parameter is optional. If this parameter is not
-         *  specified, then this method will return all the questions
-         *  for the exam. If it is specified, it will return all
-         *  questions in the exam that were created by the given user.
-         *
-         * @return {Array} An array of questions for the exam and
-         *  (optionally) the user.
-         */
-        questionsForExam: function(exam, user) {
-            // NOTE: Made the decision not to load the information
-            // for the user of questions. This means when checking
-            // if the question belongs to a user, check the id.
-            var questions = this._questionHash[exam.id] || [];
-            if (user) {
-                // Get the questions that were created by
-                // the user.
-                return questions.filter(function(question) {
-                    return question.get('author').id === user.id;
-                });
-            }
-            return questions;
         },
 
 
@@ -437,10 +361,13 @@ var Stores = require('../stores'),
             EDIT_QUESTION: function (payload) {
                 var self = this;
                 return new Promise(function (resolve, reject) {
-                    var question = self.questionForExam(Stores.PageStore().currentPayload().examId,
-                                                        Stores.PageStore().currentPayload().questionId),
+                    var question =
+                        self.questionForExam(Stores.PageStore().currentPayload().examId,
+                                             Stores.PageStore().currentPayload().questionId),
+
                         options = payload.questionMap.options,
                         saveOptions = {};
+
                     if (options) {
                         question.setOptions(options);
                     }

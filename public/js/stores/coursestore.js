@@ -145,7 +145,7 @@ var Stores = require('../Stores'),
                            .then(
                                 // Success.
                                 function() {
-                                    self.emit(CAEvent.Name.DID_FETCH_COURSES)
+                                    self.emit(CAEvent.Name.DID_FETCH_COURSES);
                                 },
                                 // Error.
                                 function(error) {
@@ -166,9 +166,6 @@ var Stores = require('../Stores'),
                                     var course;
                                     // Get the course if the course does not
                                     // already exist.
-                                    if (! payload.course) {
-                                        throw new Error("PERFORM_LOAD must provide course id in payload");
-                                    }
                                     if (!self.courseWithId(payload.course)) {
                                         // Don't have the course, need to fetch it.
                                         course = new Course();

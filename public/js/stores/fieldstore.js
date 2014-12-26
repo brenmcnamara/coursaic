@@ -118,45 +118,6 @@ var Stores = require('../stores'),
                     });
                 }
             });
-        },
-
-
-        /**
-         * Get the field for a particular course. This will update the
-         *  course's field property to contain the field.
-         *
-         * @method fetchFieldForCourse
-         *
-         * @param course {Course} The course to get the field for.
-         *
-         * @return {Promise} A promise that is called when the field
-         *  has been fetched. The success callback for the promise
-         *  will accept a single parameter of the course being updated.
-         *  The failure callback will contain an error object.
-         */
-        fetchFieldForCourse: function (course) {
-            var self = this;
-            return new Promise(function(resolve, reject) {
-                var oldField = course.get('field');
-                if (self._fieldHash[oldField.id]) {
-                    course.set('field', self._fieldHash[oldField.id]);
-                    resolve(course);
-                }
-                else {
-                    oldField.fetch({
-                        success: function() {
-                            // Add the field to the field hash because
-                            // it does not currently exist.
-                            self._fieldHash[oldField.id] = oldField;
-                            resolve(course);
-                        },
-
-                        error: function(error) {
-                            throw error;
-                        }
-                    });
-                }
-            });
         }
 
 
