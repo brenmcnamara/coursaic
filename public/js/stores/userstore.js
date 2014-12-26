@@ -58,7 +58,7 @@ var Stores = require('../stores'),
                         params = {fields: 'first_name,last_name,picture.type(square)'};
                         // TODO: Make sure to handle errors coming back from
                         // the facebook api.
-                        /*
+                        
                         FB.api("/me", params, function(response) {
 
                             user.set("firstName", response.first_name);
@@ -70,7 +70,7 @@ var Stores = require('../stores'),
                             user.save();
                             resolve();
                         });
-                        */
+                        
                         resolve();
                     }
                     else {
@@ -81,75 +81,7 @@ var Stores = require('../stores'),
                 // Fetch school promise will get the school for the indicated
                 // user from the parse server.
                 fetchSchoolPromise = new Promise(function(resolve, reject) {
-                    var school = new School();
-                    school.id = "rQIGXlBeyE";
-                    user.set('school', school);
-                    user.get('school').fetch({
-                        success: function(model, response, options) {
-                            resolve();
-                        },
-
-                        error: function(model, response, options) {
-                            throw new Error("The school of the user could not be fetched.");
-                        }
-                    });
-                });
-
-            // Add the current user to the hash.
-            this._userHash[user.id] = user;
-            // Combine all the promises into one promise.
-            return Promise.all([fbPromise, fetchSchoolPromise]);
-        },
-
-
-        /**
-         * Perform any operations after the user has been
-         * logged in.
-         *
-         * @method _didLogin
-         * @private
-         *
-         * @param user {Parse.User} The user that was logged in.
-         *
-         * @return {Promise} A promise object that gets
-         *  called when the post-login process has completed.
-         */
-        _didLogin: function(user) {
-            var self = this,
-                // Facebook promise will perform any operations needed
-                // with the facebook api.
-                fbPromise = new Promise(function(resolve, reject) {
-                    var params;
-                    if (!user.existed()) {
-                        // Get the user data from facebook.
-                        // Note: This information might change. Current implementation
-                        // assumes this never changes.
-                        params = {fields: 'first_name,last_name,picture.type(square)'};
-                        // TODO: Make sure to handle errors coming back from
-                        // the facebook api.
-                        /*
-                        FB.api("/me", params, function(response) {
-
-                            user.set("firstName", response.first_name);
-                            user.set("lastName", response.last_name);
-                            user.set("photoUrl", response.picture.data.url);
-
-                            // Save to the parse database. Response of save
-                            // is not being reaped, might want to change this later.
-                            user.save();
-                            resolve();
-                        });
-                        */
-                        resolve();
-                    }
-                    else {
-                        resolve();
-                    }
-                }),
-
-                // Fetch school promise will get the school for the indicated
-                // user from the parse server.
-                fetchSchoolPromise = new Promise(function(resolve, reject) {
+                    // Upenn hard-coded here.
                     var school = new School();
                     school.id = "rQIGXlBeyE";
                     user.set('school', school);
