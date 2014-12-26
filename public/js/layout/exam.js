@@ -57,13 +57,13 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
             Stores.ExamStore().on(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);        
+            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);        
             Stores.ExamStore().removeListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
         }
 

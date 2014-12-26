@@ -19,20 +19,16 @@ var Store = require('./Store').Store,
     Exam = require('./models.js').Exam,
     ExamRun = require('./models.js').ExamRun,
 
-    ExamStore = (function() {
+    ExamStore = Stores.Factory.createStore({
 
-        var StoreClass = function() {
-                this.dispatcherIndex = 4;
-                // A hash of id -> exam object
-                this._examHash = {};
+        initialize: function () {
+            this.dispatcherIndex = 4;
+            // A hash of id -> exam object
+            this._examHash = {};
 
-                // A hash of exam id -> array of questions.
-                this._questionHash = {};
-            },
-            self;
-
-
-        StoreClass.prototype = new Store();
+            // A hash of exam id -> array of questions.
+            this._questionHash = {};
+        },
 
 
         /**
@@ -51,8 +47,9 @@ var Store = require('./Store').Store,
          * @return {Promise} A promise that is executed when fetching
          *  has completed.
          */
-        StoreClass.prototype._fetchExamsForCourse = function(course) {
-            var query = new Parse.Query(Exam);
+        _fetchExamsForCourse: function(course) {
+            var self = this,
+                query = new Parse.Query(Exam);
 
             query.equalTo('course', course);
 
@@ -74,7 +71,50 @@ var Store = require('./Store').Store,
                     }
                 });
             });
-        };
+        },
+
+
+        /**
+         * Get all the exams for a given course. This method
+         * will get the base data for an exam and asynchronously
+         * provide an array of exams in a promise. _loadExam should
+         * be called after to finish loading any exam. The exam that
+         * are fetched are automatically added to the exam hash.
+         *
+         * @method _fetchExamsForCourse
+         * @private
+         *
+         * @param course {Course} The course to get the exams
+         *  for.
+         *
+         * @return {Promise} A promise that is executed when fetching
+         *  has completed.
+         */
+        _fetchExamsForCourse: function(course) {
+            var self = this,
+                query = new Parse.Query(Exam);
+
+            query.equalTo('course', course);
+
+            return new Promise(function(resolve, reject) {
+                query.find({
+                    success: function(response) {
+                        response = response || [];
+                        response.forEach(function(exam) {
+                            // Set the course since we know
+                            // it based on the query.
+                            exam.set('course', course);
+                            self._examHash[exam.id] = exam;
+                        });
+                        resolve(response);
+                    },
+
+                    error: function(error) {
+                        throw error;
+                    }
+                });
+            });
+        },
 
 
         /**
@@ -87,8 +127,9 @@ var Store = require('./Store').Store,
          * @return {Promise} A promise that is called when
          *  all the exam data has been fetched.
          */
-        StoreClass.prototype._loadExam = function(exam) {
+        _loadExam: function(exam) {
             var
+                self = this,
                 // Load the author of the exam.
                 authorPromise = Stores.UserStore().fetchAuthorOfExam(exam),
 
@@ -118,7 +159,7 @@ var Store = require('./Store').Store,
                 });
 
             return Promise.all([authorPromise, questionsPromise]);
-        };
+        },
 
 
         /**
@@ -129,7 +170,7 @@ var Store = require('./Store').Store,
          *
          * @return {ExamRun} An exam run of the current exam.
          */
-        StoreClass.prototype._generateExamRun = function() {
+        _generateExamRun: function() {
             var MAX_QUESTION_COUNT = 30,
                 // Make a copy of the array, since the array will be
                 // modified by the randomization algorithm. Note that
@@ -146,7 +187,7 @@ var Store = require('./Store').Store,
             randomQuestions = allQuestions;
 
             return new ExamRun(randomQuestions);
-        };
+        },
 
 
         /**
@@ -166,7 +207,7 @@ var Store = require('./Store').Store,
          * @return {Array} An array of questions for the exam and
          *  (optionally) the user.
          */
-        StoreClass.prototype.questionsForExam = function(exam, user) {
+        questionsForExam: function(exam, user) {
             // NOTE: Made the decision not to load the information
             // for the user of questions. This means when checking
             // if the question belongs to a user, check the id.
@@ -179,7 +220,40 @@ var Store = require('./Store').Store,
                 });
             }
             return questions;
-        };
+        },
+
+
+        /**
+         * Get all the questions for a particular exam. This
+         * is a query method.
+         *
+         * @method questionsForExam
+         *
+         * @param exam {Exam} The exam to get the questions for.
+         *
+         * @param user {User} The user to get the questions for.
+         *  This parameter is optional. If this parameter is not
+         *  specified, then this method will return all the questions
+         *  for the exam. If it is specified, it will return all
+         *  questions in the exam that were created by the given user.
+         *
+         * @return {Array} An array of questions for the exam and
+         *  (optionally) the user.
+         */
+        questionsForExam: function(exam, user) {
+            // NOTE: Made the decision not to load the information
+            // for the user of questions. This means when checking
+            // if the question belongs to a user, check the id.
+            var questions = this._questionHash[exam.id] || [];
+            if (user) {
+                // Get the questions that were created by
+                // the user.
+                return questions.filter(function(question) {
+                    return question.get('author').id === user.id;
+                });
+            }
+            return questions;
+        },
 
 
         /**
@@ -194,7 +268,7 @@ var Store = require('./Store').Store,
          * @return {Array} An array of Exam objects. This is an empty
          *  array if there are no exams for the given course.
          */
-        StoreClass.prototype.examsForCourse = function(course) {
+        examsForCourse: function(course) {
             var prop, exams = [];
             for (prop in this._examHash) {
                 if (this._examHash.hasOwnProperty(prop) &&
@@ -204,7 +278,7 @@ var Store = require('./Store').Store,
                 }
             }
             return exams;
-        };
+        },
 
 
         /**
@@ -217,11 +291,11 @@ var Store = require('./Store').Store,
          *  page is something that does not have an exam, this will
          *  return null.
          */
-        StoreClass.prototype.current = function() {
+        current: function() {
             return (Stores.ConfigStore().examId()) ?
                    this._examHash[Stores.ConfigStore().examId()] :
                    null;
-        };
+        },
 
 
         /**
@@ -233,9 +307,9 @@ var Store = require('./Store').Store,
          *
          * @return {ExamRun} The current exam run for the page.
          */
-        StoreClass.prototype.currentExamRun = function() {
+        currentExamRun: function() {
             return this._examRun || null;
-        };
+        },
 
 
         /**
@@ -255,7 +329,7 @@ var Store = require('./Store').Store,
          *  the associated examId. Returns null if there
          *  is nothing is found.
          */ 
-        StoreClass.prototype.questionForExam = function(examId, questionId) {
+        questionForExam: function(examId, questionId) {
             var examQuestionArray = this._questionHash[examId];
             if (examQuestionArray) {
                 for (i = 0; i < examQuestionArray.length; i++) {
@@ -266,12 +340,13 @@ var Store = require('./Store').Store,
 
             return null;
 
-        };
+        },
 
 
-        StoreClass.prototype.actionHandler = {
+        actionHandler: {
 
             CREATE_EXAM: function (payload) {
+                var self = this;
                 return new Promise(function (resolve, reject) {
                     var examMap = payload.examMap,
                         exam = new Exam();
@@ -288,7 +363,7 @@ var Store = require('./Store').Store,
                         function (exam) {
                             self._examHash[exam.id] = exam;
                             self._questionHash[exam.id] = [];
-                            self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM));
+                            self.emit(CAEvent.Name.DID_CREATE_EXAM);
                             resolve();
                         },
                         // Error.
@@ -301,6 +376,7 @@ var Store = require('./Store').Store,
 
 
             CREATE_QUESTION: function (payload) {
+                var self = this;
                 return new Promise(function (resolve, reject) {
                     var question = new Question(),
                         options = payload.questionMap.options,
@@ -320,7 +396,7 @@ var Store = require('./Store').Store,
                           // Success.
                           function (question) {
                             self._questionHash[examId].push(question);
-                            self.emit(new CAEvent(CAEvent.Name.DID_CREATE_QUESTION));
+                            self.emit(CAEvent.Name.DID_CREATE_QUESTION);
                             resolve();
                           },
 
@@ -332,6 +408,7 @@ var Store = require('./Store').Store,
 
 
             DELETE_QUESTION: function (payload) {
+                var self = this;
                 return new Promise(function (resolve, reject) {
                     var questionId = Stores.PageStore().currentPayload().questionId,
                         examId = Stores.PageStore().currentPayload().examId,
@@ -359,6 +436,7 @@ var Store = require('./Store').Store,
             
 
             EDIT_QUESTION: function (payload) {
+                var self = this;
                 return new Promise(function (resolve, reject) {
                     var question = self.questionForExam(Stores.PageStore().currentPayload().examId,
                                                         Stores.PageStore().currentPayload().questionId),
@@ -386,6 +464,7 @@ var Store = require('./Store').Store,
 
 
             PERFORM_LOAD: function (payload) {
+                var self = this;
                 // The exams are loaded only when loading a course
                 // page.
                 switch (payload.pageKey) {
@@ -432,10 +511,10 @@ var Store = require('./Store').Store,
                                 // have to generate an exam run to use.
                                 if (payload.pageKey === 'exam') {
                                     self._examRun = self._generateExamRun();
-                                    self.emit(new CAEvent(CAEvent.Name.DID_CREATE_EXAM_RUN));
+                                    self.emit(CAEvent.Name.DID_CREATE_EXAM_RUN);
                                 }
-                                self.emit(new CAEvent(CAEvent.Name.DID_FETCH_EXAMS,
-                                                      { courseId: payload.course }));
+                                self.emit(CAEvent.Name.DID_FETCH_EXAMS,
+                                          { courseId: payload.course });
                             },
 
                             // Error.
@@ -453,6 +532,7 @@ var Store = require('./Store').Store,
 
 
             SUBMIT_EXAM_RUN: function (payload) {
+                var self = this;
                 return Dispatcher.waitFor([ Stores.PageStore().dispatcherIndex ])
                      .then(
                         // Success.
@@ -465,21 +545,18 @@ var Store = require('./Store').Store,
                                     self.currentExamRun().setGuess(+prop, guesses[+prop]);
                                 }
                             }
-                            self.emit(new CAEvent(CAEvent.Name.DID_GRADE_EXAM_RUN));
+                            self.emit(CAEvent.Name.DID_GRADE_EXAM_RUN);
                         },
                         // Error.
                         function (error) {
                             throw error;
                         });
             }
-
-        };
-
-
-        return (self = new StoreClass());
-
-    }());
+        }
 
 
-module.exports = ExamStore;
+    });
+
+
+module.exports = new ExamStore();
 

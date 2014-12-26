@@ -419,7 +419,7 @@ var React = require('react'),
 
         componentWillMount: function() {
             Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
             Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
             Stores.ExamStore().on(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
         },
@@ -427,7 +427,7 @@ var React = require('react'),
 
         componentWillUnmount: function() {
             Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
             Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
             Stores.ExamStore().removeListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
         }
@@ -526,13 +526,13 @@ var React = require('react'),
 
         componentWillMount: function() {
             Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
         },
 
 
         componentWillUnmount: function() {
             Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
         }
 
 
