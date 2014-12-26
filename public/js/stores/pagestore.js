@@ -65,7 +65,7 @@ var Dispatcher = require('../dispatcher.js'),
                  .then(
                     // Success.
                     function () {
-                        return self._removeMode({ fromMode: PageStore.Mode.CANCEL_EXAM_RUN});
+                        return self._removeMode({ fromMode: this.Mode.CANCEL_EXAM_RUN});
                     },
                     // Error.
                     function (error) {
@@ -85,7 +85,7 @@ var Dispatcher = require('../dispatcher.js'),
 
 
             CREATE_COURSE: function (payload) {
-                return this._removeMode({ fromMode: PageStore.Mode.CREATE_COURSE });
+                return this._removeMode({ fromMode: this.Mode.CREATE_COURSE });
             },
 
 
@@ -96,7 +96,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function () {
                                         return self._removeMode(
-                                                    { fromMode: PageStore.Mode.CREATE_EXAM });
+                                                    { fromMode: this.Mode.CREATE_EXAM });
                                     },
                                     // Error.
                                     function (error) {
@@ -114,7 +114,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function () {
                                         return self._removeMode(
-                                                    { fromMode: PageStore.Mode.CREATE_QUESTION});
+                                                    { fromMode: this.Mode.CREATE_QUESTION});
                                     },
                                     // Error.
                                     function (error) {
@@ -132,7 +132,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function() {
                                         return self._removeMode(
-                                                    { fromMode: PageStore.Mode.DELETE_QUESTION });
+                                                    { fromMode: this.Mode.DELETE_QUESTION });
                                     },
                                     // Error.
                                     function(error) {
