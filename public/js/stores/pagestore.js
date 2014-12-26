@@ -75,7 +75,7 @@ var Dispatcher = require('../dispatcher.js'),
                    .then(
                     // Success
                     function () {
-                        self.emit(CAEvent.Name.DID_LOAD);
+                        self.emit(CAEvent.Name.LOADED_PAGE);
                     },
                     // Failure
                     function (error) {
@@ -236,7 +236,7 @@ var Dispatcher = require('../dispatcher.js'),
                                 if (payload.removeMode) {
                                     self._removeMode({ fromMode: payload.removeMode });
                                 }
-                                self.emit(CAEvent.Name.DID_LOAD);
+                                self.emit(CAEvent.Name.LOADED_PAGE);
                             },
                             // Error.
                             function(error) {

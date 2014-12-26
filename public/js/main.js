@@ -15,7 +15,7 @@ window.fbAsyncInit = function() {
             version    : 'v2.1'
     });
 
-    View.loadOnEvent(CAEvent.Name.DID_LOAD);
+    View.loadOnEvent(CAEvent.Name.LOADED_PAGE);
     WatchDog.watch();
     Dispatcher.register([ Stores.ConfigStore(), Stores.CourseStore(), Stores.ExamStore(), 
                           Stores.FieldStore(), Stores.PageStore(), Stores.UserStore() ]);
