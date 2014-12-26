@@ -9,61 +9,58 @@
          maxlen:100
 */
 
-var Store = require('./Store').Store,
-    Stores = require('../Stores'),
+var Stores = require('../Stores'),
     Dispatcher = require('../dispatcher.js'),
 
     CAEvent = require('../Event.js').CAEvent,
     
     Field = require('./models.js').Field,
 
-    FieldStore = (function() {
+    /**
+     * Private constructor for the field store.
+     *
+     * @class FieldStore
+     * @private
+     * @constructor
+     */
+    FieldStore = Stores.Factory.createStore({
 
-        /**
-         * Private constructor for the field store.
-         *
-         * @class FieldStore
-         * @private
-         * @constructor
-         */
-        var StoreClass = function() {
-                this._fieldHash = {};
-                this.dispatcherIndex = 5;
-            },
-            self;
+        initialize: function () {
+            this._fieldHash = {};
+            this.dispatcherIndex = 5;
+        },
 
-        StoreClass.prototype = new Store();
-
-        StoreClass.prototype.actionHandler = {
+        actionHandler: {
 
             PERFORM_LOAD: function (payload) {
+                var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             
-                                .then(
-                                    // Success.
-                                    function() {
-                                        var query = new Parse.Query(Field);
-                                        query.find({
-                                            success: function(response) {
-                                                response.forEach(function(field) {
-                                                    // TODO: This is not equality safe.
-                                                    self._fieldHash[field.id] = field;
-                                                });
-                                            },
-
-                                            error: function(error) {
-                                                throw error;
-                                            }
+                        .then(
+                            // Success.
+                            function() {
+                                var query = new Parse.Query(Field);
+                                query.find({
+                                    success: function(response) {
+                                        response.forEach(function(field) {
+                                            // TODO: This is not equality safe.
+                                            self._fieldHash[field.id] = field;
                                         });
                                     },
-                                    // Error.
-                                    function(error) {
+
+                                    error: function(error) {
                                         throw error;
-                                    });
+                                    }
+                                });
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
             }
 
 
-        };
+        },
 
 
         /**
@@ -74,7 +71,7 @@ var Store = require('./Store').Store,
          *
          * @return {Array} An array containing all the fields.
          */
-        StoreClass.prototype.fields = function() {
+        fields: function() {
             var prop, arr = [];
             for (prop in this._fieldHash) {
                 if (this._fieldHash.hasOwnProperty(prop)) {
@@ -82,7 +79,7 @@ var Store = require('./Store').Store,
                 }
             }
             return arr;
-        };
+        },
 
 
         /**
@@ -98,7 +95,8 @@ var Store = require('./Store').Store,
          *  will accept a single parameter of the course being updated.
          *  The failure callback will contain an error object.
          */
-        StoreClass.prototype.fetchFieldForCourse = function(course) {
+        fetchFieldForCourse: function(course) {
+            var self = this;
             return new Promise(function(resolve, reject) {
                 var oldField = course.get('field');
                 if (self._fieldHash[oldField.id]) {
@@ -120,12 +118,50 @@ var Store = require('./Store').Store,
                     });
                 }
             });
-        };
+        },
 
 
-        return (self = new StoreClass());
-        
-    }());
+        /**
+         * Get the field for a particular course. This will update the
+         *  course's field property to contain the field.
+         *
+         * @method fetchFieldForCourse
+         *
+         * @param course {Course} The course to get the field for.
+         *
+         * @return {Promise} A promise that is called when the field
+         *  has been fetched. The success callback for the promise
+         *  will accept a single parameter of the course being updated.
+         *  The failure callback will contain an error object.
+         */
+        fetchFieldForCourse: function (course) {
+            var self = this;
+            return new Promise(function(resolve, reject) {
+                var oldField = course.get('field');
+                if (self._fieldHash[oldField.id]) {
+                    course.set('field', self._fieldHash[oldField.id]);
+                    resolve(course);
+                }
+                else {
+                    oldField.fetch({
+                        success: function() {
+                            // Add the field to the field hash because
+                            // it does not currently exist.
+                            self._fieldHash[oldField.id] = oldField;
+                            resolve(course);
+                        },
 
-module.exports = FieldStore;
+                        error: function(error) {
+                            throw error;
+                        }
+                    });
+                }
+            });
+        }
+
+
+    });
+
+
+module.exports = new FieldStore();
 
