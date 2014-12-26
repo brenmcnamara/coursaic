@@ -65,7 +65,7 @@ var Dispatcher = require('../dispatcher.js'),
                  .then(
                     // Success.
                     function () {
-                        return self._removeMode({ fromMode: this.Mode.CANCEL_EXAM_RUN});
+                        return self._removeMode({ fromMode: self.Mode.CANCEL_EXAM_RUN});
                     },
                     // Error.
                     function (error) {
