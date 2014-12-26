@@ -74,7 +74,7 @@ var React = require('react'),
 module.exports = {
 
     loadOnEvent: function (event) {
-        PageStore.addListener(event, onLoad);
+        PageStore.on(event, onLoad);
     }
 };
 

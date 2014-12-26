@@ -72,8 +72,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().addListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.onChange);
+            Stores.CourseStore().on(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
         },
 
 
@@ -171,7 +171,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
+            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
         },
 
 
@@ -332,7 +332,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 
@@ -418,10 +418,10 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
+            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
         },
 
 
@@ -473,7 +473,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 
@@ -525,8 +525,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
         },
 
 
@@ -568,7 +568,7 @@ var React = require('react'),
         },
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         },
 
         componentWillUnmount: function() {
@@ -723,9 +723,9 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
+            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
         },
 
 
@@ -782,7 +782,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 
@@ -876,7 +876,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 
@@ -1166,7 +1166,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 

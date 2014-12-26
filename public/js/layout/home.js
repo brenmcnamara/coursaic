@@ -65,7 +65,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().addListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
         },
 
 
@@ -144,8 +144,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().addListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().addListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().on(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().on(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
         },
 
 
@@ -326,8 +326,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().addListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().addListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().on(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().on(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
         },
 
 

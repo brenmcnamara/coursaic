@@ -57,8 +57,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.CHANGED_MODE, this.onChange);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
+            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
+            Stores.ExamStore().on(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
 
@@ -355,7 +355,7 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_CREATE_EXAM_RUN, this.onChange);
+            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_EXAM_RUN, this.onChange);
         },
 
 

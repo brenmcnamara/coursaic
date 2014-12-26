@@ -92,8 +92,8 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().addListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().addListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+            Stores.ExamStore().on(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
+            Stores.ExamStore().on(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
         },
 
 

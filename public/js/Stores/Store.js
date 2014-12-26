@@ -43,7 +43,7 @@ Store.prototype._callbackHash = {};
  * @param method {function} The method to call
  *  when the event is emitted.
  */
-Store.prototype.addListener = function(name, method) {
+Store.prototype.on = function(name, method) {
     if (this._callbackHash[name]) {
         // Add the method to the event.
         this._callbackHash[name].push(method);
@@ -107,29 +107,5 @@ Store.prototype.emit = function(event) {
     });
 };
 
-
-/**
- * Register an action callback. This method is
- * called by the dispatcher to map callbacks
- * to actions.
- *
- * @method actionHandler
- *
- * @param name {String} The name of the action.
- *
- * @return {Function} A callback function that
- *  will get executed when the action is
- *  handled by the Dispatcher. This function
- *  takes a single parameter of the payload of
- *  the action. The function return must itself
- *  return a promise when it is executed. If this store
- *  does not respond to a particular action, then
- *  this method will return null instead of a function.
- */
-Store.prototype.actionHandler = function(name) {
-    // This method must be implemented by all
-    // stores.
-    throw new Error("actionHandler should be implemented by store.");
-};
 
 exports.Store = Store;
