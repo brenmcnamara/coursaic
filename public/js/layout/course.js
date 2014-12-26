@@ -859,21 +859,6 @@ var React = require('react'),
                             examId: Stores.ExamStore().current().id,
                             questionId: this.props.question.id
                         });
-        },
-        
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         }
 
 
@@ -1149,21 +1134,6 @@ var React = require('react'),
             var questionMap = Util.copy(this.state.questionMap);
             questionMap.explanation = event.target.value.trim();
             this.setState({ questionMap: questionMap });
-        },
-
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
         }
 
         

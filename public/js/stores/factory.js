@@ -11,6 +11,7 @@ var EventEmitter = require('events').EventEmitter,
         // The constructor for the new store.
         var prop,
             Constructor = function () {
+                this.setMaxListeners(20);
                 if (this.initialize) {
                     this.initialize();
                 }

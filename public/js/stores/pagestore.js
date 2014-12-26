@@ -96,7 +96,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function () {
                                         return self._removeMode(
-                                                    { fromMode: this.Mode.CREATE_EXAM });
+                                                    { fromMode: self.Mode.CREATE_EXAM });
                                     },
                                     // Error.
                                     function (error) {
@@ -114,7 +114,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function () {
                                         return self._removeMode(
-                                                    { fromMode: this.Mode.CREATE_QUESTION});
+                                                    { fromMode: self.Mode.CREATE_QUESTION});
                                     },
                                     // Error.
                                     function (error) {
@@ -132,7 +132,7 @@ var Dispatcher = require('../dispatcher.js'),
                                     // Success.
                                     function() {
                                         return self._removeMode(
-                                                    { fromMode: this.Mode.DELETE_QUESTION });
+                                                    { fromMode: self.Mode.DELETE_QUESTION });
                                     },
                                     // Error.
                                     function(error) {
@@ -157,13 +157,15 @@ var Dispatcher = require('../dispatcher.js'),
 
 
             EDIT_QUESTION: function (payload) {
+                console.log("EDIT_QUESTION called.");
                 var self = this;
                 return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
                                  .then(
                                     // Success.
                                     function () {
+                                        console.log("Removing question.");
                                         return self._removeMode(
-                                                    { fromMode: this.Mode.EDIT_QUESTION });
+                                                    { fromMode: self.Mode.EDIT_QUESTION });
                                     },
                                     // Error.
                                     function (error) {
@@ -215,9 +217,6 @@ var Dispatcher = require('../dispatcher.js'),
                                 payload.updateHash = (typeof payload.updateHash === 'boolean') ?
                                                      payload.updateHash :
                                                      true;
-                                if (!payload.pageKey) {
-                                    throw new Error("Page loaded without pageKey specified.");
-                                }
                                 if (payload.updateHash) {
                                     switch (payload.pageKey) {
                                     // All hash changes here should be set to silent. Non-silent
