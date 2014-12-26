@@ -7,14 +7,6 @@
  * specifically for the home page.
  */
 
-/*
- * Dependencies:
- *  - React
- *  - Components in header.js
- *  - Components in widgets.js
- */
-
-
 var React = require('react'),
 
     HeaderLayout = require('./header.js'),
