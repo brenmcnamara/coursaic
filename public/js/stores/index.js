@@ -12,7 +12,7 @@ module.exports = {
 
     ConfigStore: function () {
         if (!cache.ConfigStore) {
-            cache.ConfigStore = require('./ConfigStore.js');
+            cache.ConfigStore = require('./configstore.js');
         }
         return cache.ConfigStore;
     },
@@ -20,7 +20,7 @@ module.exports = {
 
     CourseStore: function () {
         if (!cache.CourseStore) {
-            cache.CourseStore = require('./CourseStore.js');
+            cache.CourseStore = require('./coursestore.js');
         }
         return cache.CourseStore;
     },
@@ -28,7 +28,7 @@ module.exports = {
 
     ExamStore: function () {
         if (!cache.ExamStore) {
-            cache.ExamStore = require('./ExamStore.js');
+            cache.ExamStore = require('./examstore.js');
         }
         return cache.ExamStore;
     },
@@ -36,7 +36,7 @@ module.exports = {
     
     FieldStore: function () {
         if (!cache.FieldStore) {
-            cache.FieldStore = require('./FieldStore.js');
+            cache.FieldStore = require('./fieldstore.js');
         }
         return cache.FieldStore;
     },
@@ -44,7 +44,7 @@ module.exports = {
 
     PageStore: function () {
         if (!cache.PageStore) {
-            cache.PageStore = require('./PageStore.js');
+            cache.PageStore = require('./pagestore.js');
         }
         return cache.PageStore;
     },
@@ -52,7 +52,7 @@ module.exports = {
 
     UserStore: function () {
         if (!cache.UserStore) {
-            cache.UserStore = require('./UserStore.js');
+            cache.UserStore = require('./userstore.js');
         }
         return cache.UserStore;
     },

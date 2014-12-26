@@ -13,7 +13,7 @@ var React = require('react'),
     PopupsLayout = require('./popups.js'),
     HeaderLayout = require('./header.js'),
 
-    Stores = require('../Stores'),
+    Stores = require('../stores'),
 
     Action = require('../Action.js').Action,
     CAEvent = require('../Event.js').CAEvent,

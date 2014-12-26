@@ -2,8 +2,7 @@
 
 var React = require('react'),
     
-    PageStore = require('../Stores/PageStore.js'),
-    ConfigStore = require('../Stores/ConfigStore'),
+    Stores = require('../stores'),
 
     HomeLayout = require('./home.js'),
     CourseLayout = require('./course.js'),
@@ -61,12 +60,12 @@ var React = require('react'),
      * @method _onLoad
      */
     onLoad = function(event) {
-        switch (ConfigStore.pageKey()) {
+        switch (Stores.ConfigStore().pageKey()) {
         case 'course':
-            render('course', { courseId: ConfigStore.courseId() });
+            render('course', { courseId: Stores.ConfigStore().courseId() });
             break;
         default:
-            render(ConfigStore.pageKey());
+            render(Stores.ConfigStore().pageKey());
         }
     };
 
@@ -74,7 +73,7 @@ var React = require('react'),
 module.exports = {
 
     loadOnEvent: function (event) {
-        PageStore.on(event, onLoad);
+        Stores.PageStore().on(event, onLoad);
     }
 };
 

@@ -8,7 +8,7 @@
  */
     
 var React = require('react'),
-    Stores = require('../Stores'),
+    Stores = require('../stores'),
     CAEvent = require('../Event.js').CAEvent,
 
     Util = require('../util.js'),

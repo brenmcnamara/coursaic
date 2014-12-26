@@ -12,7 +12,7 @@ var React = require('react'),
     HeaderLayout = require('./header.js'),
     PopupsLayout = require('./popups.js'),
 
-    Stores = require('../Stores'),
+    Stores = require('../stores'),
 
     Formatter = require('../formatter.js'),
 

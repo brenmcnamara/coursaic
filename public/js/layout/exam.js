@@ -3,7 +3,7 @@
 
 var React = require('react'),
     
-    Stores = require('../Stores'),
+    Stores = require('../stores'),
 
     HeaderLayout = require('./header.js'),
     WidgetsLayout = require('./widgets.js'),

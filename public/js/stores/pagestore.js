@@ -12,7 +12,7 @@
 /*global Store */
 
 var Dispatcher = require('../dispatcher.js'),
-    Stores = require('../Stores'),
+    Stores = require('../stores'),
     Anchor = require('../Anchor.js').Anchor,
     CAEvent = require('../Event.js').CAEvent,
 

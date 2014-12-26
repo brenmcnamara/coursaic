@@ -9,8 +9,7 @@
          maxlen:100
 */
 
-var Store = require('./Store').Store,
-    Stores = require('../Stores'),
+var Stores = require('../stores'),
 
     Dispatcher = require('../dispatcher.js'),
     CAEvent = require('../Event.js').CAEvent,

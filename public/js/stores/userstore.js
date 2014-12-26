@@ -12,7 +12,7 @@
 /*global Parse, Action, CAEvent, Store */
 
 
-var Stores = require('../Stores'),
+var Stores = require('../stores'),
     Dispatcher = require('../dispatcher.js'),
     CAEvent = require('../Event.js').CAEvent,
 
@@ -268,6 +268,7 @@ var Stores = require('../Stores'),
          *  fetching the author has completed.
          */
         fetchAuthorOfExam: function(exam) {
+            var self = this;
             return new Promise(function(resolve, reject) {
                 exam.get('author').fetch({
                     success: function(user) {
