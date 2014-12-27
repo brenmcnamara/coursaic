@@ -101,7 +101,8 @@ var
         // Set the default options.
         this._options = {
             allowPartialMatch: true,
-            defaultResolveValue: null
+            defaultResolveValue: null,
+            shortCircuit: true
         };
 
         this._cases = [];
@@ -151,7 +152,10 @@ PatternMatcher.prototype.resolve = function () {
         caseSection,
         pathSection,
         didAllSectionsMatch,
-        argMap = {};
+        argMap = {},
+        // This property is only used when the shortCircuit option
+        // is turned off.
+        allResolves = [];
 
     for (i = 0, n = this._cases.length; i < n; ++i) {
         nextCase = this._cases[i];
@@ -208,15 +212,31 @@ PatternMatcher.prototype.resolve = function () {
                 // Execute the callback for the matching case,
                 // passing it the arguments that were resolved
                 // during the matching.
-                return nextCase.callback(argMap);
+                if (this._options.shortCircuit) {
+                    // Short-circuit the pattern matching
+                    // and stop looking for case statements
+                    // after the first one was found.
+                    return nextCase.callback(argMap);
+                }
+                else {
+                    // If not short-circuiting, then add the
+                    // result of this case statement to the
+                    // array and continue looking for
+                    // more matches.
+                    allResolves.push(nextCase.callback(argMap));
+                }
+
             }
-        }
-        if (this._options.allowPartialMatch) {
-            console.log("Done Allowing partial match.");
         }
     }
     // No cases match.
-    return this._options.defaultResolveValue;
+    if (this._options.shortCircuit) {
+        return this._options.defaultResolveValue;
+    }
+    else {
+        return allResolves;
+    }
+
 };
 
 

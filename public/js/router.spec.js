@@ -276,6 +276,69 @@ describe("Router", function () {
             expect(matcher.resolve()).toEqual([]);
         });
 
+        it("should perform short-circuit pattern matching by default.", function () {
+            var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false;
+
+            Router.setPath("/home/1234567890/course/2345678910");
+
+            matcher = Router.createPatternMatcher();
+
+            // Both cases match the path, but only the first case
+            // should be run because this is getting short-circuited.
+            matcher.forCase("/home/<schoolId>", function (argMap) {
+                didMakeFirstMatch = true;
+            });
+
+            matcher.forCase("/home/<_>/course/<courseId>", function (argMap) {
+                didMakeSecondMatch = true;
+            });
+            matcher.resolve();
+
+            expect(didMakeFirstMatch).toBeTruthy();
+            expect(didMakeSecondMatch).toBeFalsy();
+        });
+
+        it("should provide the option to override short-circuit when matching.", function () {
+            var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false;
+
+            Router.setPath("/home/1234567890/course/2345678910");
+
+            matcher = Router.createPatternMatcher();
+            matcher.config({ shortCircuit: false });
+
+            matcher.forCase("/home/<schoolId>", function (argMap) {
+                didMakeFirstMatch = true;
+            });
+
+            matcher.forCase("/home/<_>/course/<courseId>", function (argMap) {
+                didMakeSecondMatch = true;
+            });
+            matcher.resolve();
+
+            expect(didMakeFirstMatch).toBeTruthy();
+            expect(didMakeSecondMatch).toBeTruthy();
+        });
+
+        it("should give an array of return values when overriding short-circuit.", function () {
+            var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false;
+
+            Router.setPath("/home/1234567890/course/2345678910");
+
+            matcher = Router.createPatternMatcher();
+            matcher.config({ shortCircuit: false });
+
+            matcher.forCase("/home/<schoolId>", function (argMap) {
+                return 1;
+            });
+
+            matcher.forCase("/home/<_>/course/<courseId>", function (argMap) {
+                return 2;
+            });
+
+            // Note the return values are in the order of the case statements.
+            expect(matcher.resolve()).toEqual([1, 2]);
+        });
+
     });
 
 });
