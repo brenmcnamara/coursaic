@@ -6,6 +6,11 @@ var Router = require('./router.js');
 
 describe("Router", function () {
 
+    beforeEach(function () {
+        Router.removeListener();
+        Router.setPath("/");
+    });
+
     it("should have simple criteria for valid paths.", function () {
         var matcher;
 
@@ -34,6 +39,23 @@ describe("Router", function () {
     it("should perform quick partial matching on current path.", function () {
         Router.setPath("/home/1234567890/course/2345678901");
         expect(Router.matchArguments("/home/<schoolId>")).toEqual({ schoolId: "1234567890"});
+    });
+
+    it("should allow path callback to deny the Router's path to change.", function () {
+        Router.onChange(function (path) {
+            return false;
+        });
+        Router.setPath("/home");
+
+        expect(Router.getPath()).toBe("/");
+    });
+
+    it("should allow path callback to validate the path before changing it.", function () {
+        Router.onChange(function (path) {
+            return true;
+        });
+        Router.setPath("/home");
+        expect(Router.getPath()).toBe("/home");
     });
 
     describe("Pattern Matcher", function () {

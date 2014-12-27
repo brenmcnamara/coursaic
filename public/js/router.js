@@ -23,6 +23,10 @@ var
     
     stateMap = {
 
+        // An optional callback to changing the path
+        // of the Router.
+        onChangeCallback: null,
+
         // The current path for the page.
         path: '/'
 
@@ -49,10 +53,50 @@ var
      * Set the path of the router.
      *
      * @method setPath
+     *
      * @param path {String} The new path for the router.
+     *
+     * @param options {Object} An object containing options
+     *  for setting the path. This parameter is optional.
      */
-    setPath = function (path) {
-        stateMap.path = path;
+    setPath = function (path, options) {
+        options = options || {};
+        if (!stateMap.onChangeCallback ||
+            options.silent ||
+            stateMap.onChangeCallback(path)) {
+    
+            stateMap.path = path;
+        }
+
+    },
+
+
+    /**
+     * Register listeners for when the path of the
+     * Router changes. There can only be 1 registered
+     * listener at a time.
+     *
+     * 
+     * @method onChange
+     *
+     * @param callback {Function} A function that is executed
+     *  when the path of the Router is being changed. The first
+     *  argument to the callback is the new path that was set. If the
+     *  callback returns true, then the Router will go ahead and update
+     *  the path, otherwise, it will keep the old path.
+     */
+    onChange = function (callback) {
+        stateMap.onChangeCallback = callback;
+    },
+
+
+    /**
+     * Remove the onChange listener from the router.
+     *
+     * @method removeListener
+     */
+    removeListener = function () {
+        stateMap.onChangeCallback = null;
     },
 
 
@@ -244,6 +288,8 @@ module.exports = {
     createPatternMatcher: createPatternMatcher,
     getPath: getPath,
     setPath: setPath,
+    onChange: onChange,
+    removeListener: removeListener,
     isValidPath: isValidPath,
     matchArguments: matchArguments
 };
