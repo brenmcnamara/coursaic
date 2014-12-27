@@ -25,6 +25,17 @@ describe("Router", function () {
         expect(Router.isValidPath("/hello/_")).toBeFalsy();
     });
 
+    it("should perform quick pattern matching on current path.", function () {
+        Router.setPath("/home/1234567890");
+        expect(Router.matchArguments("/home/<schoolId>")).toEqual({ schoolId: "1234567890"});
+        expect(Router.matchArguments("/home/<_>/<somethingElse>")).toEqual({});
+    });
+
+    it("should perform quick partial matching on current path.", function () {
+        Router.setPath("/home/1234567890/course/2345678901");
+        expect(Router.matchArguments("/home/<schoolId>")).toEqual({ schoolId: "1234567890"});
+    });
+
     describe("Pattern Matcher", function () {
 
         it("should call the correct case statement.", function () {
@@ -202,28 +213,12 @@ describe("Router", function () {
 
         });
 
-        it("should not allow matches on partially correct paths by default.", function () {
+        it("should partial matching by default.", function () {
             var matcher, didPartialMatch = false;
 
             Router.setPath('/home/path/to/blah');
             matcher = Router.createPatternMatcher();
 
-            matcher.forCase('/home/path', function () {
-                didPartialMatch = true;
-            });
-
-            matcher.resolve();
-            expect(didPartialMatch).toBeFalsy();
-
-        });
-
-        it("should support configuration to allow partial matches.", function () {
-            var matcher, didPartialMatch = false;
-
-            Router.setPath('/home/path/to/blah');
-            matcher = Router.createPatternMatcher();
-
-            matcher.config({ allowPartialMatch: true });
             matcher.forCase('/home/path', function () {
                 didPartialMatch = true;
             });
@@ -233,19 +228,34 @@ describe("Router", function () {
 
         });
 
-        it("should support configuration to allow partial matching with arguments", function () {
+        it("should support partial matching with arguments.", function () {
             var matcher, didPartialMatchWithArgs = false;
 
             Router.setPath('/home/path/to/blah');
             matcher = Router.createPatternMatcher();
 
-            matcher.config({ allowPartialMatch: true });
             matcher.forCase('/home/path/<word:([a-z]+)>', function (argMap) {
                 didPartialMatchWithArgs = (argMap.word === 'to');
             });
 
             matcher.resolve();
             expect(didPartialMatchWithArgs).toBeTruthy();
+        });
+
+        it("should be configurable to disallow partial matching.", function () {
+            var matcher, didPartialMatch = false;
+
+            Router.setPath('/home/path/to/blah');
+            matcher = Router.createPatternMatcher();
+            matcher.config({ allowPartialMatch: false });
+
+            matcher.forCase('/home/path', function () {
+                didPartialMatch = true;
+            });
+
+            matcher.resolve();
+            expect(didPartialMatch).toBeFalsy();
+
         });
 
         it("should resolve to null if all cases fail.", function () {

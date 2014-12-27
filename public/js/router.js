@@ -68,6 +68,27 @@ var
 
 
     /**
+     * Perform pattern matching on the arguments
+     * and get an object containing all the matched
+     * patterns.
+     *
+     * @method matchArguments
+     * @param pattern {String} The pattern to match
+     *  the current path against.
+     *
+     * @return {Object} An argument map of all the matched
+     *  patterns.
+     */
+    matchArguments = function (pattern) {
+        var matcher = createPatternMatcher();
+        matcher.config({ defaultResolveValue: {} });
+        matcher.forCase(pattern, function (argMap) {
+            return argMap;
+        });
+        return matcher.resolve();
+    },
+
+    /**
      * An object that matches against path
      * patterns.
      *
@@ -79,7 +100,8 @@ var
         this._path = path;
         // Set the default options.
         this._options = {
-            allowPartialMatch: false
+            allowPartialMatch: true,
+            defaultResolveValue: null
         };
 
         this._cases = [];
@@ -194,7 +216,7 @@ PatternMatcher.prototype.resolve = function () {
         }
     }
     // No cases match.
-    return this._options.defaultResolveValue || null;
+    return this._options.defaultResolveValue;
 };
 
 
@@ -202,5 +224,6 @@ module.exports = {
     createPatternMatcher: createPatternMatcher,
     getPath: getPath,
     setPath: setPath,
-    isValidPath: isValidPath
+    isValidPath: isValidPath,
+    matchArguments: matchArguments
 };
