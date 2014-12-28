@@ -5,8 +5,11 @@
  * used by this project.
  */
 
+var argumentRegExp = /<[A-Za-z_]+>/g,
+    
+    argumentNameRegExp = /[A-Za-z_]+/g,
 
-var Util = {
+    Util = {
     
     /**
      * Make a deep copy of an object.
@@ -83,6 +86,33 @@ var Util = {
             }
         }
         return obj;
+    },
+
+
+    /**
+     * Convert a pattern to a string using values that are
+     * passed into an object.
+     *
+     * @method generateString
+     *
+     * @param pattern {String} The pattern to convert
+     *  into a string.
+     *
+     * @param argMap {Object} The object containing all
+     *  the arguments that go into the string.
+     */
+    generateString: function (pattern, argMap) {
+        var args = pattern.match(argumentRegExp),
+            argNames = args.map(function (arg) {
+                return arg.match(argumentNameRegExp)[0];
+            }),
+            argValues = argNames.map(function (argName) {
+                return argMap[argName];
+            });
+
+        return args.reduce(function (memo, arg, index) {
+            return memo.replace(arg, argValues[index]);
+        }, pattern);
     }
 
 
