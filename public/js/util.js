@@ -93,7 +93,7 @@ var argumentRegExp = /<[A-Za-z_]+>/g,
      * Convert a pattern to a string using values that are
      * passed into an object.
      *
-     * @method generateString
+     * @method patternToString
      *
      * @param pattern {String} The pattern to convert
      *  into a string.
@@ -101,7 +101,7 @@ var argumentRegExp = /<[A-Za-z_]+>/g,
      * @param argMap {Object} The object containing all
      *  the arguments that go into the string.
      */
-    generateString: function (pattern, argMap) {
+    patternToString: function (pattern, argMap) {
         var args = pattern.match(argumentRegExp),
             argNames = args.map(function (arg) {
                 return arg.match(argumentNameRegExp)[0];

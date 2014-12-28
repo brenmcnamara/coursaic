@@ -64,13 +64,19 @@ describe("Utility Object", function () {
 
     });
 
-    describe("generateString method", function () {
+    describe("patternToString method", function () {
 
         it("should generate the correct string from the list of arguments.", function () {
             var pattern = "/home/<schoolId>/course/<courseId>",
                 argMap = { schoolId: "1234", courseId: "9876" };
 
-            expect(Util.generateString(pattern, argMap)).toBe("/home/1234/course/9876");
+            expect(Util.patternToString(pattern, argMap)).toBe("/home/1234/course/9876");
+        });
+
+        it("should generate the correct string when having duplicate argument names.", function () {
+            var pattern = "/home/<id>/course/<id>/exam/<id>",
+                argMap = { id: "abc" };
+            expect(Util.patternToString(pattern, argMap)).toBe("/home/abc/course/abc/exam/abc");
         });
 
     });
