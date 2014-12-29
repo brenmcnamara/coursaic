@@ -1,11 +1,11 @@
 /**
- * router.js
+ * path.js
  */
 
 var 
     Util = require('./util.js'),
 
-    pathRegExp = /^(\/[^_\(\)<>\[\]]*)+$/,
+    pathRegExp = /(^\/$)|(^(\/[^_\/\(\)<>\[\]]+)+$)/,
 
     idRegExp = /[A-Za-z\d]{10}/,
 
@@ -20,83 +20,10 @@ var
     customArgumentRegExp = /<[A-Za-z][A-Za-z\d]*:\([^<>\(\)]+\)>/,
 
     argumentMatcherRegExp = /\([^<>\(\)]+\)/,
-    
-    stateMap = {
-
-        // An optional callback to changing the path
-        // of the Router.
-        onChangeCallback: null,
-
-        // The current path for the page.
-        path: '/'
-
-    },
 
 
-    createPatternMatcher = function () {
-        return new PatternMatcher(stateMap.path);
-    },
-
-
-    /**
-     * Get the current path of the router.
-     *
-     * @method getPath
-     * @return {String} The current path of the router.
-     */
-    getPath = function () {
-        return stateMap.path;
-    },
-
-
-    /**
-     * Set the path of the router.
-     *
-     * @method setPath
-     *
-     * @param path {String} The new path for the router.
-     *
-     * @param options {Object} An object containing options
-     *  for setting the path. This parameter is optional.
-     */
-    setPath = function (path, options) {
-        options = options || {};
-        if (!stateMap.onChangeCallback ||
-            options.silent ||
-            stateMap.onChangeCallback(path)) {
-    
-            stateMap.path = path;
-        }
-
-    },
-
-
-    /**
-     * Register listeners for when the path of the
-     * Router changes. There can only be 1 registered
-     * listener at a time.
-     *
-     * 
-     * @method onChange
-     *
-     * @param callback {Function} A function that is executed
-     *  when the path of the Router is being changed. The first
-     *  argument to the callback is the new path that was set. If the
-     *  callback returns true, then the Router will go ahead and update
-     *  the path, otherwise, it will keep the old path.
-     */
-    onChange = function (callback) {
-        stateMap.onChangeCallback = callback;
-    },
-
-
-    /**
-     * Remove the onChange listener from the router.
-     *
-     * @method removeListener
-     */
-    removeListener = function () {
-        stateMap.onChangeCallback = null;
+    createPatternMatcher = function (path) {
+        return new PatternMatcher(path);
     },
 
 
@@ -117,14 +44,18 @@ var
      * patterns.
      *
      * @method matchArguments
+     *
      * @param pattern {String} The pattern to match
-     *  the current path against.
+     *  against the path.
+     *
+     * @param path {String} The path to run the pattern
+     *  against.
      *
      * @return {Object} An argument map of all the matched
      *  patterns.
      */
-    matchArguments = function (pattern) {
-        var matcher = createPatternMatcher();
+    matchArguments = function (pattern, path) {
+        var matcher = createPatternMatcher(path);
         matcher.config({ defaultResolveValue: {} });
         matcher.forCase(pattern, function (argMap) {
             return argMap;
@@ -191,7 +122,7 @@ PatternMatcher.prototype.forCase = function (pattern, callback) {
 PatternMatcher.prototype.resolve = function () {
     var i, n,
         j, m,
-        pathSections = stateMap.path.split('/'),
+        pathSections = this._path.split('/'),
         nextCase,
         caseSection,
         pathSection,
@@ -286,10 +217,6 @@ PatternMatcher.prototype.resolve = function () {
 
 module.exports = {
     createPatternMatcher: createPatternMatcher,
-    getPath: getPath,
-    setPath: setPath,
-    onChange: onChange,
-    removeListener: removeListener,
     isValidPath: isValidPath,
     matchArguments: matchArguments
 };
