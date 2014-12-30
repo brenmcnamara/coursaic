@@ -85,9 +85,33 @@ var
 
 
 /**
- * Configure the PatternMatcher with pre-defined options.
+ * Getter and setter for the path of the PatternMatcher.
+ *
+ * @method path
+ *
+ * @param path {String} The path of the pattern matcher.
+ *  This parameter is opional. If provided, the method
+ *  call will behave like a setter. Otherwise, it will behave
+ *  as a setter.
+ *
+ * @return {String} The path of the PatternMatcher if this
+ *  method is treated as a getter, undefined otherwise.
+ */
+PatternMatcher.prototype.path = function(path) {
+    if (path) {
+        this._path = path;
+    }
+    else {
+        return this._path;
+    }
+};
+
+
+/**
+ * Configure the Pattern Matcher with pre-defined options.
  *
  * @method config
+ *
  * @param optionsMap {Object} A set of options to configure
  *  the pattern matcher for.
  */
@@ -218,5 +242,5 @@ PatternMatcher.prototype.resolve = function () {
 module.exports = {
     createPatternMatcher: createPatternMatcher,
     isValidPath: isValidPath,
-    matchArguments: matchArguments
+    matchArguments: matchArguments,
 };

@@ -332,6 +332,25 @@ describe("Path", function () {
             expect(matcher.resolve()).toEqual([1, 2]);
         });
 
+        it("should allow the path of the pattern matcher to change.", function () {
+            var matcher = Path.createPatternMatcher("/home"),
+                didMatchHome = false, didMatchSplash = false;
+            matcher.forCase("/home", function() {
+                didMatchHome = true;
+            });
+
+            matcher.forCase("/splash", function () {
+                didMatchSplash = true;
+            });
+
+            matcher.path("/splash");
+
+            matcher.resolve();
+
+            expect(didMatchHome).toBeFalsy();
+            expect(didMatchSplash).toBeTruthy();
+        });
+
     });
 
 });
