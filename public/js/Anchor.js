@@ -2,12 +2,19 @@
  * anchor.js
  */
 
-/**
- * A module that keeps track of the
- * url hash for the page, performing
- * hash queries and hash updates.
- */
-var Anchor = (function() {
+
+var 
+    
+    Path = require('./path.js'),
+
+    Util = require('./util.js'),
+
+    /**
+     * A module that keeps track of the
+     * url hash for the page, performing
+     * hash queries and hash updates.
+     */
+    Anchor = (function() {
 
     /* DECLARATION */
 
@@ -117,7 +124,8 @@ var Anchor = (function() {
             // hash change. This flag will be automatically
             // set back to false after the hash change has
             // occurred.
-            silent: false   
+            silent: false
+
         };
 
     /* IMPLEMENTATION */
@@ -142,28 +150,39 @@ var Anchor = (function() {
 
 
     _serializeHash = function(hashMap) {
-        var prop, hashArr = [];
-        for (prop in hashMap) {
-            if (hashMap.hasOwnProperty(prop)) {
-                hashArr.push(prop + "=" + hashMap[prop]);
+        switch (hashMap.pageKey) {
+
+        case 'home':
+            return '/';
+        case 'course':
+            if (hashMap.examId) {
+                return Util.patternToString('/course/<course>/exam/<examId>', hashMap);
             }
+            return Util.patternToString('/course/<course>', hashMap);
+        case 'exam':
+            return Util.patternToString('/course/<course>/exam/<examId>/take', hashMap);
         }
-        return (hashArr.length) ? ("#" + hashArr.join("&")) : "";
     };
 
 
     _parseHash = function(hash) {
-        // Assumes that hash is in the correct format.
-        if (hash && hash !== "" && hash !== "#") {
-            return hash.substr(1, hash.length - 1)
-                       .split("&")
-                       .reduce(function(memo, pair) {
-                            var breakPair = pair.split("=");
-                            memo[breakPair[0]] = breakPair[1];
-                            return memo;
-                       }, {});
-        }
-        return {};
+        var matcher = Path.createPatternMatcher(hash.substr(1, hash.length - 1));
+
+        matcher.config({ defaultResolveValue: { pageKey: 'home'} });
+
+        matcher.forCase("/course/<course>/exam/<examId>/take", function (argMap) {
+            return Util.extend(argMap, { pageKey: 'exam' });
+        });
+
+        matcher.forCase("/course/<course>/exam/<examId>", function (argMap) {
+            return Util.extend(argMap, { pageKey: 'course' });
+        });
+
+        matcher.forCase("/course/<course>", function (argMap) {
+            return Util.extend(argMap, { pageKey: 'course'} );
+        });
+
+        return matcher.resolve();
     };
 
 
