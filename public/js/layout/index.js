@@ -13,6 +13,7 @@ var React = require('react'),
     HomeLayout = require('./home.js'),
     CourseLayout = require('./course.js'),
     ExamLayout = require('./exam.js'),
+    ErrorPage = require('./404.js'),
 
     render = function() {
         var matcher = Path.createPatternMatcher(Router.path());
@@ -46,8 +47,8 @@ var React = require('react'),
         });
 
         if (!matcher.resolve()) {
-            console.error("Unrecognized path: " + Router.path());
-            throw new Error("Trying to render unrecognized path: " + Router.path());
+            React.render(React.createFactory(ErrorPage.Root)(),
+                        document.getElementsByTagName('body')[0]);
         }
 
     },
@@ -98,17 +99,21 @@ var React = require('react'),
         Router.addRoute("/course/<courseId>", Action.Name.LOAD_COURSE);
         Router.addRoute("/course/<courseId>/exam/<_>", Action.Name.LOAD_COURSE);
         Router.addRoute("/course/<courseId>/exam/<examId>/take", Action.Name.LOAD_EXAM_RUN);
+
+        Router.addDefaultRoute(Action.Name.LOAD_NOT_FOUND);
+
     };
 
 
 module.exports = {
 
     register: function () {
+        Stores.PageStore().on(CAEvent.Name.LOADED_PAGE, onLoad);
+        Stores.PageStore().on(CAEvent.Name.PAGE_NOT_FOUND, onLoad);
+
         Router.config({ location: window.location });
         routing();
         Router.watch({ initialLoad: true });
-        Stores.PageStore().on(CAEvent.Name.LOADED_PAGE, onLoad);
-
     }
 
 };

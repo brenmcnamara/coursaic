@@ -18,6 +18,10 @@ var Dispatcher = require('../dispatcher.js'),
 
     PageStore = Stores.Factory.createStore({
 
+        initializer: function () {
+            this._currentMode = null;
+        },
+
         _addMode: function(inputMap) {
             var self = this,
                 toMode = inputMap.toMode,
@@ -207,6 +211,15 @@ var Dispatcher = require('../dispatcher.js'),
                                     function (error) {
                                         throw error;
                                     });
+            },
+
+
+            LOAD_NOT_FOUND: function (payload) {
+                var self = this;
+                return new Promise(function (resolve, reject) {
+                    self.emit(CAEvent.Name.PAGE_NOT_FOUND);
+                    resolve();
+                });
             },
 
 

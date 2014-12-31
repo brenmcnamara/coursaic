@@ -6,13 +6,6 @@
  * and dispatcher.
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100, node:true
-*/
-
 var Dispatcher = require('./dispatcher.js'),
 
     Action = {};
@@ -49,6 +42,8 @@ Action.Name = {
 
     LOAD_HOME: 'LOAD_HOME',
 
+    LOAD_NOT_FOUND: 'LOAD_NOT_FOUND',
+
     SUBMIT_EXAM_RUN: 'SUBMIT_EXAM_RUN',
 
     TO_MODE_CANCEL_EXAM_RUN: 'TO_MODE_CANCEL_EXAM_RUN',
@@ -65,24 +60,6 @@ Action.Name = {
 
     UNENROLL_CURRENT_USER: 'UNENROLL_CURRENT_USER'
 
-};
-
-
-/**
- * Register the actions with the dispatcher.
- * This will reset the registered actions each
- * time this is called. This method must be called
- * before using Action.send.
- *
- * @method register
- */
-Action.register = function() {
-    var prop;
-    for (prop in Action.Name) {
-        if (Action.Name.hasOwnProperty(prop) && typeof prop === 'string') {
-            Dispatcher.register(Action.Name[prop]);
-        }
-    }
 };
 
 

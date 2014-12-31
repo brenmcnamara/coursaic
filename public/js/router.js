@@ -19,7 +19,11 @@ var
 
         // A pattern matcher used to resolve routes to
         // actions.
-        directory: null
+        directory: null,
+
+        // The action that is called when routing has failed.
+        defaultAction: null
+
     },
 
 
@@ -67,6 +71,7 @@ var
         }
     },
 
+
     /**
      * Route the page to the current path.
      *
@@ -75,8 +80,10 @@ var
      */
     route = function () {
         if (!stateMap.directory.resolve()) {
-            // Send no routing action.
-            console.log("No route found.");
+            if (stateMap.defaultAction) {
+                Action.send(stateMap.defaultAction, { path: stateMap.directory.path() });
+            }
+
         }
     },
 
@@ -216,6 +223,22 @@ var
             Action.send(action, Util.extend(argMap, { path: path }));
             return true;
         });
+    },
+
+
+    /**
+     * Add an action for a default route. This action is sent
+     * if the current route is not handled by any other. This is
+     * optional, no action is required for bad routes.
+     *
+     * @method addDefaultRoute
+     *
+     * @param action {Action.Name} The action that is sent when
+     *  the route has failed. This action is given a payload containing
+     *  the path that was attempted (key = "path").
+     */
+    addDefaultRoute = function (action) {
+        stateMap.defaultAction = action;
     };
 
 
@@ -225,5 +248,6 @@ module.exports = {
     unwatch: unwatch,
     path: path,
     addRoute: addRoute,
+    addDefaultRoute: addDefaultRoute,
     matchArguments: matchArguments
 };

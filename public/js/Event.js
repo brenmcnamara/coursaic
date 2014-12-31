@@ -44,6 +44,8 @@ CAEvent.Name = {
 
     LOADED_PAGE: 'LOADED_PAGE',
 
+    PAGE_NOT_FOUND: 'PAGE_NOT_FOUND',
+    
     DID_FETCH_COURSES: 'DID_FETCH_COURSES',
     // Event for when the exam hash is updated
     // to display an exam on the course page.
