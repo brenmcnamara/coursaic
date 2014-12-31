@@ -401,7 +401,7 @@ var Stores = require('../stores'),
                         // Success.
                         function() {
                             return self._fetchExamsForCourse(
-                                    Stores.CourseStore().courseWithId(payload.course));
+                                    Stores.CourseStore().courseWithId(payload.courseId));
                         },
                         // Error.
                         function(error) {
@@ -434,7 +434,7 @@ var Stores = require('../stores'),
                                 self.emit(CAEvent.Name.DID_CREATE_EXAM_RUN);
                             }
                             self.emit(CAEvent.Name.DID_FETCH_EXAMS,
-                                      { courseId: payload.course });
+                                      { courseId: payload.courseId });
                         },
 
                         // Error.
@@ -456,7 +456,7 @@ var Stores = require('../stores'),
                         // Success.
                         function() {
                             return self._fetchExamsForCourse(
-                                    Stores.CourseStore().courseWithId(payload.course));
+                                    Stores.CourseStore().courseWithId(payload.courseId));
                         },
                         // Error.
                         function(error) {
@@ -488,7 +488,7 @@ var Stores = require('../stores'),
                             self.emit(CAEvent.Name.DID_CREATE_EXAM_RUN);
 
                             self.emit(CAEvent.Name.DID_FETCH_EXAMS,
-                                      { courseId: payload.course });
+                                      { courseId: payload.courseId });
                         },
 
                         // Error.

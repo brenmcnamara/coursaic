@@ -140,10 +140,10 @@ var Stores = require('../Stores'),
                                 var course;
                                 // Get the course if the course does not
                                 // already exist.
-                                if (!self.courseWithId(payload.course)) {
+                                if (!self.courseWithId(payload.courseId)) {
                                     // Don't have the course, need to fetch it.
                                     course = new Course();
-                                    course.id = payload.course;
+                                    course.id = payload.courseId;
                                     return self._fetchCourse(course);
                                 }
                             },
@@ -196,10 +196,10 @@ var Stores = require('../Stores'),
                                 var course;
                                 // Get the course if the course does not
                                 // already exist.
-                                if (!self.courseWithId(payload.course)) {
+                                if (!self.courseWithId(payload.courseId)) {
                                     // Don't have the course, need to fetch it.
                                     course = new Course();
-                                    course.id = payload.course;
+                                    course.id = payload.courseId;
                                     return self._fetchCourse(course);
                                 }
                             },

@@ -95,9 +95,9 @@ var React = require('react'),
     routing = function () {
         Router.addRoute("/", Action.Name.LOAD_HOME);
         // TODO: Change course to courseId.
-        Router.addRoute("/course/<course>", Action.Name.LOAD_COURSE);
-        Router.addRoute("/course/<course>/exam/<_>", Action.Name.LOAD_COURSE);
-        Router.addRoute("/course/<course>/exam/<examId>/take", Action.Name.LOAD_EXAM_RUN);
+        Router.addRoute("/course/<courseId>", Action.Name.LOAD_COURSE);
+        Router.addRoute("/course/<courseId>/exam/<_>", Action.Name.LOAD_COURSE);
+        Router.addRoute("/course/<courseId>/exam/<examId>/take", Action.Name.LOAD_EXAM_RUN);
     };
 
 
