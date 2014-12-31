@@ -4,7 +4,8 @@ var WatchDog = require('./WatchDog.js').WatchDog,
     Stores = require('./stores'),
     Action = require('./Action.js').Action,
     CAEvent = require('./Event.js').CAEvent,
-    View = require('./layout');
+    View = require('./layout'),
+    Router = require('./router.js');
 
 Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
 window.fbAsyncInit = function() {
@@ -15,11 +16,12 @@ window.fbAsyncInit = function() {
             version    : 'v2.1'
     });
 
-    View.loadOnEvent(CAEvent.Name.LOADED_PAGE);
-    WatchDog.watch();
     Dispatcher.register([ Stores.ConfigStore(), Stores.CourseStore(), Stores.ExamStore(), 
                           Stores.FieldStore(), Stores.PageStore(), Stores.UserStore() ]);
-    Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
+    View.register();
+    // WatchDog.watch();
+
+//    Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
 };
 
 (function(d, s, id){

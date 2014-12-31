@@ -4,6 +4,11 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
+    Router = require('../router.js'),
+    CAEvent = require('../Event.js').CAEvent,
+
+    Action = require('../Action.js').Action,
+    
     HomeLayout = require('./home.js'),
     CourseLayout = require('./course.js'),
     ExamLayout = require('./exam.js'),
@@ -67,14 +72,33 @@ var React = require('react'),
         default:
             render(Stores.ConfigStore().pageKey());
         }
+    },
+
+    /**
+     *  Setup the routing for the application.
+     *
+     * @method routing
+     * @private
+     */
+    routing = function () {
+        Router.addRoute("/", Action.Name.LOAD_HOME);
+        // TODO: Change course to courseId.
+        Router.addRoute("/course/<course>", Action.Name.LOAD_COURSE);
+        Router.addRoute("/course/<course>/exam/<_>", Action.Name.LOAD_COURSE);
+        Router.addRoute("/course/<course>/exam/<examId>/take", Action.Name.LOAD_EXAM_RUN);
     };
 
 
 module.exports = {
 
-    loadOnEvent: function (event) {
-        Stores.PageStore().on(event, onLoad);
+    register: function () {
+        Router.config({ location: window.location });
+        routing();
+        Router.watch({ initialLoad: true });
+        Stores.PageStore().on(CAEvent.Name.LOADED_PAGE, onLoad);
+
     }
+
 };
 
 

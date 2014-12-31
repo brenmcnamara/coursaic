@@ -125,6 +125,92 @@ var Stores = require('../Stores'),
             },
 
 
+            LOAD_EXAM_RUN: function (payload) {
+                var self = this;
+                // Wait for the User to be loaded.
+                // Load all the information for the course.
+                // NOTE: This is needed by the exam page key so that
+                // the exam store can load the exam and question related
+                // to the single exam of the course.
+                // Just make sure the single course is loaded.
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                       .then(
+                            // Success.
+                            function() {
+                                var course;
+                                // Get the course if the course does not
+                                // already exist.
+                                if (!self.courseWithId(payload.course)) {
+                                    // Don't have the course, need to fetch it.
+                                    course = new Course();
+                                    course.id = payload.course;
+                                    return self._fetchCourse(course);
+                                }
+                            },
+
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
+            },
+
+
+            LOAD_HOME: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                            // Done waiting for the User Store.
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchPage();
+                            },
+                            // Error.
+                            function(error) {
+                                throw error;
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(CAEvent.Name.DID_FETCH_COURSES);
+                                },
+                                // Error.
+                                function(error) {
+                                    throw error;
+                                });
+            },
+
+
+            LOAD_COURSE: function (payload) {
+                var self = this;
+                // Wait for the User to be loaded.
+                // Load all the information for the course.
+                // NOTE: This is needed by the exam page key so that
+                // the exam store can load the exam and question related
+                // to the single exam of the course.
+                // Just make sure the single course is loaded.
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                       .then(
+                            // Success.
+                            function() {
+                                var course;
+                                // Get the course if the course does not
+                                // already exist.
+                                if (!self.courseWithId(payload.course)) {
+                                    // Don't have the course, need to fetch it.
+                                    course = new Course();
+                                    course.id = payload.course;
+                                    return self._fetchCourse(course);
+                                }
+                            },
+
+                            // Error.
+                            function(error) {
+                                throw error;
+                            });
+            },
+
+
             PERFORM_LOAD: function (payload) {
                 var self = this;
                 switch (payload.pageKey) {
@@ -177,8 +263,7 @@ var Stores = require('../Stores'),
                                 // Error.
                                 function(error) {
                                     throw error;
-                                }
-                            );
+                                });
 
                 default:
                     return new Promise(function(resolve, reject) {
@@ -203,6 +288,8 @@ var Stores = require('../Stores'),
                                     throw error;
                                 });
             }
+
+            
         },
 
 
@@ -243,6 +330,7 @@ var Stores = require('../Stores'),
          *  the course has successfully been fetched.
          */
         _fetchCourse: function(course) {
+            var self = this;
             return new Promise(function(resolve, reject) {
                 course.fetch({
                     success: function() {
@@ -251,6 +339,20 @@ var Stores = require('../Stores'),
                         self._loadCourse(course).then(
                             // Success
                             function() {
+                                // Add the course to the course array.
+                                var i, n, foundCourse;
+                                for (i = 0, n = self._courses.length && !foundCourse; i < n; ++i) {
+                                    if (course.id === self._courses[i].id) {
+                                        // Refresh the course in the collection.
+                                        self._courses[i] = course;
+                                        foundCourse = true;
+                                    }
+                                }
+
+                                // Add the new course to the collection.
+                                if (!foundCourse) {
+                                    self._courses.push(course);
+                                }
                                 resolve();
                             },
                             // Failure
@@ -439,8 +541,8 @@ var Stores = require('../Stores'),
             // TODO: Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
-            return (Stores.ConfigStore().courseId()) ?
-                    this.courseWithId(Stores.ConfigStore().courseId()) :
+            return (Stores.PageStore().courseId()) ?
+                    this.courseWithId(Stores.PageStore().courseId()) :
                     null;
         },
 

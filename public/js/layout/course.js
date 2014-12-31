@@ -17,6 +17,7 @@ var React = require('react'),
     Formatter = require('../formatter.js'),
 
     Action = require('../Action.js').Action,
+    Router = require('../router.js'),
     CAEvent = require('../Event.js').CAEvent,
 
     Util = require('../util.js'),
@@ -552,19 +553,6 @@ var React = require('react'),
                     <p className="content__body__description">{ description }</p>
                 </div>
             );
-        },
-
-
-        didFetchExams: function() {
-            this.forceUpdate();
-        },
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-        },
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
         }
 
     }),
@@ -635,12 +623,9 @@ var React = require('react'),
 
 
         onClickTakeExam: function(event) {
-            Action.send(Action.Name.PERFORM_LOAD,
-                        {
-                            pageKey: 'exam',
-                            examId: Stores.ExamStore().current().id,
-                            course: Stores.CourseStore().current().id
-                        });
+            Router.path("/course/<courseId>/exam/<examId>/take",
+                        { examId: Stores.ExamStore().current().id,
+                          courseId: Stores.CourseStore().current().id });
         }
 
 

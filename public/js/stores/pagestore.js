@@ -13,6 +13,7 @@
 
 var Dispatcher = require('../dispatcher.js'),
     Stores = require('../stores'),
+    Router = require('../router.js'),
     Anchor = require('../Anchor.js').Anchor,
     CAEvent = require('../Event.js').CAEvent,
 
@@ -157,13 +158,11 @@ var Dispatcher = require('../dispatcher.js'),
 
 
             EDIT_QUESTION: function (payload) {
-                console.log("EDIT_QUESTION called.");
                 var self = this;
                 return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
                                  .then(
                                     // Success.
                                     function () {
-                                        console.log("Removing question.");
                                         return self._removeMode(
                                                     { fromMode: self.Mode.EDIT_QUESTION });
                                     },
@@ -202,6 +201,57 @@ var Dispatcher = require('../dispatcher.js'),
             FROM_MODE_EDIT_QUESTION: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.EDIT_QUESTION });
             },
+
+
+            LOAD_EXAM_RUN: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
+                                            Stores.CourseStore().dispatcherIndex,
+                                            Stores.ExamStore().dispatcherIndex,
+                                            Stores.FieldStore().dispatcherIndex ])
+                                 .then(
+                                    function () {
+                                        self._removeMode({fromMode: self.currentMode()});
+                                        self.emit(CAEvent.Name.LOADED_PAGE);
+                                    },
+                                    function (error) {
+                                        throw error;
+                                    });
+            },
+
+
+            LOAD_COURSE: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
+                                            Stores.CourseStore().dispatcherIndex,
+                                            Stores.ExamStore().dispatcherIndex,
+                                            Stores.FieldStore().dispatcherIndex ])
+                                 .then(
+                                    function () {
+                                        self._removeMode({fromMode: self.currentMode()});
+                                        self.emit(CAEvent.Name.LOADED_PAGE);
+                                    },
+                                    function (error) {
+                                        throw error;
+                                    });
+            },
+
+
+            LOAD_HOME: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
+                                            Stores.CourseStore().dispatcherIndex,
+                                            Stores.FieldStore().dispatcherIndex ])
+                                 .then(
+                                    function () {
+                                        self._removeMode({fromMode: self.currentMode()});
+                                        self.emit(CAEvent.Name.LOADED_PAGE);
+                                    },
+                                    function (error) {
+                                        throw error;
+                                    });
+            },
+
 
 
             PERFORM_LOAD: function (payload) {
@@ -316,6 +366,33 @@ var Dispatcher = require('../dispatcher.js'),
         currentPayload: function() {
             return this._currentPayload || null;
         },
+
+
+        /**
+         * The course id represented by the current page.
+         *
+         * @method courseId
+         *
+         * @return {String} The course id for the current page,
+         *  or null if the page has no course id.
+         */
+        courseId: function () {
+            return Router.matchArguments("/course/<courseId>").courseId || null;
+        },
+
+
+        /**
+         * The exam id for the current page.
+         *
+         * @method examId
+         *
+         * @return {String} The exam id for the current page,
+         *  or null if the page has no exam id.
+         */
+        examId: function () {
+            return Router.matchArguments("/course/<_>/exam/<examId>").examId || null;
+        },
+
 
         /**
          * A hash containing different possible modes of the page.

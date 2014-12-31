@@ -10,6 +10,7 @@ var React = require('react'),
     PopupsLayout = require('./popups.js'),
 
     Action = require('../Action.js').Action,
+    Router = require('../router.js'),
     CAEvent = require('../Event.js').CAEvent,
 
     Util = require('../util.js'),
@@ -95,9 +96,16 @@ var React = require('react'),
 
 
         onClick: function() {
+            Router.path("/course/<courseId>/exam/<examId>",
+                        {
+                            courseId: Stores.CourseStore().current().id,
+                            examId: Stores.ExamStore().current().id
+                        });
+            /*
             Action.send(Action.Name.PERFORM_LOAD, { pageKey: 'course',
                                                     course: Stores.CourseStore().current().id,
                                                     removeMode: Stores.PageStore().Mode.VIEW_EXAM_RESULTS });
+            */
         }
 
 

@@ -11,6 +11,7 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
+    Router = require('../router.js'),
     Action = require('../Action.js').Action,
     CAEvent = require('../Event.js').CAEvent,
 
@@ -70,14 +71,19 @@ var React = require('react'),
 
 
         onClickLogo: function(event) {
+            Router.path("/");
+            /*
             Action.send(Action.Name.PERFORM_LOAD,
-                        {pageKey: 'home'})
+                        {pageKey: 'home'});
+*/
         },
 
 
         onClickText: function(event) {
+            Router.path("/");
+            /*
             Action.send(Action.Name.PERFORM_LOAD,
-                        {pageKey: 'home'})
+                        {pageKey: 'home'});*/
         },
 
 

@@ -165,6 +165,22 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
+            LOAD_EXAM_RUN: function (payload) {
+                return this._login();
+            },
+
+
+            LOAD_COURSE: function (payload) {
+                return this._login();
+            },
+
+
+            LOAD_HOME: function (payload) {
+                console.log("Called user store.");
+                return this._login();
+            },
+
+
             PERFORM_LOAD: function (payload) {
                 return this._login();
             }

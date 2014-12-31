@@ -15,6 +15,7 @@ var React = require('react'),
 
     Stores = require('../stores'),
 
+    Router = require('../router.js'),
     Action = require('../Action.js').Action,
     CAEvent = require('../Event.js').CAEvent,
 
@@ -296,7 +297,8 @@ var React = require('react'),
 
 
         handleClick: function(event) {
-            Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'course', course: this.props.course.id});
+            Router.path("/course/<courseId>", { courseId: this.props.course.id });
+//            Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'course', course: this.props.course.id});
         }
 
 
@@ -383,8 +385,9 @@ var React = require('react'),
 
 
         handleClick: function(event) {
-            Action.send(Action.Name.PERFORM_LOAD,
-                        {pageKey: 'course', course: this.props.course.id})
+            Router.path("/course/<courseId>", { courseId: this.props.course.id });
+/*            Action.send(Action.Name.PERFORM_LOAD,
+                        {pageKey: 'course', course: this.props.course.id})*/
         }
 
 
