@@ -11,6 +11,7 @@ var React = require('react'),
     Stores = require('../stores'),
     CAEvent = require('../Event.js').CAEvent,
 
+    Router = require('../router.js'),
     Util = require('../util.js'),
     Action = require('../Action.js').Action,
 
@@ -337,7 +338,11 @@ var React = require('react'),
 
 
         onYes: function(event) {
-            Action.send(Action.Name.CANCEL_EXAM_RUN);
+            Router.path("/course/<courseId>/exam/<examId>",
+                        {
+                            courseId: Stores.CourseStore().current().id,
+                            examId: Stores.ExamStore().current().id
+                        });
         },
 
 

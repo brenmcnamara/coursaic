@@ -74,7 +74,6 @@ var
      * @private
      */
     route = function () {
-        console.log("routing");
         if (!stateMap.directory.resolve()) {
             // Send no routing action.
             console.log("No route found.");
@@ -185,7 +184,7 @@ var
             
         case 0:
             // Treat this method call as a getter.
-            return stateMap.path;
+            return stateMap.directory.path();
         case 1:
             // Treat this as a setter.
             syncHash(arguments[0]);

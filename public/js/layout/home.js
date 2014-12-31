@@ -298,7 +298,6 @@ var React = require('react'),
 
         handleClick: function(event) {
             Router.path("/course/<courseId>", { courseId: this.props.course.id });
-//            Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'course', course: this.props.course.id});
         }
 
 

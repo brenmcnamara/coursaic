@@ -19,8 +19,6 @@ var Dispatcher = require('./dispatcher.js'),
 
 Action.Name = {
 
-    CANCEL_EXAM_RUN: 'CANCEL_EXAM_RUN',
-
     CREATE_COURSE: 'CREATE_COURSE',
 
     CREATE_EXAM: 'CREATE_EXAM',
@@ -28,8 +26,6 @@ Action.Name = {
     CREATE_QUESTION: 'CREATE_QUESTION',
 
     DELETE_QUESTION: 'DELETE_QUESTION',
-
-    DISPLAY_EXAM: 'DISPLAY_EXAM',
 
     EDIT_QUESTION: 'EDIT_QUESTION',
 
@@ -52,8 +48,6 @@ Action.Name = {
     LOAD_EXAM_RUN: 'LOAD_EXAM_RUN',
 
     LOAD_HOME: 'LOAD_HOME',
-
-    PERFORM_LOAD: 'PERFORM_LOAD',
 
     SUBMIT_EXAM_RUN: 'SUBMIT_EXAM_RUN',
 

@@ -72,18 +72,11 @@ var React = require('react'),
 
         onClickLogo: function(event) {
             Router.path("/");
-            /*
-            Action.send(Action.Name.PERFORM_LOAD,
-                        {pageKey: 'home'});
-*/
         },
 
 
         onClickText: function(event) {
             Router.path("/");
-            /*
-            Action.send(Action.Name.PERFORM_LOAD,
-                        {pageKey: 'home'});*/
         },
 
 

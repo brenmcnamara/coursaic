@@ -10,14 +10,6 @@ var cache = {};
 
 module.exports = {
 
-    ConfigStore: function () {
-        if (!cache.ConfigStore) {
-            cache.ConfigStore = require('./configstore.js');
-        }
-        return cache.ConfigStore;
-    },
-
-
     CourseStore: function () {
         if (!cache.CourseStore) {
             cache.CourseStore = require('./coursestore.js');

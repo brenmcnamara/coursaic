@@ -14,7 +14,6 @@
 var Dispatcher = require('../dispatcher.js'),
     Stores = require('../stores'),
     Router = require('../router.js'),
-    Anchor = require('../Anchor.js').Anchor,
     CAEvent = require('../Event.js').CAEvent,
 
     PageStore = Stores.Factory.createStore({
@@ -56,33 +55,6 @@ var Dispatcher = require('../dispatcher.js'),
 
 
         actionHandler: {
-
-            CANCEL_EXAM_RUN: function (payload) {
-                var self = this;
-                return new Promise(function (resolve, reject) { 
-                    Anchor.set({ pageKey: 'course' }, { silent: true });
-                    resolve();
-                })
-                 .then(
-                    // Success.
-                    function () {
-                        return self._removeMode({ fromMode: self.Mode.CANCEL_EXAM_RUN});
-                    },
-                    // Error.
-                    function (error) {
-                        throw error;
-                    })
-
-                   .then(
-                    // Success
-                    function () {
-                        self.emit(CAEvent.Name.LOADED_PAGE);
-                    },
-                    // Failure
-                    function (error) {
-                        throw error;
-                    });
-            },
 
 
             CREATE_COURSE: function (payload) {
@@ -139,21 +111,6 @@ var Dispatcher = require('../dispatcher.js'),
                                     function(error) {
                                         throw error;
                                     });
-            },
-
-            // TODO: Get rid of this action.
-            DISPLAY_EXAM: function (payload) {
-                var self = this;
-                return new Promise(function(resolve, rejected) {
-                    // Nothing to do yet. Might add stuff here
-                    if (!payload.examId) {
-                        throw new Error("Displayed exam without any exam");
-                    }
-                    Anchor.set({pageKey: 'course', examId: payload.examId},
-                               {silent: true});
-                    self.emit(CAEvent.Name.DID_LOAD_EXAM);
-                    resolve();
-                });
             },
 
 
@@ -250,51 +207,6 @@ var Dispatcher = require('../dispatcher.js'),
                                     function (error) {
                                         throw error;
                                     });
-            },
-
-
-
-            PERFORM_LOAD: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
-                                            Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex,
-                                            Stores.FieldStore().dispatcherIndex ])
-
-                         .then(
-                            // Success.
-                            function() {
-                                payload.updateHash = (typeof payload.updateHash === 'boolean') ?
-                                                     payload.updateHash :
-                                                     true;
-                                if (payload.updateHash) {
-                                    switch (payload.pageKey) {
-                                    // All hash changes here should be set to silent. Non-silent
-                                    // hash changes may be picked up and converted to another
-                                    // action.
-                                    case 'course':
-                                        Anchor.set({pageKey: 'course', course: payload.course},
-                                                   {silent: true});
-                                        break;
-                                    case 'home':
-                                        Anchor.set({pageKey: 'home'},
-                                                   {silent: true});
-                                        Anchor.unset(['examId'], { silent: true });
-                                        break;
-                                    default:
-                                        Anchor.set({pageKey: payload.pageKey},
-                                                   {silent: true});
-                                    }
-                                }
-                                if (payload.removeMode) {
-                                    self._removeMode({ fromMode: payload.removeMode });
-                                }
-                                self.emit(CAEvent.Name.LOADED_PAGE);
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
             },
 
 

@@ -176,14 +176,9 @@ var Stores = require('../stores'),
 
 
             LOAD_HOME: function (payload) {
-                console.log("Called user store.");
-                return this._login();
-            },
-
-
-            PERFORM_LOAD: function (payload) {
                 return this._login();
             }
+
 
         },
 

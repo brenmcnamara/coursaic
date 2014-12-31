@@ -4,6 +4,7 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
+    Path = require('../path.js'),
     Router = require('../router.js'),
     CAEvent = require('../Event.js').CAEvent,
 
@@ -13,25 +14,42 @@ var React = require('react'),
     CourseLayout = require('./course.js'),
     ExamLayout = require('./exam.js'),
 
-    render = function(key, params) {
+    render = function() {
+        var matcher = Path.createPatternMatcher(Router.path());
+
         unmountRoot();
-        switch (key) {
-            case 'home':
-                React.render(React.createFactory(HomeLayout.Root)(params),
-                             document.getElementsByTagName('body')[0]);
-                break;
-            case 'course':
-                React.render(React.createFactory(CourseLayout.Root)(params),
-                             document.getElementsByTagName('body')[0]);
-                break;
-            case 'exam':
-                React.render(React.createFactory(ExamLayout.Root)(params),
-                             document.getElementsByTagName('body')[0]);
-                break;
-            default:
-                console.error("Unrecognized page key " + key);
-                throw new Error("Trying to render page with unrecognized key " + key);
+
+        matcher.config({ allowPartialMatch: false });
+
+        matcher.forCase("/", function (argMap) {
+            React.render(React.createFactory(HomeLayout.Root)(argMap),
+                         document.getElementsByTagName('body')[0]);
+            return true;
+        });
+
+        matcher.forCase("/course/<courseId>", function (argMap) {
+            React.render(React.createFactory(CourseLayout.Root)(argMap),
+                         document.getElementsByTagName('body')[0]);     
+            return true;      
+        });
+
+        matcher.forCase("/course/<courseId>/exam/<examId>", function (argMap) {
+            React.render(React.createFactory(CourseLayout.Root)(argMap),
+                         document.getElementsByTagName('body')[0]);
+            return true;
+        });
+
+        matcher.forCase("/course/<courseId>/exam/<examId>/take", function (argMap) {
+            React.render(React.createFactory(ExamLayout.Root)(argMap),
+                         document.getElementsByTagName('body')[0]);
+            return true;
+        });
+
+        if (!matcher.resolve()) {
+            console.error("Unrecognized path: " + Router.path());
+            throw new Error("Trying to render unrecognized path: " + Router.path());
         }
+
     },
 
 
@@ -65,13 +83,7 @@ var React = require('react'),
      * @method _onLoad
      */
     onLoad = function(event) {
-        switch (Stores.ConfigStore().pageKey()) {
-        case 'course':
-            render('course', { courseId: Stores.ConfigStore().courseId() });
-            break;
-        default:
-            render(Stores.ConfigStore().pageKey());
-        }
+        render();
     },
 
     /**

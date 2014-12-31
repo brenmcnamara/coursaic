@@ -1,6 +1,5 @@
 
-var WatchDog = require('./WatchDog.js').WatchDog,
-    Dispatcher = require('./dispatcher.js'),
+var Dispatcher = require('./dispatcher.js'),
     Stores = require('./stores'),
     Action = require('./Action.js').Action,
     CAEvent = require('./Event.js').CAEvent,
@@ -16,12 +15,9 @@ window.fbAsyncInit = function() {
             version    : 'v2.1'
     });
 
-    Dispatcher.register([ Stores.ConfigStore(), Stores.CourseStore(), Stores.ExamStore(), 
-                          Stores.FieldStore(), Stores.PageStore(), Stores.UserStore() ]);
+    Dispatcher.register([ Stores.CourseStore(), Stores.ExamStore(), Stores.FieldStore(),
+                          Stores.PageStore(), Stores.UserStore() ]);
     View.register();
-    // WatchDog.watch();
-
-//    Action.send(Action.Name.PERFORM_LOAD, {pageKey: 'home'});
 };
 
 (function(d, s, id){

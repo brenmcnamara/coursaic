@@ -101,11 +101,6 @@ var React = require('react'),
                             courseId: Stores.CourseStore().current().id,
                             examId: Stores.ExamStore().current().id
                         });
-            /*
-            Action.send(Action.Name.PERFORM_LOAD, { pageKey: 'course',
-                                                    course: Stores.CourseStore().current().id,
-                                                    removeMode: Stores.PageStore().Mode.VIEW_EXAM_RESULTS });
-            */
         }
 
 

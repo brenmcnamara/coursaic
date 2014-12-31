@@ -455,8 +455,11 @@ var React = require('react'),
 
 
         handleClick: function(event) {
-            Action.send(Action.Name.DISPLAY_EXAM,
-                        { examId: this.props.exam.id })
+            Router.path("/course/<courseId>/exam/<examId>",
+                        {
+                            courseId: Stores.CourseStore().current().id,
+                            examId: this.props.exam.id
+                        });
         },
 
 
