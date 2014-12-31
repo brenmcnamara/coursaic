@@ -73,9 +73,13 @@ Action.Name = {
  *
  * @param payload {Object} The action
  *  parameters.
+ *
+ * @param options {Object} Options that can be injected
+ *  into the dispatch of the action. This includes success
+ *  and error callbacks when the action has completed dispatching.
  */
-Action.send = function(name, payload) {
-    Dispatcher.dispatch(name, payload);
+Action.send = function(name, payload, options) {
+    Dispatcher.dispatch(name, payload, options);
 };
 
 module.exports = {

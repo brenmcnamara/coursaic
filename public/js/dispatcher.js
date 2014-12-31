@@ -152,7 +152,7 @@ var
      * @throw If the action has not yet been
      *  registered.
      */
-    dispatch = function(name, payload) {
+    dispatch = function(name, payload, options) {
         // Get the callbacks for the action.
         var self = this,
             storeCalls = actionHandlers(name),
@@ -218,13 +218,21 @@ var
                 function() {
                     stateMap.locked = false;
                     self._currentAction = null;
+                    if (options.success) {
+                        options.success();
+                    }
                 },
                 // Failure callback
                 function(err) {
                     stateMap.locked =  false;
                     self._currentAction = null;
-                    console.error(err);
-                    throw err;
+                    if (options.error) {
+                        options.error(err);
+                    }
+                    else {
+                        console.error(err);
+                        throw err;
+                    }
                 });
         }
         else {
