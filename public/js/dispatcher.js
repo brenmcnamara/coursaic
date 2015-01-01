@@ -43,7 +43,11 @@ var
         // A list of all rejects that are on the
         // wait list. This is a map of
         // dispatcherIndex -> Array of reject callbacks.
-        waitHash_reject: {}
+        waitHash_reject: {},
+
+        // A set of hooks that can be registered to be called
+        // at any point during the dispatch process.
+        hooks: {}
 
     },
 
@@ -88,19 +92,25 @@ var
 
 
     /**
-     * Register a list of stores with the dispatcher.
+     * Configure the dispatcher for use. This method must be
+     * called before the dispatcher can be used.
      *
-     * @method register
+     * @method config
      *
-     * @param name {Array} An array of stores to get tracked
-     *  by the dispatcher.
+     * @param options {Object} Any options needed to configure
+     *  the dispatcher. This must include an array of
+     *  stores to register with the dispatcher (key="stores").
      */
-    register = function(stores) {
+    config = function(options) {
+        var stores = options.stores;
+
         stateMap.stores = stores.slice();
         // Assign a dispatcherIndex to each store.
         stateMap.stores.forEach(function (store, index) {
             store.dispatcherIndex = (index + 1);
         });
+
+        stateMap.hooks.preDispatchValidator = options.preDispatchValidator || null;
     },
 
 
@@ -115,7 +125,7 @@ var
      * @private
      * @param name {Action.Name} The name of the action.
      *
-     * @return { Array } An array of actionHandler objects.
+     * @return {Array} An array of actionHandler objects.
      */
     actionHandlers = function (name) {
         return stateMap.stores.reduce(function(memo, store) {
@@ -131,6 +141,28 @@ var
             }
             return memo;
         }, []);
+    },
+
+
+    /**
+     * Check if there is an error when validating
+     * the action and payload.
+     *
+     * @method isValidSchema
+     * @private
+     *
+     * @param action {Action.Name} The name of the action
+     *  to validate.
+     *
+     * @param payload {Object} The payload of the action to validate.
+     *
+     * @return {Error} The error if there is one, null otherwise.
+     */
+    validationError = function (action, payload) {
+        if (stateMap.hooks.preDispatchValidator) {
+            return stateMap.hooks.preDispatchValidator(action, payload);
+        }
+        return null;
     },
 
 
@@ -154,10 +186,12 @@ var
      */
     dispatch = function(name, payload, options) {
         // Get the callbacks for the action.
-        var self = this,
+        var error,
+            self = this,
             storeCalls = actionHandlers(name),
             promises;
 
+        options = options || {};
         if (!storeCalls) {
             throw new Error("Action " + name + " must be registered.");
         }
@@ -165,6 +199,17 @@ var
         if (stateMap.locked) {
             throw new Error("Dispatcher trying to dispatch " + name +
                             " while an action is already dispatching.");
+        }
+
+        error = validationError(name, payload);
+        if (error) {
+            if (options.error) {
+                options.error(error);
+                return;
+            }
+            else {
+                throw error;
+            }
         }
 
         // Lock the dispatcher before doing anything.
@@ -244,7 +289,7 @@ var
 
 module.exports = {
     dispatch: dispatch,
-    register: register,
+    config: config,
     waitFor: waitFor
 };
 
