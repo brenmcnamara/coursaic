@@ -87,6 +87,6 @@ Expecting 'STRING', '}'
     "wsh"           : false,    // Windows Scripting Host
     "yui"           : false,    // Yahoo User Interface
 
-    // Custom Globals
-    "globals"       : {}        // additional predefined global variables
+     // Custom Globals
+    "globals"       : { "Promise" : false }        // additional predefined global variables
 }

@@ -4,7 +4,9 @@
  * Tests for the promisefactory.js file.
  */
 
-var Prom = require('promise'),
+/*global -Promise */
+
+var Promise = require('promise'),
     PromiseFactory = require('./promisefactory.js');
 
 describe("Promise Factory", function () {
@@ -70,7 +72,7 @@ describe("Promise Factory", function () {
 
         it("should transfer parameters to a 'then' clause.", function (done) {
             var value = "value";
-            (new Prom(function (resolve, reject) {
+            (new Promise(function (resolve, reject) {
                 resolve(value);
             }))
 
@@ -85,7 +87,7 @@ describe("Promise Factory", function () {
         it("should throw an error if the preceding promise throws an error.", function (done) {
             var fail = this.fail;
 
-            (new Prom(function (resolve) {
+            (new Promise(function (resolve) {
                 throw Error("An error.");
             }))
 
