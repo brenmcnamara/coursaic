@@ -126,7 +126,9 @@ var
          *  take a parameter of an error and throw the error.
          */
         emitEvent: function (store, event) {
-
+            return Thenify.execute(function () {
+                store.emit(event);
+            });
         }
 
     };

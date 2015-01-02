@@ -124,6 +124,22 @@ describe("Promise Factory", function () {
                     }));
         });
 
+
+        it("should generate an event emitter for a 'then' clause.", function (done) {
+            var 
+                mockStore = {
+                    emit: function (event) {
+                        expect(event).toBe("event");
+                        done();
+                    }
+                };
+
+            PromiseFactory.Promisify.noOp()
+                .then.apply(null,
+                    PromiseFactory.Thenify.emitEvent(mockStore, "event"));
+
+        });
+
     });
 
 
