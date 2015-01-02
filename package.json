@@ -22,7 +22,8 @@
     "express": "3.4.7",
     "precommit-hook": "~1.0.7",
     "react": "~0.12.2",
-    "jsonschema": "~1.0.0"
+    "jsonschema": "~1.0.0",
+    "promise": "~6.0.1"
   },
   "precommit": [
     "test"

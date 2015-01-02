@@ -67,6 +67,7 @@ var Stores = require('../stores'),
                         .then(
                             // Success.
                             function() {
+                                console.log("Calling field store.");
                                 var query = new Parse.Query(Field);
                                 query.find({
                                     success: function(response) {
