@@ -100,7 +100,7 @@ var
 
             stateMap.location = options.location;
             
-            hash = getHash();
+            hash = Router.getHash();
 
             stateMap.directory = Path.createPatternMatcher(hash);
             stateMap.directory.config({ allowPartialMatch: false });
@@ -126,19 +126,19 @@ var
             }
 
             stateMap.watchId = setInterval(function () {
-                var currentPath = getHash(),
+                var currentPath = Router.getHash(),
                     savedPath = stateMap.directory.path();
 
                 if (currentPath !== savedPath) {
                     stateMap.directory.path(currentPath);
-                    route();
+                    Router.route();
                 }
             }, 150);
 
 
             // Check if we send an initial action.
             if (options.initialLoad) {
-                route();
+                Router.route();
             }
         },
 
@@ -197,11 +197,11 @@ var
                 return stateMap.directory.path();
             case 1:
                 // Treat this as a setter.
-                syncHash(arguments[0]);
+                Router.syncHash(arguments[0]);
                 break;
             default:
                 // Assume 2 parameters.
-                syncHash(Util.patternToString(arguments[0], arguments[1]));
+                Router.syncHash(Util.patternToString(arguments[0], arguments[1]));
             }
         },
 

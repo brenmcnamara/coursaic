@@ -78,8 +78,8 @@ Action.Name = {
  *  into the dispatch of the action. This includes success
  *  and error callbacks when the action has completed dispatching.
  */
-Action.send = function(name, payload, options) {
-    Dispatcher.dispatch(name, payload, options);
+Action.send = function(name, payload) {
+    Dispatcher.dispatch(name, payload);
 };
 
 module.exports = {

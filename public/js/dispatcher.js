@@ -2,15 +2,11 @@
  * dispatcher.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
+/*global -Promise */
 
+var 
 
-var
+    Promise = require('Promise'),
 
     /**
      * Contains all the state for the dispatcher.
@@ -181,109 +177,96 @@ var
      *  dispatching another action (only 1 action can be
      *  propogated at a time).
      *
-     * @throw If the action has not yet been
-     *  registered.
+     * @return {Promise} A promise that is completed once
+     *  either all the stores have completed their actions or
+     *  an error has occurred.
      */
-    dispatch = function(name, payload, options) {
+    dispatch = function(name, payload) {
         // Get the callbacks for the action.
-        var error,
-            self = this,
-            storeCalls = actionHandlers(name),
-            promises;
+        return new Promise(function (resolve) {
+            var error,
+                self = this,
+                storeCalls = actionHandlers(name),
+                actionHandlerPromises;
 
-        options = options || {};
-        if (!storeCalls) {
-            throw new Error("Action " + name + " must be registered.");
-        }
+            if (!storeCalls) {
+                throw new Error("Action " + name + " must be registered.");
+            }
 
-        if (stateMap.locked) {
-            throw new Error("Dispatcher trying to dispatch " + name +
-                            " while an action is already dispatching.");
-        }
+            if (stateMap.locked) {
+                throw new Error("Dispatcher trying to dispatch " + name +
+                                " while an action is already dispatching.");
+            }
 
-        error = validationError(name, payload);
-        if (error) {
-            if (options.error) {
-                options.error(error);
-                return;
+            error = validationError(name, payload);
+
+            // Lock the dispatcher before doing anything.
+            stateMap.locked = true;
+            this._currentAction = name;
+            // Get all the promises that are produced
+            // by the functions.
+            if (storeCalls.length > 0) {
+                actionHandlerPromises = storeCalls.map(function(storeCall) {
+                    var index = storeCall.index,
+                        callback = storeCall.callback;
+                    // TODO: Clean up unnecessary nested promises.
+                    return new Promise(function(resolve, reject) {
+                        callback(payload).then(
+                            // On success
+                            function() {
+                                resolve();
+                                // Notify all objects waiting for the
+                                // resolution of this callback to notify
+                                // that the callback has resolved.
+                                (stateMap.waitHash_resolve[index] || [])
+                                    .forEach(function(wait_resolve) {
+                                        wait_resolve();
+                                    });
+                                // Empty out all resolution and rejection
+                                // calls associated with this index.
+                                stateMap.waitHash_resolve[index] = [];
+                                stateMap.waitHash_reject[index] = [];
+                            },
+                            // On error
+                            function(err) {
+                                reject(err);
+                                // Notify all objects waiting for the
+                                // resolution of this callback to resolve
+                                // that the callback has rejection.
+                                (stateMap.waitHash_reject[index] || [])
+                                .forEach(function(wait_reject) {
+                                        wait_reject();
+                                    });
+                                // Empty out all resolution and rejection
+                                // calls associated with this index.
+                                stateMap.waitHash_resolve[index] = [];
+                                stateMap.waitHash_reject[index] = [];
+                            }
+                        );
+                    });
+                });
+
+                Promise.all(actionHandlerPromises).then(
+                    // Success callback
+                    function() {
+                        stateMap.locked = false;
+                        self._currentAction = null;
+                        resolve();
+                    },
+                    // Failure callback
+                    function(err) {
+                        stateMap.locked =  false;
+                        self._currentAction = null;
+                        throw err;
+                    });
             }
             else {
-                throw error;
+                stateMap.locked = false;
+                this._currentAction = null;
+                resolve();
             }
-        }
-
-        // Lock the dispatcher before doing anything.
-        stateMap.locked = true;
-        this._currentAction = name;
-        // Get all the promises that are produced
-        // by the functions.
-        if (storeCalls.length > 0) {
-            promises = storeCalls.map(function(storeCall) {
-                var index = storeCall.index,
-                    callback = storeCall.callback;
-                // TODO: Clean up unnecessary nested promises.
-                return new Promise(function(resolve, reject) {
-                    callback(payload).then(
-                        // On success
-                        function() {
-                            resolve();
-                            // Notify all objects waiting for the
-                            // resolution of this callback to notify
-                            // that the callback has resolved.
-                            (stateMap.waitHash_resolve[index] || [])
-                                .forEach(function(wait_resolve) {
-                                    wait_resolve();
-                                });
-                            // Empty out all resolution and rejection
-                            // calls associated with this index.
-                            stateMap.waitHash_resolve[index] = [];
-                            stateMap.waitHash_reject[index] = [];
-                        },
-                        // On error
-                        function(err) {
-                            reject(err);
-                            // Notify all objects waiting for the
-                            // resolution of this callback to resolve
-                            // that the callback has rejection.
-                            (stateMap.waitHash_reject[index] || [])
-                            .forEach(function(wait_reject) {
-                                    wait_reject();
-                                });
-                            // Empty out all resolution and rejection
-                            // calls associated with this index.
-                            stateMap.waitHash_resolve[index] = [];
-                            stateMap.waitHash_reject[index] = [];
-                        }
-                    );
-                });
-            });
-            // TODO: Make better name for promises. 
-            Promise.all(promises).then(
-                // Success callback
-                function() {
-                    stateMap.locked = false;
-                    self._currentAction = null;
-                    if (options.success) {
-                        options.success();
-                    }
-                },
-                // Failure callback
-                function(err) {
-                    stateMap.locked =  false;
-                    self._currentAction = null;
-                    if (options.error) {
-                        options.error(err);
-                    }
-                    else {
-                        console.error(err);
-                        throw err;
-                    }
-                });
-        }
-        else {
-            stateMap.locked = false;
-            this._currentAction = null;
-        }
+        });
+    
     };
 
 
