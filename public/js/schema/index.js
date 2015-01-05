@@ -41,7 +41,6 @@ var
     };
 
 
-
 module.exports = {
     config: config,
     validateAction: validateAction

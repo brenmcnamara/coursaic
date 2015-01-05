@@ -88,12 +88,12 @@ var React = require('react'),
     },
 
     /**
-     *  Setup the routing for the application.
+     * Setup the routing for the application.
      *
-     * @method routing
+     * @method addRouting
      * @private
      */
-    routing = function () {
+    addRouting = function () {
         Router.addRoute("/", Action.Name.LOAD_HOME);
         // TODO: Change course to courseId.
         Router.addRoute("/course/<courseId>", Action.Name.LOAD_COURSE);
@@ -112,7 +112,7 @@ module.exports = {
         Router.on(CAEvent.Name.LOADED_PAGE, onLoad);
         Router.on(CAEvent.Name.PAGE_NOT_FOUND, onLoad);
 
-        routing();
+        addRouting();
         Router.watch({ initialLoad: true });
     }
 

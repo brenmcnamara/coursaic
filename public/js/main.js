@@ -4,7 +4,7 @@ var Dispatcher = require('./dispatcher.js'),
     Action = require('./Action.js').Action,
     CAEvent = require('./Event.js').CAEvent,
     View = require('./layout'),
-    Schema = require('./schema'),
+    Validator = require('./validator.js'),
     Router = require('./router.js');
 
 Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
@@ -24,7 +24,9 @@ window.fbAsyncInit = function() {
                   Stores.UserStore() ],
 
         preDispatchValidator: function (action, payload) {
-            var result = Schema.validateAction(action, payload);
+
+            // Make sure that the schema of the payload is valid.
+            var result = Validator.validate(action, payload);
             if (result.valid || !result.hasSchema) {
                 return null;
             }
