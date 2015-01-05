@@ -108,10 +108,10 @@ var React = require('react'),
 module.exports = {
 
     register: function () {
-        Stores.PageStore().on(CAEvent.Name.LOADED_PAGE, onLoad);
-        Stores.PageStore().on(CAEvent.Name.PAGE_NOT_FOUND, onLoad);
-
         Router.config({ location: window.location });
+        Router.on(CAEvent.Name.LOADED_PAGE, onLoad);
+        Router.on(CAEvent.Name.PAGE_NOT_FOUND, onLoad);
+
         routing();
         Router.watch({ initialLoad: true });
     }

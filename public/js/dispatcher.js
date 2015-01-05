@@ -183,7 +183,7 @@ var
      */
     dispatch = function(name, payload) {
         // Get the callbacks for the action.
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
             var error,
                 self = this,
                 storeCalls = actionHandlers(name),
@@ -197,9 +197,16 @@ var
                 throw new Error("Dispatcher trying to dispatch " + name +
                                 " while an action is already dispatching.");
             }
+            try {
+                error = validationError(name, payload);
+            }
+            catch (e) {
+                console.error(e);
+            }
 
-            error = validationError(name, payload);
-
+            if (error) {
+                throw error;
+            }
             // Lock the dispatcher before doing anything.
             stateMap.locked = true;
             this._currentAction = name;
@@ -210,7 +217,7 @@ var
                     var index = storeCall.index,
                         callback = storeCall.callback;
                     // TODO: Clean up unnecessary nested promises.
-                    return new Promise(function(resolve, reject) {
+                    return new Promise(function(resolve) {
                         callback(payload).then(
                             // On success
                             function() {
@@ -229,6 +236,8 @@ var
                             },
                             // On error
                             function(err) {
+                                // Reject the encompassing promise create
+                                // at the root of Dispatch's scope.
                                 reject(err);
                                 // Notify all objects waiting for the
                                 // resolution of this callback to resolve
@@ -246,7 +255,9 @@ var
                     });
                 });
 
-                Promise.all(actionHandlerPromises).then(
+                Promise.all(actionHandlerPromises)
+                    // All store promises have completed.
+                    .then(
                     // Success callback
                     function() {
                         stateMap.locked = false;
@@ -257,10 +268,13 @@ var
                     function(err) {
                         stateMap.locked =  false;
                         self._currentAction = null;
-                        throw err;
+
+                        // TODO: Should clear the waitHash.
+                        reject(err);
                     });
             }
             else {
+                // No actions to take, just resolve this action.
                 stateMap.locked = false;
                 this._currentAction = null;
                 resolve();

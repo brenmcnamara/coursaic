@@ -25,9 +25,10 @@ window.fbAsyncInit = function() {
 
         preDispatchValidator: function (action, payload) {
             var result = Schema.validateAction(action, payload);
-            if (result.valid) {
+            if (result.valid || !result.hasSchema) {
                 return null;
             }
+            // Assuming there is an error at this point.
             // Report back the first validation error in the list.
             return Error("Action payload schema error for action " + action + ": " +
                          '"' + result.errors[0].message) + '".';

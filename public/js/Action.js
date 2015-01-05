@@ -79,7 +79,7 @@ Action.Name = {
  *  and error callbacks when the action has completed dispatching.
  */
 Action.send = function(name, payload) {
-    Dispatcher.dispatch(name, payload);
+    return Dispatcher.dispatch(name, payload);
 };
 
 module.exports = {

@@ -6,6 +6,7 @@ var
     Util = require('./util.js'),
     Action = require('./Action.js').Action,
     Path = require('./path.js'),
+    CAEvent = require('./Event.js').CAEvent,
 
     emitter = new (require('events').EventEmitter)(),
 
@@ -82,9 +83,11 @@ var
     route = function () {
         if (!stateMap.directory.resolve()) {
             if (stateMap.defaultAction) {
-                Action.send(stateMap.defaultAction, { path: stateMap.directory.path() });
+                Action.send(stateMap.defaultAction, { path: stateMap.directory.path() })
+                    .then(function () {
+                        emitter.emit(CAEvent.Name.PAGE_NOT_FOUND);
+                    });
             }
-
         }
     },
 
@@ -221,7 +224,10 @@ var
     addRoute = function (pattern, action) {
         stateMap.directory.forCase(pattern, function (argMap) {
             var path = stateMap.directory.path();
-            Action.send(action, Util.extend(argMap, { path: path }));
+            Action.send(action, Util.extend(argMap, { path: path }))
+                .then(function () {
+                    emitter.emit(CAEvent.Name.LOADED_PAGE);
+                });
             return true;
         });
     },
@@ -254,7 +260,7 @@ var
      * @param callback {Function} The function to execute
      *  when the event is called.
      */
-    on = emitter.on,
+    on = emitter.on.bind(emitter),
 
 
      /**
@@ -268,7 +274,7 @@ var
       *
       * @param callback {Function} The callback to remove.
       */
-    removeListener = emitter.removeListener;
+    removeListener = emitter.removeListener.bind(emitter);
 
 
 module.exports = {
@@ -282,5 +288,4 @@ module.exports = {
     watch: watch,
     unwatch: unwatch,
     config: config
-
 };

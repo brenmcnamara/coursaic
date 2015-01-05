@@ -173,7 +173,6 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     function () {
                                         self._removeMode({fromMode: self.currentMode()});
-                                        self.emit(CAEvent.Name.LOADED_PAGE);
                                     },
                                     function (error) {
                                         throw error;
@@ -190,7 +189,6 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     function () {
                                         self._removeMode({fromMode: self.currentMode()});
-                                        self.emit(CAEvent.Name.LOADED_PAGE);
                                     },
                                     function (error) {
                                         throw error;
@@ -206,20 +204,10 @@ var Dispatcher = require('../dispatcher.js'),
                                  .then(
                                     function () {
                                         self._removeMode({fromMode: self.currentMode()});
-                                        self.emit(CAEvent.Name.LOADED_PAGE);
                                     },
                                     function (error) {
                                         throw error;
                                     });
-            },
-
-
-            LOAD_NOT_FOUND: function (payload) {
-                var self = this;
-                return new Promise(function (resolve, reject) {
-                    self.emit(CAEvent.Name.PAGE_NOT_FOUND);
-                    resolve();
-                });
             },
 
 
