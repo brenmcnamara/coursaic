@@ -165,20 +165,9 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
-            LOAD_EXAM_RUN: function (payload) {
-                return this._login();
-            },
-
-
-            LOAD_COURSE: function (payload) {
-                return this._login();
-            },
-
-
             LOAD_HOME: function (payload) {
                 return this._login();
             }
-
 
         },
 

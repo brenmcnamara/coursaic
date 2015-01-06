@@ -133,55 +133,54 @@ var Stores = require('../Stores'),
                 // the exam store can load the exam and question related
                 // to the single exam of the course.
                 // Just make sure the single course is loaded.
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-                       .then(
-                            // Success.
-                            function() {
-                                var course;
-                                // Get the course if the course does not
-                                // already exist.
-                                if (!self.courseWithId(payload.courseId)) {
-                                    // Don't have the course, need to fetch it.
-                                    course = new Course();
-                                    course.id = payload.courseId;
-                                    return self._fetchCourse(course);
-                                }
-                            },
+                return new Promise(function (resolve, reject) {
+                    var course;
+                    // Get the course if the course does not
+                    // already exist.
+                    if (!self.courseWithId(payload.courseId)) {
+                        // Don't have the course, need to fetch it.
+                        course = new Course();
+                        course.id = payload.courseId;
+                        self._fetchCourse(course)
+                            .then(
+                                function () {
+                                    resolve();
+                                },
 
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
+                                function (error) {
+                                    reject(error);
+                                });
+                    }
+                });
             },
 
 
             LOAD_EXAM_RUN: function (payload) {
                 var self = this;
-                // Wait for the User to be loaded.
                 // Load all the information for the course.
                 // NOTE: This is needed by the exam page key so that
                 // the exam store can load the exam and question related
                 // to the single exam of the course.
                 // Just make sure the single course is loaded.
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-                       .then(
-                            // Success.
-                            function() {
-                                var course;
-                                // Get the course if the course does not
-                                // already exist.
-                                if (!self.courseWithId(payload.courseId)) {
-                                    // Don't have the course, need to fetch it.
-                                    course = new Course();
-                                    course.id = payload.courseId;
-                                    return self._fetchCourse(course);
-                                }
-                            },
+                return new Promise(function (resolve, reject) {
+                    var course;
+                    // Get the course if the course does not
+                    // already exist.
+                    if (!self.courseWithId(payload.courseId)) {
+                        // Don't have the course, need to fetch it.
+                        course = new Course();
+                        course.id = payload.courseId;
+                        self._fetchCourse(course)
+                            .then(
+                                function () {
+                                    resolve();
+                                },
 
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
+                                function (error) {
+                                    reject(error);
+                                });
+                    }
+                });
             },
 
 

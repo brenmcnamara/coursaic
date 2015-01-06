@@ -31,64 +31,8 @@ var Stores = require('../stores'),
         },
 
         actionHandler: {
-
-            LOAD_COURSE: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-                            
-                        .then(
-                            // Success.
-                            function() {
-                                var query = new Parse.Query(Field);
-                                query.find({
-                                    success: function(response) {
-                                        response.forEach(function(field) {
-                                            // TODO: This is not equality safe.
-                                            self._fieldHash[field.id] = field;
-                                        });
-                                    },
-
-                                    error: function(error) {
-                                        throw error;
-                                    }
-                                });
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
-            },
-
             
             LOAD_HOME: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-                            
-                        .then(
-                            // Success.
-                            function() {
-                                var query = new Parse.Query(Field);
-                                query.find({
-                                    success: function(response) {
-                                        response.forEach(function(field) {
-                                            // TODO: This is not equality safe.
-                                            self._fieldHash[field.id] = field;
-                                        });
-                                    },
-
-                                    error: function(error) {
-                                        throw error;
-                                    }
-                                });
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
-            },
-
-
-            LOAD_EXAM_RUN: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             

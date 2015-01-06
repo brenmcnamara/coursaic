@@ -394,8 +394,7 @@ var Stores = require('../stores'),
                 // Wait for the course to get loaded, then
                 // load all the exams for the course and questions
                 // for the exam.
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex,
-                                            Stores.CourseStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
                     // After the CourseStore has finished.
                     .then(
                         // Success.
@@ -449,8 +448,7 @@ var Stores = require('../stores'),
                 // Wait for the course to get loaded, then
                 // load all the exams for the course and questions
                 // for the exam.
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex,
-                                            Stores.CourseStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
                     // After the CourseStore has finished.
                     .then(
                         // Success.

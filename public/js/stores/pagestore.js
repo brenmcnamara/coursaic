@@ -166,10 +166,8 @@ var Dispatcher = require('../dispatcher.js'),
 
             LOAD_EXAM_RUN: function (payload) {
                 var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
-                                            Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex,
-                                            Stores.FieldStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
+                                            Stores.ExamStore().dispatcherIndex ])
                                  .then(
                                     function () {
                                         self._removeMode({fromMode: self.currentMode()});
@@ -182,10 +180,8 @@ var Dispatcher = require('../dispatcher.js'),
 
             LOAD_COURSE: function (payload) {
                 var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
-                                            Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex,
-                                            Stores.FieldStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
+                                            Stores.ExamStore().dispatcherIndex ])
                                  .then(
                                     function () {
                                         self._removeMode({fromMode: self.currentMode()});
