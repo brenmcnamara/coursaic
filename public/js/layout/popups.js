@@ -9,10 +9,9 @@
     
 var React = require('react'),
     Stores = require('../stores'),
-    CAEvent = require('../Event.js').CAEvent,
-
     Router = require('../router.js'),
     Util = require('../util.js'),
+    Constants = require('../constants.js')
     Action = require('../Action.js').Action,
 
     /**
@@ -158,17 +157,17 @@ var React = require('react'),
             // State is the payload.
             // Copy the course map from the state and add the
             // current user's school.
-            Action.send(Action.Name.CREATE_COURSE, this.state.courseMap);
+            Action.send(Constants.Action.CREATE_COURSE, this.state.courseMap);
         },
 
 
         onClickCancel: function() {
-            Action.send(Action.Name.FROM_MODE_CREATE_COURSE);
+            Action.send(Constants.Action.FROM_MODE_CREATE_COURSE);
         },
 
 
         onClickBackground: function() {
-            Action.send(Action.Name.FROM_MODE_CREATE_COURSE);
+            Action.send(Constants.Action.FROM_MODE_CREATE_COURSE);
         }
 
 
@@ -276,12 +275,12 @@ var React = require('react'),
             }
             var map = Util.copy(this.state.examMap);
             map.courseId = Stores.CourseStore().current().id;
-            Action.send(Action.Name.CREATE_EXAM, { examMap: map });
+            Action.send(Constants.Action.CREATE_EXAM, { examMap: map });
         },
 
 
         onClickCancel: function(event) {
-            Action.send(Action.Name.FROM_MODE_CREATE_EXAM);
+            Action.send(Constants.Action.FROM_MODE_CREATE_EXAM);
         }
 
 
@@ -307,12 +306,12 @@ var React = require('react'),
 
 
         onYes: function(event) {
-            Action.send(Action.Name.DELETE_QUESTION);
+            Action.send(Constants.Action.DELETE_QUESTION);
         },
 
 
         onNo: function(event) {
-            Action.send(Action.Name.FROM_MODE_DELETE_QUESTION);
+            Action.send(Constants.Action.FROM_MODE_DELETE_QUESTION);
         }
 
 
@@ -347,7 +346,7 @@ var React = require('react'),
 
 
         onNo: function(event) {
-            Action.send(Action.Name.FROM_MODE_CANCEL_EXAM_RUN);
+            Action.send(Constants.Action.FROM_MODE_CANCEL_EXAM_RUN);
         }
 
 

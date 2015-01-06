@@ -17,8 +17,8 @@ var React = require('react'),
     Formatter = require('../formatter.js'),
 
     Action = require('../Action.js').Action,
+    Constants = require('../constants.js'),
     Router = require('../router.js'),
-    CAEvent = require('../Event.js').CAEvent,
 
     Util = require('../util.js'),
 
@@ -65,14 +65,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().on(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
+            Stores.CourseStore().on(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(CAEvent.Name.DID_CHANGE_ENROLLMENT, this.onChange);
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
         }
 
 
@@ -164,12 +164,12 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
+            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.onChange);
+            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.onChange);
         }
 
 
@@ -198,7 +198,7 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Action.Name.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 
@@ -227,7 +227,7 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Action.Name.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 
@@ -316,7 +316,7 @@ var React = require('react'),
 
         
         onClickCreateExam: function(event) {
-            Action.send(Action.Name.TO_MODE_CREATE_EXAM);
+            Action.send(Constants.Action.TO_MODE_CREATE_EXAM);
         },
 
         changedMode: function(event) {
@@ -325,12 +325,12 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
         },
 
 
         componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
 
 
@@ -411,18 +411,18 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
+            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_CREATE_EXAM, this.didCreateExam);
+            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
         }
 
     }),
@@ -469,12 +469,12 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
         },
 
 
         componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
 
 
@@ -521,14 +521,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(CAEvent.Name.DID_LOAD_EXAM, this.didLoadExam);
+            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
         }
 
 
@@ -703,16 +703,16 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
+            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(Constants.Event.DID_CREATE_QUESTION, this.didCreateQuestion);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_CREATE_QUESTION, this.didCreateQuestion);
+            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
+            Stores.ExamStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_QUESTION, this.didCreateQuestion);
         }
 
 
@@ -757,17 +757,17 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Action.Name.TO_MODE_CREATE_QUESTION, { examId: Stores.ExamStore().current().id });
+            Action.send(Constants.Action.TO_MODE_CREATE_QUESTION, { examId: Stores.ExamStore().current().id });
         },
 
 
         componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
         },
 
 
         componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
 
 
@@ -833,7 +833,7 @@ var React = require('react'),
 
         
         onEdit: function(event) {
-            Action.send(Action.Name.TO_MODE_EDIT_QUESTION,
+            Action.send(Constants.Action.TO_MODE_EDIT_QUESTION,
                         {
                             examId: Stores.ExamStore().current().id,
                             questionId: this.props.question.id
@@ -842,7 +842,7 @@ var React = require('react'),
 
 
         onDelete: function(event) {
-            Action.send(Action.Name.TO_MODE_DELETE_QUESTION,
+            Action.send(Constants.Action.TO_MODE_DELETE_QUESTION,
                         {
                             examId: Stores.ExamStore().current().id,
                             questionId: this.props.question.id
@@ -992,7 +992,7 @@ var React = require('react'),
                 // Add the current exam to the question.
                 map = Util.copy(this.state.questionMap);
                 map.examId = Stores.ExamStore().current().id;
-                Action.send(Action.Name.CREATE_QUESTION,
+                Action.send(Constants.Action.CREATE_QUESTION,
                         {
                             questionMap: map
                         });
@@ -1002,7 +1002,7 @@ var React = require('react'),
             else {
                 // TODO: Modify so that examId is
                 // inside the questionMap.
-                Action.send(Action.Name.EDIT_QUESTION,
+                Action.send(Constants.Action.EDIT_QUESTION,
                         {
                             questionMap: this.state.questionMap
                         });
@@ -1013,10 +1013,10 @@ var React = require('react'),
 
         onClickCancel: function() {
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.EDIT_QUESTION) {
-                Action.send(Action.Name.FROM_MODE_EDIT_QUESTION);
+                Action.send(Constants.Action.FROM_MODE_EDIT_QUESTION);
             }
             else {
-                Action.send(Action.Name.FROM_MODE_CREATE_QUESTION);
+                Action.send(Constants.Action.FROM_MODE_CREATE_QUESTION);
             }
         },
 

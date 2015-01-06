@@ -13,7 +13,7 @@ var React = require('react'),
 
     Router = require('../router.js'),
     Action = require('../Action.js').Action,
-    CAEvent = require('../Event.js').CAEvent,
+    Constants = require('../constants.js'),
 
     /**
      * The header element that shows at the top
@@ -91,14 +91,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().on(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+            Stores.ExamStore().on(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
+            Stores.ExamStore().on(Constants.Event.DID_END_EDITING, this.didEndEditing);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_END_EDITING, this.didEndEditing);
+            Stores.ExamStore().removeListener(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
+            Stores.ExamStore().removeListener(Constants.Event.DID_END_EDITING, this.didEndEditing);
         }
 
 

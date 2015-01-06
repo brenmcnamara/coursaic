@@ -10,11 +10,6 @@
 
 var React = require('react'),
 
-    Stores = require('../stores'),
-
-    Action = require('../Action.js').Action,
-    CAEvent = require('../Event.js').CAEvent,
-
     /**
      * A divide element used to vertically
      * separate components.

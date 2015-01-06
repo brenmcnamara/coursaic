@@ -17,7 +17,7 @@ var React = require('react'),
 
     Router = require('../router.js'),
     Action = require('../Action.js').Action,
-    CAEvent = require('../Event.js').CAEvent,
+    Constants = require('../constants.js'),
 
     Formatter = require('../formatter.js'),
 
@@ -66,12 +66,12 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
         },
 
 
         componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.changedMode);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
 
 
@@ -145,14 +145,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().on(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().on(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().on(Constants.Event.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().on(Constants.Event.DID_CREATE_COURSE, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().removeListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.DID_CREATE_COURSE, this.onChange);
         },
 
 
@@ -237,7 +237,7 @@ var React = require('react'),
 
 
         didClick: function(event) {
-            Action.send(Action.Name.TO_MODE_CREATE_COURSE);
+            Action.send(Constants.Action.TO_MODE_CREATE_COURSE);
         }
 
 
@@ -327,14 +327,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.CourseStore().on(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().on(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().on(Constants.Event.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().on(Constants.Event.DID_CREATE_COURSE, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(CAEvent.Name.DID_FETCH_COURSES, this.onChange);
-            Stores.CourseStore().removeListener(CAEvent.Name.DID_CREATE_COURSE, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.DID_FETCH_COURSES, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.DID_CREATE_COURSE, this.onChange);
         },
 
 
@@ -385,7 +385,7 @@ var React = require('react'),
 
         handleClick: function(event) {
             Router.path("/course/<courseId>", { courseId: this.props.course.id });
-/*            Action.send(Action.Name.PERFORM_LOAD,
+/*            Action.send(Constants.Action.PERFORM_LOAD,
                         {pageKey: 'course', course: this.props.course.id})*/
         }
 

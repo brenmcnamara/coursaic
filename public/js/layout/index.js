@@ -6,9 +6,8 @@ var React = require('react'),
 
     Path = require('../path.js'),
     Router = require('../router.js'),
-    CAEvent = require('../Event.js').CAEvent,
 
-    Action = require('../Action.js').Action,
+    Constants = require('../constants.js'),
     
     HomeLayout = require('./home.js'),
     CourseLayout = require('./course.js'),
@@ -94,13 +93,13 @@ var React = require('react'),
      * @private
      */
     addRouting = function () {
-        Router.addRoute("/", Action.Name.LOAD_HOME);
+        Router.addRoute("/", Constants.Action.LOAD_HOME);
         // TODO: Change course to courseId.
-        Router.addRoute("/course/<courseId>", Action.Name.LOAD_COURSE);
-        Router.addRoute("/course/<courseId>/exam/<_>", Action.Name.LOAD_COURSE);
-        Router.addRoute("/course/<courseId>/exam/<examId>/take", Action.Name.LOAD_EXAM_RUN);
+        Router.addRoute("/course/<courseId>", Constants.Action.LOAD_COURSE);
+        Router.addRoute("/course/<courseId>/exam/<_>", Constants.Action.LOAD_COURSE);
+        Router.addRoute("/course/<courseId>/exam/<examId>/take", Constants.Action.LOAD_EXAM_RUN);
 
-        Router.addDefaultRoute(Action.Name.LOAD_NOT_FOUND);
+        Router.addDefaultRoute(Constants.Action.LOAD_NOT_FOUND);
 
     };
 
@@ -109,8 +108,8 @@ module.exports = {
 
     register: function () {
         Router.config({ location: window.location });
-        Router.on(CAEvent.Name.LOADED_PAGE, onLoad);
-        Router.on(CAEvent.Name.PAGE_NOT_FOUND, onLoad);
+        Router.on(Constants.Event.LOADED_PAGE, onLoad);
+        Router.on(Constants.Event.PAGE_NOT_FOUND, onLoad);
 
         addRouting();
         Router.watch({ initialLoad: true });

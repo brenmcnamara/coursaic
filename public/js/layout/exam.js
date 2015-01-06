@@ -10,8 +10,8 @@ var React = require('react'),
     PopupsLayout = require('./popups.js'),
 
     Action = require('../Action.js').Action,
+    Constants = require('../constants.js'),
     Router = require('../router.js'),
-    CAEvent = require('../Event.js').CAEvent,
 
     Util = require('../util.js'),
 
@@ -58,14 +58,14 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.PageStore().on(CAEvent.Name.CHANGED_MODE, this.onChange);
-            Stores.ExamStore().on(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
+            Stores.ExamStore().on(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.PageStore().removeListener(CAEvent.Name.CHANGED_MODE, this.onChange);        
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_GRADE_EXAM_RUN, this.onChange);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
+            Stores.ExamStore().removeListener(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         }
 
 
@@ -306,7 +306,7 @@ var React = require('react'),
 
 
         onSubmit: function(event) {
-            Action.send(Action.Name.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
+            Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
         }
 
 
@@ -358,12 +358,12 @@ var React = require('react'),
 
 
         componentWillMount: function() {
-            Stores.ExamStore().on(CAEvent.Name.DID_CREATE_EXAM_RUN, this.onChange);
+            Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
         },
 
 
         componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(CAEvent.Name.DID_CREATE_EXAM_RUN, this.onChange);
+            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
         }
 
 
@@ -468,7 +468,7 @@ var React = require('react'),
 
 
         onClickCancel: function() {
-            Action.send(Action.Name.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
+            Action.send(Constants.Action.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
         }
 
 

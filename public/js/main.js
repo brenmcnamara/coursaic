@@ -1,8 +1,6 @@
 
 var Dispatcher = require('./dispatcher.js'),
     Stores = require('./stores'),
-    Action = require('./Action.js').Action,
-    CAEvent = require('./Event.js').CAEvent,
     View = require('./layout'),
     Validator = require('./validator.js'),
     Router = require('./router.js');
@@ -16,7 +14,7 @@ window.fbAsyncInit = function() {
             version    : 'v2.1'
     });
 
-    Schema.config();
+    Validator.config();
 
     Dispatcher.config({
         stores: [ Stores.CourseStore(), Stores.ExamStore(),
