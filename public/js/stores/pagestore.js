@@ -14,7 +14,7 @@
 var Dispatcher = require('../dispatcher.js'),
     Stores = require('../stores'),
     Router = require('../router.js'),
-    CAEvent = require('../Event.js').CAEvent,
+    Constants = require('../constants.js'),
 
     PageStore = Stores.Factory.createStore({
 
@@ -35,7 +35,7 @@ var Dispatcher = require('../dispatcher.js'),
                 self._currentMode = toMode;
                 // TODO: Should copy the payload.
                 self._currentPayload = toPayload;
-                self.emit(CAEvent.Name.CHANGED_MODE);
+                self.emit(Constants.Event.CHANGED_MODE);
                 resolve();
             });
         },
@@ -52,7 +52,7 @@ var Dispatcher = require('../dispatcher.js'),
                 }
                 self._currentMode = null;
                 self._currentPayload = null;
-                self.emit(CAEvent.Name.CHANGED_MODE);
+                self.emit(Constants.Event.CHANGED_MODE);
                 resolve();
             });
         },

@@ -11,7 +11,7 @@
 
 var Stores = require('../Stores'),
     Dispatcher = require('../dispatcher.js'),
-    CAEvent = require('../Event.js').CAEvent,
+    Constants = require('../constants.js'),
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,
@@ -96,7 +96,7 @@ var Stores = require('../Stores'),
                         function() {
                             // TODO: Maybe pass the course as a parameter
                             // to this event.
-                            self.emit(CAEvent.Name.DID_CREATE_COURSE);
+                            self.emit(Constants.Event.DID_CREATE_COURSE);
                         },
                         // Error.
                         function(error) {
@@ -116,7 +116,7 @@ var Stores = require('../Stores'),
                              .then(
                                 // Success.
                                 function() {
-                                    self.emit(CAEvent.Name.DID_CHANGE_ENROLLMENT);
+                                    self.emit(Constants.Event.DID_CHANGE_ENROLLMENT);
                                 },
                                 // Error.
                                 function(error) {
@@ -202,7 +202,7 @@ var Stores = require('../Stores'),
                            .then(
                                 // Success.
                                 function() {
-                                    self.emit(CAEvent.Name.DID_FETCH_COURSES);
+                                    self.emit(Constants.Event.DID_FETCH_COURSES);
                                 },
                                 // Error.
                                 function(error) {
@@ -219,7 +219,7 @@ var Stores = require('../Stores'),
                              .then(
                                 // Success.
                                 function() {
-                                    self.emit(CAEvent.Name.DID_CHANGE_ENROLLMENT);
+                                    self.emit(Constants.Event.DID_CHANGE_ENROLLMENT);
                                 },
                                 // Error.
                                 function(error) {

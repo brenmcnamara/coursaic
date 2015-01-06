@@ -11,8 +11,8 @@
 
 var Stores = require('../stores'),
 
+    Constants = require('../constants.js'),
     Dispatcher = require('../dispatcher.js'),
-    CAEvent = require('../Event.js').CAEvent,
 
     Question = require('./models.js').Question,
     Exam = require('./models.js').Exam,
@@ -286,7 +286,7 @@ var Stores = require('../stores'),
                         function (exam) {
                             self._examHash[exam.id] = exam;
                             self._questionHash[exam.id] = [];
-                            self.emit(CAEvent.Name.DID_CREATE_EXAM);
+                            self.emit(Constants.Event.DID_CREATE_EXAM);
                             resolve();
                         },
                         // Error.
@@ -319,7 +319,7 @@ var Stores = require('../stores'),
                           // Success.
                           function (question) {
                             self._questionHash[examId].push(question);
-                            self.emit(CAEvent.Name.DID_CREATE_QUESTION);
+                            self.emit(Constants.Event.DID_CREATE_QUESTION);
                             resolve();
                           },
 
@@ -431,9 +431,9 @@ var Stores = require('../stores'),
                             // have to generate an exam run to use.
                             if (payload.pageKey === 'exam') {
                                 self._examRun = self._generateExamRun();
-                                self.emit(CAEvent.Name.DID_CREATE_EXAM_RUN);
+                                self.emit(Constants.Event.DID_CREATE_EXAM_RUN);
                             }
-                            self.emit(CAEvent.Name.DID_FETCH_EXAMS,
+                            self.emit(Constants.Event.DID_FETCH_EXAMS,
                                       { courseId: payload.courseId });
                         },
 
@@ -485,9 +485,9 @@ var Stores = require('../stores'),
                             // and courses. In the exam case, we
                             // have to generate an exam run to use.
                             self._examRun = self._generateExamRun();
-                            self.emit(CAEvent.Name.DID_CREATE_EXAM_RUN);
+                            self.emit(Constants.Event.DID_CREATE_EXAM_RUN);
 
-                            self.emit(CAEvent.Name.DID_FETCH_EXAMS,
+                            self.emit(Constants.Event.DID_FETCH_EXAMS,
                                       { courseId: payload.courseId });
                         },
 
@@ -512,7 +512,7 @@ var Stores = require('../stores'),
                                     self.currentExamRun().setGuess(+prop, guesses[+prop]);
                                 }
                             }
-                            self.emit(CAEvent.Name.DID_GRADE_EXAM_RUN);
+                            self.emit(Constants.Event.DID_GRADE_EXAM_RUN);
                         },
                         // Error.
                         function (error) {
