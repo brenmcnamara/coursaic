@@ -151,6 +151,9 @@ var Stores = require('../Stores'),
                                     reject(error);
                                 });
                     }
+                    else {
+                        resolve();
+                    }
                 });
             },
 
@@ -179,6 +182,9 @@ var Stores = require('../Stores'),
                                 function (error) {
                                     reject(error);
                                 });
+                    }
+                    else {
+                        resolve();
                     }
                 });
             },

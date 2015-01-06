@@ -399,8 +399,9 @@ var Stores = require('../stores'),
                     .then(
                         // Success.
                         function() {
-                            return self._fetchExamsForCourse(
-                                    Stores.CourseStore().courseWithId(payload.courseId));
+                            var course = Stores.CourseStore().courseWithId(payload.courseId);
+                            return self._fetchExamsForCourse(course);
+
                         },
                         // Error.
                         function(error) {
@@ -453,8 +454,8 @@ var Stores = require('../stores'),
                     .then(
                         // Success.
                         function() {
-                            return self._fetchExamsForCourse(
-                                    Stores.CourseStore().courseWithId(payload.courseId));
+                            var course = Stores.CourseStore().courseWithId(payload.courseId);
+                            return self._fetchExamsForCourse(course);
                         },
                         // Error.
                         function(error) {
