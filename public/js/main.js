@@ -30,7 +30,7 @@ window.fbAsyncInit = function() {
             }
             // Assuming there is an error at this point.
             // Report back the first validation error in the list.
-            return Error("Action payload schema error for action " + action + ": " +
+            return Error("Action payload error for action " + action + ": " +
                          '"' + result.errors[0].message) + '".';
         }
 

@@ -96,11 +96,15 @@ var
     },
 
 
-    ErrorType = { };
+    ErrorType = { 
+
+        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS",
+
+    };
 
 
 module.exports = {
     Event: Event,
     Action: Action,
-    Error: Error
+    ErrorType: ErrorType
 };

@@ -8,6 +8,18 @@ var Util = require('./util.js');
 
 describe("Utility Object", function () {
 
+    describe("contains method", function () {
+
+        it("should determine if an item is in an array.", function () {
+            expect(Util.contains([1, 2, 3], 1)).toBeTruthy();
+        });
+
+        it("should determine if an item is not in an array.", function () {
+            expect(Util.contains([1, 2, 3], 4)).toBeFalsy();
+        });
+
+    });
+
     describe("copy method", function () {
 
         it("should copy primitive types", function () {

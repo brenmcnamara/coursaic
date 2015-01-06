@@ -7,8 +7,10 @@
 
 var 
     Action = require('./Action.js').Action,
-
+    Constants = require('./constants.js'),
     Schema = require('./schema'),
+    Stores = require('./Stores'),
+    Util = require('./util.js'),
 
     /**
      * An array of all checks that need to happen
@@ -20,7 +22,20 @@ var
      * @type Array
      */
     preDispatchChecks = [
-        // TODO: Implement me!
+        
+        {
+            details: "User must be logged in.",
+
+            actions: [ Constants.Action.LOAD_COURSE, Constants.Action.LOAD_EXAM_RUN ],
+
+            error: Constants.ErrorType.NO_USER_CREDENTIALS,
+
+            handler: function () {
+                return !!Stores.UserStore().current();
+            }
+
+        }
+
     ],
 
 
@@ -50,10 +65,37 @@ var
      *  related to the validation process.
      */
     validate = function (action, payload) {
-        console.log("Validating.");
         var result = Schema.validateAction(action, payload);
 
-        // TODO: Other checks go here.
+        if (!result.valid && result.hasSchema) {
+            // There is a schema error.
+            return result;
+        }
+
+
+        // No schema error detected. Go through all the
+        // dispatcher checks and see if there is any other
+        // error.
+        preDispatchChecks.forEach(function (check) {
+            if (Util.contains(check.actions, action)) {
+                var error;
+                // This check if relevant.
+                if (!check.handler()) {
+                    // The handler failed, this action
+                    // is not ready to be dispatched.
+                    result.valid = false;
+                    error = Error("Pre-Dispatch Checks failed with error: " + check.error);
+                    error.type = check.error;
+                    if (result.errors) {
+                        result.errors.push(error);
+                    }
+                    else {
+                        result.errors = [error];
+                    }
+                }
+            }
+        });
+
         return result;
     };
 

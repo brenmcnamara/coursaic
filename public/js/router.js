@@ -85,9 +85,17 @@ var
         if (!stateMap.directory.resolve()) {
             if (stateMap.defaultAction) {
                 Action.send(stateMap.defaultAction, { path: stateMap.directory.path() })
-                    .then(function () {
-                        emitter.emit(Constants.Event.PAGE_NOT_FOUND);
-                    });
+                    .then(
+                        // Success.
+                        function () {
+                            emitter.emit(Constants.Event.PAGE_NOT_FOUND);
+                        },
+                        // Failure.
+                        function (error) {
+                            // Routing failed.
+                            console.error(error);
+                            throw error;
+                        });
             }
         }
     },
@@ -226,9 +234,17 @@ var
         stateMap.directory.forCase(pattern, function (argMap) {
             var path = stateMap.directory.path();
             Action.send(action, Util.extend(argMap, { path: path }))
-                .then(function () {
-                    emitter.emit(Constants.Event.LOADED_PAGE);
-                });
+                .then(
+                    // Success.
+                    function () {
+                        emitter.emit(Constants.Event.LOADED_PAGE);
+                    },
+                    // Error.
+                    function (error) {
+                        console.error(error);
+                        throw error;
+                    });
+
             return true;
         });
     },
