@@ -17,8 +17,6 @@ var React = require('react'),
     render = function() {
         var matcher = Path.createPatternMatcher(Router.path());
 
-        unmountRoot();
-
         matcher.config({ allowPartialMatch: false });
 
         matcher.forCase("/", function (argMap) {
@@ -50,28 +48,6 @@ var React = require('react'),
                         document.getElementsByTagName('body')[0]);
         }
 
-    },
-
-
-    /**
-     * Unmount the root element
-     *
-     * @method _unmountRoot
-     * @private
-     *
-     * @return {Boolean} true if an element was
-     * unmounted, false otherwise.
-     */
-    unmountRoot = function() {
-        var result;
-        try {
-            result = React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-        }
-        catch (e) {
-            console.error(e);
-            throw e;
-        }
-        return result;
     },
 
 
