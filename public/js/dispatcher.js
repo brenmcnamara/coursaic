@@ -144,7 +144,7 @@ var
      * Check if there is an error when validating
      * the action and payload.
      *
-     * @method isValidSchema
+     * @method validateError
      * @private
      *
      * @param action {Action.Name} The name of the action
@@ -154,7 +154,7 @@ var
      *
      * @return {Error} The error if there is one, null otherwise.
      */
-    validationError = function (action, payload) {
+    validateError = function (action, payload) {
         if (stateMap.hooks.preDispatchValidator) {
             return stateMap.hooks.preDispatchValidator(action, payload);
         }
@@ -189,24 +189,17 @@ var
                 storeCalls = actionHandlers(name),
                 actionHandlerPromises;
 
-            if (!storeCalls) {
-                throw new Error("Action " + name + " must be registered.");
-            }
-
             if (stateMap.locked) {
                 throw new Error("Dispatcher trying to dispatch " + name +
                                 " while an action is already dispatching.");
             }
-            try {
-                error = validationError(name, payload);
-            }
-            catch (e) {
-                console.error(e);
-            }
+
+            error = validateError(name, payload);
 
             if (error) {
                 throw error;
             }
+
             // Lock the dispatcher before doing anything.
             stateMap.locked = true;
             this._currentAction = name;

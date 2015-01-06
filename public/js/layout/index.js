@@ -69,14 +69,33 @@ var React = require('react'),
      * @private
      */
     addRouting = function () {
-        Router.addRoute("/", Constants.Action.LOAD_HOME);
-        // TODO: Change course to courseId.
-        Router.addRoute("/course/<courseId>", Constants.Action.LOAD_COURSE);
-        Router.addRoute("/course/<courseId>/exam/<_>", Constants.Action.LOAD_COURSE);
-        Router.addRoute("/course/<courseId>/exam/<examId>/take", Constants.Action.LOAD_EXAM_RUN);
+        Router.registerRoute("/", Constants.Action.LOAD_HOME);
+        Router.registerRoute("/course/<courseId>", Constants.Action.LOAD_COURSE);
+        Router.registerRoute("/course/<courseId>/exam/<_>", Constants.Action.LOAD_COURSE);
+        Router.registerRoute("/course/<courseId>/exam/<examId>/take", Constants.Action.LOAD_EXAM_RUN);
 
-        Router.addDefaultRoute(Constants.Action.LOAD_NOT_FOUND);
+        Router.registerDefaultRoute(Constants.Action.LOAD_NOT_FOUND);
 
+    },
+
+
+    /**
+     * Setup the error handling for any errors
+     * that are propogated through the router.
+     */
+    addErrorHandling = function () {
+
+        Router.registerError(Constants.ErrorType.NO_USER_CREDENTIALS, function () {
+            console.log("No user credentials.");
+        });
+
+        Router.registerError(Constants.ErrorType.INVALID_ROUTE, function () {
+            console.log("Invalid routing.");
+        });
+
+        Router.registerDefaultError(function () {
+            console.log("Default error.");
+        });
     };
 
 
@@ -88,6 +107,8 @@ module.exports = {
         Router.on(Constants.Event.PAGE_NOT_FOUND, onLoad);
 
         addRouting();
+        addErrorHandling();
+
         Router.watch({ initialLoad: true });
     }
 

@@ -30,8 +30,10 @@ window.fbAsyncInit = function() {
             }
             // Assuming there is an error at this point.
             // Report back the first validation error in the list.
-            return Error("Action payload error for action " + action + ": " +
-                         '"' + result.errors[0].message) + '".';
+            error = Error("Action payload error for action " + action + ": " +
+                          '"' + result.errors[0].message) + '".';
+            error.type = result.errors[0].type;
+            return result.errors[0];
         }
 
     });

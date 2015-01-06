@@ -21,6 +21,13 @@ var
         // by set interval.
         watchId: null,
 
+        // An array of error handler objects used to map
+        // an error to a single handler.
+        errorHandlers: [],
+
+        // The default error handler function.
+        defaultErrorHandler: null,
+
         // A pattern matcher used to resolve routes to
         // actions.
         directory: null,
@@ -94,7 +101,17 @@ var
                         function (error) {
                             // Routing failed.
                             console.error(error);
-                            throw error;
+                            if (!error.type) {
+                                stateMap.defaultErrorHandler();
+                            }
+
+                            var i, n;
+                            for (i = 0, n = stateMap.errorHandlers.length; i < n; ++i) {
+                                if (stateMap.errorHandlers[i].errorType === error.type) {
+                                    stateMap.errorHandlers[i].handler();
+                                    return;
+                                }
+                            }
                         });
             }
         }
@@ -217,12 +234,12 @@ var
 
 
     /**
-     * Add a route to watch for that will trigger a specified
+     * Register a route to watch for that will trigger a specified
      * action. The action that is dispatched on the pattern will
      * be given a payload containing all the resolved variables
      * in the pattern, and the current path (key name "path").
      *
-     * @method addRoute
+     * @method registerRoute
      *
      * @param pattern {String} The pattern to match against
      *  the route.
@@ -230,7 +247,7 @@ var
      * @param action {Action.Name} The name of the action to
      *  execute when the pattern has been achieved.
      */
-    addRoute = function (pattern, action) {
+    registerRoute = function (pattern, action) {
         stateMap.directory.forCase(pattern, function (argMap) {
             var path = stateMap.directory.path();
             Action.send(action, Util.extend(argMap, { path: path }))
@@ -241,8 +258,21 @@ var
                     },
                     // Error.
                     function (error) {
+                        // TODO: This code exists in 2 places. Abstract
+                        // out to a function.
                         console.error(error);
-                        throw error;
+                        if (!error.type) {
+                            stateMap.defaultErrorHandler();
+                        }
+
+                        var i, n;
+                        for (i = 0, n = stateMap.errorHandlers.length; i < n; ++i) {
+                            if (stateMap.errorHandlers[i].errorType === error.type) {
+                                stateMap.errorHandlers[i].handler();
+                                return;
+                            }
+                        }
+
                     });
 
             return true;
@@ -251,18 +281,49 @@ var
 
 
     /**
-     * Add an action for a default route. This action is sent
+     * Register an action for a default route. This action is sent
      * if the current route is not handled by any other. This is
      * optional, no action is required for bad routes.
      *
-     * @method addDefaultRoute
+     * @method registerDefaultRoute
      *
      * @param action {Action.Name} The action that is sent when
      *  the route has failed. This action is given a payload containing
      *  the path that was attempted (key = "path").
      */
-    addDefaultRoute = function (action) {
+    registerDefaultRoute = function (action) {
         stateMap.defaultAction = action;
+    },
+
+
+    /**
+     * Register an error with the router and a handler to handle
+     * the error. If multiple errors appear, only the first error
+     * will be triggered.
+     *
+     * @method registerError
+     *
+     * @param errorType {String} The error to register.
+     *
+     * @param handler {Function} The handler for the error
+     *  when it appears.
+     */
+    registerError = function (errorType, handler) {
+        stateMap.errorHandlers.push({errorType: errorType, handler: handler });
+    },
+
+
+    /**
+     * Register an error handler for any errors that do not
+     * have a type listed.
+     *
+     * @method registerDefaultError
+     *
+     * @param handler {Function} The handler to call when a
+     *  default error is detected.
+     */
+    registerDefaultError = function (handler) {
+        stateMap.defaultErrorHandler = handler;
     },
 
 
@@ -296,8 +357,10 @@ var
 
 module.exports = {
 
-    addDefaultRoute: addDefaultRoute,
-    addRoute: addRoute,
+    registerDefaultRoute: registerDefaultRoute,
+    registerRoute: registerRoute,
+    registerError: registerError,
+    registerDefaultError: registerDefaultError,
     path: path,
     on: on,
     removeListener: removeListener,

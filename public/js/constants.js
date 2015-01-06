@@ -98,7 +98,9 @@ var
 
     ErrorType = { 
 
-        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS",
+        INVALID_ROUTE: "INVALID_ROUTE",
+
+        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS"
 
     };
 
