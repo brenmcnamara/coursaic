@@ -5,8 +5,9 @@
 var
     Util = require('./util.js'),
     Action = require('./Action.js').Action,
+    Constants = require('./constants.js'),
     Path = require('./path.js'),
-    CAEvent = require('./Event.js').CAEvent,
+
 
     emitter = new (require('events').EventEmitter)(),
 
@@ -85,7 +86,7 @@ var
             if (stateMap.defaultAction) {
                 Action.send(stateMap.defaultAction, { path: stateMap.directory.path() })
                     .then(function () {
-                        emitter.emit(CAEvent.Name.PAGE_NOT_FOUND);
+                        emitter.emit(Constants.Event.PAGE_NOT_FOUND);
                     });
             }
         }
@@ -226,7 +227,7 @@ var
             var path = stateMap.directory.path();
             Action.send(action, Util.extend(argMap, { path: path }))
                 .then(function () {
-                    emitter.emit(CAEvent.Name.LOADED_PAGE);
+                    emitter.emit(Constants.Event.LOADED_PAGE);
                 });
             return true;
         });
