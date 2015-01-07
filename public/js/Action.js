@@ -6,7 +6,7 @@
  * and dispatcher.
  */
 
-var Dispatcher = require('./dispatcher.js'),
+var Dispatcher = require('./torque').Dispatcher,
 
     Action = {};
 

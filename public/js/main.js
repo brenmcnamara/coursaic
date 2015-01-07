@@ -1,5 +1,5 @@
 
-var Dispatcher = require('./dispatcher.js'),
+var Dispatcher = require('./torque').Dispatcher,
     Stores = require('./stores'),
     View = require('./layout'),
     Validator = require('./validator.js'),

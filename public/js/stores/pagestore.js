@@ -11,7 +11,7 @@
 
 /*global Store */
 
-var Dispatcher = require('../dispatcher.js'),
+var Dispatcher = require('../torque').Dispatcher,
     Stores = require('../stores'),
     Router = require('../router.js'),
     Constants = require('../constants.js'),

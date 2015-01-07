@@ -6,7 +6,7 @@
 
 
 var Stores = require('../stores'),
-    Dispatcher = require('../dispatcher.js'),
+    Dispatcher = require('../torque').Dispatcher,
     Constants = require('../constants.js'),
 
     School = Parse.Object.extend("School"),

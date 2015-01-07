@@ -12,7 +12,7 @@
 var Stores = require('../stores'),
 
     Constants = require('../constants.js'),
-    Dispatcher = require('../dispatcher.js'),
+    Dispatcher = require('../torque').Dispatcher,
 
     Question = require('./models.js').Question,
     Exam = require('./models.js').Exam,
