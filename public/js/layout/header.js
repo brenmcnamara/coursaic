@@ -12,7 +12,7 @@ var React = require('react'),
     Stores = require('../stores'),
 
     Router = require('../router.js'),
-    Action = require('../Action.js').Action,
+    Action = require('../torque').Action,
     Constants = require('../constants.js'),
 
     /**

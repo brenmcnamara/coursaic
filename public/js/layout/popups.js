@@ -12,7 +12,7 @@ var React = require('react'),
     Router = require('../router.js'),
     Util = require('../util.js'),
     Constants = require('../constants.js')
-    Action = require('../Action.js').Action,
+    Action = require('../torque').Action,
 
     /**
      * A popup form for creating a course.

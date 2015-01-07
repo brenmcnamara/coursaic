@@ -4,7 +4,7 @@
 
 var
     Util = require('./util.js'),
-    Action = require('./Action.js').Action,
+    Action = require('./torque').Action,
     Constants = require('./constants.js'),
     Path = require('./path.js'),
 

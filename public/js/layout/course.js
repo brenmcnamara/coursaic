@@ -16,7 +16,7 @@ var React = require('react'),
 
     Formatter = require('../formatter.js'),
 
-    Action = require('../Action.js').Action,
+    Action = require('../torque').Action,
     Constants = require('../constants.js'),
     Router = require('../router.js'),
 

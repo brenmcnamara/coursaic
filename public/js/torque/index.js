@@ -6,5 +6,6 @@
 
 module.exports = {
     Dispatcher: require('./dispatcher.js'),
-    StoreBuilder: require('./storebuilder.js')
+    StoreBuilder: require('./storebuilder.js'),
+    Action: require('./action.js')
 };

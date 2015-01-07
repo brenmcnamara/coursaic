@@ -6,7 +6,7 @@
  */
 
 var 
-    Action = require('./Action.js').Action,
+    Action = require('./torque').Action,
     Constants = require('./constants.js'),
     Schema = require('./schema'),
     Stores = require('./Stores'),

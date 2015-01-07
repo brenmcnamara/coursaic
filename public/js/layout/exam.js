@@ -9,7 +9,7 @@ var React = require('react'),
     WidgetsLayout = require('./widgets.js'),
     PopupsLayout = require('./popups.js'),
 
-    Action = require('../Action.js').Action,
+    Action = require('../torque').Action,
     Constants = require('../constants.js'),
     Router = require('../router.js'),
 
