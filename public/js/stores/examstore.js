@@ -147,7 +147,7 @@ var Stores = require('../stores'),
                 throw error;
             }
 
-            return new ExamRun(randomQuestions);
+            return new ExamRun(allQuestions);
         },
 
 
@@ -456,35 +456,23 @@ var Stores = require('../stores'),
                 // for the exam.
                 return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
                     // After the CourseStore has finished.
-                    .then(
-                        // Success.
-                        function() {
+                    .then(function() {
                             var course = Stores.CourseStore().courseWithId(payload.courseId);
                             return self._fetchExamsForCourse(course);
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
+                    })
+                    
                     // After the exams have been fetched for the course.
-                    .then(
-                        // Success.
-                        function(exams) {
+                    .then(function(exams) {
                             // Map the exams in the course into
                             // a list of promises.
                             return Promise.all(exams.map(function(exam) {
                                 // Load all the data in the exam.
                                 return self._loadExam(exam);
                             }));
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
+                    })
+                    
                     // After all the exams have been loaded.
-                    .then(
-                        // Success.
-                        function() {
+                    .then(function() {
                             // NOTE: This case is for both exam
                             // and courses. In the exam case, we
                             // have to generate an exam run to use.
@@ -493,12 +481,7 @@ var Stores = require('../stores'),
 
                             self.emit(Constants.Event.DID_FETCH_EXAMS,
                                       { courseId: payload.courseId });
-                        },
-
-                        // Error.
-                        function(error) {
-                            throw error;
-                        });
+                    });
             },
 
 

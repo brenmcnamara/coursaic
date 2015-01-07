@@ -202,7 +202,6 @@ var
 
             // Lock the dispatcher before performing dispatch to
             // stores.
-            console.log("Locking.");
             stateMap.locked = true;
             this._currentAction = name;
             // Get all the promises that are produced
@@ -231,7 +230,6 @@ var
                             },
                             // On error
                             function(err) {
-                                console.log("Error called.");
                                 // TODO: Take another look at this
                                 // error handling here.
                                 

@@ -62,6 +62,11 @@ var React = require('react'),
         render();
     },
 
+    onInvalidLoad = function (event) {
+        React.render(React.createFactory(ErrorPage.Root)(),
+                     document.getElementsByTagName('body')[0]);
+    },
+
     /**
      * Setup the routing for the application.
      *
@@ -89,13 +94,12 @@ var React = require('react'),
             console.log("No user credentials.");
         });
 
-        Router.registerError(Constants.ErrorType.INVALID_ROUTE, function () {
-            console.log("Invalid routing.");
-        });
+        Router.registerError(Constants.ErrorType.INVALID_EXAM_RUN, Router.ErrorOperation.pageNotFound);
 
         Router.registerDefaultError(function () {
             console.log("Default error.");
         });
+
     };
 
 
@@ -104,7 +108,7 @@ module.exports = {
     register: function () {
         Router.config({ location: window.location });
         Router.on(Constants.Event.LOADED_PAGE, onLoad);
-        Router.on(Constants.Event.PAGE_NOT_FOUND, onLoad);
+        Router.on(Constants.Event.PAGE_NOT_FOUND, onInvalidLoad);
 
         addRouting();
         addErrorHandling();

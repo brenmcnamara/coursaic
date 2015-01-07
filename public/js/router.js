@@ -357,7 +357,31 @@ var
       *
       * @param callback {Function} The callback to remove.
       */
-    removeListener = emitter.removeListener.bind(emitter);
+    removeListener = emitter.removeListener.bind(emitter),
+
+
+    /**
+     * A set of predefined functions that can be used to
+     * handle errors.
+     *
+     * @property ErrorOperation
+     * @type Object
+     */
+    ErrorOperation = {
+
+        /**
+         * Handle the error by simulating a page-not-found
+         * type error. This will cause the PAGE_NOT_FOUND
+         * event to be emitted from the Router.
+         *
+         * @method pageNotFound
+         */
+        pageNotFound: function () {
+            emitter.emit(Constants.Event.PAGE_NOT_FOUND);
+        }
+
+    };
+
 
 
 module.exports = {
@@ -372,5 +396,7 @@ module.exports = {
     matchArguments: matchArguments,
     watch: watch,
     unwatch: unwatch,
-    config: config
+    config: config,
+
+    ErrorOperation: ErrorOperation
 };
