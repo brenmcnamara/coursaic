@@ -200,7 +200,9 @@ var
                 throw error;
             }
 
-            // Lock the dispatcher before doing anything.
+            // Lock the dispatcher before performing dispatch to
+            // stores.
+            console.log("Locking.");
             stateMap.locked = true;
             this._currentAction = name;
             // Get all the promises that are produced
@@ -210,7 +212,7 @@ var
                     var index = storeCall.index,
                         callback = storeCall.callback;
                     // TODO: Clean up unnecessary nested promises.
-                    return new Promise(function(resolve) {
+                    return new Promise(function(resolve, reject) {
                         callback(payload).then(
                             // On success
                             function() {
@@ -229,20 +231,24 @@ var
                             },
                             // On error
                             function(err) {
-                                // Reject the encompassing promise create
-                                // at the root of Dispatch's scope.
-                                reject(err);
+                                console.log("Error called.");
+                                // TODO: Take another look at this
+                                // error handling here.
+                                
                                 // Notify all objects waiting for the
                                 // resolution of this callback to resolve
                                 // that the callback has rejection.
                                 (stateMap.waitHash_reject[index] || [])
                                 .forEach(function(wait_reject) {
-                                        wait_reject();
+                                        wait_reject(err);
                                     });
                                 // Empty out all resolution and rejection
                                 // calls associated with this index.
                                 stateMap.waitHash_resolve[index] = [];
                                 stateMap.waitHash_reject[index] = [];
+                                // Reject the encompassing promise created
+                                // at the root of Dispatch's scope.
+                                reject(err);
                             }
                         );
                     });
@@ -251,20 +257,20 @@ var
                 Promise.all(actionHandlerPromises)
                     // All store promises have completed.
                     .then(
-                    // Success callback
-                    function() {
-                        stateMap.locked = false;
-                        self._currentAction = null;
-                        resolve();
-                    },
-                    // Failure callback
-                    function(err) {
-                        stateMap.locked =  false;
-                        self._currentAction = null;
+                        // Success callback
+                        function() {
+                            stateMap.locked = false;
+                            self._currentAction = null;
+                            resolve();
+                        },
 
-                        // TODO: Should clear the waitHash.
-                        reject(err);
-                    });
+                        // Failure callback
+                        function(err) {
+                            stateMap.locked =  false;
+                            self._currentAction = null;
+
+                            reject(err);
+                        });
             }
             else {
                 // No actions to take, just resolve this action.
