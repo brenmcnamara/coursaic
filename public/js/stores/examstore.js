@@ -124,23 +124,28 @@ var Stores = require('../stores'),
          * @method _generateExamRun
          * @private
          *
+         * @throw Error if trying to take an exam run for
+         *  an exam that has no questions.
+         *
          * @return {ExamRun} An exam run of the current exam.
          */
         _generateExamRun: function() {
             var MAX_QUESTION_COUNT = 30,
+
+                error,
+
                 // Make a copy of the array, since the array will be
                 // modified by the randomization algorithm. Note that
                 // the array is modified, but the questions inside the
                 // array are not.
-                allQuestions = this.questionsForExam(this.current()).slice(),
-                // An array of random questions pulled to be in the exam run.
-                // The maximum number of random questions is equal to the exam
-                // run.
-                randomQuestions, i, randomIndex;
+                allQuestions = this.questionsForExam(this.current()).slice();
 
-            // TODO: Implement the randomization algorithm. For
-            // now, just set the set of questions to all the questions available.
-            randomQuestions = allQuestions;
+            if (!allQuestions.length) {
+                // No questions.
+                error = Error("No questions for the exam run.");
+                error.type = Constants.ErrorType.INVALID_EXAM_RUN;
+                throw error;
+            }
 
             return new ExamRun(randomQuestions);
         },

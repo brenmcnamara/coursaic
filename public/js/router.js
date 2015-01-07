@@ -112,6 +112,9 @@ var
                                     return;
                                 }
                             }
+                            // The error type is not being handled.
+                            // Called the default handler.
+                            stateMap.defaultErrorHandler();
                         });
             }
         }
@@ -260,19 +263,21 @@ var
                     function (error) {
                         // TODO: This code exists in 2 places. Abstract
                         // out to a function.
+                        var i, n;
                         console.error(error);
                         if (!error.type) {
                             stateMap.defaultErrorHandler();
                         }
 
-                        var i, n;
                         for (i = 0, n = stateMap.errorHandlers.length; i < n; ++i) {
                             if (stateMap.errorHandlers[i].errorType === error.type) {
                                 stateMap.errorHandlers[i].handler();
                                 return;
                             }
                         }
-
+                        // The error type is not being handled.
+                        // Called the default handler.
+                        stateMap.defaultErrorHandler();
                     });
 
             return true;

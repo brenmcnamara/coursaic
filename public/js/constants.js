@@ -98,7 +98,7 @@ var
 
     ErrorType = { 
 
-        INVALID_ROUTE: "INVALID_ROUTE",
+        INVALID_EXAM_RUN: "INVALID_EXAM_RUN",
 
         NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS"
 
