@@ -12,6 +12,7 @@
 var Stores = require('../Stores'),
     Dispatcher = require('../torque').Dispatcher,
     Constants = require('../constants.js'),
+    StoreBuilder = require('../torque').StoreBuilder,
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,
@@ -23,7 +24,7 @@ var Stores = require('../Stores'),
      * @module Store
      * @class CourseStore
      */
-    CourseStore = Stores.Factory.createStore({
+    CourseStore = StoreBuilder.createStore({
 
         initialize: function () {
             this._isFetching = false;

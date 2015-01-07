@@ -12,11 +12,12 @@
 /*global Store */
 
 var Dispatcher = require('../torque').Dispatcher,
+    StoreBuilder = require('../torque').StoreBuilder,
     Stores = require('../stores'),
     Router = require('../router.js'),
     Constants = require('../constants.js'),
 
-    PageStore = Stores.Factory.createStore({
+    PageStore = StoreBuilder.createStore({
 
         initializer: function () {
             this._currentMode = null;

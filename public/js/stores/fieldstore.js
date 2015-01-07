@@ -16,6 +16,8 @@ var Stores = require('../stores'),
     
     Field = require('./models.js').Field,
 
+    StoreBuilder = require('../torque').StoreBuilder,
+
     /**
      * Private constructor for the field store.
      *
@@ -23,7 +25,7 @@ var Stores = require('../stores'),
      * @private
      * @constructor
      */
-    FieldStore = Stores.Factory.createStore({
+    FieldStore = StoreBuilder.createStore({
 
         initialize: function () {
             this._fieldHash = {};

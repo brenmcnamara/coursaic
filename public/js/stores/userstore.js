@@ -7,6 +7,7 @@
 
 var Stores = require('../stores'),
     Dispatcher = require('../torque').Dispatcher,
+    StoreBuilder = require('../torque').StoreBuilder,
     Constants = require('../constants.js'),
 
     School = Parse.Object.extend("School"),
@@ -19,7 +20,7 @@ var Stores = require('../stores'),
      * @module Store
      * @class UserStore
      */
-    UserStore = Stores.Factory.createStore({
+    UserStore = StoreBuilder.createStore({
 
         initialize: function () {
             this._userHash = {};

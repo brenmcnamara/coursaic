@@ -18,7 +18,9 @@ var Stores = require('../stores'),
     Exam = require('./models.js').Exam,
     ExamRun = require('./models.js').ExamRun,
 
-    ExamStore = Stores.Factory.createStore({
+    StoreBuilder = require('../torque').StoreBuilder,
+
+    ExamStore = StoreBuilder.createStore({
 
         initialize: function () {
             this.dispatcherIndex = 4;

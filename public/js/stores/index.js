@@ -47,9 +47,6 @@ module.exports = {
             cache.UserStore = require('./userstore.js');
         }
         return cache.UserStore;
-    },
-
-
-    Factory: require('./factory.js')
+    }
 
 };

@@ -1,5 +1,5 @@
 /**
- * factory.js
+ * storebuilder.js
  */
 
 
