@@ -4,7 +4,7 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
-    Path = require('../path.js'),
+    Matcher = require('../flex-node').Matcher,
     Router = require('../router.js'),
 
     Constants = require('../constants.js'),
@@ -15,7 +15,7 @@ var React = require('react'),
     ErrorPage = require('./404.js'),
 
     render = function() {
-        var matcher = Path.createPatternMatcher(Router.path());
+        var matcher = Matcher.createPatternMatcher(Router.path());
 
         matcher.config({ allowPartialMatch: false });
 

@@ -10,9 +10,9 @@
 */
 
 var Stores = require('../Stores'),
-    Dispatcher = require('flex-node').Dispatcher,
+    Dispatcher = require('../flex-node').Dispatcher,
     Constants = require('../constants.js'),
-    StoreBuilder = require('flex-node').StoreBuilder,
+    StoreBuilder = require('../flex-node').StoreBuilder,
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,

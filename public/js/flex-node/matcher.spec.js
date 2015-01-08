@@ -1,51 +1,51 @@
 /**
- * path.spec.js
+ * matcher.spec.js
  */
 
-var Path = require('./path.js');
+var Matcher = require('./matcher.js');
 
-describe("Path", function () {
+describe("Matcher", function () {
 
     it("should have simple criteria for valid paths.", function () {
         var matcher;
 
-        expect(Path.isValidPath("/")).toBeTruthy();
-        expect(Path.isValidPath("/hello/world")).toBeTruthy();
-        expect(Path.isValidPath("blah/blah")).toBeFalsy();
-        expect(Path.isValidPath("/blah/blah/")).toBeFalsy();
-        expect(Path.isValidPath("//")).toBeFalsy();
+        expect(Matcher.isValidPath("/")).toBeTruthy();
+        expect(Matcher.isValidPath("/hello/world")).toBeTruthy();
+        expect(Matcher.isValidPath("blah/blah")).toBeFalsy();
+        expect(Matcher.isValidPath("/blah/blah/")).toBeFalsy();
+        expect(Matcher.isValidPath("//")).toBeFalsy();
     });
 
     it("should retrict valid paths to paths without these chars: (,),<,>,[,],_.", function () {
         var matcher;
 
-        expect(Path.isValidPath("/hello/(")).toBeFalsy();
-        expect(Path.isValidPath("/hello/)")).toBeFalsy();
-        expect(Path.isValidPath("/hello/<")).toBeFalsy();
-        expect(Path.isValidPath("/hello/>")).toBeFalsy();
-        expect(Path.isValidPath("/hello/[")).toBeFalsy();
-        expect(Path.isValidPath("/hello/]")).toBeFalsy();
-        expect(Path.isValidPath("/hello/_")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/(")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/)")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/<")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/>")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/[")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/]")).toBeFalsy();
+        expect(Matcher.isValidPath("/hello/_")).toBeFalsy();
     });
 
     it("should perform quick pattern matching on current path.", function () {
         var path = "/home/1234567890";
-        expect(Path.matchArguments("/home/<schoolId>", path)).toEqual({ schoolId: "1234567890"});
-        expect(Path.matchArguments("/home/<_>/<somethingElse>", path)).toEqual({});
+        expect(Matcher.matchArguments("/home/<schoolId>", path)).toEqual({ schoolId: "1234567890"});
+        expect(Matcher.matchArguments("/home/<_>/<somethingElse>", path)).toEqual({});
     });
 
     it("should perform quick partial matching on current path.", function () {
         var path = "/home/1234567890/course/2345678901";
-        expect(Path.matchArguments("/home/<schoolId>", path)).toEqual({ schoolId: "1234567890"});
+        expect(Matcher.matchArguments("/home/<schoolId>", path)).toEqual({ schoolId: "1234567890"});
     });
 
-    describe("Pattern Matcher", function () {
+    describe("Pattern Matcher object", function () {
 
         it("should call the correct case statement.", function () {
             var matcher, didMatchCase = false,
                 path = "/path/to/page";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/not/path/to/page', function (argMap) { });
 
@@ -63,7 +63,7 @@ describe("Path", function () {
             var matcher, didReturnCase = false,
                 path = "/path/to/page";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/path/to/page', function (argMap) {
                 return true;
@@ -79,7 +79,7 @@ describe("Path", function () {
             var matcher, didMatchSchoolId = false,
                 path = "/home/e4F3G679Dj";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/home/<schoolId>', function (argMap) {
                 didMatchSchoolId = (argMap.schoolId === "e4F3G679Dj");
@@ -96,7 +96,7 @@ describe("Path", function () {
                 didMatchValidCase = false,
                 path = "/home";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase("/<pageKey:(\\d+)>", function (argMap) {
                 didMatchInvalidCase = true;
@@ -115,7 +115,7 @@ describe("Path", function () {
             var matcher, didMatchAllPatterns = false,
                 path = "/home/e4F3G679Dj/course/Lkf6h6G93J";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase("/home/<schoolId>/course/<courseId>", function (argMap) {
                 didMatchAllPatterns = (argMap.schoolId === "e4F3G679Dj" &&
@@ -131,7 +131,7 @@ describe("Path", function () {
             var matcher, didResolveUnderscore = false,
                 path = '/home/1234567890';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/home/<_>', function (argMap) {
                 didResolveUnderscore = true;
@@ -146,7 +146,7 @@ describe("Path", function () {
             var matcher, didResolveUnderscore = false,
                 path = '/home/123';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase("/home/<_>", function (argMap) {
                 didResolveUnderscore = true;
@@ -162,7 +162,7 @@ describe("Path", function () {
             var matcher, didResolveUnderscore = false,
                 path = '/home/e4F3G679Dj';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/<_:([A-Za-z]+)>/e4F3G679Dj', function (argMap) {
                 didResolveUnderscore = true;
@@ -177,7 +177,7 @@ describe("Path", function () {
             var matcher, didResolveUnderscore = false,
                 path = '/home';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/<_:(course)', function (argMap) {
                 didResolveUnderscore = true;
@@ -193,7 +193,7 @@ describe("Path", function () {
             var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false,
                 path = '/home/path/to/blah';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/home/path/to/blah', function (argMap) {
                 didMakeFirstMatch = true;
@@ -214,7 +214,7 @@ describe("Path", function () {
             var matcher, didPartialMatch = false,
                 path = '/home/path/to/blah';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/home/path', function () {
                 didPartialMatch = true;
@@ -229,7 +229,7 @@ describe("Path", function () {
             var matcher, didPartialMatchWithArgs = false,
                 path = '/home/path/to/blah';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             matcher.forCase('/home/path/<word:([a-z]+)>', function (argMap) {
                 didPartialMatchWithArgs = (argMap.word === 'to');
@@ -243,7 +243,7 @@ describe("Path", function () {
             var matcher, didPartialMatch = false,
                 path = '/home/path/to/blah';
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
             matcher.config({ allowPartialMatch: false });
 
             matcher.forCase('/home/path', function () {
@@ -258,7 +258,7 @@ describe("Path", function () {
         it("should resolve to null if all cases fail.", function () {
             var matcher,
                 path = '/home';
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
             expect(matcher.resolve()).toBe(null);
         });
 
@@ -266,7 +266,7 @@ describe("Path", function () {
             var matcher,
                 path = "/home";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
             matcher.config({ defaultResolveValue: [] });
 
             expect(matcher.resolve()).toEqual([]);
@@ -276,7 +276,7 @@ describe("Path", function () {
             var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false,
                 path = "/home/1234567890/course/2345678910";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
 
             // Both cases match the path, but only the first case
             // should be run because this is getting short-circuited.
@@ -297,7 +297,7 @@ describe("Path", function () {
             var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false,
                 path = "/home/1234567890/course/2345678910";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
             matcher.config({ shortCircuit: false });
 
             matcher.forCase("/home/<schoolId>", function (argMap) {
@@ -317,7 +317,7 @@ describe("Path", function () {
             var matcher, didMakeFirstMatch = false, didMakeSecondMatch = false,
                 path = "/home/1234567890/course/2345678910";
 
-            matcher = Path.createPatternMatcher(path);
+            matcher = Matcher.createPatternMatcher(path);
             matcher.config({ shortCircuit: false });
 
             matcher.forCase("/home/<schoolId>", function (argMap) {
@@ -333,7 +333,7 @@ describe("Path", function () {
         });
 
         it("should allow the path of the pattern matcher to change.", function () {
-            var matcher = Path.createPatternMatcher("/home"),
+            var matcher = Matcher.createPatternMatcher("/home"),
                 didMatchHome = false, didMatchSplash = false;
             matcher.forCase("/home", function() {
                 didMatchHome = true;

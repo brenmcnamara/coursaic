@@ -3,10 +3,10 @@
  */
 
 var
-    Util = require('./util.js'),
-    Action = require('flex-node').Action,
+    Util = require('./flex-node').Util,
+    Action = require('./flex-node').Action,
     Constants = require('./constants.js'),
-    Path = require('./path.js'),
+    Matcher = require('./flex-node').Matcher,
 
 
     emitter = new (require('events').EventEmitter)(),
@@ -132,7 +132,7 @@ var
         
         hash = getHash();
 
-        stateMap.directory = Path.createPatternMatcher(hash);
+        stateMap.directory = Matcher.createPatternMatcher(hash);
         stateMap.directory.config({ allowPartialMatch: false });
     },
 
@@ -196,7 +196,7 @@ var
      *  variables in the pattern.
      */
     matchArguments = function (pattern) {
-        return Path.matchArguments(pattern, stateMap.directory.path());
+        return Matcher.matchArguments(pattern, stateMap.directory.path());
     },
 
 

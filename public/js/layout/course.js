@@ -16,11 +16,11 @@ var React = require('react'),
 
     Formatter = require('../formatter.js'),
 
-    Action = require('flex-node').Action,
+    Action = require('../flex-node').Action,
     Constants = require('../constants.js'),
     Router = require('../router.js'),
 
-    Util = require('../util.js'),
+    Util = require('../flex-node').Util,
 
     /**
      * The root element on the Course

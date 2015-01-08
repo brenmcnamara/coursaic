@@ -9,11 +9,11 @@ var React = require('react'),
     WidgetsLayout = require('./widgets.js'),
     PopupsLayout = require('./popups.js'),
 
-    Action = require('flex-node').Action,
+    Action = require('../flex-node').Action,
     Constants = require('../constants.js'),
     Router = require('../router.js'),
 
-    Util = require('../util.js'),
+    Util = require('../flex-node').Util,
 
     /*
      * The root element of the exam page.

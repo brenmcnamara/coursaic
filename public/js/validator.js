@@ -6,11 +6,11 @@
  */
 
 var 
-    Action = require('flex-node').Action,
+    Action = require('./flex-node').Action,
     Constants = require('./constants.js'),
     Schema = require('./schema'),
     Stores = require('./Stores'),
-    Util = require('./util.js'),
+    Util = require('./flex-node').Util,
 
     /**
      * An array of all checks that need to happen

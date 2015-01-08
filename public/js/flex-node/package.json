@@ -1,0 +1,27 @@
+{
+  "name": "flex-node",
+  "version": "0.0.1",
+  "description": "A front-end web framework built on browserify and react.",
+  "main": "index.js",
+  "author": {
+    "name": "Brendan McNamara"
+  },
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brenmcnamara/torque"
+  },
+  "dependencies": {
+    "promise": "~6.0.1"
+  },
+  "gitHead": "024bc90893e0bac6c18de59af5d38581baa0bfc0",
+  "bugs": {
+    "url": "https://github.com/brenmcnamara/torque/issues"
+  },
+  "readme": "ERROR: No README data found!",
+  "homepage": "https://github.com/brenmcnamara/torque",
+  "_id": "flex-node@0.0.1",
+  "scripts": {},
+  "_shasum": "dd5aa4edab1720a7a95a8f17f09eead0302fbaa7",
+  "_from": "flex-node@"
+}

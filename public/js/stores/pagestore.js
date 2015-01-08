@@ -11,8 +11,8 @@
 
 /*global Store */
 
-var Dispatcher = require('flex-node').Dispatcher,
-    StoreBuilder = require('flex-node').StoreBuilder,
+var Dispatcher = require('../flex-node').Dispatcher,
+    StoreBuilder = require('../flex-node').StoreBuilder,
     Stores = require('../stores'),
     Router = require('../router.js'),
     Constants = require('../constants.js'),
