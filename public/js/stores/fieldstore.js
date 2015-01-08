@@ -10,13 +10,13 @@
 */
 
 var Stores = require('../stores'),
-    Dispatcher = require('../torque').Dispatcher,
+    Dispatcher = require('flex-node').Dispatcher,
 
     Constants = require('../constants.js'),
     
     Field = require('./models.js').Field,
 
-    StoreBuilder = require('../torque').StoreBuilder,
+    StoreBuilder = require('flex-node').StoreBuilder,
 
     /**
      * Private constructor for the field store.

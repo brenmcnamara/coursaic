@@ -1,5 +1,5 @@
 
-var Dispatcher = require('./torque').Dispatcher,
+var Dispatcher = require('flex-node').Dispatcher,
     Stores = require('./stores'),
     View = require('./layout'),
     Validator = require('./validator.js'),

@@ -10,9 +10,9 @@
 */
 
 var Stores = require('../Stores'),
-    Dispatcher = require('../torque').Dispatcher,
+    Dispatcher = require('flex-node').Dispatcher,
     Constants = require('../constants.js'),
-    StoreBuilder = require('../torque').StoreBuilder,
+    StoreBuilder = require('flex-node').StoreBuilder,
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,

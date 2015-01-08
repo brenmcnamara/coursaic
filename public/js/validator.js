@@ -6,7 +6,7 @@
  */
 
 var 
-    Action = require('./torque').Action,
+    Action = require('flex-node').Action,
     Constants = require('./constants.js'),
     Schema = require('./schema'),
     Stores = require('./Stores'),

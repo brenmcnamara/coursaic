@@ -4,7 +4,7 @@
 
 var
     Util = require('./util.js'),
-    Action = require('./torque').Action,
+    Action = require('flex-node').Action,
     Constants = require('./constants.js'),
     Path = require('./path.js'),
 

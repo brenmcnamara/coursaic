@@ -6,8 +6,8 @@
 
 
 var Stores = require('../stores'),
-    Dispatcher = require('../torque').Dispatcher,
-    StoreBuilder = require('../torque').StoreBuilder,
+    Dispatcher = require('flex-node').Dispatcher,
+    StoreBuilder = require('flex-node').StoreBuilder,
     Constants = require('../constants.js'),
 
     School = Parse.Object.extend("School"),

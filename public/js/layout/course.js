@@ -16,7 +16,7 @@ var React = require('react'),
 
     Formatter = require('../formatter.js'),
 
-    Action = require('../torque').Action,
+    Action = require('flex-node').Action,
     Constants = require('../constants.js'),
     Router = require('../router.js'),
 

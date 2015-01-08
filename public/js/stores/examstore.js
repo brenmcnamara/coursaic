@@ -12,13 +12,13 @@
 var Stores = require('../stores'),
 
     Constants = require('../constants.js'),
-    Dispatcher = require('../torque').Dispatcher,
+    Dispatcher = require('flex-node').Dispatcher,
 
     Question = require('./models.js').Question,
     Exam = require('./models.js').Exam,
     ExamRun = require('./models.js').ExamRun,
 
-    StoreBuilder = require('../torque').StoreBuilder,
+    StoreBuilder = require('flex-node').StoreBuilder,
 
     ExamStore = StoreBuilder.createStore({
 
