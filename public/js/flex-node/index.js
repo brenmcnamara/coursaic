@@ -9,5 +9,6 @@ module.exports = {
     StoreBuilder: require('./storebuilder.js'),
     Action: require('./action.js'),
     Matcher: require('./matcher.js'),
-    Util: require('./util.js')
+    Util: require('./util.js'),
+    Router: require('./router.js')
 };

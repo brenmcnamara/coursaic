@@ -3,10 +3,9 @@
  */
 
 var
-    Util = require('./flex-node').Util,
-    Action = require('./flex-node').Action,
-    Matcher = require('./flex-node').Matcher,
-
+    Util = require('./util.js'),
+    Action = require('./action.js'),
+    Matcher = require('./matcher.js'),
 
     emitter = new (require('events').EventEmitter)(),
 

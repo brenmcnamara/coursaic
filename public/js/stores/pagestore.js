@@ -14,7 +14,7 @@
 var Dispatcher = require('../flex-node').Dispatcher,
     StoreBuilder = require('../flex-node').StoreBuilder,
     Stores = require('../stores'),
-    Router = require('../router.js'),
+    Router = require('../flex-node').Router,
     Constants = require('../constants.js'),
 
     PageStore = StoreBuilder.createStore({

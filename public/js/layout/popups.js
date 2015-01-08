@@ -9,7 +9,7 @@
     
 var React = require('react'),
     Stores = require('../stores'),
-    Router = require('../router.js'),
+    Router = require('../flex-node').Router,
     Util = require('../flex-node').Util,
     Constants = require('../constants.js')
     Action = require('../flex-node').Action,

@@ -5,7 +5,7 @@ var React = require('react'),
     Stores = require('../stores'),
 
     Matcher = require('../flex-node').Matcher,
-    Router = require('../router.js'),
+    Router = require('../flex-node').Router,
 
     Constants = require('../constants.js'),
     
