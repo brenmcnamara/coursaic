@@ -5,7 +5,6 @@
 var
     Util = require('./flex-node').Util,
     Action = require('./flex-node').Action,
-    Constants = require('./constants.js'),
     Matcher = require('./flex-node').Matcher,
 
 
@@ -95,7 +94,7 @@ var
                     .then(
                         // Success.
                         function () {
-                            emitter.emit(Constants.Event.PAGE_NOT_FOUND);
+                            emitter.emit("PAGE_NOT_FOUND");
                         },
                         // Failure.
                         function (error) {
@@ -257,7 +256,7 @@ var
                 .then(
                     // Success.
                     function () {
-                        emitter.emit(Constants.Event.LOADED_PAGE);
+                        emitter.emit("LOADED_PAGE");
                     },
                     // Error.
                     function (error) {
@@ -371,13 +370,13 @@ var
 
         /**
          * Handle the error by simulating a page-not-found
-         * type error. This will cause the PAGE_NOT_FOUND
+         * type error. This will cause the "PAGE_NOT_FOUND"
          * event to be emitted from the Router.
          *
          * @method pageNotFound
          */
         pageNotFound: function () {
-            emitter.emit(Constants.Event.PAGE_NOT_FOUND);
+            emitter.emit("PAGE_NOT_FOUND");
         }
 
     };
