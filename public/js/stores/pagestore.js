@@ -160,13 +160,9 @@ var Dispatcher = require('shore').Dispatcher,
                 var self = this;
                 return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
                                             Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    function () {
-                                        self._removeMode({fromMode: self.currentMode()});
-                                    },
-                                    function (error) {
-                                        throw error;
-                                    });
+                                 .then(function () {
+                                    self._removeMode({fromMode: self.currentMode()});
+                                 });
             },
 
 
@@ -174,13 +170,9 @@ var Dispatcher = require('shore').Dispatcher,
                 var self = this;
                 return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
                                             Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    function () {
-                                        self._removeMode({fromMode: self.currentMode()});
-                                    },
-                                    function (error) {
-                                        throw error;
-                                    });
+                                 .then(function () {
+                                    self._removeMode({fromMode: self.currentMode()});
+                                 });
             },
 
 
@@ -189,13 +181,9 @@ var Dispatcher = require('shore').Dispatcher,
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
                                             Stores.CourseStore().dispatcherIndex,
                                             Stores.FieldStore().dispatcherIndex ])
-                                 .then(
-                                    function () {
-                                        self._removeMode({fromMode: self.currentMode()});
-                                    },
-                                    function (error) {
-                                        throw error;
-                                    });
+                                 .then(function () {
+                                    self._removeMode({fromMode: self.currentMode()});
+                                 });
             },
 
 
