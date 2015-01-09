@@ -2,21 +2,14 @@
  * FieldStore.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
 var Stores = require('../stores'),
-    Dispatcher = require('../flex-node').Dispatcher,
+    Dispatcher = require('shore').Dispatcher,
 
     Constants = require('../constants.js'),
     
     Field = require('./models.js').Field,
 
-    StoreBuilder = require('../flex-node').StoreBuilder,
+    StoreBuilder = require('shore').StoreBuilder,
 
     /**
      * Private constructor for the field store.

@@ -2,17 +2,10 @@
  * CourseStore.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
 var Stores = require('../Stores'),
-    Dispatcher = require('../flex-node').Dispatcher,
+    Dispatcher = require('shore').Dispatcher,
     Constants = require('../constants.js'),
-    StoreBuilder = require('../flex-node').StoreBuilder,
+    StoreBuilder = require('shore').StoreBuilder,
 
     Field = require('./models.js').Field,
     Course = require('./models.js').Course,

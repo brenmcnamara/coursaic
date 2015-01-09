@@ -9,10 +9,10 @@
     
 var React = require('react'),
     Stores = require('../stores'),
-    Router = require('../flex-node').Router,
-    Util = require('../flex-node').Util,
+    Router = require('shore').Router,
+    Util = require('shore').Util,
     Constants = require('../constants.js')
-    Action = require('../flex-node').Action,
+    Action = require('shore').Action,
 
     /**
      * A popup form for creating a course.

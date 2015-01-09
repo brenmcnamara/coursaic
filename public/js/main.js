@@ -1,9 +1,9 @@
 
-var Dispatcher = require('./flex-node').Dispatcher,
+var Dispatcher = require('shore').Dispatcher,
     Stores = require('./stores'),
     View = require('./layout'),
     Validator = require('./validator.js'),
-    Router = require('./flex-node').Router;
+    Router = require('shore').Router;
 
 Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
 window.fbAsyncInit = function() {

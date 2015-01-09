@@ -2,23 +2,16 @@
  * ExamStore.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
 var Stores = require('../stores'),
 
     Constants = require('../constants.js'),
-    Dispatcher = require('../flex-node').Dispatcher,
+    Dispatcher = require('shore').Dispatcher,
 
     Question = require('./models.js').Question,
     Exam = require('./models.js').Exam,
     ExamRun = require('./models.js').ExamRun,
 
-    StoreBuilder = require('../flex-node').StoreBuilder,
+    StoreBuilder = require('shore').StoreBuilder,
 
     ExamStore = StoreBuilder.createStore({
 

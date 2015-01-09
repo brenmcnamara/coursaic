@@ -2,19 +2,10 @@
  * PageStore.js
  */
 
-/*jslint browser:true, continue:false, devel:true,
-         indent:4, maxerr:50, newcap:true,
-         nomen:true, plusplus:true, regexp:true,
-         sloppy:true, vars:true, white:true,
-         maxlen:100
-*/
-
-/*global Store */
-
-var Dispatcher = require('../flex-node').Dispatcher,
-    StoreBuilder = require('../flex-node').StoreBuilder,
+var Dispatcher = require('shore').Dispatcher,
+    StoreBuilder = require('shore').StoreBuilder,
     Stores = require('../stores'),
-    Router = require('../flex-node').Router,
+    Router = require('shore').Router,
     Constants = require('../constants.js'),
 
     PageStore = StoreBuilder.createStore({

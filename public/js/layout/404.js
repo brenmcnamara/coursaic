@@ -7,7 +7,7 @@
  */
 
 var React = require('React'),
-    Router = require('../flex-node').Router,
+    Router = require('shore').Router,
 
     Root = React.createClass({
 

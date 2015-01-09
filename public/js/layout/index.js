@@ -4,8 +4,8 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
-    Matcher = require('../flex-node').Matcher,
-    Router = require('../flex-node').Router,
+    Matcher = require('shore').Matcher,
+    Router = require('shore').Router,
 
     Constants = require('../constants.js'),
     
