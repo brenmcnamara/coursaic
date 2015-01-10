@@ -4,10 +4,11 @@ var Dispatcher = require('shore').Dispatcher,
     Validator = require('./validator.js'),
     routes = require('./routes.js');
 
-Parse.initialize("4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1", "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8");
+Parse.initialize(Env.parseAppId, Env.parseJavascriptId);
+
 window.fbAsyncInit = function() {
     Parse.FacebookUtils.init({ // this line replaces FB.init({
-            appId      : Config.facebookId,
+            appId      : Env.facebookId,
             cookie     : true, // enable cookies to allow Parse to access the session
             xfbml      : true,
             version    : 'v2.1'

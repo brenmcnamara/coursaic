@@ -27,9 +27,44 @@
     <script type="text/javascript" src="lib/parse/parse.1.3.0.js"></script>
 
     <script type="text/javascript">
-        window.Config = {
-            facebookId: <%= facebook_id %>
-        };
+
+        (function (global) {
+
+            var
+                fatalError = function () {
+                    console.log("FATAL ERROR!!!");
+                },
+
+                facebookId = <%= facebook_id %>,
+                NODE_ENV = "<%= NODE_ENV %>",
+                parseAppId = "<%= parse_app_id %>",
+                parseJavascriptId = "<%= parse_javascript_id %>"
+
+                Env = {
+                    facebookId: facebookId,
+                    parseAppId: parseAppId,
+                    parseJavascriptId: parseJavascriptId,
+                    NODE_ENV: NODE_ENV
+                };
+
+            // Watch the config object and make sure nothing bad happens
+            // to it.
+
+            setInterval(function () {
+                if (global.Env !== Env ||
+                    Env.facebookId !== facebookId ||
+                    Env.NODE_ENV !== NODE_ENV ||
+                    Env.parseAppId !== parseAppId ||
+                    Env.parseJavascriptId !== parseJavascriptId) {
+
+                    fatalError();
+                }
+            }, 300);
+
+            global.Env = Env;
+
+        }(window));
+
     </script>
 
     <script type="text/javascript" src="build/bundle.js"></script>
