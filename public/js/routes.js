@@ -67,9 +67,15 @@ var
 
 module.exports = {
 
+    /**
+     * Configure the routes for the module. This method
+     * assumes that the router for shore has already been configured.
+     *
+     * @method config
+     */
     config: function () {
-        router.config({ location: window.location });
 
+        // TODO: Remove any listeners if there are any that already exist.
         router.on(constants.Event.LOADED_PAGE, onLoadedPage);
         router.on(constants.Event.PAGE_NOT_FOUND, onPageNotFound);
 

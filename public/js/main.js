@@ -1,8 +1,7 @@
 
-var Dispatcher = require('shore').Dispatcher,
-    logger = require('shore').logger,
+var shore = require('shore'),
     Stores = require('./stores'),
-    Validator = require('./validator.js'),
+    validator = require('./validator.js'),
     routes = require('./routes.js');
 
 Parse.initialize(Env.parseAppId, Env.parseJavascriptId);
@@ -15,37 +14,45 @@ window.fbAsyncInit = function() {
             version    : 'v2.1'
     });
 
-    if (Env.NODE_ENV === "development") {
-        logger.config({ outputs: [console ] });
-    }
-    // Production mode. Log to no outputs.
-    else {
-        logger.config();
-    }
+    shore.config({
+        
+        dispatcher: {
+            stores: [Stores.CourseStore(), Stores.ExamStore(),
+                     Stores.FieldStore(), Stores.PageStore(),
+                     Stores.UserStore()],
 
-    Validator.config();
-
-    Dispatcher.config({
-        stores: [ Stores.CourseStore(), Stores.ExamStore(),
-                  Stores.FieldStore(), Stores.PageStore(),
-                  Stores.UserStore() ],
-
-        preDispatchValidator: function (action, payload) {
-
-            // Make sure that the schema of the payload is valid.
-            var result = Validator.validate(action, payload);
-            if (result.valid || !result.hasSchema) {
-                return null;
+            // Validator that gets called before the action
+            // is propogated through the stores. This assumes that
+            // the Validator module has already been configured.
+            preDispatchValidator: function (action, payload) {
+                // Make sure that the schema of the payload is valid.
+                var result = validator.validate(action, payload);
+                if (result.valid || !result.hasSchema) {
+                    return null;
+                }
+                // Assuming there is an error at this point.
+                // Report back the first validation error in the list.
+                error = Error("Action payload error for action " + action + ": " +
+                              '"' + result.errors[0].message) + '".';
+                error.type = result.errors[0].type;
+                return result.errors[0];
             }
-            // Assuming there is an error at this point.
-            // Report back the first validation error in the list.
-            error = Error("Action payload error for action " + action + ": " +
-                          '"' + result.errors[0].message) + '".';
-            error.type = result.errors[0].type;
-            return result.errors[0];
+        },
+
+        logger: {
+            // Only log if in development environment.
+            outputs: ((Env.NODE_ENV === 'development') ? [ console ] : [ ])
+        },
+
+        router: {
+            // Give the location to look for the hash when checking for
+            // changes.
+            location: window.location
         }
 
     });
+
+    validator.config();
 
     routes.config();
 };
