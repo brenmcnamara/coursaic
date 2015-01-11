@@ -1,5 +1,6 @@
 
 var Dispatcher = require('shore').Dispatcher,
+    logger = require('shore').logger,
     Stores = require('./stores'),
     Validator = require('./validator.js'),
     routes = require('./routes.js');
@@ -13,6 +14,14 @@ window.fbAsyncInit = function() {
             xfbml      : true,
             version    : 'v2.1'
     });
+
+    if (Env.NODE_ENV === "development") {
+        logger.config({ outputs: [console ] });
+    }
+    // Production mode. Log to no outputs.
+    else {
+        logger.config();
+    }
 
     Validator.config();
 
