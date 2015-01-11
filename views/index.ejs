@@ -32,7 +32,8 @@
 
             var
                 fatalError = function () {
-                    console.log("FATAL ERROR!!!");
+                    // Navigate to the fatal page.
+                    window.location.href = window.location.href + "fatal";
                 },
 
                 facebookId = <%= facebook_id %>,
