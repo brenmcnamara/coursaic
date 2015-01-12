@@ -77,7 +77,7 @@ var Stores = require('../stores'),
                 fetchSchoolPromise = new Promise(function(resolve, reject) {
                     // Upenn hard-coded here.
                     var school = new School();
-                    school.id = "rQIGXlBeyE";
+                    school.id = "HLSpm7DJeB";
                     user.set('school', school);
                     user.get('school').fetch({
                         success: function(model, response, options) {
