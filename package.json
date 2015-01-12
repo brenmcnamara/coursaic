@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "grunt",
-    "test": "grunt test"
+    "start": "./node_modules/.bin/grunt",
+    "test": "./node_modules/.bin/grunt test"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
@@ -20,6 +20,7 @@
   "dependencies": {
     "ejs": "~0.7.1",
     "express": "3.4.7",
+    "grunt-cli": "^0.1.13",
     "jsonschema": "~1.0.0",
     "precommit-hook": "~1.0.7",
     "promise": "~6.0.1",
