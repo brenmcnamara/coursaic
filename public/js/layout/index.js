@@ -9,12 +9,15 @@ var React = require('react'),
 
     Constants = require('../constants.js'),
     
+    splashLayout = require('./splash.js'),
     homeLayout = require('./home.js'),
     courseLayout = require('./course.js'),
     examLayout = require('./exam.js'),
     errorPage = require('./404.js');
 
 module.exports = {
+
+    splashLayout: splashLayout,
 
     homeLayout: homeLayout,
 

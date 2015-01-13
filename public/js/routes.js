@@ -24,6 +24,12 @@ module.exports = {
         router.routes([
             {
                 route: "/",
+                action: constants.Action.LOAD_SPLASH,
+                component: layout.splashLayout.Root
+            },
+
+            {
+                route: "/home",
                 action: constants.Action.LOAD_HOME,
                 component: layout.homeLayout.Root
             },
