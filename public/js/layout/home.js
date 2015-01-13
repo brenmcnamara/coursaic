@@ -40,8 +40,8 @@ var React = require('react'),
                 return (
                     <div className="main">
                         <PopupsLayout.CreateCourse />
-                        <HeaderLayout.Header isOpaque={ true } />
-                        <HeaderLayout.HeaderFill isOpaque={ true } />
+                        <HeaderLayout.Header />
+                        <HeaderLayout.HeaderFill />
                         <Home_Img />
                         <Content />
                     </div>

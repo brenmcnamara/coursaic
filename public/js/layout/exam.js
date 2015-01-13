@@ -29,8 +29,8 @@ var React = require('react'),
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.VIEW_EXAM_RESULTS) {
                 return (
                     <div className="main">
-                        <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.HeaderFill isOpaque={ false } />
+                        <HeaderLayout.Header />
+                        <HeaderLayout.HeaderFill />
                         <BackButton />
                         <ExamResults />
                     </div>

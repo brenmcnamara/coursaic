@@ -1,4 +1,4 @@
-/*
+    /*
  * header.css
  *
  * All the styling for the header.
@@ -9,7 +9,8 @@
           Header
 \* -------------------- */
 
-.header, .header--fill {
+.header {
+    background-color: rgba(42, 42, 42, 1);
     position: fixed;
 
     height: 60px;
@@ -19,19 +20,7 @@
     z-index: 2;
 }
 
-.header {
-    background: rgba(42, 42, 42, .6);
-}
-
-.header--fill {
-    background-color: rgba(42, 42, 42, 1);
-}
-
 .header-offset {
-    display: none;
-}
-
-.header-offset--fill {
     position: relative;
 
     height: 60px; /* same as header */

@@ -31,13 +31,10 @@ var React = require('react'),
 
         
         render: function() {
-            var user = Stores.UserStore().current(),
-                headerType = (this.props.isOpaque) ?
-                             ("header") :
-                             ("header--fill");
+            var user = Stores.UserStore().current();
             if (!this.state.isEditing) {
                 return (
-                    <header className={ headerType }>
+                    <header className="header">
                         <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-dark.png" />
                         <h1 onClick={ this.onClickText } className="header__title--clickable">Coursaic</h1>
                         <nav className="main-nav">
@@ -53,7 +50,7 @@ var React = require('react'),
             }
             else {
                 return (
-                    <header className={ headerType }>
+                    <header className="header">
                         <img className="header__logo--unclickable" src="/img/logo-dark.png" />
                         <h1  className="header__title--unclickable">Coursaic</h1>
                         <nav className="main-nav">
@@ -117,11 +114,8 @@ var React = require('react'),
     HeaderFill = React.createClass({
         
         render: function() {
-            var fillType = (this.props.isOpaque) ?
-                           ("header-offset") :
-                           ("header-offset--fill");
             return (
-                <div className={ fillType }></div>
+                <div className={ "header-offset" }></div>
             );
         }
 

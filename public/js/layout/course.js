@@ -48,8 +48,8 @@ var React = require('react'),
                 <div className="main">
                     { createExamPopup }
                     { deleteQuestionPopup }
-                    <HeaderLayout.Header isOpaque={ false } />
-                    <HeaderLayout.HeaderFill isOpaque={ false } />
+                    <HeaderLayout.Header />
+                    <HeaderLayout.HeaderFill />
                     <Dashboard />
                     <Summary />
                     { enrollButton }
