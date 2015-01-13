@@ -1,4 +1,4 @@
-    /*
+/*
  * header.css
  *
  * All the styling for the header.
@@ -12,101 +12,125 @@
 .header {
     background-color: rgba(42, 42, 42, 1);
     position: fixed;
-
-    height: 60px;
-    min-width: 800px;
     width: 100%;
 
-    z-index: 2;
 }
 
-.header-offset {
-    position: relative;
+@media only screen and (max-device-width: 700px) {
+    
+    .header {
+        height: 200px;
+    }
 
-    height: 60px; /* same as header */
-    width: 100%; /* same as header */
 }
 
-.header__logo--clickable,
-.header__logo--unclickable {
-    position: absolute;
+@media only screen and (min-device-width: 701px) {
+    
+    .header {
+        height: 4em;
+        z-index: 2;
+    }
 
-    width: 55px;
-    height: 44px;
+    .header-offset {
+        position: relative;
 
-    margin-top: -22px;
-    top: 50%;
-    left: 20px;
+        height: 4em; /* same as header */
+        width: 100%; /* same as header */
+    }
+
+    .header__logo--clickable,
+    .header__logo--unclickable {
+        position: absolute;
+
+        width: 4em;
+        height: 3em;
+
+        margin-top: -1.5em;
+        top: 50%;
+        left: 1em;
+    }
+
+    .header__logo--clickable {
+        cursor: pointer;
+    }
+
+    .header__title--clickable,
+    .header__title--unclickable {
+        position: relative;
+        display: inline;
+
+        margin: 0;
+        left: 3em;
+
+        font-size: 2em;
+        /* height is 2em with respect to the current font-size */
+        line-height: 2em;
+        color: #4A90E2;
+    }
+
+    .header__title--clickable {
+        cursor: pointer;
+    }
+
+    .header__profile-pic {
+        position: absolute;
+        top: .17em;
+        right: .6em;
+        font-size: 3em;
+    }
+    
 }
 
-.header__logo--clickable {
-    cursor: pointer;
-}
-
-.header__title--clickable,
-.header__title--unclickable {
-    position: relative;
-    display: inline;
-
-    left: 100px;
-    top: 12px;
-
-    font-size: 28px;
-    color: #4A90E2;
-}
-
-.header__title--clickable {
-    cursor: pointer;
-}
-
-.header__profile-pic {
-    position: absolute;
-    top: 5px;
-    right: 35px;
-}
 
 /* -------------------- *\
         Main-Nav
 \* -------------------- */
 
-.main-nav {
-    position: absolute;
+@media only screen and (min-device-width: 701px) {
+    
+    .main-nav {
+       
+       position: absolute;
 
-    right: 105px; /* 35 + 50 + 20 */
-    top: 5px;
-    height: 50px;
+       right: 6em;
+       top: .5em;
+       height: 3em;
+    }
+
+    .main-nav__item,
+    .main-nav__item--clickable,
+    .main-nav__item--unclickable {
+       float: left;
+       line-height: 3em;
+
+       margin-left: 1.5em;
+
+       font-size: 1em;
+       font-weight: medium;
+    }
+
+    .main-nav__item--clickable {
+        color: #F5A623;
+       cursor: pointer;
+    }
+
+    .main-nav__item--unclickable {
+        color: white;
+    }
+
+    .main-nav__break {
+        float: right;
+
+        margin-left: 20px; /* This should be the same as margin-left of mainNav-item */
+
+        margin-top: 5px; /* (totalheight(50) - height(30)) / 2 */
+        width: 3px;
+        height: 40px;
+
+        background: white;
+    }
+
 }
 
-.main-nav__item,
-.main-nav__item--clickable,
-.main-nav__item--unclickable {
-    float: left;
-    line-height: 50px;
 
-    margin-left: 20px;
-
-    font-size: 20px;
-    font-weight: medium;
-}
-
-.main-nav__item--clickable {
-    color: #F5A623;
-    cursor: pointer;
-}
-
-.main-nav__item--unclickable {
-    color: white;
-}
-
-.main-nav__break {
-    float: right;
-
-    margin-left: 20px; /* This should be the same as margin-left of mainNav-item */
-
-    margin-top: 5px; /* (totalheight(50) - height(30)) / 2 */
-    width: 3px;
-    height: 40px;
-
-    background: white;
-}
 

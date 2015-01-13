@@ -453,24 +453,24 @@ ul.profile-grid {
 
 .profile-pic--circle--bordered,
 .profile-pic--square--bordered {
-    width: 56px;
-    height: 56px;
+    width: 1.2em;
+    height: 1.2em;
 
     background: #DDD;
 }
 
 .profile-pic--circle,
 .profile-pic--square {
-    width: 50px;
-    height: 50px;
+    width: 1em;
+    height: 1em;
 }
 
 .profile-pic--circle {
-    border-radius: 25px;
+    border-radius: .5em;
 }
 
 .profile-pic--circle--bordered {
-    border-radius: 28px;
+    border-radius: .6em;
 }
 
 .profile-pic--circle > img,
@@ -479,8 +479,8 @@ ul.profile-grid {
 .profile-pic--square--bordered > img {
     position: absolute;
 
-    width: 50px;
-    height: 50px;
+    width: 1em;
+    height: 1em;
 }
 
 .profile-pic--circle > img,
@@ -491,13 +491,13 @@ ul.profile-grid {
 
 .profile-pic--circle--bordered > img,
 .profile-pic--square--bordered > img {
-    top: 3px;
-    left: 3px;
+    top: .1em;
+    left: .1em;
 }
 
 .profile-pic--circle > img,
 .profile-pic--circle--bordered > img {
-    border-radius: 25px;
+    border-radius: .5em;
 }
 
 /* TODO: Move this element to course styles */
