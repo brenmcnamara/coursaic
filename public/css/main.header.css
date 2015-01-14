@@ -71,13 +71,6 @@
     .header__title--clickable {
         cursor: pointer;
     }
-
-    .header__profile-pic {
-        position: absolute;
-        top: .17em;
-        right: .6em;
-        font-size: 3em;
-    }
     
 }
 
@@ -92,7 +85,7 @@
        
        position: absolute;
 
-       right: 6em;
+       right: 2em;
        top: .5em;
        height: 3em;
     }

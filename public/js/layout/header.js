@@ -38,13 +38,10 @@ var React = require('react'),
                         <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-dark.png" />
                         <h1 onClick={ this.onClickText } className="header__title--clickable">Coursaic</h1>
                         <nav className="main-nav">
-                        <div className="main-nav__item--unclickable">
-                            Welcome, {user.get('firstName')}
-                        </div>
+                            <div className="main-nav__item--unclickable">
+                                Welcome, {user.get('firstName')}
+                            </div>
                         </nav>
-                        <div className="profile-pic--circle header__profile-pic">
-                            <img src= {user.get('photoUrl')} />
-                        </div>
                     </header>
                 );
             }
@@ -54,13 +51,10 @@ var React = require('react'),
                         <img className="header__logo--unclickable" src="/img/logo-dark.png" />
                         <h1  className="header__title--unclickable">Coursaic</h1>
                         <nav className="main-nav">
-                        <div className="main-nav__item--unclickable">
-                            Welcome, {user.get('firstName')}
-                        </div>
+                            <div className="main-nav__item--unclickable">
+                                Welcome, {user.get('firstName')}
+                            </div>
                         </nav>
-                        <div className="profile-pic--circle header__profile-pic">
-                            <img src= {user.get('photoUrl')} />
-                        </div>
                     </header>  
                 );
             }

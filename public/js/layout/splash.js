@@ -20,6 +20,21 @@ var React = require('react'),
                 <div className="main">
                     <headerLayout.Header />
                     <headerLayout.HeaderFill />
+                    <div className="splash__filler">
+                        <div className="splash__filler__content">
+                            <p className="splash__filler__catch-phrase">A new way to study!</p>
+                            <div className="splash__filler__button-wrapper">
+                                <button className="button large-button--transparant">
+                                    Login
+                                </button>
+                            </div>
+                            <div className="splash__filler__button-wrapper">
+                                <button className="button large-button--transparant">
+                                    Sign Up
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }

@@ -178,23 +178,41 @@
     background: #DDD;
 }
 
+.large-button--transparant {
+    background: transparent;
+}
+
 .small-button,
 .small-button--positive,
 .small-button--negative,
 .large-button,
 .large-button--positive,
-.large-button--negative {
-    
-    border: none;
+.large-button--negative,
+.large-button--transparant {
     color: white;
 }
 
+.large-button--transparant {
+    border: solid white 3px;
+}
+
+.small-button,
+.small-button--positive,
+.small-button--negative,
 .large-button,
+.large-button--positive,
+.large-button--negative  {
+    border: none;
+}
+
+.large-button,
+.large-button--transparant,
 .large-button--positive,
 .large-button--negative {
     font-size: 1.1em;
     width: 200px;
     height: 30px;
+    line-height: 15px;
 }
 
 .small-button,

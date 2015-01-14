@@ -1,0 +1,36 @@
+/**
+ * main.splash.css
+ *
+ * Styling for the splash page.
+ */
+
+.splash__filler {
+    background-image: url("../img/splash_img.png");
+    background-position: left center;
+    width: 100%;
+    height: 35em;
+    margin: 0px;
+
+    position: relative;
+}
+
+.splash__filler__content {
+    position: absolute;
+
+    width: 30em;
+    margin: 6em 0 0 -15em;
+    left: 50%;
+
+    text-align: center;
+}
+
+.splash__filler__catch-phrase {
+    text-align: center;
+    font-size: 2em;
+    color: white;
+    font-weight: bold;
+}
+
+.splash__filler__button-wrapper {
+    margin-top: 1em;
+}
