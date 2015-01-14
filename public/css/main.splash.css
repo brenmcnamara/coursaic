@@ -34,3 +34,39 @@
 .splash__filler__button-wrapper {
     margin-top: 1em;
 }
+
+ul.splash__feature-list {
+    list-style: none;
+}
+
+.splash__feature-list {
+    margin: 0 0 2em 0;
+    padding: 0;
+}
+
+.splash__feature-list > li {
+    position: relative;
+    height: 8em;
+    margin-top: 3em;
+    display: flex;
+    flex-direction: row;
+}
+
+.splash__feature-list__item__image-wrapper {
+    height: 100%;
+    width: 16em;
+    min-width: 16em;
+    text-align: center;
+}
+
+
+.splash__feature-list__item__text-wrapper {
+    flex-grow: 1;
+}
+
+.splash__feature-list__item__text-wrapper > p {
+    font-size: 1.5em;
+    color: #444;
+    font-weight: bold;
+    margin: 1.5em;
+}
