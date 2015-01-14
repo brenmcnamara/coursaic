@@ -9,16 +9,24 @@
           Header
 \* -------------------- */
 
-.header {
-    background-color: rgba(42, 42, 42, 1);
+.header,
+.header--fill {
     position: fixed;
     width: 100%;
+}
 
+.header {
+    background: rgba(0, 0, 0, 0);
+}
+
+.header--fill {
+    background-color: rgba(42, 42, 42, 1);
 }
 
 @media only screen and (max-device-width: 700px) {
     
-    .header {
+    .header,
+    .header-fill {
         height: 200px;
     }
 
@@ -26,12 +34,16 @@
 
 @media only screen and (min-device-width: 701px) {
     
-    .header {
+    .header,
+    .header--fill {
         height: 4em;
         z-index: 2;
     }
 
     .header-offset {
+        display: none;
+    }
+    .header-offset--fill {
         position: relative;
 
         height: 4em; /* same as header */

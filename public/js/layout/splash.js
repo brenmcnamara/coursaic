@@ -18,8 +18,8 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="main">
-                    <headerLayout.Header />
-                    <headerLayout.HeaderFill />
+                    <headerLayout.Header isOpaque={ true } />
+                    <headerLayout.HeaderFill isOpaque={ true } />
                     <div className="splash__filler">
                         <div className="splash__filler__content">
                             <p className="splash__filler__catch-phrase">A new way to study!</p>

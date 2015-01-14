@@ -50,8 +50,8 @@ var React = require('react'),
             else {
                 return (
                     <div className="main">
-                        <HeaderLayout.Header isOpaque={ true } />
-                        <HeaderLayout.HeaderFill isOpaque={ true } />
+                        <HeaderLayout.Header />
+                        <HeaderLayout.HeaderFill />
                         <Home_Img />
                         <Content />
                     </div>
