@@ -210,9 +210,8 @@
 .large-button--positive,
 .large-button--negative {
     font-size: 1.1em;
-    width: 200px;
-    height: 30px;
-    line-height: 15px;
+    width: 12em;
+    height: 2em;
 }
 
 .small-button,
