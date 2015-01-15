@@ -38,7 +38,7 @@ var React = require('react'),
             if (!this.state.isEditing) {
                 return (
                     <header className={ headerType }>
-                        <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-dark.png" />
+                        <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-white-border.png" />
                         <h1 onClick={ this.onClickText } className="header__title--clickable">Coursaic</h1>
                         <nav className="main-nav">
                             <div className="main-nav__item--unclickable">

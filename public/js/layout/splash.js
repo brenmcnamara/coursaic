@@ -17,7 +17,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="main">
+                <div className="main splash">
                     <headerLayout.Header isOpaque={ true } />
                     <headerLayout.HeaderFill isOpaque={ true } />
                     <SplashFiller />
