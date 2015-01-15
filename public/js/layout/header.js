@@ -35,32 +35,22 @@ var React = require('react'),
                 headerType = (this.props.isOpaque) ?
                              ("header") :
                              ("header--fill");
-            if (!this.state.isEditing) {
-                return (
-                    <header className={ headerType }>
-                        <img onClick={ this.onClickLogo } className="header__logo--clickable" src="/img/logo-white-border.png" />
-                        <h1 onClick={ this.onClickText } className="header__title--clickable">Coursaic</h1>
-                        <nav className="main-nav">
-                            <div className="main-nav__item--unclickable">
-                                Welcome, {user.get('firstName')}
-                            </div>
-                        </nav>
-                    </header>
-                );
-            }
-            else {
-                return (
-                    <header className={ headerType }>
-                        <img className="header__logo--unclickable" src="/img/logo-dark.png" />
-                        <h1  className="header__title--unclickable">Coursaic</h1>
-                        <nav className="main-nav">
-                            <div className="main-nav__item--unclickable">
-                                Welcome, {user.get('firstName')}
-                            </div>
-                        </nav>
-                    </header>  
-                );
-            }
+            // TODO: Handle editing mode!
+            return (
+                <div className="header">
+                    <div className="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+                        <a className="pure-menu-heading" href="">
+                            <img className="header__logo" src="/img/logo-white-border.png" />
+                            <span className="header__title">Coursaic</span>
+                        </a>
+
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Sign Up</a></li>
+                        </ul>
+                    </div>
+                </div>
+            );
         },
 
 
@@ -96,34 +86,10 @@ var React = require('react'),
         }
 
 
-    }),
-
-
-    /**
-     * The filler that helps move elements outside
-     * of the header down so they are not hidden
-     * by the header.
-     *
-     * @module Layout
-     * @submodule Header
-     * @class HeaderFill
-     */
-    HeaderFill = React.createClass({
-        
-        render: function() {
-            var fillType = (this.props.isOpaque) ?
-                           ("header-offset") :
-                           ("header-offset--fill");
-            return (
-                <div className={ fillType }></div>
-            );
-        }
-
     });
 
 
 module.exports = {
-    Header: Header,
-    HeaderFill: HeaderFill
+    Header: Header
 };
 

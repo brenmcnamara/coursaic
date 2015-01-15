@@ -41,7 +41,6 @@ var React = require('react'),
                     <div className="main">
                         <PopupsLayout.CreateCourse />
                         <HeaderLayout.Header />
-                        <HeaderLayout.HeaderFill />
                         <Home_Img />
                         <Content />
                     </div>
@@ -51,7 +50,6 @@ var React = require('react'),
                 return (
                     <div className="main">
                         <HeaderLayout.Header />
-                        <HeaderLayout.HeaderFill />
                         <Home_Img />
                         <Content />
                     </div>

@@ -49,7 +49,6 @@ var React = require('react'),
                     { createExamPopup }
                     { deleteQuestionPopup }
                     <HeaderLayout.Header />
-                    <HeaderLayout.HeaderFill />
                     <Dashboard />
                     <Summary />
                     { enrollButton }

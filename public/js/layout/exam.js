@@ -30,7 +30,6 @@ var React = require('react'),
                 return (
                     <div className="main">
                         <HeaderLayout.Header />
-                        <HeaderLayout.HeaderFill />
                         <BackButton />
                         <ExamResults />
                     </div>
