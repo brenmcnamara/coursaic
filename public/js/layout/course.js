@@ -119,9 +119,6 @@ var React = require('react'),
 
         render: function() {
             var course = Stores.CourseStore().current(),
-                bannerStyle = {
-                    background: course.get('field').get('color')
-                },
                 enrollText = (course.enrollCount() == 1) ? 
                              "1 person enrolled" :
                              course.enrollCount() + " people enrolled",
@@ -140,13 +137,9 @@ var React = require('react'),
 
             return (
                 <div className="course-summary">
-                    <div className="course-summary__banner" style={ bannerStyle }></div>
+                    <div className="course-summary__banner"></div>
                     <h1 className="course-summary__code">{ course.get('code') }</h1>
                     <p className="course-summary__name">{ course.get('name') }</p>
-                    <p className="course-summary__field">
-                        <span className="course-summary__field__key">Field: </span>
-                        <span className="course-summary__field__value">{ course.get('field').get('name') }</span>
-                    </p>
                     <div className="divide"></div>
                     <ul className="course-summary__stats">
                         <li className="course-summary__stats__item">{ enrollText }</li>
@@ -369,7 +362,7 @@ var React = require('react'),
                 selectionBarStyle = {
                     top: selectedExamBarPixelPosition.toString() +"px",
                     display: displayStyle,
-                    background: course.get('field').get('color')
+                    background: '#4A90E2'
                 },
                 selectionBar = (examList.length) ?
                                (<div className="exam-list__selection-bar"

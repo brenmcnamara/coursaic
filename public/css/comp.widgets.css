@@ -387,6 +387,7 @@ ul.category__list {
     border-radius: 2px;
 
     cursor: pointer;
+
 }
 
 
@@ -406,6 +407,8 @@ ul.category__list {
     text-align: center;
     color: white;
     font-weight: normal;
+
+    background: #4A90E2;
 }
 
 .course-info__footer {
@@ -542,6 +545,7 @@ ul.profile-grid {
     float: left;
     width: 20px;
     height: 100%;
+    background: #4A90E2;
 }
 
 .course-summary__code {

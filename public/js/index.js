@@ -18,8 +18,7 @@ window.fbAsyncInit = function() {
         
         dispatcher: {
             stores: [Stores.CourseStore(), Stores.ExamStore(),
-                     Stores.FieldStore(), Stores.PageStore(),
-                     Stores.UserStore()],
+                     Stores.PageStore(), Stores.UserStore()],
 
             // Validator that gets called before the action
             // is propogated through the stores. This assumes that

@@ -179,8 +179,7 @@ var Dispatcher = require('shore').Dispatcher,
             LOAD_HOME: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
-                                            Stores.CourseStore().dispatcherIndex,
-                                            Stores.FieldStore().dispatcherIndex ])
+                                            Stores.CourseStore().dispatcherIndex ])
                                  .then(function () {
                                     self._removeMode({fromMode: self.currentMode()});
                                  });

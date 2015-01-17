@@ -33,9 +33,7 @@ var React = require('react'),
     Root = React.createClass({
 
         render: function() {
-            // TODO: How can I avoid writing
-            // all the html twice?
-            var school = Stores.UserStore().current().get('school');
+            // TODO: Don't write this twice.
             if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_COURSE) {
                 return (
                     <div className="main">
@@ -358,16 +356,12 @@ var React = require('react'),
         
         render: function() {
             var course = this.props.course,
-                field = course.get('field'),
-                courseHeaderStyle = {
-                    background: field.get('color')
-                },
                 enrollMessage = course.enrollCount() + ' enrolled';
             return (
                 <div onClick= { this.handleClick }
                      className="home-content__courses__grid__course course-info">
 
-                    <header className="course-info__header" style={ courseHeaderStyle }>
+                    <header className="course-info__header">
                         { course.get('code') }
                     </header>
                     <div className="course-info__body">
