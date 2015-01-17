@@ -25,7 +25,7 @@
     "precommit-hook": "~1.0.7",
     "promise": "~6.0.1",
     "react": "~0.12.2",
-    "shore": "0.2.2"
+    "shore": "0.2.3"
   },
   "precommit": [
     "test"
