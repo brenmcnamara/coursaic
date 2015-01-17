@@ -55,13 +55,18 @@ module.exports = {
                 route: "/course/<courseId>/exam/<examId>/take",
                 action: constants.Action.LOAD_EXAM_RUN,
                 component: layout.examLayout.Root
+            },
+
+            {
+                route: "/signup",
+                component: layout.notifyLayout.SignUpComplete
             }
         ]);
 
         // Add a default route.
         router.defaultRoute({
             action: constants.Action.LOAD_NOT_FOUND,
-            component: layout.pageNotFound
+            component: layout.notifyLayout.PageNotFound
         });
 
         // Add all the error handling here.

@@ -25,7 +25,7 @@ module.exports = {
 
     examLayout: examLayout,
 
-    pageNotFound: notifyLayout.PageNotFound
+    notifyLayout: notifyLayout
 
 };
 
