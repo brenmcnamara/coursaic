@@ -9,7 +9,7 @@
 var React = require('React'),
     Router = require('shore').Router,
 
-    Root = React.createClass({
+    PageNotFound = React.createClass({
 
         render: function () {
             return (
@@ -36,5 +36,5 @@ var React = require('React'),
 
 
 module.exports = {
-    Root: Root
+    PageNotFound: PageNotFound
 };

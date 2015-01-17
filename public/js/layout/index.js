@@ -13,7 +13,7 @@ var React = require('react'),
     homeLayout = require('./home.js'),
     courseLayout = require('./course.js'),
     examLayout = require('./exam.js'),
-    errorPage = require('./404.js');
+    notifyLayout = require('./notify.js');
 
 module.exports = {
 
@@ -25,7 +25,7 @@ module.exports = {
 
     examLayout: examLayout,
 
-    errorPage: errorPage
+    pageNotFound: notifyLayout.PageNotFound
 
 };
 

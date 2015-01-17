@@ -61,7 +61,7 @@ module.exports = {
         // Add a default route.
         router.defaultRoute({
             action: constants.Action.LOAD_NOT_FOUND,
-            component: layout.errorPage.Root
+            component: layout.pageNotFound
         });
 
         // Add all the error handling here.
