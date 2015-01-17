@@ -14,10 +14,11 @@ var React = require('React'),
         render: function () {
             return (
                 <div className="main">
-                    <div className="page-error">
-                        <h1>404</h1>
-                        <h3>Page not Found</h3>
-                        <p>We could not find this page. <span className="inline-button" 
+                    <div className="notify">
+                        <i className="fa fa-wrench notify-icon"></i>
+                        <h3 className="notify__head">Page not Found</h3>
+                        <p className="notify__subhead">
+                            We could not find this page. <span className="inline-button" 
                                                               onClick={ this.onClickHome }>
                                                               Return home.</span>
                         </p>
