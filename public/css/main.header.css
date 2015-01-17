@@ -20,7 +20,19 @@
   vertical-align: middle;
 }
 
-/* -------------------- *\
-         Main Nav
-\* -------------------- */
+/* PORTRAIT AND LANDSCAPE MOBILE DEVICE */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
+    
+    .header {
+      font-size: 2em;
+    }
+    
+    .header__title {
+        display: none;
+    }
 
+}
+
+/* -------------------- *\
+        Home-Menu
+\* -------------------- */

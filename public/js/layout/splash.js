@@ -10,43 +10,14 @@ var React = require('react'),
 
     headerLayout = require('./header.js'),
 
-    /**
-     * The root of the react component.
-     */
-    Header = React.createClass({
-
-        render: function () {
-            return (
-                <div className="header">
-                    <div className="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
-                        <a className="pure-menu-heading" href="">
-                            <img className="header__logo" src="/img/logo-white-border.png" />
-                            <span className="header__title">Coursaic</span>
-                        </a>
-
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Sign Up</a></li>
-                        </ul>
-                    </div>
-                </div>
-            );
-        }
-    }),
-
     Splash = React.createClass({
 
         render: function () {
             return (
-                <div className="splash-container">
-                    <div className="splash">
-                        <h1 className="splash-head">Big Bold Text</h1>
-                        <p className="splash-subhead">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        </p>
-                        <p>
-                            <a href="http://purecss.io" className="pure-button pure-button-primary">Get Started</a>
-                        </p>
+                <div className="splash-filler-container">
+                    <div className="splash-filler">
+                        <h1 className="splash-filler__head">Coursaic</h1>
+                        <p className="splash-filler__subhead">A New Way to Study</p>
                     </div>
                 </div>
             );
@@ -54,119 +25,109 @@ var React = require('react'),
     }),
 
 
+    UserForms = React.createClass({
+
+        render: function () {
+            return (
+                <section>
+                    <div className="pure-g">
+                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
+                            <h3 className="splash__form-name">Sign Up</h3>
+                            <form className="pure-form pure-form-stacked sign-up-form">
+                                <fieldset>
+                                    <label htmlFor="name">First Name</label>
+                                    <input id="name" type="text" placeholder="Your Name" />
+                                    
+                                    <label htmlFor="name">Last Name</label>
+                                    <input id="name" type="text" placeholder="Your Name" /> 
+                                        
+
+                                    <label htmlFor="email">Your Email</label>
+                                    <input id="email" type="email" placeholder="Your Email" />
+
+                                    <label htmlFor="password">Your Password</label>
+                                    <input id="password" type="password" placeholder="Your Password" />
+
+                                    <button type="submit" className="pure-button">Sign Up</button>
+
+                                </fieldset>
+                            </form>
+                        </div>
+
+                        <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
+                            <h3 className="splash__form-name">Login</h3>
+                            <form className="pure-form pure-form-stacked sign-up-form">
+                                <fieldset>
+                                    <label htmlFor="email">Your Email</label>
+                                    <input id="email" type="email" placeholder="Your Email" />
+
+                                    <label htmlFor="password">Your Password</label>
+                                    <input id="password" type="password" placeholder="Your Password" />
+
+                                    <button type="submit" className="pure-button">Login</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+
+                </section>
+            );
+        }
+
+    }),
+
+
+    FeatureList = React.createClass({
+        render: function () {
+            return (
+                <section>
+                    <div className="pure-g">
+                        <div className="l-box pure-u-1 pure-u-lg-1-3">
+                                <h3 className="content-subhead">
+                                    <i className="fa fa-university"></i>
+                                    Find classes you are taking
+                                </h3>
+                                <p>
+                                    Find classes from your university that you are taking. Enroll and have access to content submitted by your classmates.
+                                </p>
+                        </div>
+
+                        <div className="l-box pure-u-1 pure-u-lg-1-3">
+
+                            <h3 className="content-subhead">
+                                <i className="fa fa-file-text"></i>
+                                Quiz Yourself
+                            </h3>
+                            <p>
+                                Help create practice exams and quiz yourself with questions that your friends submit.
+                            </p>
+                        </div>
+                        
+                        <div className="l-box pure-u-1 pure-u-lg-1-3">
+                            <h3 className="content-subhead">
+                                <i className="fa fa-mobile"></i>
+                                Study on the Go
+                            </h3>
+                            <p>
+                                Have easy access to practice exams on your mobile devices, letting you study from anywhere.
+                            </p>
+                        </div>
+                        
+                    </div>
+                </section>
+            );
+        }
+
+    }),
+
+
     Content = React.createClass({
+ 
         render: function () {
             return (
                 <div className="content-wrapper">
-                    <div className="content">
-                        <h2 className="content-head is-center">Excepteur sint occaecat cupidatat.</h2>
-
-                        <div className="pure-g">
-                            <div className="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-
-                                <h3 className="content-subhead">
-                                    <i className="fa fa-rocket"></i>
-                                    Get Started Quickly
-                                </h3>
-                                <p>
-                                    Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
-                                </p>
-                            </div>
-                            <div className="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                                <h3 className="content-subhead">
-                                    <i className="fa fa-mobile"></i>
-                                    Responsive Layouts
-                                </h3>
-                                <p>
-                                    Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
-                                </p>
-                            </div>
-                            <div className="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                                <h3 className="content-subhead">
-                                    <i className="fa fa-th-large"></i>
-                                    Modular
-                                </h3>
-                                <p>
-                                    Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
-                                </p>
-                            </div>
-                            <div className="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                                <h3 className="content-subhead">
-                                    <i className="fa fa-check-square-o"></i>
-                                    Plays Nice
-                                </h3>
-                                <p>
-                                    Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="ribbon l-box-lrg pure-g">
-                        <div className="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
-                            <img className="pure-img-responsive" alt="File Icons"
-                                                                 width="300"
-                                                                 src="img/common/file-icons.png" />
-                        </div>
-                        <div className="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
-
-                            <h2 className="content-head content-head-ribbon">Laboris nisi ut aliquip.</h2>
-
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="content">
-                        <h2 className="content-head is-center">Dolore magna aliqua. Uis aute irure.</h2>
-
-                        <div className="pure-g">
-                            <div className="l-box-lrg pure-u-1 pure-u-md-2-5">
-                                <form className="pure-form pure-form-stacked">
-                                    <fieldset>
-
-                                        <label for="name">Your Name</label>
-                                        <input id="name" type="text" placeholder="Your Name" />
-
-
-                                        <label for="email">Your Email</label>
-                                        <input id="email" type="email" placeholder="Your Email" />
-
-                                        <label for="password">Your Password</label>
-                                        <input id="password" type="password" placeholder="Your Password" />
-
-                                        <button type="submit" className="pure-button">Sign Up</button>
-                                    </fieldset>
-                                </form>
-                            </div>
-
-                            <div className="l-box-lrg pure-u-1 pure-u-md-3-5">
-                                <h4>Contact Us</h4>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat.
-                                </p>
-
-                                <h4>More Information</h4>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua.
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div className="footer l-box is-center">
-                        View the source of this layout to learn more. Made with love by the YUI Team.
-                    </div>
-
+                    <FeatureList />
+                    <UserForms />
                 </div>
             );
 
@@ -178,7 +139,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="main">
+                <div className="main splash">
                     <headerLayout.Header />
                     <Splash />
                     <Content />

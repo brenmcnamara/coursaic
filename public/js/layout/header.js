@@ -31,10 +31,7 @@ var React = require('react'),
 
         
         render: function() {
-            var user = Stores.UserStore().current(),
-                headerType = (this.props.isOpaque) ?
-                             ("header") :
-                             ("header--fill");
+            var user = Stores.UserStore().current();
             // TODO: Handle editing mode!
             return (
                 <div className="header">
@@ -47,6 +44,7 @@ var React = require('react'),
                         <ul>
                             <li><a href="#">About Us</a></li>
                             <li><a href="#">Sign Up</a></li>
+                            <li><a href="#">Log In</a></li>
                         </ul>
                     </div>
                 </div>

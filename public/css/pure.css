@@ -8,21 +8,7 @@
  * -- BASE STYLES --
  * Most of these are inherited from Base, but I want to change a few.
  */
-body {
-    line-height: 1.7em;
-    color: #7f8c8d;
-    font-size: 13px;
-}
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-label {
-    color: #34495e;
-}
 
 .pure-img-responsive {
     max-width: 100%;
@@ -102,7 +88,7 @@ a.pure-button-primary {
     /* Fixed menus normally have a border at the bottom. */
     border-bottom: none;
     /* I need a higher z-index here because of the scroll-over effect. */
-    z-index: 4;
+    z-index: 2;
 }
 
 .home-menu .pure-menu-heading {
@@ -116,7 +102,7 @@ a.pure-button-primary {
 }
 
 .home-menu a {
-    color: #6FBEF3;
+    color: rgb(245, 166, 35);
 }
 .home-menu li a:hover,
 .home-menu li a:focus {
@@ -125,53 +111,6 @@ a.pure-button-primary {
     color: #AECFE5;
 }
 
-
-/*
- * -- SPLASH STYLES --
- * This is the blue top section that appears on the page.
- */
-
-.splash-container {
-    background: #1f8dd6;
-    z-index: 1;
-    overflow: hidden;
-    /* The following styles are required for the "scroll-over" effect */
-    width: 100%;
-    height: 88%;
-    top: 0;
-    left: 0;
-    position: fixed !important;
-}
-
-.splash {
-    /* absolute center .splash within .splash-container */
-    width: 80%;
-    height: 50%;
-    margin: auto;
-    position: absolute;
-    top: 100px; left: 0; bottom: 0; right: 0;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-/* This is the main heading that appears on the blue section */
-.splash-head {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    border: 3px solid white;
-    padding: 1em 1.6em;
-    font-weight: 100;
-    border-radius: 5px;
-    line-height: 1em;
-}
-
-/* This is the subheading that appears on the blue section */
-.splash-subhead {
-    color: white;
-    letter-spacing: 0.05em;
-    opacity: 0.8;
-}
 
 /*
  * -- CONTENT STYLES --
@@ -183,10 +122,12 @@ a.pure-button-primary {
     top: 87%;
     width: 100%;
     min-height: 12%;
-    z-index: 2;
+
     background: white;
 
 }
+
+
 
 /* This is the class used for the main content headers (<h2>) */
 .content-head {
@@ -208,17 +149,6 @@ a.pure-button-primary {
     .content-subhead i {
         margin-right: 7px;
     }
-
-/* This is the class used for the dark-background areas. */
-.ribbon {
-    background: #2d3e50;
-    color: #aaa;
-}
-
-/* This is the class used for the footer */
-.footer {
-    background: #111;
-}
 
 /*
  * -- TABLET (AND UP) MEDIA QUERIES --
@@ -245,23 +175,6 @@ a.pure-button-primary {
             float: right;
         }
 
-    /* We increase the height of the splash-container */
-/*    .splash-container {
-        height: 500px;
-    }*/
-
-    /* We decrease the width of the .splash, since we have more width
-    to work with */
-    .splash {
-        width: 50%;
-        height: 50%;
-    }
-
-    .splash-head {
-        font-size: 250%;
-    }
-
-
     /* We remove the border-separator assigned to .l-box-lrg */
     .l-box-lrg {
         border: none;
@@ -269,14 +182,4 @@ a.pure-button-primary {
 
 }
 
-/*
- * -- DESKTOP (AND UP) MEDIA QUERIES --
- * On desktops and other large devices, we want to over-ride some
- * of the mobile and tablet styles.
- */
-@media (min-width: 78em) {
-    /* We increase the header font size even more */
-    .splash-head {
-        font-size: 300%;
-    }
-}
+
