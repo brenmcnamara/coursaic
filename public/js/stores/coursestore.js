@@ -174,7 +174,7 @@ var Stores = require('../Stores'),
             },
 
 
-            LOAD_HOME: function (payload) {
+            LOGIN: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             // Done waiting for the User Store.

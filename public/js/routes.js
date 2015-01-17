@@ -29,8 +29,13 @@ module.exports = {
             },
 
             {
+                // Note that you must extend the
+                // payload to include a username
+                // and password if you want to login
+                // a user that is not already logged
+                // into the app.
                 route: "/home",
-                action: constants.Action.LOAD_HOME,
+                action: constants.Action.LOGIN,
                 component: layout.homeLayout.Root
             },
 

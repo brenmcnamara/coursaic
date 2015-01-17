@@ -56,11 +56,20 @@
  * -- PURE BUTTON STYLES --
  * I want my pure-button elements to look a little different
  */
-.pure-button {
-    background-color: #1f8dd6;
-    color: white;
+.blue-button {
     padding: 0.5em 2em;
     border-radius: 5px;
+}
+
+.pure-button.blue-button {
+    background-color: #1f8dd6;
+    color: white;
+}
+
+.pure-button-disabled.blue-button {
+    background-color: #135a8a;
+    color: rgb(216, 216, 216);
+    cursor: default;
 }
 
 a.pure-button-primary {

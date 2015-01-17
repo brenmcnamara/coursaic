@@ -6,14 +6,7 @@ var shore = require('shore'),
 
 Parse.initialize(Env.parseAppId, Env.parseJavascriptId);
 
-window.fbAsyncInit = function() {
-    Parse.FacebookUtils.init({ // this line replaces FB.init({
-            appId      : Env.facebookId,
-            cookie     : true, // enable cookies to allow Parse to access the session
-            xfbml      : true,
-            version    : 'v2.1'
-    });
-
+window.onload = function () {
     shore.config({
         
         dispatcher: {
@@ -54,13 +47,6 @@ window.fbAsyncInit = function() {
     validator.config();
 
     routes.config();
+
 };
-
-(function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-
-}(document, 'script', 'facebook-jssdk'));
+    

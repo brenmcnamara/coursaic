@@ -43,13 +43,11 @@
                     window.location.href = window.location.href + "fatal";
                 },
 
-                facebookId = <%= facebook_id %>,
                 NODE_ENV = "<%= NODE_ENV %>",
                 parseAppId = "<%= parse_app_id %>",
                 parseJavascriptId = "<%= parse_javascript_id %>"
 
                 Env = {
-                    facebookId: facebookId,
                     parseAppId: parseAppId,
                     parseJavascriptId: parseJavascriptId,
                     NODE_ENV: NODE_ENV
@@ -60,7 +58,6 @@
 
             setInterval(function () {
                 if (global.Env !== Env ||
-                    Env.facebookId !== facebookId ||
                     Env.NODE_ENV !== NODE_ENV ||
                     Env.parseAppId !== parseAppId ||
                     Env.parseJavascriptId !== parseJavascriptId) {

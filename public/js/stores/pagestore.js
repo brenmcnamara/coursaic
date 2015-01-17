@@ -176,7 +176,7 @@ var Dispatcher = require('shore').Dispatcher,
             },
 
 
-            LOAD_HOME: function (payload) {
+            LOGIN: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
                                             Stores.CourseStore().dispatcherIndex ])
@@ -185,7 +185,7 @@ var Dispatcher = require('shore').Dispatcher,
                                  });
             },
 
-
+            
             SUBMIT_EXAM_RUN: function (payload) {
                 return this._addMode({ toMode: this.Mode.VIEW_EXAM_RESULTS,
                                        toPayload: payload });
