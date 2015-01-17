@@ -143,8 +143,8 @@ var router = require('shore').Router,
             return (
                 <section>
                     <div className="pure-g">
+                        <Login />
                         <Signup />
-                        <Login />                    
                     </div>
                 </section>
             );
