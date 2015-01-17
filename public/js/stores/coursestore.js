@@ -245,8 +245,6 @@ var Stores = require('../Stores'),
          */
         _createCourseQuery: function(requestMap) {
             var query = new Parse.Query(Course);
-            // Only get schools for the user.
-            query.equalTo('school', Stores.UserStore().current().get('school'));
             query.limit(requestMap.limit);
             query.skip(requestMap.skip);
 
