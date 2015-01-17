@@ -46,8 +46,6 @@ var Stores = require('../Stores'),
                             // it is added to the new course instance.
                             payload.field = new Field();
                             payload.field.id = fieldId;
-                            // Add the school of the current user.
-                            payload.school = Stores.UserStore().current().get('school');
                             // Enroll the current user into the course.
                             payload.enrolled = [ Stores.UserStore().current() ];
                             // Remove the field id from the payload before
@@ -326,20 +324,9 @@ var Stores = require('../Stores'),
          */
         _loadCourse: function(course) {
             var 
-                fieldPromise = Stores.FieldStore().fetchFieldForCourse(course),
+                fieldPromise = Stores.FieldStore().fetchFieldForCourse(course);
 
-                schoolPromise = new Promise(function(resolve, reject) {
-                    course.get('school').fetch({
-                        success: function() {
-                            resolve(course);
-                        },
-                        error: function(error) {
-                            throw error;
-                        }
-                    });
-                });
-
-            return Promise.all([fieldPromise, schoolPromise])
+            return Promise.all([fieldPromise])
                           // Unify the promises to return a promise that will pass
                           // a single parameter of the course that was loaded.
                           .then(
@@ -357,7 +344,7 @@ var Stores = require('../Stores'),
 
 
         /**
-         * Fetch the courses for a given school.
+         * Fetch the courses.
          *
          * @method fetch
          *

@@ -10,8 +10,6 @@ var Stores = require('../stores'),
     StoreBuilder = require('shore').StoreBuilder,
     Constants = require('../constants.js'),
 
-    School = Parse.Object.extend("School"),
-
 
     /**
      * The Store that manages all user data as
@@ -70,30 +68,12 @@ var Stores = require('../stores'),
                     else {
                         resolve();
                     }
-                }),
-
-                // Fetch school promise will get the school for the indicated
-                // user from the parse server.
-                fetchSchoolPromise = new Promise(function(resolve, reject) {
-                    // Upenn hard-coded here.
-                    var school = new School();
-                    school.id = "HLSpm7DJeB";
-                    user.set('school', school);
-                    user.get('school').fetch({
-                        success: function(model, response, options) {
-                            resolve();
-                        },
-
-                        error: function(model, response, options) {
-                            throw new Error("The school of the user could not be fetched.");
-                        }
-                    });
                 });
 
             // Add the current user to the hash.
             this._userHash[user.id] = user;
             // Combine all the promises into one promise.
-            return Promise.all([fbPromise, fetchSchoolPromise]);
+            return Promise.all([fbPromise]);
         },
 
 
