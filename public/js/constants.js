@@ -77,6 +77,8 @@ var
 
         LOGIN: 'LOGIN',
 
+        SIGNUP: 'SIGNUP',
+        
         SUBMIT_EXAM_RUN: 'SUBMIT_EXAM_RUN',
 
         TO_MODE_CANCEL_EXAM_RUN: 'TO_MODE_CANCEL_EXAM_RUN',

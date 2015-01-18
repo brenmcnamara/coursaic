@@ -13,6 +13,8 @@ var Stores = require('../stores'),
     logger = require('shore').logger,
 
 
+    User = require('./models.js').User,
+
     /**
      * The Store that manages all user data as
      * well as login and logout operations.
@@ -115,7 +117,19 @@ var Stores = require('../stores'),
                     // Need to login the user.
                     return this._login(payload.username, payload.password);
                 }
+            },
 
+
+            SIGNUP: function (payload) {
+                // Create a new user.
+                var user = new User();
+                user.set('firstName', payload.firstName);
+                user.set('lastName', payload.lastName);
+                user.set('username', payload.email);
+                user.set('email', payload.email);
+                user.set('password', payload.password);
+
+                return user.signUp(null);
             }
 
         },

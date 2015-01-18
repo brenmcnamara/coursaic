@@ -59,6 +59,7 @@ module.exports = {
 
             {
                 route: "/signup",
+                action: constants.Action.SIGNUP,
                 component: layout.notifyLayout.SignUpComplete
             }
         ]);

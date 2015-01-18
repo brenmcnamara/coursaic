@@ -30,33 +30,94 @@ var router = require('shore').Router,
 
     Signup = React.createClass({
 
+        getInitialState: function () {
+            return {
+                email: "",
+                password: "",
+                firstName: "",
+                lastName: ""
+            };
+        },
+
+
+        isValid: function () {
+            var isEmailRegExp = /^[^\/\@]+@[^\.\/\@]+\.[^\.\/\@]+$/i;
+            return this.state.firstName.length && this.state.lastName.length &&
+                   isEmailRegExp.test(this.state.email) && this.state.password.length;
+        },
+
+
         render: function () {
+            var signUpButton;
+
+            if (this.isValid()) {
+                signUpButton = (
+                    <button type="button"
+                            onClick={ this.onSignUpClicked }
+                            className="pure-button blue-button">
+                        Sign Up
+                    </button>
+                );
+            }
+            else {
+                signUpButton = (
+                    <button type="button"
+                            className="pure-button-disabled blue-button">
+                        Sign Up
+                    </button>
+                );
+            }
+
             return (
                 <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
                     <h3 className="splash__form-name">Sign Up</h3>
                     <form className="pure-form pure-form-stacked sign-up-form">
                         <fieldset>
                             <label htmlFor="name">First Name</label>
-                            <input type="text" placeholder="Your Name" />
+                            <input onChange={ this.onChangeFirstName } type="text" placeholder="First Name" />
                             
                             <label htmlFor="name">Last Name</label>
-                            <input type="text" placeholder="Your Name" /> 
+                            <input onChange={ this.onChangeLastName } type="text" placeholder="Last Name" /> 
                                 
 
                             <label htmlFor="email">Your Email</label>
-                            <input type="email" placeholder="Your Email" />
+                            <input onChange={ this.onChangeEmail } type="email" placeholder="Your Email" />
 
                             <label htmlFor="password">Your Password</label>
-                            <input type="password" placeholder="Your Password" />
+                            <input onChange={ this.onChangePassword } type="password" placeholder="Your Password" />
 
-                            <button className="pure-button blue-button">
-                                Sign Up
-                            </button>
-
+                            { signUpButton }
                         </fieldset>
                     </form>
                 </div>
             );
+        },
+
+
+        onChangeFirstName: function (event) {
+            this.setState({ firstName: event.target.value });
+        },
+
+
+        onChangeLastName: function (event) {
+            this.setState({ lastName: event.target.value });
+        },
+
+
+        onChangeEmail: function (event) {
+            this.setState({ email: event.target.value });
+        },
+
+
+        onChangePassword: function (event) {
+            this.setState({ password: event.target.value });
+        },
+
+
+        onSignUpClicked: function () {
+            if (this.isValid()) {
+                router.setPathWithPayload("/signup", this.state);
+            }
         }
 
 
@@ -77,19 +138,23 @@ var router = require('shore').Router,
 
         },
 
+
         render: function () {
             var loginButton;
 
             if (this.isValid()) {
                 loginButton = (
-                    <button onClick={ this.onLogin } className="pure-button blue-button">
+                    <button type="button"
+                            onClick={ this.onLogin }
+                            className="pure-button blue-button">
                         Login
                     </button>
                 );
             }
             else {
                 loginButton = (
-                    <button onClick={ this.onLogin } className="pure-button-disabled blue-button">
+                    <button type="button"
+                            className="pure-button-disabled blue-button">
                         Login
                     </button>
                 );
@@ -98,7 +163,7 @@ var router = require('shore').Router,
             return (
                 <div className="l-box-lrg pure-u-1 pure-u-md-1-2">
                     <h3 className="splash__form-name">Login</h3>
-                    <div className="pure-form pure-form-stacked sign-up-form">
+                    <form className="pure-form pure-form-stacked sign-up-form">
                         <fieldset>
                             <label htmlFor="email">Your Email</label>
                             <input onChange={ this.onEmailChange }
@@ -112,18 +177,21 @@ var router = require('shore').Router,
 
                             { loginButton }
                         </fieldset>
-                    </div>
+                    </form>
                 </div>
             );
         },
+
 
         onEmailChange: function (event) {
             this.setState({ email: event.target.value });
         },
 
+
         onPasswordChange: function (event) {
             this.setState({ password: event.target.value });
         },
+
 
         onLogin: function () {
             if (this.isValid()) {
@@ -133,6 +201,7 @@ var router = require('shore').Router,
                 });
             }
         }
+
 
     }),
 
