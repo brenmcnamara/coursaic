@@ -77,6 +77,8 @@ var
 
         LOGIN: 'LOGIN',
 
+        RESET_PASSWORD: 'RESET_PASSWORD',
+
         SIGNUP: 'SIGNUP',
         
         SUBMIT_EXAM_RUN: 'SUBMIT_EXAM_RUN',

@@ -130,6 +130,11 @@ var Stores = require('../stores'),
                 user.set('password', payload.password);
 
                 return user.signUp(null);
+            },
+
+
+            RESET_PASSWORD: function (payload) {
+                return Parse.User.requestPasswordReset(payload.email);
             }
 
         },

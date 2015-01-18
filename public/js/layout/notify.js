@@ -23,7 +23,7 @@ var React = require('React'),
                         <i className="fa fa-send notify-icon"></i>
                         <h3 className="notify__head">Email has been sent.</h3>
                         <p className="notify__subhead">
-                            An email has been sent to you for resetting the
+                            An email has been sent to you for resetting your
                             password.  <span className="inline-button"
                                              onClick={ this.onClickHome } >Return home</span> to try logging in.
                         </p>
@@ -44,7 +44,37 @@ var React = require('React'),
      */
     ResetPassword = React.createClass({
 
+        getInitialState: function () {
+            return { email: "" };
+        },
+
+
+        isValid: function () {
+            var isEmailRegExp = /^[^\/\@]+@[^\.\/\@]+\.[^\.\/\@]+$/i;
+            return isEmailRegExp.test(this.state.email);
+        },
+
+
         render: function () {
+            var sendEmailButton;
+            if (this.isValid()) {
+                sendEmailButton = (
+                    <button type="button"
+                            onClick={ this.onSendEmailClicked }
+                            className="pure-button blue-button">
+                        Send Email
+                    </button>
+                );
+            }
+            else {
+                sendEmailButton = (
+                    <button type="button"
+                            className="pure-button-disabled blue-button">
+                        Send Email
+                    </button>
+                );          
+            }
+
             return (
                 <div className="main">
                     <div className="notify">
@@ -56,17 +86,30 @@ var React = require('React'),
                         <form className="pure-form pure-form-stacked notify__form">
                             <fieldset>
                                 <label htmlFor="email">Your Email</label>
-                                <input type="email" placeholder="Your email" />
+                                <input onChange={ this.onChangeEmail }
+                                       type="email"
+                                       placeholder="Your email" />
 
-                                <button type="button" className="pure-button blue-button">
-                                    Send Email
-                                </button>
+                                { sendEmailButton }
                             </fieldset>
                         </form>
                     </div>
                 </div>
             );
+        },
+
+
+        onChangeEmail: function (event) {
+            this.setState({ email: event.target.value });
+        },
+
+
+        onSendEmailClicked: function () {
+            if (this.isValid()) {
+                Router.setPathWithPayload("/resetpasswordemail", { email: this.state.email });
+            }
         }
+
 
     }),
 

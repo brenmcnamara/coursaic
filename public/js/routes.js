@@ -70,6 +70,7 @@ module.exports = {
 
             {
                 route: '/resetpasswordemail',
+                action: constants.Action.RESET_PASSWORD,
                 component: layout.notifyLayout.ResetPasswordEmail
             }
         ]);
