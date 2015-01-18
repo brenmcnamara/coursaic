@@ -66,6 +66,11 @@ module.exports = {
             {
                 route: '/resetpassword',
                 component: layout.notifyLayout.ResetPassword
+            },
+
+            {
+                route: '/resetpasswordemail',
+                component: layout.notifyLayout.ResetPasswordEmail
             }
         ]);
 

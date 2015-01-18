@@ -605,14 +605,13 @@ ul.course-summary__stats {
 .notify {
     position: absolute;
 
-    margin-top: -5em;
-    margin-bottom: 2em;
+    margin-top: -8em;
+    margin-bottom: 3em;
     
     top: 50%;
     
     width: 100%;
     min-height: 10em;
-
 }
 
 .notify-icon {
@@ -632,6 +631,13 @@ ul.course-summary__stats {
     text-align: center;
     font-size: 1.3em;
     margin: 1em 5em;
+}
+
+
+.notify__form {
+    text-align: center;
+    width: 25em;
+    margin: auto;
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {

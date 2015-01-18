@@ -178,7 +178,7 @@ var router = require('shore').Router,
                             { loginButton }
                         </fieldset>
                     </form>
-                    <div onClick= { this.onForgotPassword } className="inline-button">Forgot you password?</div>
+                    <div onClick= { this.onForgotPassword } className="inline-button">Forgot your password?</div>
                 </div>
             );
         },
