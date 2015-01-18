@@ -178,6 +178,7 @@ var router = require('shore').Router,
                             { loginButton }
                         </fieldset>
                     </form>
+                    <div onClick= { this.onForgotPassword } className="inline-button">Forgot you password?</div>
                 </div>
             );
         },
@@ -200,6 +201,10 @@ var router = require('shore').Router,
                     password: this.state.password
                 });
             }
+        },
+
+        onForgotPassword: function () {
+            router.path("/resetpassword");
         }
 
 

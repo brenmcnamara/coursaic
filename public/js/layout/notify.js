@@ -9,6 +9,25 @@
 var React = require('React'),
     Router = require('shore').Router,
 
+    ResetPassword = React.createClass({
+
+        render: function () {
+            return (
+                <div className="main">
+                    <div className="notify">
+                        <i className="fa fa-frown-o notify-icon"></i>
+                        <h3 className="notify__head">Well, that Sucks</h3>
+                        <p className="notify__subhead">
+                            We have not yet built this feature yet... Try not to forget important
+                            sh**t like that.</p>
+                    </div>
+                </div>
+            );
+        }
+
+    }),
+
+
     /**
      * Alert the user that they just successfully
      * signed up for coursaic and need to verify their
@@ -72,5 +91,6 @@ var React = require('React'),
 
 module.exports = {
     PageNotFound: PageNotFound,
-    SignUpComplete: SignUpComplete
+    SignUpComplete: SignUpComplete,
+    ResetPassword: ResetPassword
 };

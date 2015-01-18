@@ -61,6 +61,11 @@ module.exports = {
                 route: "/signup",
                 action: constants.Action.SIGNUP,
                 component: layout.notifyLayout.SignUpComplete
+            },
+
+            {
+                route: '/resetpassword',
+                component: layout.notifyLayout.ResetPassword
             }
         ]);
 
