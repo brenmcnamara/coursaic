@@ -43,15 +43,7 @@ module.exports = {
                 // into the app.
                 route: "/home",
                 action: constants.Action.LOGIN,
-                component: layout.homeLayout.Root,
-                preRouteCheck: function (request) {
-                    if (!stores.UserStore().current()) {
-                        // No user exists, redirect
-                        // to the splash page so the
-                        // user can log in.
-                        request.redirect("/");
-                    }
-                }
+                component: layout.homeLayout.Root
             },
 
             {

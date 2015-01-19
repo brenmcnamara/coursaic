@@ -33,26 +33,13 @@ var React = require('react'),
     Root = React.createClass({
 
         render: function() {
-            // TODO: Don't write this twice.
-            if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_COURSE) {
-                return (
-                    <div className="main">
-                        <PopupsLayout.CreateCourse />
-                        <HeaderLayout.Header />
-                        <Home_Img />
-                        <Content />
-                    </div>
-                );        
-            }
-            else {
-                return (
-                    <div className="main">
-                        <HeaderLayout.Header />
-                        <Home_Img />
-                        <Content />
-                    </div>
-                );
-            }
+            return (
+                <div className="main">
+                    <HeaderLayout.Header />
+                    <Home_Img />
+                    <Content />
+                </div>
+            );
         },
 
 

@@ -39,14 +39,10 @@ var React = require('react'),
                                (<EnrollButton />),
                 deleteQuestionPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.DELETE_QUESTION) ?
                                       (<PopupsLayout.DeleteQuestion />) :
-                                      (null)
-                createExamPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_EXAM) ?
-                                  (<PopupsLayout.CreateExam />) :
-                                  (null);
+                                      (null);
 
             return (
                 <div className="main">
-                    { createExamPopup }
                     { deleteQuestionPopup }
                     <HeaderLayout.Header />
                     <Dashboard />
