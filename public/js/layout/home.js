@@ -119,8 +119,6 @@ var React = require('react'),
             var enrolled = Stores.CourseStore().coursesForUser(Stores.UserStore().current()) || [];
             return (
                 <div className="content__nav">
-                    <MainOptions />
-                    <WidgetsLayout.Divide />
                     <MyCoursesList enrolled={enrolled} />
                 </div>
             );
