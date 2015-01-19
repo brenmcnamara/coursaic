@@ -253,72 +253,12 @@ var React = require('react'),
      */
     Navigation = React.createClass({ 
 
-
         render: function() {
-            var examIconStyle = {
-                    height: "30px",
-                    margin: "-15px 0px 0px 9px"
-                };
-            if (!Stores.PageStore().currentMode()) {
-                return (
-                    <div className="content__nav">
-                        <ul className="main-options">
-                            <li className="main-options__item">
-                                <img src="/img/icons/exam.png"
-                                     style={ examIconStyle }
-                                     className="main-options__item__icon--clickable" />
-
-                                <div onClick={ this.onClickCreateExam }
-                                     className="main-options__item__text--clickable">Create Exam</div>
-                            </li>
-                        </ul>
-
-                        <div className="divide"></div>
-
-                        <Navigation_ExamList />
-
-                    </div>
-                );
-            }
-            else {
-                return (
-                    <div className="content__nav">
-                        <ul className="main-options">
-                            <li className="main-options__item">
-                                <img src="/img/icons/exam.png"
-                                     style={ examIconStyle }
-                                     className="main-options__item__icon--unclickable" />
-
-                                <div className="main-options__item__text--unclickable">Create Exam</div>
-                            </li>
-                        </ul>
-
-                        <div className="divide"></div>
-
-                        <Navigation_ExamList />
-
-                    </div>
-                );
-            }  
-        },
-
-        
-        onClickCreateExam: function(event) {
-            Action.send(Constants.Action.TO_MODE_CREATE_EXAM);
-        },
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+            return (
+                <div className="content__nav">
+                    <Navigation_ExamList />
+                </div>
+            );
         }
 
 
