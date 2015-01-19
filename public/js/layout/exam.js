@@ -42,8 +42,7 @@ var React = require('react'),
                 return (
                     <div className="main">
                         { cancelExamPopup }
-                        <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.HeaderFill isOpaque={ false } />
+                        <HeaderLayout.Header />
                         <ExamForm />
                     </div>
                 );  
