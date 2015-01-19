@@ -34,19 +34,18 @@ var React = require('react'),
             var user = Stores.UserStore().current();
             // TODO: Handle editing mode!
             return (
-                <div className="header">
-                    <div className="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
-                        <a className="pure-menu-heading" href="">
-                            <img className="header__logo" src="/img/logo-white-border.png" />
-                            <span className="header__title">Coursaic</span>
-                        </a>
 
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Sign Up</a></li>
-                            <li><a href="#">Log In</a></li>
-                        </ul>
-                    </div>
+                <div className="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+                    <a className="pure-menu-heading" href="">
+                        <img className="header__logo" src="/img/logo-white-border.png" />
+                        <span className="header__title">Coursaic</span>
+                    </a>
+
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Sign Up</a></li>
+                        <li><a href="#">Log In</a></li>
+                    </ul>
                 </div>
             );
         },
