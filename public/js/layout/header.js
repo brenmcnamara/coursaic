@@ -31,10 +31,21 @@ var React = require('react'),
 
         
         render: function() {
-            var user = Stores.UserStore().current();
+            var user = Stores.UserStore().current(),
+                // Modify the menu items and add them into the header.
+                menu;
+
+            if (this.props.menu) {
+                menu = this.props.menu.map(function (item) {
+                    return <li>{ item }</li>;
+                });
+            }
+            else {
+                menu = null;
+            }
+
             // TODO: Handle editing mode!
             return (
-
                 <div className="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
                     <a className="pure-menu-heading" href="">
                         <img className="header__logo" src="/img/logo-white-border.png" />
@@ -42,9 +53,7 @@ var React = require('react'),
                     </a>
 
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Sign Up</a></li>
-                        <li><a href="#">Log In</a></li>
+                        { menu }
                     </ul>
                 </div>
             );

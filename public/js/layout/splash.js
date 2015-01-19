@@ -289,9 +289,14 @@ var router = require('shore').Router,
     Root = React.createClass({
 
         render: function () {
+            var menu = [
+                (<a href="#">Login</a>),
+                (<a href="#">Sign Up</a>)
+            ];
+
             return (
                 <div className="main splash">
-                    <headerLayout.Header />
+                    <headerLayout.Header menu={ menu } />
                     <Splash />
                     <Content />
                 </div>
