@@ -101,6 +101,7 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
+
             LOGIN: function (payload) {
                 // Check if the user is already logged in.
                 if (this.current()) {
@@ -136,6 +137,7 @@ var Stores = require('../stores'),
             RESET_PASSWORD: function (payload) {
                 return Parse.User.requestPasswordReset(payload.email);
             }
+
 
         },
 

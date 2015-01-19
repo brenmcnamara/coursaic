@@ -102,9 +102,17 @@ var
 
     ErrorType = { 
 
+        // For trying to navigate to a page that
+        // is only available no credentials are provided,
+        // but users credentials are present.
+        EXISTING_USER_CREDENTIALS: "EXISTING_USER_CREDENTIALS",
+
         INVALID_EXAM_RUN: "INVALID_EXAM_RUN",
 
-        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS"
+        // For trying to navigate to a page that
+        // requires user credentials when no credentials
+        // are provided.
+        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS",
 
     };
 

@@ -7,7 +7,8 @@
 var 
     constants = require('./constants.js'),
     layout = require('./layout'),
-    router = require('shore').Router;
+    router = require('shore').Router,
+    stores = require('./stores');
 
 module.exports = {
 
@@ -24,8 +25,14 @@ module.exports = {
         router.routes([
             {
                 route: "/",
-                action: constants.Action.LOAD_SPLASH,
-                component: layout.splashLayout.Root
+                component: layout.splashLayout.Root,
+                preRouteCheck: function (request) {
+                    if (stores.UserStore().current()) {
+                        // Redirect to the home page if the
+                        // user is already logged in.
+                        request.redirect("/home");
+                    }
+                }
             },
 
             {
@@ -36,7 +43,15 @@ module.exports = {
                 // into the app.
                 route: "/home",
                 action: constants.Action.LOGIN,
-                component: layout.homeLayout.Root
+                component: layout.homeLayout.Root,
+                preRouteCheck: function (request) {
+                    if (!stores.UserStore().current()) {
+                        // No user exists, redirect
+                        // to the splash page so the
+                        // user can log in.
+                        request.redirect("/");
+                    }
+                }
             },
 
             {
