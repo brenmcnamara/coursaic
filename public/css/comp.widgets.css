@@ -575,6 +575,7 @@ ul.course-summary__stats {
     
     top: 50%;
     
+    max-width: 100%;
     width: 100%;
     min-height: 10em;
 }
@@ -601,12 +602,15 @@ ul.course-summary__stats {
 
 .notify__form {
     text-align: center;
-    width: 20em;
     margin: auto;
+    width: 20em;
 }
 
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-    .notify {
-        font-size: 2em;
+@media only screen and (max-device-width : 480px) {
+
+    .notify__form {
+        width: 10em;
     }
+
 }
+
