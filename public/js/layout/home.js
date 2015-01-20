@@ -93,15 +93,17 @@ var React = require('react'),
                     <div className="pure-u-1 course-section">
                         <h2 className="course-section__header">My Courses</h2>
                         <div className="divide"></div>
-                        <div className="pure-g course-section__grid"></div>
+                        
+                        <div className="course-section__empty">
+                            There are no courses here yet.
+                        </div>
                     </div>
 
                     <div className="pure-u-1 course-section">
                         <h2 className="course-section__header">Popular Courses</h2>
                         <div className="divide"></div>
-                        <div className="course-section__empty">
-                            There are no courses here yet.
-                        </div>
+                        
+                        <div className="pure-g course-section__grid"></div>
                     </div>
                 </div>
             );
