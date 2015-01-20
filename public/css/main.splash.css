@@ -5,6 +5,11 @@
  */
 
 
+.splash__content-wrapper {
+    top: 87%;
+}
+
+
 .splash section:nth-of-type(odd) {
     background: white;
 }

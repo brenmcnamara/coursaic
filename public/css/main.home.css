@@ -35,6 +35,36 @@
 }
 
 /* -------------------- *\
+     Course Section
+\* -------------------- */
+
+.course-section-wrapper {
+    max-width: 100%;
+    width: 100%;
+}
+
+.course-section {
+    margin-left: 2em;
+}
+
+.course-section__header {
+    /* Same margin-left as the divide element */
+    font-weight: normal;
+    color: rgb(245, 166, 35)
+}
+
+.course-section__grid {
+    margin-top: 2em;
+}
+
+.course-section__empty {
+    margin-top: 2em;
+    color: #999;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+/* -------------------- *\
       Course Search
 \* -------------------- */
 

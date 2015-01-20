@@ -36,8 +36,11 @@ var React = require('react'),
             return (
                 <div className="main">
                     <HeaderLayout.Header />
-                    <Home_Img />
-                    <Content />
+                    <div className="content-wrapper">
+                        <Dashboard />
+                        <Content />
+                    </div>
+
                 </div>
             );
         },
@@ -55,6 +58,18 @@ var React = require('react'),
 
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+        }
+
+
+    }),
+
+
+    Dashboard = React.createClass({
+
+        render: function () {
+            return (
+                <div className="dashboard"></div>
+            );
         }
 
 
@@ -94,9 +109,20 @@ var React = require('react'),
 
         render: function() {
             return (
-                <div className="home-content content">
-                    <Navigation />
-                    <Body />
+                <div className="pure-g course-section-wrapper">
+                    <div className="pure-u-1 course-section">
+                        <h2 className="course-section__header">My Courses</h2>
+                        <div className="divide"></div>
+                        <div className="pure-g course-section__grid"></div>
+                    </div>
+
+                    <div className="pure-u-1 course-section">
+                        <h2 className="course-section__header">Popular Courses</h2>
+                        <div className="divide"></div>
+                        <div className="course-section__empty">
+                            There are no courses here yet.
+                        </div>
+                    </div>
                 </div>
             );
         }

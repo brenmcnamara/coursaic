@@ -33,16 +33,15 @@
 .divide,
 .divide--full {
     background: #F5A623;
-    height: 2px;
-    margin: 10px auto;
+    height: 1px;
 }
 
 .divide {
-    width: 80%;
+    margin: auto 2em;    
 }
 
 .divide--full {
-    width: 100%;
+    margin: 0 auto;
 }
 
 /* -------------------- *\
@@ -93,48 +92,14 @@
     margin: 30px 20px 20px 20px;
 }
 
+
 /* -------------------- *\
-          Search
+        Dashboard
 \* -------------------- */
 
-.search {
-
-    position: relative;
-
-    margin-top: -25px;
-    height: 50px;
-    
-    width: 650px;
-    margin-left: -325px;
-    
-    top: 50%;
-    left: 50%;
-}
-
-.search__input {
-    position: relative;
-
-    top: 5px;
-    width: 550px;
-    height: 30px;
-    padding-left: 5px;
-
-    border: solid #AAA 1px;
-    border-radius: 4px;
-    /* TODO: Do not hard-code font-size */
-    /* TODO: Move this to text.css */
-    font-size: 20px;
-}
-
-.search__submit {
-    position: relative;
-    
-    top: 11px;
-
-    margin-left: 30px;
-
-    width: 30px;
-    height: 30px;
+.dashboard {
+    height: 15em;
+    background: rgb(216, 216, 216);
 }
 
 

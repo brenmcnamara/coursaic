@@ -275,12 +275,11 @@ var router = require('shore').Router,
  
         render: function () {
             return (
-                <div className="content-wrapper">
+                <div className="content-wrapper splash__content-wrapper">
                     <FeatureList />
                     <UserForms />
                 </div>
             );
-
         }
 
     }),
@@ -308,3 +307,4 @@ var router = require('shore').Router,
 module.exports = {
     Root: Root
 };
+
