@@ -92,8 +92,8 @@ var React = require('react'),
                 };
 
             return (
-                <div className="dashboard">
-                    <p className="dashboard__course-description">
+                <div className="course__dashboard">
+                    <p className="course__dashboard__course-description">
                         { Formatter.Text.truncate(course.get('description'), { maxlen: 200 }) }
                     </p>
                 </div>);

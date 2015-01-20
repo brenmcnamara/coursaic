@@ -11,7 +11,7 @@
         Dashboard
 \* -------------------- */
 
-.dashboard {
+.course__dashboard {
     position: relative;
 
     height: 170px;
@@ -21,7 +21,7 @@
     background: rgb(238, 238, 238);
 }
 
-.dashboard__course-logistics {
+.course__dashboard__course-logistics {
     position: absolute;
 
     left: 370px;
@@ -31,29 +31,29 @@
     margin: 0;
 }
 
-ul.dashboard__course-logistics {
+ul.course__dashboard__course-logistics {
     list-style: none;
 }
 
-.dashboard__course-logistics__item {
+.course__dashboard__course-logistics__item {
     font-size: 16px;
     color: #999;
 
     font-weight: bold;
 }
 
-.dashboard__course-logistics__item:not(:nth-of-type(1)) {
+.course__dashboard__course-logistics__item:not(:nth-of-type(1)) {
     margin-top: 10px;
 }
 
-.dashboard__profile-grid {
+.course__dashboard__profile-grid {
     position: absolute;
 
     left: 520px;
     top: 30px;
 }
 
-.dashboard__course-description {
+.course__dashboard__course-description {
     position: absolute;
     bottom: 0px;
     width: 450px;

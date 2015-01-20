@@ -45,27 +45,6 @@
 
 
 /* PORTRAIT AND LANDSCAPE MOBILE DEVICES */
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
-
-    .splash section {
-        font-size: 2.5em;
-    }
-
-    .splash-filler {
-        font-size: 2em;
-    }
-
-}
-
-/* PORTRAIT */
-@media only screen and (max-device-width : 320px) {
-
-    .splash-filler__head: {
-        margin-top: 5em;
-    }
-
-}
-
 .splash__form-name {
     color: rgb(245, 166, 35);
 }
