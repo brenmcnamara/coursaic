@@ -15,7 +15,7 @@
 }
 
 .course-section {
-    margin: 2em 0 2em 2em;
+    margin: 2em;
 }
 
 .course-section__header {
@@ -26,14 +26,14 @@
 
 .course-section__grid {
     margin-top: 2em;
-    margin-right: 2em;
 }
 
 .course-section__empty {
+    font-size: 1.2em;
     margin-top: 2em;
     color: #999;
     text-align: center;
-    font-size: 1.2em;
+
 }
 
 .course-box {
@@ -47,7 +47,7 @@
     display: -webkit-flex;
     flex-direction: column;
     -webkit-flex-direction: column;
-    margin: .25em;
+    margin: .5em;
     border-radius: 5px;
     overflow: hidden;
     border: solid #888 1px;
@@ -85,3 +85,9 @@
             padding: .25em 0;
         }
 
+/* SMALL SCREEN STYLING */
+@media screen and (max-width: 48em) {
+    .course-section__header {
+        text-align: center;
+    }
+}
