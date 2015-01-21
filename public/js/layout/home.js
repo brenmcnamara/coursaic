@@ -90,6 +90,7 @@ var React = require('react'),
         render: function() {
             return (
                 <div className="pure-g course-section-wrapper">
+
                     <section className="pure-u-1 course-section">
                         <h2 className="course-section__header">My Courses</h2>
                         <div className="divide"></div>

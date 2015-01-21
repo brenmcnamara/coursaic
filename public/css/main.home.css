@@ -15,7 +15,10 @@
 }
 
 .course-section {
-    margin: 2em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 2em;
 }
 
 .course-section__header {
@@ -33,7 +36,6 @@
     margin-top: 2em;
     color: #999;
     text-align: center;
-
 }
 
 .course-box {
@@ -73,6 +75,7 @@
 .course-box__content__tags {
 
 }
+
     .course-box__content__tags ul {
         margin: 0;
         padding: 0;
@@ -87,7 +90,9 @@
 
 /* SMALL SCREEN STYLING */
 @media screen and (max-width: 48em) {
+    
     .course-section__header {
         text-align: center;
     }
+
 }
