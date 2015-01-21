@@ -14,16 +14,10 @@
  * These are some useful classes which I will need
  */
 .l-box {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
     padding: 1em;
 }
 
 .l-box-lrg {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
     padding: 2em;
     border-bottom: 1px solid white;
 }
