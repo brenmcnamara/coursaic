@@ -606,7 +606,7 @@ ul.course-summary__stats {
     width: 20em;
 }
 
-@media only screen and (max-device-width : 480px) {
+@media screen and (max-width: 48em) {
 
     .notify__form {
         width: 10em;
