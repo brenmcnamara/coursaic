@@ -11,56 +11,54 @@
         Dashboard
 \* -------------------- */
 
-.course__dashboard {
+.course-dashboard {
+    border: solid red;
+    /* SPANS THE REMAINING WIDTH BELOW THE DASHBOARD */
+    min-height: 10em;
+
+}
+
+.course-dashboard__summary {
     position: relative;
+    border: solid green;
+}
 
-    height: 170px;
+.course-dashboard__summary__content {
+    position: absolute;
     width: 100%;
-    min-width: 800px;
+    height: 10em;
 
-    background: rgb(238, 238, 238);
+    bottom: -3em;
+
+    background: white;
+
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 2px 3px 3px .5px #999;
 }
 
-.course__dashboard__course-logistics {
-    position: absolute;
-
-    left: 370px;
-    bottom: 10px;
-
-    padding: 0;
-    margin: 0;
+.course-dashboard__summary__content__banner {
+    float: left;
+    width: 2em;
+    height: 100%;
+    background: #4A90E2;
 }
 
-ul.course__dashboard__course-logistics {
-    list-style: none;
+
+.course-dashboard__data {
+    border: solid orange;
 }
 
-.course__dashboard__course-logistics__item {
-    font-size: 16px;
-    color: #999;
-
-    font-weight: bold;
+.course-dashboard__data__display {
+    position: relative;
+    border: solid red;
+    min-height: 10em;
 }
 
-.course__dashboard__course-logistics__item:not(:nth-of-type(1)) {
-    margin-top: 10px;
-}
-
-.course__dashboard__profile-grid {
-    position: absolute;
-
-    left: 520px;
-    top: 30px;
-}
-
-.course__dashboard__course-description {
-    position: absolute;
-    bottom: 0px;
-    width: 450px;
-    max-height: 5em;
-    left: 365px; /* width of course-summary + 15px */
-    
-    overflow: hidden;
+.course-dashboard__data__display > canvas {
+    width: 100%;
+    min-height: 10em;
+    border: solid green;
 }
 
 /* -------------------- *\

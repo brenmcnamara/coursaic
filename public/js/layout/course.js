@@ -40,10 +40,10 @@ var React = require('react'),
             return (
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
-                    <Dashboard />
-                    <Summary />
-                    <EnrollButton />
-                    <Content />
+                    <div className="content-wrapper">
+                        <Dashboard />
+                    </div>
+                    
                 </div>
             );
         },
@@ -81,15 +81,33 @@ var React = require('react'),
     Dashboard = React.createClass({
         
         render: function() {
-            var course = Stores.CourseStore().current(),
-                profileGridStyle = {
-                    minWidth: "150px"
-                };
-
             return (
                 <div className="dashboard">
-                    <div className="dashboard__content"></div>
-                </div>);
+                    <div className="dashboard__content">
+                        <div className="pure-g course-dashboard">
+                            <div className="pure-u-1 pure-u-md-2-5 course-dashboard__summary">
+                                <div className="course-dashboard__summary__content">
+                                    <div className="course-dashboard__summary__content__banner" />
+                                </div>
+                            </div>
+                            <div className="pure-u-1 pure-u-md-3-5 course-dashboard__data pure-g">
+                                <div className="pure-u-2-5 course-dashboard__data__display">
+                                    <canvas id="js-course-dashboard__data__questions"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        },
+
+
+        componentDidMount: function () {
+            var context = document.getElementById('js-course-dashboard__data__questions')
+                                  .getContext('2d');
+
+
+            console.log("Setup the pi chart here.");
         }
 
 
