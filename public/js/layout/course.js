@@ -33,21 +33,12 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function() {
-            var isEnrolled = Stores.CourseStore().current().isEnrolled(Stores.UserStore().current()),
-                enrollButton = (isEnrolled) ?
-                               (<UnenrollButton />) :
-                               (<EnrollButton />),
-                deleteQuestionPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.DELETE_QUESTION) ?
-                                      (<PopupsLayout.DeleteQuestion />) :
-                                      (null);
-
             return (
                 <div className="main">
-                    { deleteQuestionPopup }
                     <HeaderLayout.Header />
                     <Dashboard />
                     <Summary />
-                    { enrollButton }
+                    <EnrollButton />
                     <Content />
                 </div>
             );
@@ -92,11 +83,7 @@ var React = require('react'),
                 };
 
             return (
-                <div className="course__dashboard">
-                    <p className="course__dashboard__course-description">
-                        { Formatter.Text.truncate(course.get('description'), { maxlen: 200 }) }
-                    </p>
-                </div>);
+                <div className="dashboard"></div>);
         }
 
 
@@ -114,32 +101,15 @@ var React = require('react'),
     Summary = React.createClass({
 
         render: function() {
-            var course = Stores.CourseStore().current(),
-                enrollText = (course.enrollCount() == 1) ? 
-                             "1 person enrolled" :
-                             course.enrollCount() + " people enrolled",
-                examCount = Stores.ExamStore().examsForCourse(course).length,
-                examText;
-
-            if (examCount === 0) {
-                examText = "No Exams";
-            }
-            else if (examCount === 1) {
-                examText = "1 Exam";
-            }
-            else {
-                examText = examCount + " Exams";
-            }
 
             return (
                 <div className="course-summary">
                     <div className="course-summary__banner"></div>
-                    <h1 className="course-summary__code">{ course.get('code') }</h1>
-                    <p className="course-summary__name">{ course.get('name') }</p>
+                    <h1 className="course-summary__code">CS 101</h1>
+                    <p className="course-summary__name">Introduction to Computer Science</p>
                     <div className="divide"></div>
                     <ul className="course-summary__stats">
-                        <li className="course-summary__stats__item">{ enrollText }</li>
-                        <li className="course-summary__stats__item">{ examText }</li>
+                        <li className="course-summary__stats__item">12 enrolled</li>
                     </ul>
                 </div>
             );
@@ -234,175 +204,8 @@ var React = require('react'),
         render: function() {
             return (
                 <div className="content course-content">
-                    <Navigation />
-                    <Body />
                 </div>
             );
-        }
-
-
-    }),
-
-
-    /**
-     * The main navigation menu for the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation
-     */
-    Navigation = React.createClass({ 
-
-        render: function() {
-            return (
-                <div className="content__nav">
-                    <Navigation_ExamList />
-                </div>
-            );
-        }
-
-
-    }),
-
-
-    /**
-     * The list of exams in the navigation menu.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation_ExamList
-     */
-    Navigation_ExamList = React.createClass({
-
-        render: function() {
-            // TODO: Add a "No Exams" list item if there are no exams.
-            var PIXEL_SPACE_BETWEEN_EXAMS = 28,
-                PIXEL_SPACE_TO_FIRST_EXAM = 27,
-
-                course = Stores.CourseStore().current(),
-
-                selectedExamIndex = -1,
-
-                examList = Stores.ExamStore().examsForCourse(course).map(function(exam, index) {
-                    if (Stores.ExamStore().current() && exam.id === Stores.ExamStore().current().id) {
-                        selectedExamIndex = index;
-                    }
-                    return <Navigation_ExamList_Item key={ exam.id } exam={ exam } />
-                }),
-
-                displayStyle = (selectedExamIndex === -1) ? "none" : "initial",
-
-                selectedExamBarPixelPosition = 
-                    (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) + PIXEL_SPACE_TO_FIRST_EXAM,
-
-                selectionBarStyle = {
-                    top: selectedExamBarPixelPosition.toString() +"px",
-                    display: displayStyle,
-                    background: '#4A90E2'
-                },
-                selectionBar = (examList.length) ?
-                               (<div className="exam-list__selection-bar"
-                                     style={ selectionBarStyle }></div>) :
-                               null;
-
-            return (
-                <div className="category exam-list">
-                    { selectionBar }
-                    <div className="category__title">Exams</div>
-                    <ul className="category__list">
-                        { examList }
-                    </ul>
-                </div>
-            );
-        },
-
-
-        // Event handler for when exams are fetched.
-        didFetchExams: function(event) {
-            this.forceUpdate();
-        },
-
-
-        didLoadExam: function(event) {
-            this.forceUpdate();
-        },
-
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        didCreateExam: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
-        }
-
-    }),
-
-
-    /**
-     * A single list item in the exam list of the course page's
-     * main navigation.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation_ExamList_Item
-     */
-    Navigation_ExamList_Item = React.createClass({
-
-        render: function() {
-            var exam = this.props.exam;
-
-            if (Stores.PageStore().currentMode()) {
-                return (
-                    <li>{ exam.get('name') }</li>
-                );
-            }
-            else {
-                return (
-                    <li onClick = { this.handleClick } >{ exam.get('name') }</li>
-                );
-            }
-        },
-
-
-        handleClick: function(event) {
-            Router.path("/course/<courseId>/exam/<examId>",
-                        {
-                            courseId: Stores.CourseStore().current().id,
-                            examId: this.props.exam.id
-                        });
-        },
-
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
 
 

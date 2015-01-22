@@ -564,6 +564,31 @@ ul.course-summary__stats {
 }
 
 /* -------------------- *\
+           Tags
+\* -------------------- */
+
+.tag {
+    font-size: .8em;
+    padding: 0em .3em;
+    border-radius: 3px;
+}
+
+.tag-list {
+    width: 100%;
+}
+
+.tag-list:after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+}
+
+.tag-list__item {
+    float: left;
+    margin: 0 0 .3em .3em;
+}
+
+/* -------------------- *\
          Notify
 \* -------------------- */
 

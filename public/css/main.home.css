@@ -67,21 +67,18 @@
     color: #444;
 }
 
-.course-box__content__tags {
-
+.course-box__content__body > div {
+    margin-bottom: 1em;
 }
 
-    .course-box__content__tags ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-        .course-box__content__tags ul li {
-            text-align: center;
-            font-size: .8em;
-            padding: .25em 0;
-        }
+.course-box__content__footer {
+    height: 1.8em;
+    line-height: 1.8em;
+    min-height: 1.5em;
+    text-align: center;
+    background: rgb(216, 216, 216);
+    color: rgb(74, 144, 226);
+}
 
 /* SMALL SCREEN STYLING */
 @media screen and (max-width: 48em) {

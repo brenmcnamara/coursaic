@@ -38,7 +38,7 @@ var Dispatcher = require('shore').Dispatcher,
                 fromMode = inputMap.fromMode;
 
             return new Promise(function(resolve, reject) {
-                if (self._currentMode !== fromMode) {
+                if (self._currentMode && self._currentMode !== fromMode) {
                     throw new Error("Expected mode to be " + fromMode +
                                     " when the mode is " + self._currentMode + ".");
                 }

@@ -110,97 +110,89 @@ var React = require('react'),
                                 <div className="course-box__content">
                                     <header className="course-box__content__header">CS 101</header>
                                     <div className="course-box__content__body">
-                                        Learn the basics of programming and algorithm design.
-                                        Understand the basics of the Java programming language
-                                        to create simple software with simple applications.
+                                        <div>
+                                            Learn the basics of programming and algorithm design.
+                                            Understand the basics of the Java programming language
+                                            to create simple software with simple applications.
+                                        </div>
+                                        <div className="tag-list">
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                                                 Java
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
+                                                 Vanderbilt
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
+                                                 Computer Science
+                                            </div>
+                                        </div>
                                     </div>
-                                    <footer className="course-box__content__tags">
-                                        <ul>
-                                            <li style={ { backgroundColor: "#e93a0a", color: "white"} } >
-                                                Java
-                                            </li>
-                                            <li style={ { backgroundColor: "#087a34", color: "white"} } >
-                                                Vanderbilt
-                                            </li>
-                                            <li style={ { backgroundColor: "#e25a58", color: "white"} } >
-                                                Computer Science
-                                            </li>
-                                        </ul>
+                                    <footer className="course-box__content__footer">
+                                        10 enrolled
                                     </footer>
                                 </div>
                             </div>
+
 
                             <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
                                 <div className="course-box__content">
                                     <header className="course-box__content__header">CS 101</header>
                                     <div className="course-box__content__body">
-                                        Here is the description for the course.
+                                        <div>
+                                            Learn the basics of programming and algorithm design.
+                                            Understand the basics of the Java programming language
+                                            to create simple software with simple applications.
+                                        </div>
+                                        <div className="tag-list">
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                                                 Java
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
+                                                 Vanderbilt
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
+                                                 Computer Science
+                                            </div>
+                                        </div>
                                     </div>
-                                    <footer className="course-box__content__tags">
-                                        <ul>
-                                            <li style={ { backgroundColor: "#087a34", color: "white"} } >
-                                                Vanderbilt
-                                            </li>
-                                        </ul>
+                                    <footer className="course-box__content__footer">
+                                        10 enrolled
                                     </footer>
                                 </div>
                             </div>
-
+                            
                             <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
                                 <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 201</header>
+                                    <header className="course-box__content__header">CS 101</header>
                                     <div className="course-box__content__body">
-                                        An introduction to abstract data structures and their
-                                        importance as a foundation to modern software
-                                        development. Create different data structures in C++.
+                                        <div>
+                                            Learn the basics of programming and algorithm design.
+                                            Understand the basics of the Java programming language
+                                            to create simple software with simple applications.
+                                        </div>
+                                        <div className="tag-list">
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                                                 Java
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
+                                                 Vanderbilt
+                                            </div>
+                                            <div className="tag tag-list__item"
+                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
+                                                 Computer Science
+                                            </div>
+                                        </div>
                                     </div>
-                                    <footer className="course-box__content__tags">
-                                        <ul>
-                                            <li style={ { backgroundColor: "#2878b2", color: "white"} } >
-                                                C++
-                                            </li>
-                                            <li style={ { backgroundColor: "#087a34", color: "white"} } >
-                                                Vanderbilt
-                                            </li>
-                                            <li style={ { backgroundColor: "#e25a58", color: "white"} } >
-                                                Computer Science
-                                            </li>
-                                        </ul>
-                                    </footer>
-                                </div>
-                            </div>
-
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">MATH 246</header>
-                                    <div className="course-box__content__body">
-                                        Here is the description for the course.
-                                    </div>
-                                    <footer className="course-box__content__tags">
-                                        <ul>
-                                            <li style={ { backgroundColor: "#087a34", color: "white"} } >
-                                                Vanderbilt
-                                            </li>
-                                            <li style={ { backgroundColor: "#e25a58", color: "white"} } >
-                                                Computer Science
-                                            </li>
-                                        </ul>
-                                    </footer>
-                                </div>
-                            </div>
-
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">BSCI 110A</header>
-                                    <div className="course-box__content__body">
-                                        Here is the description for the course.
-                                    </div>
-                                    <footer className="course-box__content__tags">
-                                        <ul>
-                                            <li style={ { backgroundColor: "#e25a58", color: "white"} } >
-                                                Computer Science
-                                            </li>
-                                        </ul>
+                                    <footer className="course-box__content__footer">
+                                        10 enrolled
                                     </footer>
                                 </div>
                             </div>
