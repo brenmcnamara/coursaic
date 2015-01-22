@@ -87,7 +87,9 @@ var React = require('react'),
                 };
 
             return (
-                <div className="dashboard"></div>);
+                <div className="dashboard">
+                    <div className="dashboard__content"></div>
+                </div>);
         }
 
 
