@@ -26,8 +26,11 @@
     height: 12em;
 
     background: white;
+}
 
-
+.course-dashboard__summary__header,
+.course-dashboard__summar__subheader {
+    margin-left: 3em;
 }
 
 .course-dashboard__summary__content__banner {

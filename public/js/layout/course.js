@@ -85,17 +85,41 @@ var React = require('react'),
                 <div className="dashboard">
                     <div className="dashboard__content">
                         <div className="pure-g course-dashboard">
-                            <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 course-dashboard__summary">
-                                <div className="course-dashboard__summary__content">
-                                    <div className="course-dashboard__summary__content__banner" />
-                                </div>
-                            </div>
-                            <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
-                                <div className="dashboard-buttons__item">
-                                    <EnrollButton />
-                                </div>
-                            </div>
+                            <Dashboard_CourseSummary />
+                            <Dashboard_Buttons />
                         </div>
+                    </div>
+                </div>
+            );
+        }
+
+
+    }),
+
+
+    Dashboard_CourseSummary = React.createClass({
+        
+        render: function () {
+            return (
+                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 course-dashboard__summary">
+                    <div className="course-dashboard__summary__content">
+                        <div className="course-dashboard__summary__content__banner" />
+                    </div>
+                </div>
+            );
+    
+        }
+
+
+    }),
+
+    Dashboard_Buttons = React.createClass({
+
+        render: function () {
+            return (
+                <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
+                    <div className="dashboard-buttons__item">
+                        <EnrollButton />
                     </div>
                 </div>
             );
