@@ -6,34 +6,12 @@
 
 
 /* -------------------- *\
-     Course Section
+       Course Box
 \* -------------------- */
 
-.course-section-wrapper {
-    max-width: 100%;
-    width: 100%;
-}
-
-.course-section {
-    padding: 2em;
-}
-
-.course-section__header {
-    /* Same margin-left as the divide element */
-    font-weight: normal;
-    color: rgb(245, 166, 35)
-}
-
-.course-section__grid {
-    margin-top: 2em;
-}
-
-.course-section__empty {
-    font-size: 1.2em;
-    margin-top: 2em;
-    color: #999;
-    text-align: center;
-}
+/* NOTE THAT THE COURSE BOX ELEMENT
+   SHOULD BE INSIDE THE section__course-grid
+   element */
 
 .course-box {
 
@@ -78,13 +56,4 @@
     text-align: center;
     background: rgb(216, 216, 216);
     color: rgb(74, 144, 226);
-}
-
-/* SMALL SCREEN STYLING */
-@media screen and (max-width: 48em) {
-    
-    .course-section__header {
-        text-align: center;
-    }
-
 }

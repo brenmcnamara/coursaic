@@ -44,52 +44,44 @@
     margin: 0 auto;
 }
 
+
 /* -------------------- *\
-         Content
+         Section
 \* -------------------- */
 
-.content {
-    display: flex;
-    display: -webkit-flex;
-
-    -webkit-flex-direction: row;
-    flex-direction: row;
-
+.section-wrapper {
+    max-width: 100%;
     width: 100%;
 }
 
-.content__nav {
-    position: relative;
-
-    width: 200px;
-    min-width: 200px;
+.section {
+    padding: 2em;
 }
 
-.content__body__wrapper {
-    margin: 0 20px 0 70px;
+.section__header {
+    /* Same margin-left as the divide element */
+    font-weight: normal;
+    color: rgb(245, 166, 35)
 }
 
-.content__body__title {
-    margin: 15px 0px 0px 0px;
-    margin-top: 15px;
-
-    font-size: 40px;
-    font-weight: bold;
-    color: #444;
+.section__course-grid {
+    margin-top: 2em;
 }
 
-.content__body__description {
-    /* TODO: Move text styling to text css */
-    margin: 5px 0px; 
-    font-size: .8em;
-    color: #666;
+.section__empty {
+    font-size: 1.2em;
+    margin-top: 2em;
+    color: #999;
+    text-align: center;
+}
+
+/* SMALL SCREEN FOR SECTION */
+@media screen and (max-width: 48em) {
     
-}
+    .section__header {
+        text-align: center;
+    }
 
-/* styling for any category elements
-   inside of the nav */
-.content__nav > .category {
-    margin: 30px 20px 20px 20px;
 }
 
 /* -------------------- *\

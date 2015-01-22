@@ -95,22 +95,22 @@ var React = require('react'),
 
         render: function() {
             return (
-                <div className="pure-g course-section-wrapper">
+                <div className="pure-g section-wrapper">
 
-                    <section className="pure-u-1 course-section">
-                        <h2 className="course-section__header">My Courses</h2>
+                    <section className="pure-u-1 section">
+                        <h2 className="section__header">My Courses</h2>
                         <div className="divide"></div>
                         
-                        <div className="course-section__empty">
+                        <div className="section__empty">
                             There are no courses here yet.
                         </div>
                     </section>
 
-                    <section className="pure-u-1 course-section">
-                        <h2 className="course-section__header">Popular Courses</h2>
+                    <section className="pure-u-1 section">
+                        <h2 className="section__header">Popular Courses</h2>
                         <div className="divide"></div>
                         
-                        <div className="pure-g course-section__grid">
+                        <div className="pure-g section__course-grid">
                             
                             <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
                                 <div className="course-box__content">
