@@ -85,29 +85,18 @@ var React = require('react'),
                 <div className="dashboard">
                     <div className="dashboard__content">
                         <div className="pure-g course-dashboard">
-                            <div className="pure-u-1 pure-u-md-2-5 course-dashboard__summary">
+                            <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 course-dashboard__summary">
                                 <div className="course-dashboard__summary__content">
                                     <div className="course-dashboard__summary__content__banner" />
                                 </div>
                             </div>
-                            <div className="pure-u-1 pure-u-md-3-5 course-dashboard__data pure-g">
-                                <div className="pure-u-2-5 course-dashboard__data__display">
-                                    <canvas id="js-course-dashboard__data__questions"></canvas>
-                                </div>
+                            <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 course-dashboard__options pure-g">
+
                             </div>
                         </div>
                     </div>
                 </div>
             );
-        },
-
-
-        componentDidMount: function () {
-            var context = document.getElementById('js-course-dashboard__data__questions')
-                                  .getContext('2d');
-
-
-            console.log("Setup the pi chart here.");
         }
 
 
