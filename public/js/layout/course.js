@@ -90,8 +90,10 @@ var React = require('react'),
                                     <div className="course-dashboard__summary__content__banner" />
                                 </div>
                             </div>
-                            <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 course-dashboard__options pure-g">
-
+                            <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
+                                <div className="dashboard-buttons__item">
+                                    <EnrollButton />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -161,7 +163,7 @@ var React = require('react'),
             return (
                 <button onClick={ this.onClick }
                         type="button" 
-                        className="button large-button--positive course-page__enroll">
+                        className="pure-button blue-button large-button">
                     Enroll
                 </button>
             );
@@ -169,7 +171,7 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            // Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 
@@ -190,7 +192,7 @@ var React = require('react'),
             return (
                 <button onClick={ this.onClick }
                         type="button"
-                        className="button large-button--negative course-page__enroll">
+                        className="pure-button red-button large-button">
                     Unenroll
                 </button>
             );
@@ -198,7 +200,7 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            // Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 

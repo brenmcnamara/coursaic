@@ -23,7 +23,7 @@
 
 .course-dashboard__summary__content {
     width: 100%;
-    height: 10em;
+    height: 12em;
 
     background: white;
 
@@ -35,11 +35,6 @@
     width: 2em;
     height: 100%;
     background: #4A90E2;
-}
-
-
-.course-dashboard__options {
-    border: solid orange;
 }
 
 @media only screen and (min-width: 48em) {
@@ -58,7 +53,6 @@
 @media only screen and (max-width: 48em) {
 
     .course-dashboard__summary__content {
-        background: rgba(0,0,0,0);
         border-top: solid #666 1px;
         border-bottom: solid #666 1px;
     }

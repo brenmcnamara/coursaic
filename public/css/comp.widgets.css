@@ -92,6 +92,50 @@
     margin: 30px 20px 20px 20px;
 }
 
+/* -------------------- *\
+         Buttons
+\* -------------------- */
+
+.inline-button {
+    color: #4A90E2;
+    cursor: pointer;
+}
+
+.inline-button:hover {
+    text-decoration: underline;       
+}
+
+
+.pure-button-disabled,
+.pure-button {
+    padding: 0.5em 2em;
+    border-radius: 5px;
+}
+
+.pure-button-disabled.large-button,
+.pure-button.large-button {
+    min-width: 15em;
+}
+
+.pure-button.blue-button {
+    background-color: #1f8dd6;
+    color: white;
+}
+
+.pure-button-disabled.blue-button {
+    background-color: #135a8a;
+    color: rgb(216, 216, 216);
+}
+
+.pure-button.red-button {
+    background-color: #ff3a4c;
+    color: white;
+}
+
+.pure-button-disabled.red-button {
+    background-color: #a32530;
+    color: rgb(216, 216, 216);
+}
 
 /* -------------------- *\
         Dashboard
@@ -110,118 +154,24 @@
     padding: 7em 0 0 0;
 }
 
-/* -------------------- *\
-      Form Elements
-\* -------------------- */
+.dashboard-buttons {
+    margin: 0;
+    padding: 0;
 
-.text-input {
-    padding: 5px;    
+    display: flex;
+    display: -webkit-flex;
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
+
+    flex-wrap: wrap;
 }
 
-.button--disabled,
-.button {
-    border: solid #CCC 1px;
-    padding: 5px 10px;
-    border-radius: 2px;
-    font-size: 1em;
-    background: #EAEAEA;
+.dashboard-buttons__item {
+    padding: .25em .5em;
 }
 
-.button-wrapper {
-    text-align: center;
-}
 
-.button-wrapper > .button,
-.button-wrapper > .button--disabled {
-    margin: 0px 10px;
-}
-
-.button {
-    color: black;
-    cursor: pointer;
-}
-
-.button--disabled {
-    color: #999;
-    cursor: default;
-}
-
-.button:active {
-    background: #DDD;
-}
-
-.large-button--transparant {
-    background: transparent;
-}
-
-.small-button,
-.small-button--positive,
-.small-button--negative,
-.large-button,
-.large-button--positive,
-.large-button--negative,
-.large-button--transparant {
-    color: white;
-}
-
-.large-button--transparant {
-    border: solid white 3px;
-}
-
-.small-button,
-.small-button--positive,
-.small-button--negative,
-.large-button,
-.large-button--positive,
-.large-button--negative  {
-    border: none;
-}
-
-.large-button,
-.large-button--transparant,
-.large-button--positive,
-.large-button--negative {
-    font-size: 1.1em;
-    width: 12em;
-    height: 2em;
-}
-
-.small-button,
-.small-button--positive,
-.small-button--negative {
-    font-size: .8em;
-    width: 80px;
-    height: 25px;
-}
-
-.small-button--positive,
-.large-button--positive {
-    background: #4A90E2;
-}
-
-.small-button--positive:active,
-.large-button--positive:active {
-    background: #386dac;
-}
-
-.small-button--negative,
-.large-button--negative {
-    background: #e34d2f;
-}
-
-.small-button--negative:active,
-.large-button--negative:active {
-    background: #a53722
-}
-
-.inline-button {
-    color: #4A90E2;
-    cursor: pointer;
-}
-
-.inline-button:hover {
-    text-decoration: underline;       
-}
 
 /* -------------------- *\
        Main-Options
