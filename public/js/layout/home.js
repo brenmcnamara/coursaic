@@ -33,9 +33,13 @@ var React = require('react'),
     Root = React.createClass({
 
         render: function() {
+            var menu = [
+                (<a href="#">Logout</a>)
+            ];
+
             return (
                 <div className="main">
-                    <HeaderLayout.Header />
+                    <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
                         <Dashboard />
                         <Content />
