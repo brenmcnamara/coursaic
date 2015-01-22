@@ -77,6 +77,25 @@
 }
 
 /* -------------------- *\
+         Section
+\* -------------------- */
+
+.course__section-wrapper {
+    margin-top: 4em;
+}
+
+/* SMALL SCREEN FOR COURSE SECTION */
+@media only screen and (max-width: 48em) {
+
+    .course__section-wrapper {
+        margin-top: 0em;
+    }
+}
+
+
+
+
+/* -------------------- *\
          Enroll
 \* -------------------- */
 

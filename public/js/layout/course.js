@@ -42,6 +42,7 @@ var React = require('react'),
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
                         <Dashboard />
+                        <Sections />
                     </div>
                     
                 </div>
@@ -137,50 +138,6 @@ var React = require('react'),
 
 
     /**
-     * A box containing basic information
-     * of the course.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Summary
-     */
-    Summary = React.createClass({
-
-        render: function() {
-
-            return (
-                <div className="course-summary">
-                    <div className="course-summary__banner"></div>
-                    <h1 className="course-summary__code">CS 101</h1>
-                    <p className="course-summary__name">Introduction to Computer Science</p>
-                    <div className="divide"></div>
-                    <ul className="course-summary__stats">
-                        <li className="course-summary__stats__item">12 enrolled</li>
-                    </ul>
-                </div>
-            );
-        },
-
-
-        onChange: function() {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.onChange);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.onChange);
-        }
-
-
-    }),
-
-
-    /**
      * The enroll button allowing a user to enroll in a
      * course.
      *
@@ -238,18 +195,13 @@ var React = require('react'),
     }),
 
 
-    /**
-     * The main content for the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Content
-     */
-    Content = React.createClass({
+    Sections = React.createClass({
 
-        render: function() {
+        render: function () {
             return (
-                <div className="content course-content">
+                <div className="section-wrapper course__section-wrapper">
+                    <Sections_Questions />
+                    <Sections_MyQuestions />
                 </div>
             );
         }
@@ -258,159 +210,54 @@ var React = require('react'),
     }),
 
 
-    /**
-     * The element containing the main content for the course
-     * page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body
-     */
-    Body = React.createClass({
-
-        render: function() {
-            // If there is a current exam, present
-            // the current exam, otherwise, present
-            // the "No Exam" element.
-            if (Stores.ExamStore().current()) {
-                return (
-                    <div className="content__body">
-                        <Body_Exam />
-                    </div>
-                )}
-            else {
-                return (
-                    <div className="content__body">
-                        <Body_Default />
-                    </div>
-                )};      
-        },
-
-
-        didFetchExams: function() {
-            this.forceUpdate();
-        },
-
-
-        didLoadExam: function() {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-        }
-
-
-    }),
-
-
-    /**
-     * The default content that is shown by the body element.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body_Default
-     */
-    Body_Default = React.createClass({
-
-        render: function() {
-            var examCount = Stores.ExamStore().examsForCourse(Stores.CourseStore().current()).length,
-                title = (examCount) ? "Select Exam" : "Create Exam",
-                description = (examCount) ? "Select an exam to the left." :
-                                            "This course has no exams. Create an exam to the left.";
-
-            return (
-                <div className="content__body__wrapper">
-                    <h1 className="content__body__title">{ title }</h1>
-                    <p className="content__body__description">{ description }</p>
-                </div>
-            );
-        }
-
-    }),
-
-
-    /**
-     * The exam content that is shown inside the body element
-     * of the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body_Exam
-     */
-    Body_Exam = React.createClass({
+    Sections_Questions = React.createClass({
         
-        render: function() {
-            // Get the current exam.
-            var exam = Stores.ExamStore().current(),
-                questionCount = Stores.ExamStore().questionsForExam(exam).length,
-                takeExamHTML,
-                noExamStyle = {
-                    color: "#e34d2f"
-                };
-
-                if (questionCount === 0) {
-                    takeExamHTML = (
-                            <p style={ noExamStyle }>
-                                This exam has no questions. You must add questions before you
-                                can take the exam.
-                            </p>
-                        );
-                }
-                else if (questionCount === 1) {
-                    takeExamHTML = (
-                                <p>
-                                    This exam only has <strong>1
-                                    </strong> question. <span onClick={ this.onClickTakeExam }
-                                          className="inline-button">Take the exam.</span>
-                                </p>
-
-                            );
-                }
-                else {
-                    takeExamHTML = (
-                                <p>
-                                    This exam has <strong>{ questionCount }
-                                    </strong> questions created between all users. <span onClick={ this.onClickTakeExam }
-                                          className="inline-button"> Take the exam.</span>
-                                </p>
-
-                            );
-                }
-
+        render: function () {
             return (
-                <div className="content__body__wrapper">
-                    <span className="content__body__title">{ exam.get('name') }</span>
-                    <div className="content__body__description">
-                        <p>{ exam.get('description') }</p>
-                        { takeExamHTML }
+                <section className="section">
+                    <div className="section__content">
+                        <h1 className="section__header">Questions</h1>
+                        <div className="divide" />
+                        <div className="section__empty">
+                            Need to fill this section in. This section should
+                            include a breakdown of the number of questions
+                            for each topic and a way for the user to take an exam. If the user
+                            is not allowed to take an exam, a reason should be stated.
+                        </div>
                     </div>
-
-                    <div className="exam-info">
-                        <Body_Exam_QuestionList />
-                    </div>
-                </div>
+                </section>
             );
-        },
-
-
-        onClickTakeExam: function(event) {
-            Router.path("/course/<courseId>/exam/<examId>/take",
-                        { examId: Stores.ExamStore().current().id,
-                          courseId: Stores.CourseStore().current().id });
         }
 
 
     }),
 
+
+    Sections_MyQuestions = React.createClass({
+
+        render: function () {
+            return (
+                <section className="section">
+                    <div className="section__content">
+                        <h1 className="section__header">My Questions</h1>
+                        <div className="divide" />
+                        <div className="section__empty">
+                            This section should include a list of questions this user
+                            has created. Each question can have a string of messages
+                            that are associated with the question, if anyone has any
+                            questions about the question that was created. In addition,
+                            the question should have delete/edit functionality in case
+                            the person wants to modify the question.
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+    }),
+
+
+    /* OLD STYLING, KEEPING TO REUSE SOME FUNCTIONALITY IN HERE */
 
     /**
      * The list of questions that the user created, displayed inside
