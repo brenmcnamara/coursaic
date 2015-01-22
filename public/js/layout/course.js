@@ -104,6 +104,12 @@ var React = require('react'),
                 <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 course-dashboard__summary">
                     <div className="course-dashboard__summary__content">
                         <div className="course-dashboard__summary__content__banner" />
+                        <h2 className="course-dashboard__summary__content__header">CS 101</h2>
+                        <h5 className="course-dashboard__summary__content__subheader">Introduction to Computer Science.</h5>
+                        <ul className="course-dashboard__summary__content__details">
+                            <li>Created 2 weeks ago</li>
+                            <li>27 enrolled</li>
+                        </ul>
                     </div>
                 </div>
             );
@@ -112,6 +118,7 @@ var React = require('react'),
 
 
     }),
+
 
     Dashboard_Buttons = React.createClass({
 

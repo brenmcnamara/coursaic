@@ -28,11 +28,6 @@
     background: white;
 }
 
-.course-dashboard__summary__header,
-.course-dashboard__summar__subheader {
-    margin-left: 3em;
-}
-
 .course-dashboard__summary__content__banner {
     float: left;
     width: 2em;
@@ -40,6 +35,24 @@
     background: #4A90E2;
 }
 
+.course-dashboard__summary__content__header,
+.course-dashboard__summary__content__subheader {
+    margin: 20px 10px 10px 50px;
+}
+
+.course-dashboard__summary__content__details {
+    list-style: none;
+    padding: 0;
+    margin: 30px 10px 10px 50px;
+}
+
+    .course-dashboard__summary__content__details li {
+        margin-bottom: .5em;
+        color: #888;
+        font-weight: bold;
+    }
+
+/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
 @media only screen and (min-width: 48em) {
 
     .course-dashboard__summary__content {
@@ -53,6 +66,7 @@
 
 }
 
+/* SMALL SCREENS FOR COURSE DASHBOARD */
 @media only screen and (max-width: 48em) {
 
     .course-dashboard__summary__content {
