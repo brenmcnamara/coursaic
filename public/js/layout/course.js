@@ -217,6 +217,21 @@ var React = require('react'),
                 <section className="section">
                     <h1 className="section__header">Questions</h1>
                     <div className="divide" />
+                    <Sections_Questions_ByTopic />
+                    <Sections_Questions_TakeExam />
+                </section>
+            );
+        }
+
+
+    }),
+
+
+    Sections_Questions_ByTopic = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__subsection">
                     <h3 className="section__subheader">Questions By Topics</h3>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
@@ -242,7 +257,7 @@ var React = require('react'),
                                       style= { { backgroundColor: '#01af00' } } ></div>
                                 <div className="question-data__legend__item__text">
                                     <span className="question-data__legend__item__text__topic">
-                                        Compiler/Runtime Errors with a long name here
+                                        Compiler/Runtime Errors
                                     </span>
                                     <span className="question-data__legend__item__text__question">
                                         22 questions
@@ -276,19 +291,21 @@ var React = require('react'),
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             );
         },
 
-        componentDidMount: function () {
 
+        componentDidMount: function () {
             this.renderPieChart();
             window.addEventListener("resize", this.renderPieChart);
         },
 
+
         componentWillUnmount: function () {
             window.removeEventListener("resize", this.renderPieChart);
         },
+
 
         renderPieChart: function () {
             // TODO: Move these colors to the page store.
@@ -370,6 +387,24 @@ var React = require('react'),
 
     }),
 
+
+    Sections_Questions_TakeExam = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__subsection">
+                    <h3 className="section__subheader">Practice Exam</h3>
+                    <div className="section__error">
+                        <i className="fa fa-exclamation-triangle"
+                           style= { { color: '#EC0000' } }></i>
+                        <div><span>You cannot take a practice exam until you have created at least <strong>5 more questions</strong> for this course.</span></div>
+                    </div>
+                </div>
+            );
+        }
+
+
+    }),
 
     Sections_MyQuestions = React.createClass({
 

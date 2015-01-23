@@ -64,6 +64,10 @@
     color: rgb(245, 166, 35)
 }
 
+.section__subsection {
+    margin-top: 2em;
+}
+
 .section__subheader {
     text-indent: 1em;
     color: #999;
@@ -79,6 +83,22 @@
     text-align: center;
 }
 
+.section__error {
+    /* Same a subheader text-indent */
+    margin-left: 1em;
+    position: relative;
+}
+
+    .section__error i {
+        position: absolute;
+        font-size: 1.5em;
+    }
+
+    .section__error div {
+        margin-left: 2.25em;
+        color: #EC0000;
+    }
+
 /* SMALL SCREEN FOR SECTION */
 @media screen and (max-width: 48em) {
     
@@ -90,8 +110,21 @@
         text-align: center;
         text-indent: 0em;
     }
+
     .section__empty {
         margin: 2em .5em;
+    }
+
+    .section__error i {
+        position: static;
+        display: block;
+        text-align: center;
+        margin-bottom: .5em;
+    }
+
+    .section__error div {
+        margin: 0;
+        text-align: center;
     }
 }
 
