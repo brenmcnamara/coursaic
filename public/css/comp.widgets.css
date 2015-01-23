@@ -149,16 +149,7 @@
 }
 
 .dashboard-buttons {
-    margin: 0;
-    padding: 0;
 
-    display: flex;
-    display: -webkit-flex;
-
-    flex-direction: column;
-    -webkit-flex-direction: column;
-
-    flex-wrap: wrap;
 }
 
 .dashboard-buttons__item {
@@ -173,7 +164,6 @@
         text-align: center;
     }
 }
-
 
 /* -------------------- *\
            Tags

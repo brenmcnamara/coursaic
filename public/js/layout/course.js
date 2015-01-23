@@ -98,6 +98,9 @@ var React = require('react'),
     }),
 
 
+/*
+
+*/
     Dashboard_CourseSummary = React.createClass({
         
         render: function () {
