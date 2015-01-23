@@ -95,6 +95,27 @@
 }
 
 /* -------------------- *\
+       Question Data
+\* -------------------- */
+
+.question-data {
+    margin-top: 2em;
+}
+
+.question-data__pie-chart-wrapper {
+
+}
+
+.question-data__legend {
+
+}
+
+.question-data__pie-chart {
+    width: 100%;
+    max-height: 12em;
+}
+
+/* -------------------- *\
          Enroll
 \* -------------------- */
 

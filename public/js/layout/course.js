@@ -221,15 +221,103 @@ var React = require('react'),
                     <div className="section__content">
                         <h1 className="section__header">Questions</h1>
                         <div className="divide" />
-                        <div className="section__empty">
-                            Need to fill this section in. This section should
-                            include a breakdown of the number of questions
-                            for each topic and a way for the user to take an exam. If the user
-                            is not allowed to take an exam, a reason should be stated.
+                        <div className="question-data pure-g">
+                            <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
+                                <canvas className="question-data__pie-chart"
+                                        id="js-question-data__pie-chart">
+                                </canvas>
+                            </div>
+                            <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4"></div>
                         </div>
                     </div>
                 </section>
             );
+        },
+
+        componentDidMount: function () {
+
+            this.renderPieChart();
+            window.addEventListener("resize", this.renderPieChart);
+        },
+
+        componentWillUnmount: function () {
+            window.removeEventListener("resize", this.renderPieChart);
+        },
+
+        renderPieChart: function () {
+            var 
+                data = [
+                    {
+                        color: '#336699',
+                        value: 12
+                    },
+                    {
+                        color: '#669966',
+                        value: 22
+                    },
+                    {
+                        color: '#FFFF00',
+                        value: 32
+                    },
+                    {
+                        color: '#990033',
+                        value: 15
+                    }
+                ],
+                canvas = document.getElementById('js-question-data__pie-chart'),
+                context = canvas.getContext('2d'),
+
+                /* ARC SIZE IN RADIANS */
+                segmentArcSize = function (i) {
+                    var 
+                        total = data.reduce(function (memo, segMap) {
+                            return memo + segMap.value;
+                        }, 0),
+
+                        multiplier = 2 * Math.PI / total;
+
+                    console.log("Arc size is " + data[i].value * multiplier);
+                    return data[i].value * multiplier;
+                },
+
+                /* START ANGLE IN RADIANS */
+                segmentStartAngle = function (i) {
+                    return data.slice(0, i).reduce(function (memo, segMap, index) {
+                        return memo + segmentArcSize(index)
+                    }, 0);
+                },
+
+                drawSegment = function (context, i) {
+                    var
+                        centerX = Math.floor(context.canvas.width / 2),
+                        centerY = Math.floor(context.canvas.height / 2),
+
+                        radius = Math.min(context.canvas.width / 2, context.canvas.height / 2),
+
+                        startAngle = segmentStartAngle(i),
+                        arcSize = segmentArcSize(i),
+                        endAngle = startAngle + arcSize;
+
+
+                    context.save();
+
+                    context.beginPath();
+                    context.moveTo(centerX, centerY);
+                    context.arc(centerX, centerY, radius, startAngle, endAngle, false);
+                    context.closePath();
+
+                    context.fillStyle = data[i].color;
+                    context.fill();
+
+                    context.restore();
+                };
+
+                // Set the width and height of the canvas.
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                data.forEach(function (segMap, index) {
+                    drawSegment(context, index);
+                });
         }
 
 
