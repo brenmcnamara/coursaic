@@ -98,9 +98,6 @@ var React = require('react'),
     }),
 
 
-/*
-
-*/
     Dashboard_CourseSummary = React.createClass({
         
         render: function () {
@@ -218,16 +215,65 @@ var React = require('react'),
         render: function () {
             return (
                 <section className="section">
-                    <div className="section__content">
-                        <h1 className="section__header">Questions</h1>
-                        <div className="divide" />
-                        <div className="question-data pure-g">
-                            <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
-                                <canvas className="question-data__pie-chart"
-                                        id="js-question-data__pie-chart">
-                                </canvas>
+                    <h1 className="section__header">Questions</h1>
+                    <div className="divide" />
+                    <h3 className="section__subheader">Questions By Topics</h3>
+                    <div className="question-data pure-g">
+                        <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
+                            <canvas className="question-data__pie-chart"
+                                    id="js-question-data__pie-chart">
+                            </canvas>
+                        </div>
+                        <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#0001d6' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Java Syntax
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        12 questions
+                                    </span>
+                                </div>   
                             </div>
-                            <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4"></div>
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#01af00' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Compiler/Runtime Errors with a long name here
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        22 questions
+                                    </span>
+                                </div>
+                                
+                            </div>
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#FFFF00' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Looping Constructs
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        32 questions
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="question-data__legend__item">
+                                <span className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#EC0000' } } ></span>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Algorithms
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        15 questions
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -245,14 +291,15 @@ var React = require('react'),
         },
 
         renderPieChart: function () {
+            // TODO: Move these colors to the page store.
             var 
                 data = [
                     {
-                        color: '#336699',
+                        color: '#0001d6',
                         value: 12
                     },
                     {
-                        color: '#669966',
+                        color: '#01af00',
                         value: 22
                     },
                     {
@@ -260,7 +307,7 @@ var React = require('react'),
                         value: 32
                     },
                     {
-                        color: '#990033',
+                        color: '#EC0000',
                         value: 15
                     }
                 ],
@@ -329,17 +376,15 @@ var React = require('react'),
         render: function () {
             return (
                 <section className="section">
-                    <div className="section__content">
-                        <h1 className="section__header">My Questions</h1>
-                        <div className="divide" />
-                        <div className="section__empty">
-                            This section should include a list of questions this user
-                            has created. Each question can have a string of messages
-                            that are associated with the question, if anyone has any
-                            questions about the question that was created. In addition,
-                            the question should have delete/edit functionality in case
-                            the person wants to modify the question.
-                        </div>
+                    <h1 className="section__header">My Questions</h1>
+                    <div className="divide" />
+                    <div className="section__empty">
+                        This section should include a list of questions this user
+                        has created. Each question can have a string of messages
+                        that are associated with the question, if anyone has any
+                        questions about the question that was created. In addition,
+                        the question should have delete/edit functionality in case
+                        the person wants to modify the question.
                     </div>
                 </section>
             );
