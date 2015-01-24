@@ -320,6 +320,10 @@ var React = require('react'),
                         value: 22
                     },
                     {
+                        color: '#681eab',
+                        value: 21
+                    },
+                    {
                         color: '#FFFF00',
                         value: 32
                     },
@@ -327,6 +331,7 @@ var React = require('react'),
                         color: '#EC0000',
                         value: 15
                     }
+
                 ],
                 canvas = document.getElementById('js-question-data__pie-chart'),
                 context = canvas.getContext('2d'),
@@ -340,7 +345,6 @@ var React = require('react'),
 
                         multiplier = 2 * Math.PI / total;
 
-                    console.log("Arc size is " + data[i].value * multiplier);
                     return data[i].value * multiplier;
                 },
 
@@ -395,7 +399,7 @@ var React = require('react'),
                 <div className="section__subsection">
                     <h3 className="section__subheader">Practice Exam</h3>
                     <div className="section__error">
-                        <i className="fa fa-exclamation-triangle"
+                        <i className="fa fa-exclamation-circle"
                            style= { { color: '#EC0000' } }></i>
                         <div><span>You cannot take a practice exam until you have created at least <strong>5 more questions</strong> for this course.</span></div>
                     </div>
