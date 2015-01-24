@@ -215,6 +215,62 @@ ProgressBar.prototype = {
      * @method render
      */
     render: function () {
+        this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+        this._renderWithData(this._data);
+    },
+
+
+    /**
+     * Change the "current" value of the progress bar.
+     *
+     * @method changeCurrent
+     *
+     * @param val {Number} The value to set "current" to.
+     *
+     * @param options {Object} Any options to configure the
+     *  setting.
+     */
+    changeCurrent: function (val, options) {
+        options = options || {};
+
+        this._data.current = val;
+        if (!options.silent) {
+            this.render();
+        }
+    },
+
+
+    /**
+     * Change the "selected" value of the progress bar.
+     *
+     * @method changeSelected
+     *
+     * @param val {Number} The value to change the "selected"
+     *  value to.
+     *
+     * @param options {Object} Any options used to configure the
+     *  setting of selected.
+     */
+    changeSelected: function (val, options) {
+        options = options || {};
+
+        this._data.selected = val;
+        if (!options.silent) {
+            this.render();
+        }
+    },
+
+
+    /**
+     * Pass in the data to render the progress bar with.
+     *
+     * @method _renderWithData
+     * @private
+     *
+     * @param data {Object} The data to render the progress bar
+     *  with.
+     */
+    _renderWithData: function (data) {
         var
             BAR_PORTION = 0.35,
             TOOLTIP_PADDING = 2,
@@ -283,42 +339,12 @@ ProgressBar.prototype = {
 
 
     /**
-     * Change the "current" value of the progress bar.
-     *
-     * @method changeCurrent
-     *
-     * @param val {Number} The value to set "current" to.
-     *
-     * @param options {Object} Any options to configure the
-     *  setting.
-     */
-    changeCurrent: function (val, options) {
-        options = options || {};
-    },
-
-
-    /**
-     * Change the "selected" value of the progress bar.
-     *
-     * @method changeSelected
-     *
-     * @param val {Number} The value to change the "selected"
-     *  value to.
-     *
-     * @param options {Object} Any options used to configure the
-     *  setting of selected.
-     */
-    changeSelected: function (val, options) {
-        options = options || {};
-    },
-
-
-    /**
      * Renders a tooltip at the given point. The tooltip is
      * configured to show above the element. The direction
      * of the tooltip can be changed in the options parameter.
      *
      * @method _renderTooltip
+     * @private
      *
      * @param x {Number} The x point the tooltip starts at.
      *

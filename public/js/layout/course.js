@@ -393,6 +393,13 @@ var React = require('react'),
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
+            setTimeout(function () {
+                bar.changeSelected(30);
+            }, 1000);
+
+            setTimeout(function () {
+                bar.changeCurrent(30);
+            }, 2000);
             bar.render();
         }
 

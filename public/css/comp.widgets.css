@@ -46,7 +46,7 @@
 .section__header {
     /* Same margin-left as the divide element */
     font-weight: normal;
-    color: rgb(245, 166, 35)
+    color: rgb(245, 166, 35);
 }
 
 .section__subsection {
