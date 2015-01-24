@@ -11,6 +11,10 @@
  * on an individual basis
  */
 
+.emphasis {
+    font-weight: bold;
+    color: rgb(245, 166, 35);
+}
 /* -------------------- *\
           Divide
 \* -------------------- */
@@ -124,6 +128,16 @@
 
 .inline-button:hover {
     text-decoration: underline;       
+}
+
+.inline-input--small,
+.inline-input {
+    margin: 0 .25em;
+    text-align: center;
+}
+
+.inline-input--small {
+    width: 3em;
 }
 
 .pure-button-disabled,

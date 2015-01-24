@@ -234,7 +234,7 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section__subsection">
-                    <h3 className="section__subheader">There are <span style= { { color: "rgb(245, 166, 35)" } }>4 topics</span> of questions</h3>
+                    <h3 className="section__subheader">There are <span className="emphasis">4 topics</span> of questions</h3>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
                             <canvas className="question-data__pie-chart"
@@ -355,12 +355,27 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section__subsection">
-                    <h3 className="section__subheader">There are <span style={ { color: "rgb(245, 166, 35)" } }>56 questions</span> total</h3>
+                    <h3 className="section__subheader">There are <span className="emphasis">56 questions</span> total</h3>
                     <div className="question-filter">
-                        <div className="question-filter__bar-wrapper">
+                        <div className="question-filter__section question-filter__bar-wrapper">
                             <canvas id="js-question-filter__bar"
                                     className="question-filter__bar"></canvas>
                         </div>
+                        <div className="question-filter__section question-filter__description">
+                            <div><span className="emphasis">42 questions</span> after applying filters.</div>
+                            <div>
+                                <strong><span className="inline-button">Click here</span></strong> to take a practice exam
+                                with <input className="pure-input-1 inline-input--small" type="text" value="37" />questions.
+                            </div>
+                        </div>
+                    </div>
+                    <div className="question-filter__section question-filter__form pure-g">
+                        <div className="pure-u-1 pure-u-md-1-2">
+                            <h4>Topics</h4>
+                        </div>
+                        <div className="pure-u-1 pure-u-md-1-2">
+                            <h4>Other filters</h4>
+                        </div> 
                     </div>
                 </div>
             );
