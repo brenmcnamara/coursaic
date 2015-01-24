@@ -234,7 +234,7 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section__subsection">
-                    <h3 className="section__subheader">Questions By Topics</h3>
+                    <h3 className="section__subheader">There are <span style= { { color: "rgb(245, 166, 35)" } }>4 topics</span> of questions</h3>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
                             <canvas className="question-data__pie-chart"
@@ -338,7 +338,6 @@ var React = require('react'),
                 canvas = document.getElementById('js-question-data__pie-chart'),
                 context = canvas.getContext('2d'),
                 chart = new widgets.PieChart(context, data);
-
                 
                 // Set the width and height of the canvas.
                 canvas.width = canvas.offsetWidth;
@@ -356,14 +355,45 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section__subsection">
-                    <h3 className="section__subheader">Practice Exam</h3>
-                    <div className="section__error">
-                        <i className="fa fa-exclamation-circle"
-                           style= { { color: '#EC0000' } }></i>
-                        <div><span>You cannot take a practice exam until you have created at least <strong>5 more questions</strong> for this course.</span></div>
+                    <h3 className="section__subheader">There are <span style={ { color: "rgb(245, 166, 35)" } }>56 questions</span> total</h3>
+                    <div className="question-filter">
+                        <div className="question-filter__bar-wrapper">
+                            <canvas id="js-question-filter__bar"
+                                    className="question-filter__bar"></canvas>
+                        </div>
                     </div>
                 </div>
             );
+        },
+
+
+        componentDidMount: function () {
+            this.renderProgressBar();
+            window.addEventListener('resize', this.renderProgressBar);
+        },
+
+
+        componentWillUnmount: function () {
+            window.removeEventListener('resize', this.renderProgressBar);
+        },
+
+        renderProgressBar: function () {
+            console.log("Rendering");
+            var
+                canvas = document.getElementById('js-question-filter__bar'),
+                context = canvas.getContext('2d'),
+                data = {
+                    total: 47,
+                    current: 42,
+                    selected: 37
+                },
+
+                bar = new widgets.ProgressBar(context, data);
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            bar.render();
         }
 
 

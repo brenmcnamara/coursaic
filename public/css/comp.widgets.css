@@ -11,24 +11,9 @@
  * on an individual basis
  */
 
-.main {
-    min-width: 800px;
-}
-
 /* -------------------- *\
-         Widgets
+          Divide
 \* -------------------- */
-
-/* SHARED STYLING */
-
-.main-options,
-.my-courses {
-    margin: 30px 20px 0 20px;
-}
-
-/* The dividing line between
- * other elements
- */
 
 .divide,
 .divide--full {

@@ -160,6 +160,33 @@
          Enroll
 \* -------------------- */
 
+.question-filter {
+
+}
+
+.question-filter__bar-wrapper {
+
+}
+
+.question-filter__bar {
+    width: 70%;
+    height: 9em;
+    margin-left: 15%;
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-filter__bar {
+        width: 94%;
+        margin-left: 3%;
+    }
+
+}
+
+/* -------------------- *\
+         Enroll
+\* -------------------- */
+
 .course-page__enroll {
     position: absolute;
     left: 365px;
