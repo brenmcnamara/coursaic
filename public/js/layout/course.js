@@ -22,6 +22,8 @@ var React = require('react'),
 
     Util = require('shore').Util,
 
+    widgets = require('../widgets.js'),
+
     /**
      * The root element on the Course
      * page.
@@ -335,57 +337,14 @@ var React = require('react'),
                 ],
                 canvas = document.getElementById('js-question-data__pie-chart'),
                 context = canvas.getContext('2d'),
+                chart = new widgets.PieChart(context, data);
 
-                /* ARC SIZE IN RADIANS */
-                segmentArcSize = function (i) {
-                    var 
-                        total = data.reduce(function (memo, segMap) {
-                            return memo + segMap.value;
-                        }, 0),
-
-                        multiplier = 2 * Math.PI / total;
-
-                    return data[i].value * multiplier;
-                },
-
-                /* START ANGLE IN RADIANS */
-                segmentStartAngle = function (i) {
-                    return data.slice(0, i).reduce(function (memo, segMap, index) {
-                        return memo + segmentArcSize(index)
-                    }, 0);
-                },
-
-                drawSegment = function (context, i) {
-                    var
-                        centerX = Math.floor(context.canvas.width / 2),
-                        centerY = Math.floor(context.canvas.height / 2),
-
-                        radius = Math.min(context.canvas.width / 2, context.canvas.height / 2),
-
-                        startAngle = segmentStartAngle(i),
-                        arcSize = segmentArcSize(i),
-                        endAngle = startAngle + arcSize;
-
-
-                    context.save();
-
-                    context.beginPath();
-                    context.moveTo(centerX, centerY);
-                    context.arc(centerX, centerY, radius, startAngle, endAngle, false);
-                    context.closePath();
-
-                    context.fillStyle = data[i].color;
-                    context.fill();
-
-                    context.restore();
-                };
-
+                
                 // Set the width and height of the canvas.
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
-                data.forEach(function (segMap, index) {
-                    drawSegment(context, index);
-                });
+                chart.render();
+                
         }
 
 
