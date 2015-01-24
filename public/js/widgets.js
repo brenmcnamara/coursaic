@@ -128,10 +128,26 @@ PieChart.prototype = {
      * @method render
      */
     render: function () {
-        var self = this;
+        var self = this,
+            centerX = this._context.canvas.width / 2,
+            centerY = this._context.canvas.height / 2,
+            radius = Math.min(centerX, centerY);
+
         this._data.forEach(function (segMap, index) {
             self._drawSegment(index);
         });
+
+        // Clear the middle of the circle.
+        this._context.save();
+        this._context.beginPath();
+        this._context.moveTo(centerX, centerY);
+        this._context.arc(centerX, centerY, radius * 0.5, 0, 2 * Math.PI, false);
+        this._context.closePath();
+
+        this._context.fillStyle = "white";
+        this._context.fill();
+
+        this._context.restore();
     },
 
 
@@ -211,7 +227,9 @@ PieChart.prototype = {
         this._context.fillStyle = this._data[index].color;
         this._context.fill();
 
+
         this._context.restore();
+
     }
 
 
