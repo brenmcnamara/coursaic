@@ -7,8 +7,40 @@
 var PieChart,
     ProgressBar,
 
+    EasingFunctions,
+
     fillRoundedRect,
     fillTriangle;
+
+
+EasingFunctions = {
+
+    easeInQuad: function (time, start, change, duration) {
+        time /= duration;
+        return change*time*time + start;
+    },
+
+
+    easeOutQuad: function (time, start, change, duration) {
+        time /= duration;
+        return -change * time*(time-2) + start;
+    },
+
+
+    easeInCubic: function (time, start, change, duration) {
+        time /= duration;
+        return change*time*time*time + start;
+    },
+
+
+    easeOutCubic: function (time, start, change, duration) {
+        time /= duration;
+        time--;
+        return change*(time*time*time + 1) + start;
+    }
+
+
+};
 
 
 /**
@@ -231,11 +263,23 @@ ProgressBar.prototype = {
      *  setting.
      */
     changeCurrent: function (val, options) {
+
         options = options || {};
 
-        this._data.current = val;
         if (!options.silent) {
-            this.render();
+
+            if (options.animate) {
+                this._animateChange({ total: this._data.total,
+                                      current: val,
+                                      selected: Math.min(this._data.selected, val) },
+                                    EasingFunctions.easeOutQuad);
+            }
+            else {
+                this._data.current = val;
+                this._data.selected = Math.min(this._data.selected, val);
+                this.render();
+            }
+
         }
     },
 
@@ -254,10 +298,60 @@ ProgressBar.prototype = {
     changeSelected: function (val, options) {
         options = options || {};
 
-        this._data.selected = val;
         if (!options.silent) {
-            this.render();
+
+            if (options.animate) {
+                this._animateChange({ total: this._data.total, selected: val, current: this._data.current },
+                                    EasingFunctions.easeOutQuad);
+            }
+            else {
+                this._data.selected = val;
+                this.render();
+            }
+
         }
+    },
+
+
+    _animateChange: function (newData, easingFunction) {
+        var
+            self = this,
+            ANIMATION_DURATION = 600,
+            ANIMATION_STEPS = 60,
+            DELTA = ANIMATION_DURATION / ANIMATION_STEPS,
+
+            startCurrent,
+            endCurrent,
+            watchId,
+            steps = 0;
+
+        watchId = setInterval(function () {
+
+            var
+                nextCurrent = easingFunction(steps * DELTA,
+                                             self._data.current,
+                                             newData.current - self._data.current,
+                                             ANIMATION_DURATION),
+
+                nextSelected = easingFunction(steps * DELTA,
+                                              self._data.selected,
+                                              newData.selected - self._data.selected,
+                                              ANIMATION_DURATION);
+
+            self._context.clearRect(0, 0, self._context.canvas.width, self._context.canvas.height);
+            self._renderWithData({ total: newData.total,
+                                   selected: nextSelected,
+                                   current: nextCurrent });
+
+            // Clear the interval once the duration has been completed.
+            if (steps * DELTA >= ANIMATION_DURATION) {
+                clearInterval(watchId);
+                // Set the current data to the new data now
+                // that the animation has finished..
+                self._data = newData;
+            }
+            ++steps;
+        }, DELTA);
     },
 
 
@@ -281,15 +375,15 @@ ProgressBar.prototype = {
             startX = 0,
             startY = (canvasHeight - barHeight) / 2,
             
-            currentRatio = this._data.current / this._data.total,
-            selectedRatio = this._data.selected / this._data.total;
+            currentRatio = data.current / data.total,
+            selectedRatio = data.selected / data.total;
 
-        if (this._data.total < this._data.current || this._data.total < this._data.selected) {
+        if (data.total < data.current || data.total < data.selected) {
             throw Error("The total value of the progress bar cannot " +
                         "be less than the current or selected values");
         }
 
-        if (this._data.current < this._data.selected) {
+        if (data.current < data.selected) {
             throw Error("The current value of the progress bar cannot " +
                         "be less than the selected value");
         }
@@ -322,14 +416,14 @@ ProgressBar.prototype = {
 
         this._renderTooltip(width * selectedRatio,
                             startY - TOOLTIP_PADDING,
-                            Math.floor(this._data.selected),
+                            Math.floor(data.selected),
                             { direction: "up" });
 
         // Only render the tooltip for "current" if it is not the same as selected.
-        if (Math.floor(this._data.selected) !== Math.floor(this._data.current)) {
+        if (Math.floor(data.selected) !== Math.floor(data.current)) {
             this._renderTooltip(width * currentRatio,
                                 barHeight + startY + TOOLTIP_PADDING,
-                                Math.floor(this._data.current));
+                                Math.floor(data.current));
         }
     
         

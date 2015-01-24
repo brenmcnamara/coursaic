@@ -377,8 +377,8 @@ var React = require('react'),
             window.removeEventListener('resize', this.renderProgressBar);
         },
 
+
         renderProgressBar: function () {
-            console.log("Rendering");
             var
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
@@ -393,13 +393,6 @@ var React = require('react'),
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
-            setTimeout(function () {
-                bar.changeSelected(30);
-            }, 1000);
-
-            setTimeout(function () {
-                bar.changeCurrent(30);
-            }, 2000);
             bar.render();
         }
 
