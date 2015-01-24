@@ -202,7 +202,7 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section-wrapper course__section-wrapper">
-                    <Sections_Questions />
+                    <Sections_Overview />
                     <Sections_MyQuestions />
                 </div>
             );
@@ -212,15 +212,15 @@ var React = require('react'),
     }),
 
 
-    Sections_Questions = React.createClass({
+    Sections_Overview = React.createClass({
         
         render: function () {
             return (
                 <section className="section">
-                    <h1 className="section__header">Questions</h1>
+                    <h1 className="section__header">Overview</h1>
                     <div className="divide" />
-                    <Sections_Questions_ByTopic />
-                    <Sections_Questions_TakeExam />
+                    <Sections_Overview_ByTopic />
+                    <Sections_Overview_TakeExam />
                 </section>
             );
         }
@@ -229,7 +229,7 @@ var React = require('react'),
     }),
 
 
-    Sections_Questions_ByTopic = React.createClass({
+    Sections_Overview_ByTopic = React.createClass({
 
         render: function () {
             return (
@@ -350,7 +350,7 @@ var React = require('react'),
     }),
 
 
-    Sections_Questions_TakeExam = React.createClass({
+    Sections_Overview_TakeExam = React.createClass({
 
         render: function () {
             return (
