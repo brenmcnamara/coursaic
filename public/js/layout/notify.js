@@ -6,7 +6,7 @@
  * Layout for the 404 page.
  */
 
-var React = require('React'),
+var React = require('react'),
     Router = require('shore').Router,
 
 
