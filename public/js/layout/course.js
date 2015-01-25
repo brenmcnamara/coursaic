@@ -466,7 +466,7 @@ var React = require('react'),
                     <h1 className="section__header">My Questions</h1>
                     <div className="divide" />
                     <div className="section__subsection">
-                        <h3><span className="inline-button  ">Click here</span> to create a new question.</h3>
+                        <h3><span className="inline-button">Click here</span> to create a new question.</h3>
                         <ul className="question-info-list">
                             <QuestionItem />
                             <li className="divide gray-divide"></li>
@@ -515,7 +515,6 @@ var React = require('react'),
                     <div className="question-edit-content">
                         <QuestionInfo />
                     </div>
-                    
                 </li>
             );
         }
