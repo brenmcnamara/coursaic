@@ -139,9 +139,10 @@
 }
 
 .question-data__legend__item__text__question {
-    margin-left: 1em;
+    margin-left: .5em;
     font-size: .8em;
     line-height: 2.5em;
+    font-style: italic;
     color: #999;
 }
 
@@ -181,7 +182,7 @@
 
 .question-filter__description {
     color: #888;
-    margin-left: 3em;
+    margin-left: 2em;
     font-size: 1.1em;
 }
 
@@ -196,6 +197,20 @@
 .question-filter__form h4 {
     text-align: center;
 }
+
+.question-filter__form__filters label {
+    padding: 0 1em 1em 1em;
+}
+
+    .question-filter__form__filters label input {
+        position: absolute;
+    }
+    
+    .question-filter__form__filters label div {
+        padding-left: 1.5em;
+        line-height: 1.1em;
+        color: #666;
+    }
 
 @media only screen and (max-width: 48em) {
 
@@ -217,59 +232,89 @@
 }
 
 /* -------------------- *\
-         Enroll
+      Question Info
 \* -------------------- */
 
-.course-page__enroll {
-    position: absolute;
-    left: 365px;
-    top: 90px;
+.question-info-list {
+    margin: 1em 0 0 0;
+    padding: 0;
+    list-style: none;
 }
 
+.question-info-list > li {
+    margin-bottom: 2em;
+}
+
+.question-info {
+    position: relative;
+}
+
+.question-info__ask,
+.question-info__explanation {
+    font-weight: bold;
+    color: #444;
+}
+
+
+.question-info__explanation {
+    margin: 1.5em 1em 0 1em;
+}
+
+.question-edit-icon-set {
+    position: absolute;
+}
+
+.question-edit-icon-set i {
+    width: 100%;
+    text-align: center;
+    margin-left: .5em;
+    font-size: 1.5em;
+}
+
+.question-edit-content {
+    margin-left: 6em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-edit-icon-set {
+        position: static;
+        margin: auto;
+    }
+
+    .question-edit-icon-set i {
+        font-size: 2em;
+        margin: 0 0 .5em 0;
+    }
+
+    .question-edit-content {
+        margin-left: 0;
+    }
+
+}
 
 /* -------------------- *\
-          Exam
+       Multi Choice
 \* -------------------- */
 
-.take-exam-button {
-    margin-top: -5px;
-    margin-left: 10px;
+.multi-choice-info__options-list {
+    margin: 1em 0 0 3em;
+    padding: 0;
+    list-style-type: upper-alpha;
 }
 
-.exam-info {
-    margin-top: 5px;
+.multi-choice-info__options-list__item,
+.multi-choice-info__options-list__item--correct {
+    margin-bottom: .5em;
 }
 
-.exam-info__creator-info__pic {
-    float: left;
+.multi-choice-info__options-list__item {
+    color: #444;
 }
 
-.exam-info__creator-info::after {
-    content: '.';
-    visibility: hidden;
-    clear: both;
-    display: block;
-    width: 0px;
-    height: 0px;
-}
-
-.exam-info__creator-info { }
-
-.exam-info__creator-info__text {
-    display: inline-block;
-    margin-left: 5px;
-    /* Note: This is dependent on the height of the picture */
-    margin-top: 15px;
-
-}
-
-.exam-info__my-questions {
-    margin: 40px 0px 0px 0px;
-}
-
-.exam-info__my-questions__add-button {
-    margin-left: 10px;
-    vertical-align: middle;
+.multi-choice-info__options-list__item--correct {
+    font-weight: bold;
+    color: #4A90E2;
 }
 
 /* -------------------- *\
@@ -348,6 +393,53 @@ input.question__ask {
 .question__content {
     margin: 0px 20px 0px 70px;
 }
+
+
+/* -------------------- *\
+          Exam
+\* -------------------- */
+
+.take-exam-button {
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.exam-info {
+    margin-top: 5px;
+}
+
+.exam-info__creator-info__pic {
+    float: left;
+}
+
+.exam-info__creator-info::after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+    display: block;
+    width: 0px;
+    height: 0px;
+}
+
+.exam-info__creator-info { }
+
+.exam-info__creator-info__text {
+    display: inline-block;
+    margin-left: 5px;
+    /* Note: This is dependent on the height of the picture */
+    margin-top: 15px;
+
+}
+
+.exam-info__my-questions {
+    margin: 40px 0px 0px 0px;
+}
+
+.exam-info__my-questions__add-button {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 
 /* -------------------- *\
        Multi-Choice

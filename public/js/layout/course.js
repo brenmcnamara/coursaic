@@ -202,8 +202,10 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="section-wrapper course__section-wrapper">
+                    <Sections_Description />
                     <Sections_Overview />
                     <Sections_MyQuestions />
+                    <Sections_FlaggedQuestions />
                 </div>
             );
         }
@@ -211,6 +213,25 @@ var React = require('react'),
 
     }),
 
+
+    Sections_Description = React.createClass({
+
+        render: function () {
+            return (
+                <section className="section">
+                    <h1 className="section__header">Description</h1>
+                    <div className="divide"></div>
+                    <div className="section__subsection">
+                        <div className="section__empty">
+                            Here is a section containing the description of the course
+                            and a list of all the tags that are available to the course.
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+    }),
 
     Sections_Overview = React.createClass({
         
@@ -372,9 +393,31 @@ var React = require('react'),
                     <div className="question-filter__section question-filter__form pure-g">
                         <div className="pure-u-1 pure-u-md-1-2">
                             <h4>Topics</h4>
+                            <div className="question-filter__form__filters pure-g">
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Algorithms</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Java Syntax</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Looping Constructs</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Compiler/Runtime Errors</div>
+                                </label>
+                            </div>
                         </div>
                         <div className="pure-u-1 pure-u-md-1-2">
-                            <h4>Other filters</h4>
+                            <h4>Filters</h4>
+                            <div className="question-filter__form__filters pure-g">
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Include my questions</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Include flagged questions</div>
+                                </label>
+                            </div>
                         </div> 
                     </div>
                 </div>
@@ -414,6 +457,7 @@ var React = require('react'),
 
     }),
 
+
     Sections_MyQuestions = React.createClass({
 
         render: function () {
@@ -421,17 +465,83 @@ var React = require('react'),
                 <section className="section">
                     <h1 className="section__header">My Questions</h1>
                     <div className="divide" />
-                    <div className="section__empty">
-                        This section should include a list of questions this user
-                        has created. Each question can have a string of messages
-                        that are associated with the question, if anyone has any
-                        questions about the question that was created. In addition,
-                        the question should have delete/edit functionality in case
-                        the person wants to modify the question.
+                    <div className="section__subsection">
+                        <h3><span className="inline-button  ">Click here</span> to create a new question.</h3>
+                        <ul className="question-info-list">
+                            <QuestionItem />
+                            <li className="divide gray-divide"></li>
+                            <QuestionItem />
+                            <li className="divide gray-divide"></li>
+                        </ul>
                     </div>
                 </section>
             );
         }
+
+    }),
+
+
+    Sections_FlaggedQuestions = React.createClass({
+
+        render: function () {
+            return (
+                <section className="section">
+                    <h1 className="section__header">Flagged Questions</h1>
+                    <div className="divide" />
+                    <div className="section__subsection">
+                        <div className="section__empty">
+                            This section should be filled out by to include a list of flagged questions.
+                            Questions should be sorted by flag count (most to least number of flags).
+                            The flag count should be viewable and the questions can be disabled by the instructor.
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+
+    }),
+
+
+    QuestionItem = React.createClass({
+
+        render: function () {
+            return (
+                <li>
+                    <div className="question-edit-icon-set pure-g">
+                        <div className="pure-u-1-2"><i className="fa fa-trash" style={ { color: "#EC0000" } }></i></div>
+                        <div className="pure-u-1-2"><i className="fa fa-pencil-square-o" style={ { color: "#4A90E2"} }></i></div>
+                    </div>
+                    <div className="question-edit-content">
+                        <QuestionInfo />
+                    </div>
+                    
+                </li>
+            );
+        }
+
+    }),
+
+
+    QuestionInfo = React.createClass({
+
+        render: function () {
+            return (
+                <div className="question-info">
+                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <ul className="multi-choice-info__options-list">
+                        <li className="multi-choice-info__options-list__item">Option 1</li>
+                        <li className="multi-choice-info__options-list__item">Option 2</li>
+                        <li className="multi-choice-info__options-list__item--correct">Option 3</li>
+                        <li className="multi-choice-info__options-list__item">Option 4</li>
+                    </ul>
+                    <div className="question-info__explanation">
+                        <span className="emphasis">Explanation:</span> 2 + 2 = 4.
+                    </div>
+                </div>
+            );
+        }
+
 
     }),
 
