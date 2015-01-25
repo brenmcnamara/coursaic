@@ -2,7 +2,7 @@
  * CourseStore.js
  */
 
-var Stores = require('../Stores'),
+var Stores = require('../stores'),
     Dispatcher = require('shore').Dispatcher,
     Constants = require('../constants.js'),
     StoreBuilder = require('shore').StoreBuilder,
