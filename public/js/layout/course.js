@@ -222,11 +222,28 @@ var React = require('react'),
                     <h1 className="section__header">Description</h1>
                     <div className="divide"></div>
                     <div className="section__subsection">
-                        <div className="section__empty">
-                            Here is a section containing the description of the course
-                            and a list of all the tags that are available to the course.
-                        </div>
+                        <p className="section__paragraph">
+                            An intensive introduction to algorithm development
+                            and problem solving on the computer. Structured problem
+                            definition, top down and modular algorithm design.
+                            Running, debugging, and testing programs. Program
+                            documentation.
+                        </p>
                     </div>
+                    <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                             Java
+                        </div>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#087a34", color: "white"} }>
+                             Vanderbilt
+                        </div>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#e25a58", color: "white"} }>
+                             Computer Science
+                        </div>
+                    </div>                  
                 </section>
             );
         }

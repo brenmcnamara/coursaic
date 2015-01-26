@@ -69,11 +69,20 @@
     margin-top: 2em;
 }
 
+/* A message that should show when
+ * a section is empty explaining why
+ * the section has no content */
 .section__empty {
     font-size: 1.2em;
     margin: 2em 3em;
-    color: #999;
     text-align: center;
+    color: #999;
+}
+
+.section__paragraph {
+    font-size: 1.2em;
+    margin: 2em 3em;
+    color: #444;
 }
 
 .section__error {
@@ -105,6 +114,11 @@
     }
 
     .section__empty {
+        margin: 2em .5em;
+    }
+
+    .section__paragraph {
+        text-align: center;
         margin: 2em .5em;
     }
 
@@ -220,7 +234,7 @@
 }
 
 .tag-list {
-    width: 100%;
+
 }
 
 .tag-list:after {
