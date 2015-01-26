@@ -235,7 +235,7 @@
 \* -------------------- */
 
 .question-info-list {
-    margin: 1em 0 0 0;
+    margin: 2em 0 0 0;
     padding: 0;
     list-style: none;
 }
@@ -259,34 +259,78 @@
     margin: 1.5em 1em 0 1em;
 }
 
-.question-edit-icon-set {
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+/* Note that the question-info element sits
+ * inside the question-edit element */
+
+.question-edit__issue-list {
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    list-style: none;
+}
+
+.question-edit__issue-list__item,
+.question-edit__issue-list__item--error,
+.question-edit__issue-list__item--warning {
+    position: relative;
+    font-size: 1.1em;
+    margin-bottom: .75em;
+}
+
+    .question-edit__issue-list__item i,
+    .question-edit__issue-list__item--error i,
+    .question-edit__issue-list__item--warning i {
+        position: absolute;
+    }
+
+.question-edit__issue-list__item__message,
+.question-edit__issue-list__item--error__message,
+.question-edit__issue-list__item--warning__message {
+    margin-left: 1.5em;
+}
+
+.question-edit__issue-list__item--error i,
+.question-edit__issue-list__item--error__message {
+    color: #EC0000;
+}
+
+.question-edit__issue-list__item--warning i,
+.question-edit__issue-list__item--warning__message {
+    color: #ffb500;
+}
+
+.question-edit__icon-set {
     position: absolute;
 }
 
-.question-edit-icon-set i {
+.question-edit__icon-set i {
     width: 100%;
     text-align: center;
     margin-left: .5em;
     font-size: 1.5em;
 }
 
-.question-edit-content {
+.question-edit__content {
     margin-left: 6em;
 }
 
 @media only screen and (max-width: 48em) {
 
-    .question-edit-icon-set {
+    .question-edit__icon-set {
         position: static;
         margin: auto;
     }
 
-    .question-edit-icon-set i {
+    .question-edit__icon-set i {
         font-size: 2em;
         margin: 0 0 .5em 0;
     }
 
-    .question-edit-content {
+    .question-edit__content {
         margin-left: 0;
     }
 

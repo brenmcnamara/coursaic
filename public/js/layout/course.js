@@ -524,14 +524,34 @@ var React = require('react'),
 
         render: function () {
             return (
-                <li>
-                    <div className="question-edit-icon-set pure-g">
-                        <div className="pure-u-1-2"><i className="fa fa-trash" style={ { color: "#EC0000" } }></i></div>
-                        <div className="pure-u-1-2"><i className="fa fa-pencil-square-o" style={ { color: "#4A90E2"} }></i></div>
+                <li className="pure-g">
+                    <div className="pure-u-1">
+                        <ul className="question-edit__issue-list">
+                            <li className="question-edit__issue-list__item--error">
+                                <i className="fa fa-exclamation-triangle"></i>
+                                <div className="question-edit__issue-list__item--error__message">
+                                    This question has been disabled by the owner of the course.
+                                </div>
+                            </li>
+                            <li className="question-edit__issue-list__item--warning">
+                                <i className="fa fa-exclamation-circle"></i>
+                                <div className="question-edit__issue-list__item--warning__message">
+                                    This question has been flagged by <strong>3 people</strong>.
+                                </div>
+                            </li>
+                            
+                        </ul>
                     </div>
-                    <div className="question-edit-content">
-                        <QuestionInfo />
+                    <div className="pure-u-1">
+                        <div className="question-edit__icon-set pure-g">
+                            <div className="pure-u-1-2"><i className="fa fa-trash" style={ { color: "#EC0000" } }></i></div>
+                            <div className="pure-u-1-2"><i className="fa fa-pencil-square-o" style={ { color: "#4A90E2"} }></i></div>
+                        </div>
+                        <div className="question-edit__content">
+                            <QuestionInfo />
+                        </div>
                     </div>
+                        
                 </li>
             );
         }
