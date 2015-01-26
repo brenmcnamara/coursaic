@@ -475,6 +475,11 @@ var React = require('react'),
     }),
 
 
+    /**
+     * A section containing all the questions that the
+     * current user has written. This will allow the user
+     * to modify their own questions.
+     */
     Sections_MyQuestions = React.createClass({
 
         render: function () {
@@ -506,11 +511,12 @@ var React = require('react'),
                     <h1 className="section__header">Flagged Questions</h1>
                     <div className="divide" />
                     <div className="section__subsection">
-                        <div className="section__empty">
-                            This section should be filled out by to include a list of flagged questions.
-                            Questions should be sorted by flag count (most to least number of flags).
-                            The flag count should be viewable and the questions can be disabled by the instructor.
-                        </div>
+                        <ul className="question-info-list">
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                        </ul>
                     </div>
                 </section>
             );
@@ -526,16 +532,16 @@ var React = require('react'),
             return (
                 <li className="pure-g">
                     <div className="pure-u-1">
-                        <ul className="question-edit__issue-list">
-                            <li className="question-edit__issue-list__item--error">
+                        <ul className="question-item__issue-list">
+                            <li className="question-item__issue-list__item--error">
                                 <i className="fa fa-exclamation-triangle"></i>
-                                <div className="question-edit__issue-list__item--error__message">
+                                <div className="question-item__issue-list__item--error__message">
                                     This question has been disabled by the owner of the course.
                                 </div>
                             </li>
-                            <li className="question-edit__issue-list__item--warning">
+                            <li className="question-item__issue-list__item--warning">
                                 <i className="fa fa-exclamation-circle"></i>
-                                <div className="question-edit__issue-list__item--warning__message">
+                                <div className="question-item__issue-list__item--warning__message">
                                     This question has been flagged by <strong>3 people</strong>.
                                 </div>
                             </li>
@@ -543,16 +549,39 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="pure-u-1">
-                        <div className="question-edit__icon-set pure-g">
+                        <div className="question-item__icon-set pure-g">
                             <div className="pure-u-1-2"><i className="fa fa-trash" style={ { color: "#EC0000" } }></i></div>
                             <div className="pure-u-1-2"><i className="fa fa-pencil-square-o" style={ { color: "#4A90E2"} }></i></div>
                         </div>
-                        <div className="question-edit__content">
+                        <div className="question-item__content">
                             <QuestionInfo />
                         </div>
                     </div>
-                        
                 </li>
+            );
+        }
+
+    }),
+
+
+    FlaggedQuestionItem = React.createClass({
+
+        render: function () {
+            return (
+                <div className="pure-g">
+                    <div className="pure-u-1">
+                        <ul className="question-item__issue-list">
+                            <li className="question-item__issue-list__item--warning">
+                                <i className="fa fa-exclamation-circle"></i>
+                                <div className="question-item__issue-list__item--warning__message">
+                                    This question has been flagged by <strong>4 people</strong>.
+                                </div>
+                            </li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div className="pure-u-1"><QuestionInfo /></div>
+                </div>
             );
         }
 

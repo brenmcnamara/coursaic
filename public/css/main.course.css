@@ -267,70 +267,70 @@
 /* Note that the question-info element sits
  * inside the question-edit element */
 
-.question-edit__issue-list {
+.question-item__issue-list {
     margin: 0 0 1.5em 0;
     padding: 0;
     list-style: none;
 }
 
-.question-edit__issue-list__item,
-.question-edit__issue-list__item--error,
-.question-edit__issue-list__item--warning {
+.question-item_issue-list__item,
+.question-item__issue-list__item--error,
+.question-item__issue-list__item--warning {
     position: relative;
     font-size: 1.1em;
     margin-bottom: .75em;
 }
 
-    .question-edit__issue-list__item i,
-    .question-edit__issue-list__item--error i,
-    .question-edit__issue-list__item--warning i {
+    .question-item__issue-list__item i,
+    .question-item__issue-list__item--error i,
+    .question-item__issue-list__item--warning i {
         position: absolute;
     }
 
-.question-edit__issue-list__item__message,
-.question-edit__issue-list__item--error__message,
-.question-edit__issue-list__item--warning__message {
+.question-item__issue-list__item__message,
+.question-item__issue-list__item--error__message,
+.question-item__issue-list__item--warning__message {
     margin-left: 1.5em;
 }
 
-.question-edit__issue-list__item--error i,
-.question-edit__issue-list__item--error__message {
+.question-item__issue-list__item--error i,
+.question-item__issue-list__item--error__message {
     color: #EC0000;
 }
 
-.question-edit__issue-list__item--warning i,
-.question-edit__issue-list__item--warning__message {
-    color: #ffb500;
+.question-item__issue-list__item--warning i,
+.question-item__issue-list__item--warning__message {
+    color: #ff8600;
 }
 
-.question-edit__icon-set {
+.question-item__icon-set {
     position: absolute;
 }
 
-.question-edit__icon-set i {
+.question-item__icon-set i {
     width: 100%;
     text-align: center;
     margin-left: .5em;
     font-size: 1.5em;
 }
 
-.question-edit__content {
+.question-item__content {
     margin-left: 6em;
 }
 
 @media only screen and (max-width: 48em) {
 
-    .question-edit__icon-set {
+    .question-item__icon-set {
         position: static;
         margin: auto;
     }
 
-    .question-edit__icon-set i {
+    .question-item__icon-set i {
         font-size: 2em;
         margin: 0 0 .5em 0;
     }
 
-    .question-edit__content {
+    .question-item__content {
         margin-left: 0;
     }
 
