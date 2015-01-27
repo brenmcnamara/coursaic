@@ -582,7 +582,7 @@ var React = require('react'),
                     </div>
                         <div className="pure-u-1">
                         <div className="question-item__icon-set--1 pure-g">
-                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-minus-circle" style={ { color: "#EC0000"} }></i></div>
+                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-minus-circle"></i></div>
                         </div>
                         <div className="question-item__content"><QuestionInfo /></div>
                     </div>

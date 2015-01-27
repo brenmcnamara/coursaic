@@ -13,7 +13,8 @@
 
 .emphasis {
     font-weight: bold;
-    color: rgb(245, 166, 35);
+    color: #666;
+    text-decoration: underline;
 }
 /* -------------------- *\
           Divide
