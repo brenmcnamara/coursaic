@@ -52,6 +52,11 @@ module.exports = {
             },
 
             {
+                route: "/exam",
+                component: layout.examLayout.Root
+            },
+
+            {
                 route: "/course/<courseId>",
                 action: constants.Action.LOAD_COURSE,
                 component: layout.courseLayout.Root
