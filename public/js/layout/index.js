@@ -13,7 +13,8 @@ var React = require('react'),
     homeLayout = require('./home.js'),
     courseLayout = require('./course.js'),
     examLayout = require('./exam.js'),
-    notifyLayout = require('./notify.js');
+    notifyLayout = require('./notify.js'),
+    resultLayout = require('./result.js');
 
 module.exports = {
 
@@ -25,7 +26,9 @@ module.exports = {
 
     examLayout: examLayout,
 
-    notifyLayout: notifyLayout
+    notifyLayout: notifyLayout,
+
+    resultLayout: resultLayout
 
 };
 
