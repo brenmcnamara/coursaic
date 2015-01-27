@@ -534,13 +534,13 @@ var React = require('react'),
                     <div className="pure-u-1">
                         <ul className="question-item__issue-list">
                             <li className="question-item__issue-list__item--error">
-                                <i className="fa fa-exclamation-triangle"></i>
+                                <i className="fa fa-exclamation-circle"></i>
                                 <div className="question-item__issue-list__item--error__message">
                                     This question has been disabled by the owner of the course.
                                 </div>
                             </li>
                             <li className="question-item__issue-list__item--warning">
-                                <i className="fa fa-exclamation-circle"></i>
+                                <i className="fa fa-exclamation-triangle"></i>
                                 <div className="question-item__issue-list__item--warning__message">
                                     This question has been flagged by <strong>3 people</strong>.
                                 </div>
@@ -549,9 +549,9 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="pure-u-1">
-                        <div className="question-item__icon-set pure-g">
-                            <div className="pure-u-1-2"><i className="fa fa-trash" style={ { color: "#EC0000" } }></i></div>
-                            <div className="pure-u-1-2"><i className="fa fa-pencil-square-o" style={ { color: "#4A90E2"} }></i></div>
+                        <div className="question-item__icon-set--2 pure-g">
+                            <div className="pure-u-1-2 question-item__icon-set__item--danger"><i className="fa fa-trash"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--safe"><i className="fa fa-pencil-square-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo />
@@ -572,7 +572,7 @@ var React = require('react'),
                     <div className="pure-u-1">
                         <ul className="question-item__issue-list">
                             <li className="question-item__issue-list__item--warning">
-                                <i className="fa fa-exclamation-circle"></i>
+                                <i className="fa fa-exclamation-triangle"></i>
                                 <div className="question-item__issue-list__item--warning__message">
                                     This question has been flagged by <strong>4 people</strong>.
                                 </div>
@@ -580,7 +580,12 @@ var React = require('react'),
                             <li></li>
                         </ul>
                     </div>
-                    <div className="pure-u-1"><QuestionInfo /></div>
+                        <div className="pure-u-1">
+                        <div className="question-item__icon-set--1 pure-g">
+                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-minus-circle" style={ { color: "#EC0000"} }></i></div>
+                        </div>
+                        <div className="question-item__content"><QuestionInfo /></div>
+                    </div>
                 </div>
             );
         }
@@ -595,10 +600,10 @@ var React = require('react'),
                 <div className="question-info">
                     <div className="question-info__ask">What is 2 + 2?</div>
                     <ul className="multi-choice-info__options-list">
-                        <li className="multi-choice-info__options-list__item">Option 1</li>
-                        <li className="multi-choice-info__options-list__item">Option 2</li>
-                        <li className="multi-choice-info__options-list__item--correct">Option 3</li>
-                        <li className="multi-choice-info__options-list__item">Option 4</li>
+                        <li className="multi-choice-info__options-list__item">17</li>
+                        <li className="multi-choice-info__options-list__item">16,322,471</li>
+                        <li className="multi-choice-info__options-list__item--correct">4</li>
+                        <li className="multi-choice-info__options-list__item">3</li>
                     </ul>
                     <div className="question-info__explanation">
                         <span className="emphasis">Explanation:</span> 2 + 2 = 4.

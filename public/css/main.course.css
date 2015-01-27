@@ -303,34 +303,92 @@
     color: #ff8600;
 }
 
-.question-item__icon-set {
+.question-item__icon-set,
+.question-item__icon-set--1,
+.question-item__icon-set--2 {
     position: absolute;
 }
 
-.question-item__icon-set i {
+.question-item__icon-set__item i,
+.question-item__icon-set__item--danger i,
+.question-item__icon-set__item--safe i {
+    cursor: pointer;
     width: 100%;
     text-align: center;
-    margin-left: .5em;
     font-size: 1.5em;
+    margin-right: .5em;
 }
 
-.question-item__content {
+/* A dangerous icon is one that causes
+ * dangerous actions to occur when clicked,
+ * such as deleting something 
+ */
+.question-item__icon-set__item--danger i {
+    color: #EC0000;
+}
+
+.question-item__icon-set__item--safe i {
+    color: #4A90E2;
+}
+
+/* A safe icon is one that is not dangerous */
+
+/* Style the content of a question item next to an
+ * icon-set class. The styling should make it so
+ * that the content does not overlap the icon set.
+ */
+.question-item__icon-set--1 + .question-item__content {
+    margin-left: 4em;
+}
+
+.question-item__icon-set--2 + .question-item__content {
     margin-left: 6em;
 }
 
 @media only screen and (max-width: 48em) {
 
+    /* Bring the icon set back into
+     * the flow of the page so that it
+     * can be placed above the question.
+     */
+    .question-item__icon-set--1,
+    .question-item__icon-set--2,
     .question-item__icon-set {
         position: static;
         margin: auto;
     }
 
-    .question-item__icon-set i {
-        font-size: 2em;
-        margin: 0 0 .5em 0;
+    /* Remove the margin that is created
+     * for the icon set overlap, since on small
+     * screens, the icon set is in the flow of the
+     * page (above styling).
+     */
+    .question-item__icon-set__item,
+    .question-item__icon-set__item--danger,
+    .question-item__icon-set__item--safe {
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 0 .5em;
     }
 
-    .question-item__content {
+    .question-item__icon-set__item i,
+    .question-item__icon-set__item--danger i,
+    .question-item__icon-set__item--safe i {
+        border-radius: 4px;
+    }
+    
+    .question-item__icon-set__item--danger i {
+        /* Same color as icon */
+        border: solid #EC0000 1px;
+    }
+
+    .question-item__icon-set__item--safe i {
+        /* Same color as icon */
+        border: solid #4A90E2 1px;
+    }
+
+    .question-item__icon-set--1 + .question-item__content,
+    .question-item__icon-set--2 + .question-item__content {
         margin-left: 0;
     }
 

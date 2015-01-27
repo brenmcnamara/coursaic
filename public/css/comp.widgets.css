@@ -104,8 +104,20 @@
 /* SMALL SCREEN FOR SECTION */
 @media screen and (max-width: 48em) {
     
+    /* Change the padding of some of the
+     * section elements so that things can
+     * become more centered on smaller screens.
+     */
+    .section {
+        padding: 1em;
+    }
+
     .section__header {
         text-align: center;
+    }
+
+    .section__subsection {
+        margin-left: 0em;
     }
 
     .section__subheader {
