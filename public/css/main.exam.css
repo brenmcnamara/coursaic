@@ -4,6 +4,70 @@
  * Styling for the exam page.
  */
 
+/* -------------------- *\
+          Timer
+\* -------------------- */
+
+/* The timer element that shows how long
+ * the user has been taking the exam for.
+ */
+.timer--hide,
+.timer {
+    position: fixed;
+    right: 2em;
+    top: 6em;
+    z-index: 2;
+}
+
+/* The element that actually shows the time in
+ * the timer.
+ */
+.timer__time {
+    font-size: 1.5em;
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    background: rgba(0,0,0,.7);
+    border-radius: 2px;
+
+    padding: .5em;
+
+    cursor: pointer;
+}
+
+    /* Hide the timer time when the
+     * timer is hidden
+     */
+    .timer--hide .timer__time {
+        display: none;
+    }
+
+    /* Hide the timer button when
+     * we want to show the timer.
+     */
+    .timer .timer__button {
+        display: none;
+    }
+
+/* The button used to hide/show the timer. */
+.timer__button {
+    cursor: pointer;
+
+    width: 2em;
+    background: rgba(0,0,0,.7);
+
+    border-radius: 2px;
+}
+
+    .timer__button i {
+        font-size: 1.1em;
+        padding: .2em;
+        color: white;
+        text-align: center;
+        width: 100%;
+    }
+
+/*  OLD STYLES */
+
 .exam,
 .exam-run-results {
   margin: 0 50px 0 30px;  

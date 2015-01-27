@@ -34,7 +34,8 @@ var
         render: function () {
 
             return (
-                <div className="dashboard"></div>
+                <div className="dashboard">
+                </div>
             );
         }
 

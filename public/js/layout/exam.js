@@ -25,46 +25,65 @@ var React = require('react'),
     Root = React.createClass({
 
         render: function() {
-            /*
-            if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.VIEW_EXAM_RESULTS) {
-                return (
-                    <div className="main">
-                        <HeaderLayout.Header />
-                        <BackButton />
-                        <ExamResults />
-                    </div>
-                );
-            }
-            else {
-                */
-                return (
-                    <div className="main">
-                        <HeaderLayout.Header />
+            return (
+                <div className="main">
+                    <HeaderLayout.Header />
+                    <Timer time="01:13" />
+                    <div className="content-wrapper">
                         <Dashboard />
                         <ExamForm />
                     </div>
-                );  
-//            }
+                </div>
+            );
         },
-
 
         onChange: function(event) {
             this.forceUpdate();
         },
-
 
         componentWillMount: function() {
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
             Stores.ExamStore().on(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
-
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
             Stores.ExamStore().removeListener(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         }
 
+    }),
 
+
+    Timer = React.createClass({
+
+        getInitialState: function () {
+            return { show: true };
+        },
+
+        render: function () {
+            var timerClass = (this.state.show) ? "timer" : "timer--hide"
+            return (
+                <div className={ timerClass }>
+                    <div className="timer__button"
+                         onClick={ this.onClickTimerButton } >
+                        <i className="fa fa-compress"></i>
+                    </div>
+                    <div className="timer__time"
+                         onClick={ this.onClickTimerText } >
+                        { this.props.time }
+                    </div>
+                </div>
+            );
+        },
+
+        onClickTimerButton: function () {
+            this.setState({ show: true});
+        },
+
+        onClickTimerText: function () {
+            this.setState({ show: false });
+        }
+    
     }),
 
 
@@ -72,10 +91,13 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="dashboard"></div>
+                <div className="dashboard">
+                    <div className="dashboard__content">
+
+                    </div>
+                </div>
             );
         }
-
 
     }),
 
