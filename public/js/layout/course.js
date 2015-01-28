@@ -559,8 +559,11 @@ var React = require('react'),
                                     This question has been flagged by <strong>3 people</strong>.
                                 </div>
                             </li>
-                            
                         </ul>
+                    </div>
+                    <div className="question-topic pure-u-1">
+                        <span className="question-topic__head">Topic:</span>
+                        <span className="question-topic__content">Java Syntax</span>
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">

@@ -289,6 +289,33 @@
       Question Info
 \* -------------------- */
 
+.question-topic {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+}
+
+.question-topic__head {
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
+.question-topic__content {
+    color: rgb(245, 166, 35);
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-topic {
+        text-align: center;
+    }
+
+}
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
 .question-info-list {
     margin: 2em 0 0 0;
     padding: 0;
