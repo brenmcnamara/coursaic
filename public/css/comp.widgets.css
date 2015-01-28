@@ -39,6 +39,30 @@
 }
 
 /* -------------------- *\
+         Triangle
+\* -------------------- */
+
+/* A small trianlge element that can be used
+ * as some kind of pointer.
+ *
+ * NOTE: This should be placed inside an element that
+ * does not have a position: static;
+ */
+.black-triangle,
+.triangle {
+    top: -1em;
+    left: 0;
+    position: absolute;
+
+    border-left: solid transparent .5em;
+    border-right: solid transparent .5em;
+}
+
+.black-triangle {
+    border-bottom: solid black 1em;
+}
+
+/* -------------------- *\
          Section
 \* -------------------- */
 
@@ -265,21 +289,15 @@
       Question Info
 \* -------------------- */
 
-.question-info-list--numbered,
 .question-info-list {
     margin: 2em 0 0 0;
     padding: 0;
-}
-
-.question-info-list--numbered {
-    list-style: decimal;
 }
 
 .question-info-list {
     list-style: none;
 }
 
-    .question-inf-list--numbered > li,
     .question-info-list > li {
         margin-bottom: 2em;
     }
@@ -293,7 +311,6 @@
     font-weight: bold;
     color: #444;
 }
-
 
 .question-info__explanation {
     margin: 1.5em 1em 0 1em;

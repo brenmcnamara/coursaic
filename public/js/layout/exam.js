@@ -156,11 +156,15 @@ var React = require('react'),
 
         render: function() {
             return (
-                <ul className="question-info-list--numbered">
-                    <ExamForm_QuestionList_MultiChoice />
-                    <ExamForm_QuestionList_MultiChoice />
-                    <ExamForm_QuestionList_MultiChoice />
-                    <ExamForm_QuestionList_MultiChoice />                                                                        
+                <ul className="question-info-list">
+                    <ExamForm_QuestionList_MultiChoice index={ 1 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 2 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 3 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 4 } />
+                    <li><WidgetsLayout.Divide /></li>
                 </ul>
             );           
         },
@@ -190,20 +194,25 @@ var React = require('react'),
 
 
     /**
-     * A multiple choice question in the exam form.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamForm_QuestionList_MultiChoice
-     * @private
+     * A multiple choice question for an exam.
      */
     ExamForm_QuestionList_MultiChoice = React.createClass({
 
+        getInitialState: function () {
+            return { showFlagOptions: false };
+        },
+
         render: function() {
+            var flagOptionsClass = 
+                ((this.state.showFlagOptions) ? "question-flag__options-list":
+                                                "question-flag__options-list--hide");
+
             return (
-                <li className="question-item--multi-choice">
-                    <div className="question-info">
-                        <div className="question-info__ask">What is 2 + 2?</div>
+                <li className="pure-g">
+                    <div className="question-info pure-u-1 pure-u-md-1-2">
+                        <div className="question-info__ask">
+                            <span>{ this.props.index }.</span> What is 2 + 2?
+                        </div>
                         <ul className="multi-choice-info__options-list--lettered">
                             <ExamForm_Question_MultiChoice_Item />
                             <ExamForm_Question_MultiChoice_Item />
@@ -211,8 +220,29 @@ var React = require('react'),
                             <ExamForm_Question_MultiChoice_Item /> 
                         </ul>
                     </div>
+                    <div className="question-flag pure-u-1 pure-u-md-1-2">
+                        <div className="question-flag__button"
+                             onClick={ this.onClickFlagButton } >
+                            <i className="fa fa-flag"></i>Flag this question.
+                        </div>
+                        <ul className={ flagOptionsClass } >
+                            <div className="triangle black-triangle" style={ { top: '-.9em' } }></div>
+                            <li>Not relevant to the material</li>
+                            <li>Does not make sense</li>
+                            <li>Similar to another question I have seen</li>
+                        </ul>
+                        <ul className="question-flag__action-list">
+                            <li>Swap this question for another question.</li>
+                            <li>Remove this question.</li>
+                        </ul>
+                    </div>
                 </li>
             );
+        },
+
+        onClickFlagButton: function (event) {
+            // Toggle the show flag options element.
+            this.setState({ showFlagOptions: !this.state.showFlagOptions });
         },
 
         onChangeItem: function(event) {
