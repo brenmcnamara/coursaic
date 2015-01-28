@@ -599,11 +599,11 @@ var React = require('react'),
             return (
                 <div className="question-info">
                     <div className="question-info__ask">What is 2 + 2?</div>
-                    <ul className="multi-choice-info__option-list">
-                        <li className="multi-choice-info__option-list__item">17</li>
-                        <li className="multi-choice-info__option-list__item">16,322,471</li>
-                        <li className="multi-choice-info__option-list__item--correct">4</li>
-                        <li className="multi-choice-info__option-list__item">3</li>
+                    <ul className="multi-choice-info__options-list">
+                        <li className="multi-choice-info__options-list__item">17</li>
+                        <li className="multi-choice-info__options-list__item">16,322,471</li>
+                        <li className="multi-choice-info__options-list__item--correct">4</li>
+                        <li className="multi-choice-info__options-list__item">3</li>
                     </ul>
                     <div className="question-info__explanation">
                         <span className="emphasis">Explanation:</span> 2 + 2 = 4.

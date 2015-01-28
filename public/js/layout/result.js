@@ -113,7 +113,7 @@ var
                 <li className="solution-item--multi-choice">
                     <div className="question-info">
                         <div className="question-info__ask">What is 2 + 2?</div>
-                        <ul className="multi-choice-info__option-list">
+                        <ul className="multi-choice-info__options-list">
                             <ExamResults_SolutionList_MultiChoice_Item />
                             <ExamResults_SolutionList_MultiChoice_Item />
                             <ExamResults_SolutionList_MultiChoice_Item />
@@ -143,7 +143,7 @@ var
 
         render: function() {
             return (
-                <li className="multi-choice-info__option-list__item">37</li>
+                <li className="multi-choice-info__options-list__item">37</li>
             );
         }
 

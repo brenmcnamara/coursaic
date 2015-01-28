@@ -238,6 +238,7 @@
  * inside the question-edit element */
 
 .question-item__issue-list {
+    font-size: .8em;
     margin: 0 0 1.5em 0;
     padding: 0;
     list-style: none;

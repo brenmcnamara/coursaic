@@ -204,8 +204,8 @@ var React = require('react'),
 
         render: function() {
             var flagOptionsClass = 
-                ((this.state.showFlagOptions) ? "question-flag__option-list":
-                                                "question-flag__option-list--hide");
+                ((this.state.showFlagOptions) ? "question-flag__options-list":
+                                                "question-flag__options-list--hide");
 
             return (
                 <li className="pure-g">
@@ -213,7 +213,7 @@ var React = require('react'),
                         <div className="question-info__ask">
                             <span>{ this.props.index }.</span> What is 2 + 2?
                         </div>
-                        <ul className="multi-choice-info__option-list--lettered">
+                        <ul className="multi-choice-info__options-list--lettered">
                             <ExamForm_Question_MultiChoice_Item />
                             <ExamForm_Question_MultiChoice_Item />
                             <ExamForm_Question_MultiChoice_Item />
