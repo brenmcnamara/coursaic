@@ -562,7 +562,6 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="question-topic pure-u-1">
-                        <span className="question-topic__head">Topic:</span>
                         <span className="question-topic__content">Java Syntax</span>
                     </div>
                     <div className="pure-u-1">
@@ -623,7 +622,7 @@ var React = require('react'),
                         <li className="multi-choice-info__options-list__item">3</li>
                     </ul>
                     <div className="question-info__explanation">
-                        <span className="emphasis">Explanation:</span> 2 + 2 = 4.
+                        Just because!
                     </div>
                 </div>
             );

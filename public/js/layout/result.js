@@ -120,7 +120,7 @@ var
                             <ExamResults_SolutionList_MultiChoice_Item />
                         </ul>
                         <div className="question-info__explanation">
-                            <span className="emphasis">Explanation:</span> Just because!!
+                            Just because!!
                         </div>
                     </div>
                 </li>

@@ -300,6 +300,13 @@
     margin-right: .5em;
 }
 
+.question-topic__content:before {
+    content: 'Topic:';
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
 .question-topic__content {
     color: rgb(245, 166, 35);
 }
@@ -337,6 +344,12 @@
 .question-info__explanation {
     font-weight: bold;
     color: #444;
+}
+
+.question-info__explanation:before {
+    content: 'Explanation:';
+    margin-right: .5em;
+    text-decoration: underline;
 }
 
 .question-info__explanation {
