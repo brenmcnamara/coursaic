@@ -296,11 +296,18 @@ var React = require('react'),
 
         render: function() {
             return (
-                <div className="button-wrapper exam__button-wrapper">
-                    <button type="button" className="pure-button blue-button">Submit</button>
-                    <button onClick={ this.onClickCancel } type="button" className="pure-button">
-                        Cancel
-                    </button>
+                <div className="pure-g">
+                    <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
+                        <button type="button" className="pure-button blue-button">Submit</button>
+                    </div>
+
+                    <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
+                        <button onClick={ this.onClickCancel }
+                                type="button" className="pure-button">
+                            Cancel
+                        </button>
+                    </div>
+
                 </div>
             );
         },

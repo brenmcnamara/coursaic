@@ -67,6 +67,23 @@
     }
 
 /* -------------------- *\
+        Exam Button
+\* -------------------- */
+
+/* A wrapper element for a main button on the exam page. */
+.exam-button-wrapper {
+  text-align: center;
+}
+
+/* SMALL SCREEN STYLING FOR EXAM-BUTTON */
+@media only screen and (max-width: 48em) {
+
+    .exam-button-wrapper {
+       margin-bottom: 1em;
+    }
+}
+
+/* -------------------- *\
       Question Flag
 \* -------------------- */
 
