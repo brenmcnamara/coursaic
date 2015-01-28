@@ -131,6 +131,9 @@ var React = require('react'),
                     <div className="dashboard-buttons__item">
                         <EnrollButton />
                     </div>
+                    <div className="dashboard-buttons__item">
+                        <AllQuestionsButton />
+                    </div>
                 </div>
             );
         }
@@ -159,14 +162,25 @@ var React = require('react'),
             );
         },
 
-
         onClick: function() {
             // Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
-
     }),
 
+
+    AllQuestionsButton = React.createClass({
+
+        render: function () {
+            return (
+                <button type="button"
+                        className="pure-button blue-button large-button">
+                    View All Questions
+                </button>
+            );
+        }
+
+    }),
 
     /**
      * The unenroll button allowing a user to unenroll
