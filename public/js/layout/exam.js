@@ -232,8 +232,8 @@ var React = require('react'),
                             <li>Similar to another question I have seen</li>
                         </ul>
                         <ul className="question-flag__action-list">
-                            <li>Swap this question for another question.</li>
-                            <li>Remove this question.</li>
+                            <li className="inline-button">Swap this question for another question.</li>
+                            <li className="inline-button">Remove this question.</li>
                         </ul>
                     </div>
                 </li>
