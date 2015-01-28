@@ -18,8 +18,7 @@ var
                     <headerLayout.Header />
                     <div className="content-wrapper">
                         <Dashboard />
-                        <BackButton />
-                        <ExamResults />
+                        <Section_ExamResults />
                     </div>
                     
                 </div>
@@ -41,55 +40,18 @@ var
 
     }),
 
-    /**
-     * The back button that shows up on the exam page. Used to
-     * navigate back to the course page.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class BackButton
-     * @private
-     */
-    BackButton = React.createClass({
 
-        render: function() {
+    Section_ExamResults = React.createClass({
+
+        render: function () {
             return (
-                <button type="button"
-                        className="exam-result-back pure-button blue-button">
-                    Back to Course
-                </button>
-            );
-        },
-
-
-        onClick: function() {
-        }
-
-
-    }),
-
-
-    /**
-     * The results of taking an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults
-     * @private
-     */
-    ExamResults = React.createClass({
-
-        render: function() {
-            return (
-                <div className="exam-run-results">
-                    <h1 className="exam__title">Exam 1</h1>
+                <section className="section">
                     <ExamScore />
                     <widgetsLayout.DivideFull />
-                    <ExamResults_SolutionList />
-                </div>
+                    <ExamResults />
+                </section>
             );
         }
-
 
     }),
 
@@ -124,7 +86,7 @@ var
      * @submodule Exam
      * @class ExamResults_SolutionList
      */
-    ExamResults_SolutionList = React.createClass({
+    ExamResults = React.createClass({
 
         render: function() {
             return (
