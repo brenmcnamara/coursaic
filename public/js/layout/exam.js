@@ -121,7 +121,7 @@ var React = require('react'),
         render: function() {
             var exam = Stores.ExamStore().current();
             return (
-                <div className="section exam">
+                <div className="section exam-form">
                     <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
                     <ExamForm_Buttons onSubmit={ this.onSubmit } />
                 </div>
