@@ -327,14 +327,14 @@
  * the question (the choices you can pick
  * from in a multi choice question)
  */
-.multi-choice-info__options-list--lettered,
-.multi-choice-info__options-list {
+.multi-choice-info__option-list--lettered,
+.multi-choice-info__option-list {
     margin: 1em 0 0 3em;
     padding: 0;
 }
 
 /* Styling for the list of multiple choice options. */
-.multi-choice-info__options-list {
+.multi-choice-info__option-list {
     list-style-type: upper-alpha;
 }
 
@@ -342,20 +342,20 @@
  * it is designed for the user to select an
  * options from a radio button
  */
-.multi-choice-info__options-list--lettered {
+.multi-choice-info__option-list--lettered {
     list-style-type: none;
 }
 
-.multi-choice-info__options-list__item,
-.multi-choice-info__options-list__item--correct {
+.multi-choice-info__option-list__item,
+.multi-choice-info__option-list__item--correct {
     margin-bottom: .5em;
 }
 
-.multi-choice-info__options-list__item {
+.multi-choice-info__option-list__item {
     color: #444;
 }
 
-.multi-choice-info__options-list__item--correct {
+.multi-choice-info__option-list__item--correct {
     font-weight: bold;
     color: #4A90E2;
 }
@@ -364,7 +364,7 @@
      * Styling if there is an input element for a multi-choice
      * options.
      */
-    .multi-choice-info__options-list__item input {
+    .multi-choice-info__option-list__item input {
         margin-right: .5em;
     }
 /* -------------------- *\

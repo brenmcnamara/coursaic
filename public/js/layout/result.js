@@ -73,7 +73,6 @@ var
                 </div>
             );        
         }
-       
 
     }),
 
@@ -96,7 +95,6 @@ var
             );
         }
 
-
     }),
 
     /**
@@ -113,21 +111,21 @@ var
         render: function() {
             return (
                 <li className="solution-item--multi-choice">
-                    <div className="solution-item__question">What is 2 + 2?</div>
-                    <ul className="solution-item--multi-choice__options">
-                        <ExamResults_SolutionList_MultiChoice_Item />
-                        <ExamResults_SolutionList_MultiChoice_Item />
-                        <ExamResults_SolutionList_MultiChoice_Item />
-                        <ExamResults_SolutionList_MultiChoice_Item />
-                    </ul>
-                    <div className="solution-item__explanation">
-                        <span>Explanation:</span>
-                        <span>Here is an explanation for why this solution is correct.</span>
+                    <div className="question-info">
+                        <div className="question-info__ask">What is 2 + 2?</div>
+                        <ul className="multi-choice-info__option-list">
+                            <ExamResults_SolutionList_MultiChoice_Item />
+                            <ExamResults_SolutionList_MultiChoice_Item />
+                            <ExamResults_SolutionList_MultiChoice_Item />
+                            <ExamResults_SolutionList_MultiChoice_Item />
+                        </ul>
+                        <div className="question-info__explanation">
+                            <span className="emphasis">Explanation:</span> Just because!!
+                        </div>
                     </div>
                 </li>
             );
         }
-
 
     }),
 
@@ -145,7 +143,7 @@ var
 
         render: function() {
             return (
-                <li className="solution-item--multi-choice__options__item">37</li>
+                <li className="multi-choice-info__option-list__item">37</li>
             );
         }
 
