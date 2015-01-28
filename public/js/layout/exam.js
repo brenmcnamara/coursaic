@@ -66,7 +66,7 @@ var React = require('react'),
                 <div className={ timerClass }>
                     <div className="timer__button"
                          onClick={ this.onClickTimerButton } >
-                        <i className="fa fa-compress"></i>
+                        <i className="fa fa-expand"></i>
                     </div>
                     <div className="timer__time"
                          onClick={ this.onClickTimerText } >
@@ -156,7 +156,7 @@ var React = require('react'),
 
         render: function() {
             return (
-                <ul className="exam__question-list">
+                <ul className="question-info-list--numbered">
                     <ExamForm_QuestionList_MultiChoice />
                     <ExamForm_QuestionList_MultiChoice />
                     <ExamForm_QuestionList_MultiChoice />
@@ -202,22 +202,22 @@ var React = require('react'),
         render: function() {
             return (
                 <li className="question-item--multi-choice">
-                    <div className="question-item__question">What is 2 + 2?</div>
-                    <ul className="question-item--multi-choice__options">
-                        <ExamForm_Question_MultiChoice_Item />
-                        <ExamForm_Question_MultiChoice_Item />
-                        <ExamForm_Question_MultiChoice_Item />
-                        <ExamForm_Question_MultiChoice_Item />
-                    </ul>
+                    <div className="question-info">
+                        <div className="question-info__ask">What is 2 + 2?</div>
+                        <ul className="multi-choice-info__options-list--lettered">
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item /> 
+                        </ul>
+                    </div>
                 </li>
             );
         },
 
-
         onChangeItem: function(event) {
             this.props.onChange(event, this.props.index);
         }
-
 
     }),
 
@@ -236,7 +236,7 @@ var React = require('react'),
             var option = this.props.option,
                 name = this.props.name;
             return (
-                <li className="question-item--multi-choice__options__item">
+                <li className="multi-choice-info__options-list__item">
                     <input type="radio" onChange={ this.onChange }
                                         name="question-here"
                                         value="37" />37

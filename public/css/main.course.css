@@ -234,36 +234,6 @@
       Question Info
 \* -------------------- */
 
-.question-info-list {
-    margin: 2em 0 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.question-info-list > li {
-    margin-bottom: 2em;
-}
-
-.question-info {
-    position: relative;
-}
-
-.question-info__ask,
-.question-info__explanation {
-    font-weight: bold;
-    color: #444;
-}
-
-
-.question-info__explanation {
-    margin: 1.5em 1em 0 1em;
-}
-
-
-/* -------------------- *\
-      Question Info
-\* -------------------- */
-
 /* Note that the question-info element sits
  * inside the question-edit element */
 
@@ -392,30 +362,6 @@
         margin-left: 0;
     }
 
-}
-
-/* -------------------- *\
-       Multi Choice
-\* -------------------- */
-
-.multi-choice-info__options-list {
-    margin: 1em 0 0 3em;
-    padding: 0;
-    list-style-type: upper-alpha;
-}
-
-.multi-choice-info__options-list__item,
-.multi-choice-info__options-list__item--correct {
-    margin-bottom: .5em;
-}
-
-.multi-choice-info__options-list__item {
-    color: #444;
-}
-
-.multi-choice-info__options-list__item--correct {
-    font-weight: bold;
-    color: #4A90E2;
 }
 
 /* -------------------- *\

@@ -27,7 +27,7 @@
     font-family: 'Orbitron', sans-serif;
     color: white;
     background: rgba(0,0,0,.7);
-    border-radius: 2px;
+    border-radius: 4px;
 
     padding: .5em;
 
@@ -55,7 +55,7 @@
     width: 2em;
     background: rgba(0,0,0,.7);
 
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
     .timer__button i {
