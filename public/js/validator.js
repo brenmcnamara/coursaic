@@ -9,7 +9,7 @@ var
     Action = require('shore').Action,
     Constants = require('./constants.js'),
     Schema = require('./schema'),
-    Stores = require('./Stores'),
+    Stores = require('./stores'),
     Util = require('shore').Util,
 
     /**

@@ -5,8 +5,16 @@
 <head>
     <title>Coursaic</title>
 
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
     <!-- Third-party Stylesheets -->
+    <link href='http://fonts.googleapis.com/css?family=Orbitron:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/normalize.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/css/pure.css">
 
     <!-- Coursaic Stylesheets -->
 
@@ -18,6 +26,7 @@
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/main.splash.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.home.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.course.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.exam.css" />
@@ -36,13 +45,11 @@
                     window.location.href = window.location.href + "fatal";
                 },
 
-                facebookId = <%= facebook_id %>,
                 NODE_ENV = "<%= NODE_ENV %>",
                 parseAppId = "<%= parse_app_id %>",
                 parseJavascriptId = "<%= parse_javascript_id %>"
 
                 Env = {
-                    facebookId: facebookId,
                     parseAppId: parseAppId,
                     parseJavascriptId: parseJavascriptId,
                     NODE_ENV: NODE_ENV
@@ -53,7 +60,6 @@
 
             setInterval(function () {
                 if (global.Env !== Env ||
-                    Env.facebookId !== facebookId ||
                     Env.NODE_ENV !== NODE_ENV ||
                     Env.parseAppId !== parseAppId ||
                     Env.parseJavascriptId !== parseJavascriptId) {
@@ -69,7 +75,6 @@
     </script>
 
     <script type="text/javascript" src="build/bundle.js"></script>
-
 
 </head>
 

@@ -11,112 +11,357 @@
         Dashboard
 \* -------------------- */
 
-.dashboard {
+.course-dashboard {
+    /* SPANS THE REMAINING WIDTH BELOW THE DASHBOARD */
+    min-height: 10em;
+
+}
+
+.course-dashboard__summary {
+    min-height: 10em;
     position: relative;
+}
 
-    height: 170px;
+.course-dashboard__summary__content {
     width: 100%;
-    min-width: 800px;
+    height: 12em;
 
-    background: rgb(238, 238, 238);
+    background: white;
 }
 
-.dashboard__course-logistics {
-    position: absolute;
-
-    left: 370px;
-    bottom: 10px;
-
-    padding: 0;
-    margin: 0;
+.course-dashboard__summary__content__banner {
+    float: left;
+    width: 2em;
+    height: 100%;
+    background: #4A90E2;
 }
 
-ul.dashboard__course-logistics {
+.course-dashboard__summary__content__header,
+.course-dashboard__summary__content__subheader {
+    margin: 20px 10px 10px 50px;
+}
+
+.course-dashboard__summary__content__details {
     list-style: none;
+    padding: 0;
+    margin: 30px 10px 10px 50px;
 }
 
-.dashboard__course-logistics__item {
-    font-size: 16px;
-    color: #999;
+    .course-dashboard__summary__content__details li {
+        margin-bottom: .5em;
+        color: #888;
+        font-weight: bold;
+    }
 
+/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
+@media only screen and (min-width: 48em) {
+
+    .course-dashboard__summary__content {
+        position: absolute;
+        bottom: -2em;
+
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 2px 3px 3px .5px #999;
+        
+    }
+
+}
+
+/* SMALL SCREENS FOR COURSE DASHBOARD */
+@media only screen and (max-width: 48em) {
+
+    .course-dashboard__summary__content {
+        border-top: solid #666 1px;
+        border-bottom: solid #666 1px;
+    }
+
+}
+
+/* -------------------- *\
+         Section
+\* -------------------- */
+
+.course__section-wrapper {
+    margin-top: 4em;
+}
+
+/* SMALL SCREEN FOR COURSE SECTION */
+@media only screen and (max-width: 48em) {
+
+    .course__section-wrapper {
+        margin-top: 0em;
+    }
+}
+
+/* -------------------- *\
+       Question Data
+\* -------------------- */
+
+.question-data {
+    margin-top: 2em;
+}
+
+.question-data__pie-chart-wrapper {
+
+}
+
+.question-data__legend {
+
+}
+
+.question-data__legend__item {
+    position: relative;
+    margin-top: .1em;
+    min-height: 2em;
+}
+
+.question-data__legend__item__color {
+    position: absolute;
+    top: .5em;
+    left: 0;
+    height: 1em;
+    width: 1em;
+    border-radius: .5em;
+}
+
+.question-data__legend__item__text {
+    margin-left: 2em;
+}
+
+.question-data__legend__item__text__topic {
+    font-size: .8em;
+    /* 2 / .8 = 2.5 */
+    line-height: 2.5em;
+    color: #444;
     font-weight: bold;
 }
 
-.dashboard__course-logistics__item:not(:nth-of-type(1)) {
-    margin-top: 10px;
+.question-data__legend__item__text__question {
+    margin-left: .5em;
+    font-size: .8em;
+    line-height: 2.5em;
+    font-style: italic;
+    color: #999;
 }
 
-.dashboard__profile-grid {
-    position: absolute;
-
-    left: 520px;
-    top: 30px;
+.question-data__pie-chart {
+    width: 100%;
+    max-height: 12em;
 }
 
-.dashboard__course-description {
-    position: absolute;
-    bottom: 0px;
-    width: 450px;
-    max-height: 5em;
-    left: 365px; /* width of course-summary + 15px */
+@media only screen and (max-width: 48em) {
+
+    .question-data__legend__item {
+        margin-left: 2em;
+    }
+}
+
+/* -------------------- *\
+     Question Filter
+\* -------------------- */
+
+.question-filter {
+
+}
+
+.question-filter__section {
+    margin-bottom: 2em;
+}
+
+.question-filter__bar-wrapper {
+
+}
+
+.question-filter__bar {
+    width: 70%;
+    height: 9em;
+    margin-left: 15%;
+}
+
+.question-filter__description {
+    color: #888;
+    margin-left: 2em;
+    font-size: 1.1em;
+}
+
+.question-filter__description > div {
+    margin-top: .5em;
+}
+
+.question-filter__form > div:nth-child(1) {
+    border-right: solid #BBB 1px;
+}
+
+.question-filter__form h4 {
+    text-align: center;
+}
+
+.question-filter__form__filters label {
+    padding: 0 1em 1em 1em;
+}
+
+    .question-filter__form__filters label input {
+        position: absolute;
+    }
     
-    overflow: hidden;
+    .question-filter__form__filters label div {
+        padding-left: 1.5em;
+        line-height: 1.1em;
+        color: #666;
+    }
+
+@media only screen and (max-width: 48em) {
+
+    .question-filter__bar {
+        width: 94%;
+        margin-left: 3%;
+    }
+
+    .question-filter__description {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .question-filter__form > div:nth-child(1) {
+        border-right: none;
+        border-bottom: solid #BBB 1px;
+    }
+
 }
 
 /* -------------------- *\
-         Enroll
+      Question Info
 \* -------------------- */
 
-.course-page__enroll {
+/* Note that the question-info element sits
+ * inside the question-edit element */
+
+.question-item__issue-list {
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    list-style: none;
+}
+
+.question-item_issue-list__item,
+.question-item__issue-list__item--error,
+.question-item__issue-list__item--warning {
+    position: relative;
+    font-size: 1.1em;
+    margin-bottom: .75em;
+}
+
+    .question-item__issue-list__item i,
+    .question-item__issue-list__item--error i,
+    .question-item__issue-list__item--warning i {
+        position: absolute;
+    }
+
+.question-item__issue-list__item__message,
+.question-item__issue-list__item--error__message,
+.question-item__issue-list__item--warning__message {
+    margin-left: 1.5em;
+}
+
+.question-item__issue-list__item--error i,
+.question-item__issue-list__item--error__message {
+    color: #EC0000;
+}
+
+.question-item__issue-list__item--warning i,
+.question-item__issue-list__item--warning__message {
+    color: #EC0000;
+}
+
+.question-item__icon-set,
+.question-item__icon-set--1,
+.question-item__icon-set--2 {
     position: absolute;
-    left: 365px;
-    top: 90px;
 }
 
-
-/* -------------------- *\
-          Exam
-\* -------------------- */
-
-.take-exam-button {
-    margin-top: -5px;
-    margin-left: 10px;
+.question-item__icon-set__item i,
+.question-item__icon-set__item--danger i,
+.question-item__icon-set__item--safe i {
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-right: .5em;
 }
 
-.exam-info {
-    margin-top: 5px;
+/* A dangerous icon is one that causes
+ * dangerous actions to occur when clicked,
+ * such as deleting something 
+ */
+.question-item__icon-set__item--danger i {
+    color: #EC0000;
 }
 
-.exam-info__creator-info__pic {
-    float: left;
+.question-item__icon-set__item--safe i {
+    color: #4A90E2;
 }
 
-.exam-info__creator-info::after {
-    content: '.';
-    visibility: hidden;
-    clear: both;
-    display: block;
-    width: 0px;
-    height: 0px;
+/* A safe icon is one that is not dangerous */
+
+/* Style the content of a question item next to an
+ * icon-set class. The styling should make it so
+ * that the content does not overlap the icon set.
+ */
+.question-item__icon-set--1 + .question-item__content {
+    margin-left: 4em;
 }
 
-.exam-info__creator-info { }
-
-.exam-info__creator-info__text {
-    display: inline-block;
-    margin-left: 5px;
-    /* Note: This is dependent on the height of the picture */
-    margin-top: 15px;
-
+.question-item__icon-set--2 + .question-item__content {
+    margin-left: 6em;
 }
 
-.exam-info__my-questions {
-    margin: 40px 0px 0px 0px;
-}
+@media only screen and (max-width: 48em) {
 
-.exam-info__my-questions__add-button {
-    margin-left: 10px;
-    vertical-align: middle;
+    /* Bring the icon set back into
+     * the flow of the page so that it
+     * can be placed above the question.
+     */
+    .question-item__icon-set--1,
+    .question-item__icon-set--2,
+    .question-item__icon-set {
+        position: static;
+        margin: auto;
+    }
+
+    /* Remove the margin that is created
+     * for the icon set overlap, since on small
+     * screens, the icon set is in the flow of the
+     * page (above styling).
+     */
+    .question-item__icon-set__item,
+    .question-item__icon-set__item--danger,
+    .question-item__icon-set__item--safe {
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 0 .5em;
+    }
+
+    .question-item__icon-set__item i,
+    .question-item__icon-set__item--danger i,
+    .question-item__icon-set__item--safe i {
+        border-radius: 4px;
+    }
+    
+    .question-item__icon-set__item--danger i {
+        /* Same color as icon */
+        border: solid #EC0000 1px;
+    }
+
+    .question-item__icon-set__item--safe i {
+        /* Same color as icon */
+        border: solid #4A90E2 1px;
+    }
+
+    .question-item__icon-set--1 + .question-item__content,
+    .question-item__icon-set--2 + .question-item__content {
+        margin-left: 0;
+    }
+
 }
 
 /* -------------------- *\
@@ -195,6 +440,53 @@ input.question__ask {
 .question__content {
     margin: 0px 20px 0px 70px;
 }
+
+
+/* -------------------- *\
+          Exam
+\* -------------------- */
+
+.take-exam-button {
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.exam-info {
+    margin-top: 5px;
+}
+
+.exam-info__creator-info__pic {
+    float: left;
+}
+
+.exam-info__creator-info::after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+    display: block;
+    width: 0px;
+    height: 0px;
+}
+
+.exam-info__creator-info { }
+
+.exam-info__creator-info__text {
+    display: inline-block;
+    margin-left: 5px;
+    /* Note: This is dependent on the height of the picture */
+    margin-top: 15px;
+
+}
+
+.exam-info__my-questions {
+    margin: 40px 0px 0px 0px;
+}
+
+.exam-info__my-questions__add-button {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 
 /* -------------------- *\
        Multi-Choice

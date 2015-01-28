@@ -25,248 +25,81 @@ var React = require('react'),
     Root = React.createClass({
 
         render: function() {
-            var cancelExamPopup;
-            if (Stores.PageStore().currentMode() === Stores.PageStore().Mode.VIEW_EXAM_RESULTS) {
-                return (
-                    <div className="main">
-                        <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.HeaderFill isOpaque={ false } />
-                        <BackButton />
-                        <ExamResults />
-                    </div>
-                );
-            }
-            else {
-                cancelExamPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CANCEL_EXAM_RUN) ?
-                                  (<PopupsLayout.CancelExamRun />) :
-                                  (null);
-                return (
-                    <div className="main">
-                        { cancelExamPopup }
-                        <HeaderLayout.Header isOpaque={ false } />
-                        <HeaderLayout.HeaderFill isOpaque={ false } />
+            return (
+                <div className="main">
+                    <HeaderLayout.Header />
+                    <Timer time="01:13" />
+                    <div className="content-wrapper">
+                        <Dashboard />
                         <ExamForm />
                     </div>
-                );  
-            }
+                </div>
+            );
         },
-
 
         onChange: function(event) {
             this.forceUpdate();
         },
-
 
         componentWillMount: function() {
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
             Stores.ExamStore().on(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
-
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
             Stores.ExamStore().removeListener(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         }
 
-
     }),
 
 
+    Timer = React.createClass({
 
-    /**
-     * The back button that shows up on the exam page. Used to
-     * navigate back to the course page.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class BackButton
-     * @private
-     */
-    BackButton = React.createClass({
+        getInitialState: function () {
+            return { show: true };
+        },
 
-        render: function() {
+        render: function () {
+            var timerClass = (this.state.show) ? "timer" : "timer--hide"
             return (
-                <button onClick={ this.onClick }
-                        type="button"
-                        className="exam-result-back button">
-                    Back to Course
-                </button>
+                <div className={ timerClass }>
+                    <div className="timer__button"
+                         onClick={ this.onClickTimerButton } >
+                        <i className="fa fa-expand"></i>
+                    </div>
+                    <div className="timer__time"
+                         onClick={ this.onClickTimerText } >
+                        { this.props.time }
+                    </div>
+                </div>
             );
         },
 
+        onClickTimerButton: function () {
+            this.setState({ show: true});
+        },
 
-        onClick: function() {
-            Router.path("/course/<courseId>/exam/<examId>",
-                        {
-                            courseId: Stores.CourseStore().current().id,
-                            examId: Stores.ExamStore().current().id
-                        });
+        onClickTimerText: function () {
+            this.setState({ show: false });
         }
-
-
+    
     }),
 
 
-    /**
-     * The results of taking an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults
-     * @private
-     */
-    ExamResults = React.createClass({
+    Dashboard = React.createClass({
 
-        render: function() {
-            var exam = Stores.ExamStore().current();
+        render: function () {
             return (
-                <div className="exam-run-results">
-                    <h1 className="exam__title">{ exam.get('name') }</h1>
-                    <ExamScore />
-                    <WidgetsLayout.DivideFull />
-                    <ExamResults_SolutionList />
-                </div>
-            );
-        }
+                <div className="dashboard">
+                    <div className="dashboard__content">
 
-
-    }),
-
-
-    /**
-     * The element showing the score the user got
-     * on an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamScore
-     */
-    ExamScore = React.createClass({
-
-        render: function() {
-            var examRun = Stores.ExamStore().currentExamRun(),
-                // TODO: Add some formatter for this.
-                percentage = Math.floor(examRun.grade() * 100);
-
-            return (
-                <div className="exam-run-results__score">
-                    You scored <span className="exam-run-results__score__percent">{ percentage }%</span>
-                </div>
-            );        
-        }
-       
-
-    }),
-
-
-    /**
-     * The list of solution for the exam the user
-     * has just taken.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList
-     */
-    ExamResults_SolutionList = React.createClass({
-
-        render: function() {
-            var examRun = Stores.ExamStore().currentExamRun(),
-                solutions = examRun.questions().map(function(question, index) {
-                    var guess = examRun.guessAtIndex(index),
-                        key = question.id + "-" + index.toString();
-                    return <ExamResults_SolutionList_MultiChoice   question={ question }
-                                                                   guess={ guess }
-                                                                   key={ key } />;
-                });
-
-            return (
-                <ul className="exam-run-results__list">{ solutions }</ul>
-            );
-        }
-
-
-    }),
-
-
-    /**
-     * A single mutliple choice solution to the results
-     * of an exam
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList_MultiChoice
-     * @private
-     */
-    ExamResults_SolutionList_MultiChoice = React.createClass({
-
-        render: function() {
-            var self = this,
-                question = this.props.question,
-                options = question.getOptions().map(function(option, index) {
-                    var key = question.id + "-option-" + index.toString();
-                    if (question.isCorrect(option)) {
-                        return <ExamResults_SolutionList_MultiChoice_Item key={ key }
-                                                                          option={ option }
-                                                                          isCorrect={ true } />;
-                    }
-                    else if (option === self.props.guess) {
-                        return <ExamResults_SolutionList_MultiChoice_Item  key={ key }
-                                                                           isIncorrect={ true }
-                                                                           option={ option } />; 
-                    }
-                    else {
-                        return <ExamResults_SolutionList_MultiChoice_Item  key={ key }
-                                                                           option={ option } />
-                    }
-                });
-            return (
-                <li className="solution-item--multi-choice">
-                    <div className="solution-item__question">{ question.get('question') }</div>
-                    <ul className="solution-item--multi-choice__options">
-                        { options }
-                    </ul>
-                    <div className="solution-item__explanation">
-                        <span>Explanation:</span>
-                        <span> { question.get('explanation') }</span>
                     </div>
-                </li>
+                </div>
             );
         }
-
 
     }),
-
-
-    /**
-     * An single multiple choice item for a multiple choice
-     * question in the results of taking an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList_MultiChoice_Item
-     * @private
-     */
-    ExamResults_SolutionList_MultiChoice_Item = React.createClass({
-
-        render: function() {
-            var itemType;
-            if (this.props.isIncorrect) {
-                itemType = "solution-item--multi-choice__options__item--incorrect";
-            }
-            else if (this.props.isCorrect) {
-
-                itemType = "solution-item--multi-choice__options__item--correct";
-            }
-            else {
-                itemType = "solution-item--multi-choice__options__item";
-            }
-            return (
-                <li className={ itemType }>{ this.props.option }</li>
-            );
-        }
-
-
-    });
 
 
     /**
@@ -288,9 +121,7 @@ var React = require('react'),
         render: function() {
             var exam = Stores.ExamStore().current();
             return (
-                <div className="exam">
-                    <h1 className="exam__title">{ exam.get('name') }</h1>
-                    <WidgetsLayout.DivideFull />
+                <div className="section exam">
                     <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
                     <ExamForm_Buttons onSubmit={ this.onSubmit } />
                 </div>
@@ -306,7 +137,7 @@ var React = require('react'),
 
 
         onSubmit: function(event) {
-            Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
+            // Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
         }
 
 
@@ -324,26 +155,18 @@ var React = require('react'),
     ExamForm_QuestionList = React.createClass({
 
         render: function() {
-            var self = this,
-                examRun = Stores.ExamStore().currentExamRun(),
-                questionList;
-
-            if (examRun) {
-                questionList = examRun.questions().map(function(question, index) {
-                        var key = "ExamQuestion-" + question.id;
-                        return <ExamForm_QuestionList_MultiChoice
-                                                onChange={ self.onChangeQuestion }
-                                                index={ index }
-                                                question={ question }
-                                                key={ key } />
-                    });
-                return (
-                    <ul className="exam__question-list">
-                        { questionList }
-                    </ul>
-                );           
-            }
-            return null;
+            return (
+                <ul className="question-info-list">
+                    <ExamForm_QuestionList_MultiChoice index={ 1 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 2 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 3 } />
+                    <li><WidgetsLayout.Divide /></li>
+                    <ExamForm_QuestionList_MultiChoice index={ 4 } />
+                    <li><WidgetsLayout.Divide /></li>
+                </ul>
+            );           
         },
 
       
@@ -371,43 +194,60 @@ var React = require('react'),
 
 
     /**
-     * A multiple choice question in the exam form.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamForm_QuestionList_MultiChoice
-     * @private
+     * A multiple choice question for an exam.
      */
     ExamForm_QuestionList_MultiChoice = React.createClass({
 
+        getInitialState: function () {
+            return { showFlagOptions: false };
+        },
+
         render: function() {
-            var self = this,
-                question = this.props.question,
-                options = question.getOptions(),
-                optionList = options.map(function(option, index) {
-                    var key = question.id + "-option-" + index.toString(),
-                        name = question.id;
-                    return <ExamForm_Question_MultiChoice_Item onChangeItem={ self.onChangeItem }
-                                                               option={ option }
-                                                               key={ key }
-                                                               name={ name } />;
-                });
+            var flagOptionsClass = 
+                ((this.state.showFlagOptions) ? "question-flag__options-list":
+                                                "question-flag__options-list--hide");
 
             return (
-                <li className="question-item--multi-choice">
-                    <div className="question-item__question">{ question.get('question') }</div>
-                    <ul className="question-item--multi-choice__options">
-                        { optionList }
-                    </ul>
+                <li className="pure-g">
+                    <div className="question-info pure-u-1 pure-u-md-1-2">
+                        <div className="question-info__ask">
+                            <span>{ this.props.index }.</span> What is 2 + 2?
+                        </div>
+                        <ul className="multi-choice-info__options-list--lettered">
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item />
+                            <ExamForm_Question_MultiChoice_Item /> 
+                        </ul>
+                    </div>
+                    <div className="question-flag pure-u-1 pure-u-md-1-2">
+                        <div className="question-flag__button"
+                             onClick={ this.onClickFlagButton } >
+                            <i className="fa fa-flag"></i>Flag this question.
+                        </div>
+                        <ul className={ flagOptionsClass } >
+                            <div className="triangle black-triangle" style={ { top: '-.9em' } }></div>
+                            <li>Not relevant to the material</li>
+                            <li>Does not make sense</li>
+                            <li>Similar to another question I have seen</li>
+                        </ul>
+                        <ul className="question-flag__action-list">
+                            <li className="inline-button">Swap this question for another question.</li>
+                            <li className="inline-button">Remove this question.</li>
+                        </ul>
+                    </div>
                 </li>
             );
         },
 
+        onClickFlagButton: function (event) {
+            // Toggle the show flag options element.
+            this.setState({ showFlagOptions: !this.state.showFlagOptions });
+        },
 
         onChangeItem: function(event) {
             this.props.onChange(event, this.props.index);
         }
-
 
     }),
 
@@ -426,10 +266,10 @@ var React = require('react'),
             var option = this.props.option,
                 name = this.props.name;
             return (
-                <li className="question-item--multi-choice__options__item">
+                <li className="multi-choice-info__options-list__item">
                     <input type="radio" onChange={ this.onChange }
-                                        name={ name }
-                                        value={ option } />{ option }
+                                        name="question-here"
+                                        value="37" />37
                 </li>
             );
         },
@@ -456,19 +296,25 @@ var React = require('react'),
 
         render: function() {
             return (
-                <div className="button-wrapper exam__button-wrapper">
-                    <button onClick={ this.props.onSubmit }
-                            type="button" className="button">Submit</button>
-                    <button onClick={ this.onClickCancel } type="button" className="button">
-                        Cancel
-                    </button>
+                <div className="pure-g">
+                    <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
+                        <button type="button" className="pure-button blue-button">Submit</button>
+                    </div>
+
+                    <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
+                        <button onClick={ this.onClickCancel }
+                                type="button" className="pure-button">
+                            Cancel
+                        </button>
+                    </div>
+
                 </div>
             );
         },
 
 
         onClickCancel: function() {
-            Action.send(Constants.Action.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
+           // Action.send(Constants.Action.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
         }
 
 

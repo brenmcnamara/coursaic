@@ -38,7 +38,7 @@ var Dispatcher = require('shore').Dispatcher,
                 fromMode = inputMap.fromMode;
 
             return new Promise(function(resolve, reject) {
-                if (self._currentMode !== fromMode) {
+                if (self._currentMode && self._currentMode !== fromMode) {
                     throw new Error("Expected mode to be " + fromMode +
                                     " when the mode is " + self._currentMode + ".");
                 }
@@ -176,17 +176,16 @@ var Dispatcher = require('shore').Dispatcher,
             },
 
 
-            LOAD_HOME: function (payload) {
+            LOGIN: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex, 
-                                            Stores.CourseStore().dispatcherIndex,
-                                            Stores.FieldStore().dispatcherIndex ])
+                                            Stores.CourseStore().dispatcherIndex ])
                                  .then(function () {
                                     self._removeMode({fromMode: self.currentMode()});
                                  });
             },
 
-
+            
             SUBMIT_EXAM_RUN: function (payload) {
                 return this._addMode({ toMode: this.Mode.VIEW_EXAM_RESULTS,
                                        toPayload: payload });

@@ -69,14 +69,18 @@ var
 
         FROM_MODE_EDIT_QUESTION: 'FROM_MODE_EDIT_QUESTION',
 
-        LOAD_COURSE: 'LOAD_COURSE',
-
         LOAD_EXAM_RUN: 'LOAD_EXAM_RUN',
 
-        LOAD_HOME: 'LOAD_HOME',
+        LOAD_COURSE: 'LOAD_COURSE',
 
         LOAD_NOT_FOUND: 'LOAD_NOT_FOUND',
 
+        LOGIN: 'LOGIN',
+
+        RESET_PASSWORD: 'RESET_PASSWORD',
+
+        SIGNUP: 'SIGNUP',
+        
         SUBMIT_EXAM_RUN: 'SUBMIT_EXAM_RUN',
 
         TO_MODE_CANCEL_EXAM_RUN: 'TO_MODE_CANCEL_EXAM_RUN',
@@ -98,9 +102,17 @@ var
 
     ErrorType = { 
 
+        // For trying to navigate to a page that
+        // is only available no credentials are provided,
+        // but users credentials are present.
+        EXISTING_USER_CREDENTIALS: "EXISTING_USER_CREDENTIALS",
+
         INVALID_EXAM_RUN: "INVALID_EXAM_RUN",
 
-        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS"
+        // For trying to navigate to a page that
+        // requires user credentials when no credentials
+        // are provided.
+        NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS",
 
     };
 

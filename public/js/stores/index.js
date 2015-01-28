@@ -25,14 +25,6 @@ module.exports = {
         return cache.ExamStore;
     },
 
-    
-    FieldStore: function () {
-        if (!cache.FieldStore) {
-            cache.FieldStore = require('./fieldstore.js');
-        }
-        return cache.FieldStore;
-    },
-
 
     PageStore: function () {
         if (!cache.PageStore) {

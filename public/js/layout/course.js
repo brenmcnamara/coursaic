@@ -22,6 +22,8 @@ var React = require('react'),
 
     Util = require('shore').Util,
 
+    widgets = require('../widgets.js'),
+
     /**
      * The root element on the Course
      * page.
@@ -33,27 +35,18 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function() {
-            var isEnrolled = Stores.CourseStore().current().isEnrolled(Stores.UserStore().current()),
-                enrollButton = (isEnrolled) ?
-                               (<UnenrollButton />) :
-                               (<EnrollButton />),
-                deleteQuestionPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.DELETE_QUESTION) ?
-                                      (<PopupsLayout.DeleteQuestion />) :
-                                      (null)
-                createExamPopup = (Stores.PageStore().currentMode() === Stores.PageStore().Mode.CREATE_EXAM) ?
-                                  (<PopupsLayout.CreateExam />) :
-                                  (null);
+            var menu = [
+                (<a href="#">Logout</a>)
+            ];
 
             return (
                 <div className="main">
-                    { createExamPopup }
-                    { deleteQuestionPopup }
-                    <HeaderLayout.Header isOpaque={ false } />
-                    <HeaderLayout.HeaderFill isOpaque={ false } />
-                    <Dashboard />
-                    <Summary />
-                    { enrollButton }
-                    <Content />
+                    <HeaderLayout.Header menu={ menu } />
+                    <div className="content-wrapper">
+                        <Dashboard />
+                        <Sections />
+                    </div>
+                    
                 </div>
             );
         },
@@ -91,85 +84,55 @@ var React = require('react'),
     Dashboard = React.createClass({
         
         render: function() {
-            var course = Stores.CourseStore().current(),
-                profileGridStyle = {
-                    minWidth: "150px"
-                };
-
             return (
                 <div className="dashboard">
-                    <p className="dashboard__course-description">
-                        { Formatter.Text.truncate(course.get('description'), { maxlen: 200 }) }
-                    </p>
-                </div>);
+                    <div className="dashboard__content">
+                        <div className="pure-g course-dashboard">
+                            <Dashboard_CourseSummary />
+                            <Dashboard_Buttons />
+                        </div>
+                    </div>
+                </div>
+            );
         }
 
 
     }),
 
 
-    /**
-     * A box containing basic information
-     * of the course.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Summary
-     */
-    Summary = React.createClass({
-
-        render: function() {
-            var course = Stores.CourseStore().current(),
-                bannerStyle = {
-                    background: course.get('field').get('color')
-                },
-                enrollText = (course.enrollCount() == 1) ? 
-                             "1 person enrolled" :
-                             course.enrollCount() + " people enrolled",
-                examCount = Stores.ExamStore().examsForCourse(course).length,
-                examText;
-
-            if (examCount === 0) {
-                examText = "No Exams";
-            }
-            else if (examCount === 1) {
-                examText = "1 Exam";
-            }
-            else {
-                examText = examCount + " Exams";
-            }
-
+    Dashboard_CourseSummary = React.createClass({
+        
+        render: function () {
             return (
-                <div className="course-summary">
-                    <div className="course-summary__banner" style={ bannerStyle }></div>
-                    <h1 className="course-summary__code">{ course.get('code') }</h1>
-                    <p className="course-summary__name">{ course.get('name') }</p>
-                    <p className="course-summary__field">
-                        <span className="course-summary__field__key">Field: </span>
-                        <span className="course-summary__field__value">{ course.get('field').get('name') }</span>
-                    </p>
-                    <div className="divide"></div>
-                    <ul className="course-summary__stats">
-                        <li className="course-summary__stats__item">{ enrollText }</li>
-                        <li className="course-summary__stats__item">{ examText }</li>
-                    </ul>
+                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 course-dashboard__summary">
+                    <div className="course-dashboard__summary__content">
+                        <div className="course-dashboard__summary__content__banner" />
+                        <h2 className="course-dashboard__summary__content__header">CS 101</h2>
+                        <h5 className="course-dashboard__summary__content__subheader">Introduction to Computer Science.</h5>
+                        <ul className="course-dashboard__summary__content__details">
+                            <li>Created 2 weeks ago</li>
+                            <li>27 enrolled</li>
+                        </ul>
+                    </div>
                 </div>
             );
-        },
+    
+        }
 
 
-        onChange: function() {
-            this.forceUpdate();
-        },
+    }),
 
 
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.onChange);
-        },
+    Dashboard_Buttons = React.createClass({
 
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.onChange);
+        render: function () {
+            return (
+                <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
+                    <div className="dashboard-buttons__item">
+                        <EnrollButton />
+                    </div>
+                </div>
+            );
         }
 
 
@@ -190,7 +153,7 @@ var React = require('react'),
             return (
                 <button onClick={ this.onClick }
                         type="button" 
-                        className="button large-button--positive course-page__enroll">
+                        className="pure-button blue-button large-button">
                     Enroll
                 </button>
             );
@@ -198,7 +161,7 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            // Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 
@@ -219,7 +182,7 @@ var React = require('react'),
             return (
                 <button onClick={ this.onClick }
                         type="button"
-                        className="button large-button--negative course-page__enroll">
+                        className="pure-button red-button large-button">
                     Unenroll
                 </button>
             );
@@ -227,27 +190,22 @@ var React = require('react'),
 
 
         onClick: function() {
-            Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            // Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
 
 
     }),
 
 
-    /**
-     * The main content for the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Content
-     */
-    Content = React.createClass({
+    Sections = React.createClass({
 
-        render: function() {
+        render: function () {
             return (
-                <div className="content course-content">
-                    <Navigation />
-                    <Body />
+                <div className="section-wrapper course__section-wrapper">
+                    <Sections_Description />
+                    <Sections_Overview />
+                    <Sections_MyQuestions />
+                    <Sections_FlaggedQuestions />
                 </div>
             );
         }
@@ -256,384 +214,409 @@ var React = require('react'),
     }),
 
 
-    /**
-     * The main navigation menu for the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation
-     */
-    Navigation = React.createClass({ 
+    Sections_Description = React.createClass({
 
-
-        render: function() {
-            var examIconStyle = {
-                    height: "30px",
-                    margin: "-15px 0px 0px 9px"
-                };
-            if (!Stores.PageStore().currentMode()) {
-                return (
-                    <div className="content__nav">
-                        <ul className="main-options">
-                            <li className="main-options__item">
-                                <img src="/img/icons/exam.png"
-                                     style={ examIconStyle }
-                                     className="main-options__item__icon--clickable" />
-
-                                <div onClick={ this.onClickCreateExam }
-                                     className="main-options__item__text--clickable">Create Exam</div>
-                            </li>
-                        </ul>
-
-                        <div className="divide"></div>
-
-                        <Navigation_ExamList />
-
+        render: function () {
+            return (
+                <section className="section">
+                    <h1 className="section__header">Description</h1>
+                    <div className="divide"></div>
+                    <div className="section__subsection">
+                        <p className="section__paragraph">
+                            An intensive introduction to algorithm development
+                            and problem solving on the computer. Structured problem
+                            definition, top down and modular algorithm design.
+                            Running, debugging, and testing programs. Program
+                            documentation.
+                        </p>
                     </div>
-                );
-            }
-            else {
-                return (
-                    <div className="content__nav">
-                        <ul className="main-options">
-                            <li className="main-options__item">
-                                <img src="/img/icons/exam.png"
-                                     style={ examIconStyle }
-                                     className="main-options__item__icon--unclickable" />
+                    <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                             Java
+                        </div>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#087a34", color: "white"} }>
+                             Vanderbilt
+                        </div>
+                        <div className="tag tag-list__item"
+                             style={ { backgroundColor: "#e25a58", color: "white"} }>
+                             Computer Science
+                        </div>
+                    </div>                  
+                </section>
+            );
+        }
 
-                                <div className="main-options__item__text--unclickable">Create Exam</div>
-                            </li>
-                        </ul>
+    }),
 
-                        <div className="divide"></div>
-
-                        <Navigation_ExamList />
-
-                    </div>
-                );
-            }  
-        },
-
+    Sections_Overview = React.createClass({
         
-        onClickCreateExam: function(event) {
-            Action.send(Constants.Action.TO_MODE_CREATE_EXAM);
-        },
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+        render: function () {
+            return (
+                <section className="section">
+                    <h1 className="section__header">Overview</h1>
+                    <div className="divide" />
+                    <Sections_Overview_ByTopic />
+                    <Sections_Overview_TakeExam />
+                </section>
+            );
         }
 
 
     }),
 
 
-    /**
-     * The list of exams in the navigation menu.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation_ExamList
-     */
-    Navigation_ExamList = React.createClass({
+    Sections_Overview_ByTopic = React.createClass({
 
-        render: function() {
-            // TODO: Add a "No Exams" list item if there are no exams.
-            var PIXEL_SPACE_BETWEEN_EXAMS = 28,
-                PIXEL_SPACE_TO_FIRST_EXAM = 27,
+        render: function () {
+            return (
+                <div className="section__subsection">
+                    <h3 className="section__subheader">There are <span className="emphasis">4 topics</span> of questions</h3>
+                    <div className="question-data pure-g">
+                        <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
+                            <canvas className="question-data__pie-chart"
+                                    id="js-question-data__pie-chart">
+                            </canvas>
+                        </div>
+                        <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#0001d6' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Java Syntax
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        12 questions
+                                    </span>
+                                </div>   
+                            </div>
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#01af00' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Compiler/Runtime Errors
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        22 questions
+                                    </span>
+                                </div>
+                                
+                            </div>
+                            <div className="question-data__legend__item">
+                                <div className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#FFFF00' } } ></div>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Looping Constructs
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        32 questions
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="question-data__legend__item">
+                                <span className="question-data__legend__item__color"
+                                      style= { { backgroundColor: '#EC0000' } } ></span>
+                                <div className="question-data__legend__item__text">
+                                    <span className="question-data__legend__item__text__topic">
+                                        Algorithms
+                                    </span>
+                                    <span className="question-data__legend__item__text__question">
+                                        15 questions
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        },
 
-                course = Stores.CourseStore().current(),
 
-                selectedExamIndex = -1,
+        componentDidMount: function () {
+            this.renderPieChart();
+            window.addEventListener("resize", this.renderPieChart);
+        },
 
-                examList = Stores.ExamStore().examsForCourse(course).map(function(exam, index) {
-                    if (Stores.ExamStore().current() && exam.id === Stores.ExamStore().current().id) {
-                        selectedExamIndex = index;
+
+        componentWillUnmount: function () {
+            window.removeEventListener("resize", this.renderPieChart);
+        },
+
+
+        renderPieChart: function () {
+            // TODO: Move these colors to the page store.
+            var 
+                data = [
+                    {
+                        color: '#0001d6',
+                        value: 12
+                    },
+                    {
+                        color: '#01af00',
+                        value: 22
+                    },
+                    {
+                        color: '#681eab',
+                        value: 21
+                    },
+                    {
+                        color: '#FFFF00',
+                        value: 32
+                    },
+                    {
+                        color: '#EC0000',
+                        value: 15
                     }
-                    return <Navigation_ExamList_Item key={ exam.id } exam={ exam } />
-                }),
 
-                displayStyle = (selectedExamIndex === -1) ? "none" : "initial",
+                ],
+                canvas = document.getElementById('js-question-data__pie-chart'),
+                context = canvas.getContext('2d'),
+                chart = new widgets.PieChart(context, data);
+                
+                // Set the width and height of the canvas.
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                chart.render();
+                
+        }
 
-                selectedExamBarPixelPosition = 
-                    (selectedExamIndex * PIXEL_SPACE_BETWEEN_EXAMS) + PIXEL_SPACE_TO_FIRST_EXAM,
 
-                selectionBarStyle = {
-                    top: selectedExamBarPixelPosition.toString() +"px",
-                    display: displayStyle,
-                    background: course.get('field').get('color')
+    }),
+
+
+    Sections_Overview_TakeExam = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__subsection">
+                    <h3 className="section__subheader">There are <span className="emphasis">56 questions</span> total</h3>
+                    <div className="question-filter">
+                        <div className="question-filter__section question-filter__bar-wrapper">
+                            <canvas id="js-question-filter__bar"
+                                    className="question-filter__bar"></canvas>
+                        </div>
+                        <div className="question-filter__section question-filter__description">
+                            <div><span className="emphasis">42 questions</span> after applying filters.</div>
+                            <div>
+                                <strong><span className="inline-button">Click here</span></strong> to take a practice exam
+                                with <input className="pure-input-1 inline-input--small" type="text" value="37" />questions.
+                            </div>
+                        </div>
+                    </div>
+                    <div className="question-filter__section question-filter__form pure-g">
+                        <div className="pure-u-1 pure-u-md-1-2">
+                            <h4>Topics</h4>
+                            <div className="question-filter__form__filters pure-g">
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Algorithms</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Java Syntax</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Looping Constructs</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Compiler/Runtime Errors</div>
+                                </label>
+                            </div>
+                        </div>
+                        <div className="pure-u-1 pure-u-md-1-2">
+                            <h4>Filters</h4>
+                            <div className="question-filter__form__filters pure-g">
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Include my questions</div>
+                                </label>
+                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
+                                    <input type="checkbox" /><div>Include flagged questions</div>
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            );
+        },
+
+
+        componentDidMount: function () {
+            this.renderProgressBar();
+            window.addEventListener('resize', this.renderProgressBar);
+        },
+
+
+        componentWillUnmount: function () {
+            window.removeEventListener('resize', this.renderProgressBar);
+        },
+
+
+        renderProgressBar: function () {
+            var
+                canvas = document.getElementById('js-question-filter__bar'),
+                context = canvas.getContext('2d'),
+                data = {
+                    total: 47,
+                    current: 42,
+                    selected: 37
                 },
-                selectionBar = (examList.length) ?
-                               (<div className="exam-list__selection-bar"
-                                     style={ selectionBarStyle }></div>) :
-                               null;
 
+                bar = new widgets.ProgressBar(context, data);
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            bar.render();
+        }
+
+
+    }),
+
+
+    /**
+     * A section containing all the questions that the
+     * current user has written. This will allow the user
+     * to modify their own questions.
+     */
+    Sections_MyQuestions = React.createClass({
+
+        render: function () {
             return (
-                <div className="category exam-list">
-                    { selectionBar }
-                    <div className="category__title">Exams</div>
-                    <ul className="category__list">
-                        { examList }
+                <section className="section">
+                    <h1 className="section__header">My Questions</h1>
+                    <div className="divide" />
+                    <div className="section__subsection">
+                        <h3><span className="inline-button">Click here</span> to create a new question.</h3>
+                        <ul className="question-info-list">
+                            <QuestionItem />
+                            <li className="divide gray-divide"></li>
+                            <QuestionItem />
+                            <li className="divide gray-divide"></li>
+                        </ul>
+                    </div>
+                </section>
+            );
+        }
+
+    }),
+
+
+    Sections_FlaggedQuestions = React.createClass({
+
+        render: function () {
+            return (
+                <section className="section">
+                    <h1 className="section__header">Flagged Questions</h1>
+                    <div className="divide" />
+                    <div className="section__subsection">
+                        <ul className="question-info-list">
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                            <li><FlaggedQuestionItem /></li>
+                        </ul>
+                    </div>
+                </section>
+            );
+        }
+
+
+    }),
+
+
+    QuestionItem = React.createClass({
+
+        render: function () {
+            return (
+                <li className="pure-g">
+                    <div className="pure-u-1">
+                        <ul className="question-item__issue-list">
+                            <li className="question-item__issue-list__item--error">
+                                <i className="fa fa-exclamation-circle"></i>
+                                <div className="question-item__issue-list__item--error__message">
+                                    This question has been disabled by the owner of the course.
+                                </div>
+                            </li>
+                            <li className="question-item__issue-list__item--warning">
+                                <i className="fa fa-exclamation-triangle"></i>
+                                <div className="question-item__issue-list__item--warning__message">
+                                    This question has been flagged by <strong>3 people</strong>.
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div className="pure-u-1">
+                        <div className="question-item__icon-set--2 pure-g">
+                            <div className="pure-u-1-2 question-item__icon-set__item--danger"><i className="fa fa-trash"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--safe"><i className="fa fa-pencil-square-o"></i></div>
+                        </div>
+                        <div className="question-item__content">
+                            <QuestionInfo />
+                        </div>
+                    </div>
+                </li>
+            );
+        }
+
+    }),
+
+
+    FlaggedQuestionItem = React.createClass({
+
+        render: function () {
+            return (
+                <div className="pure-g">
+                    <div className="pure-u-1">
+                        <ul className="question-item__issue-list">
+                            <li className="question-item__issue-list__item--warning">
+                                <i className="fa fa-exclamation-triangle"></i>
+                                <div className="question-item__issue-list__item--warning__message">
+                                    This question has been flagged by <strong>4 people</strong>.
+                                </div>
+                            </li>
+                            <li></li>
+                        </ul>
+                    </div>
+                        <div className="pure-u-1">
+                        <div className="question-item__icon-set--1 pure-g">
+                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-minus-circle"></i></div>
+                        </div>
+                        <div className="question-item__content"><QuestionInfo /></div>
+                    </div>
+                </div>
+            );
+        }
+
+    }),
+
+
+    QuestionInfo = React.createClass({
+
+        render: function () {
+            return (
+                <div className="question-info">
+                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <ul className="multi-choice-info__options-list">
+                        <li className="multi-choice-info__options-list__item">17</li>
+                        <li className="multi-choice-info__options-list__item">16,322,471</li>
+                        <li className="multi-choice-info__options-list__item--correct">4</li>
+                        <li className="multi-choice-info__options-list__item">3</li>
                     </ul>
-                </div>
-            );
-        },
-
-
-        // Event handler for when exams are fetched.
-        didFetchExams: function(event) {
-            this.forceUpdate();
-        },
-
-
-        didLoadExam: function(event) {
-            this.forceUpdate();
-        },
-
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        didCreateExam: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
-            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM, this.didCreateExam);
-        }
-
-    }),
-
-
-    /**
-     * A single list item in the exam list of the course page's
-     * main navigation.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Navigation_ExamList_Item
-     */
-    Navigation_ExamList_Item = React.createClass({
-
-        render: function() {
-            var exam = this.props.exam;
-
-            if (Stores.PageStore().currentMode()) {
-                return (
-                    <li>{ exam.get('name') }</li>
-                );
-            }
-            else {
-                return (
-                    <li onClick = { this.handleClick } >{ exam.get('name') }</li>
-                );
-            }
-        },
-
-
-        handleClick: function(event) {
-            Router.path("/course/<courseId>/exam/<examId>",
-                        {
-                            courseId: Stores.CourseStore().current().id,
-                            examId: this.props.exam.id
-                        });
-        },
-
-
-        changedMode: function(event) {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
-        }
-
-
-    }),
-
-
-    /**
-     * The element containing the main content for the course
-     * page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body
-     */
-    Body = React.createClass({
-
-        render: function() {
-            // If there is a current exam, present
-            // the current exam, otherwise, present
-            // the "No Exam" element.
-            if (Stores.ExamStore().current()) {
-                return (
-                    <div className="content__body">
-                        <Body_Exam />
-                    </div>
-                )}
-            else {
-                return (
-                    <div className="content__body">
-                        <Body_Default />
-                    </div>
-                )};      
-        },
-
-
-        didFetchExams: function() {
-            this.forceUpdate();
-        },
-
-
-        didLoadExam: function() {
-            this.forceUpdate();
-        },
-
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().on(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.PageStore().removeListener(Constants.Event.DID_LOAD_EXAM, this.didLoadExam);
-        }
-
-
-    }),
-
-
-    /**
-     * The default content that is shown by the body element.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body_Default
-     */
-    Body_Default = React.createClass({
-
-        render: function() {
-            var examCount = Stores.ExamStore().examsForCourse(Stores.CourseStore().current()).length,
-                title = (examCount) ? "Select Exam" : "Create Exam",
-                description = (examCount) ? "Select an exam to the left." :
-                                            "This course has no exams. Create an exam to the left.";
-
-            return (
-                <div className="content__body__wrapper">
-                    <h1 className="content__body__title">{ title }</h1>
-                    <p className="content__body__description">{ description }</p>
-                </div>
-            );
-        }
-
-    }),
-
-
-    /**
-     * The exam content that is shown inside the body element
-     * of the course page.
-     *
-     * @module Layout
-     * @submodule Course
-     * @class Body_Exam
-     */
-    Body_Exam = React.createClass({
-        
-        render: function() {
-            // Get the current exam.
-            var exam = Stores.ExamStore().current(),
-                questionCount = Stores.ExamStore().questionsForExam(exam).length,
-                takeExamHTML,
-                noExamStyle = {
-                    color: "#e34d2f"
-                };
-
-                if (questionCount === 0) {
-                    takeExamHTML = (
-                            <p style={ noExamStyle }>
-                                This exam has no questions. You must add questions before you
-                                can take the exam.
-                            </p>
-                        );
-                }
-                else if (questionCount === 1) {
-                    takeExamHTML = (
-                                <p>
-                                    This exam only has <strong>1
-                                    </strong> question. <span onClick={ this.onClickTakeExam }
-                                          className="inline-button">Take the exam.</span>
-                                </p>
-
-                            );
-                }
-                else {
-                    takeExamHTML = (
-                                <p>
-                                    This exam has <strong>{ questionCount }
-                                    </strong> questions created between all users. <span onClick={ this.onClickTakeExam }
-                                          className="inline-button"> Take the exam.</span>
-                                </p>
-
-                            );
-                }
-
-            return (
-                <div className="content__body__wrapper">
-                    <span className="content__body__title">{ exam.get('name') }</span>
-                    <div className="content__body__description">
-                        <p>{ exam.get('description') }</p>
-                        { takeExamHTML }
-                    </div>
-
-                    <div className="exam-info">
-                        <Body_Exam_QuestionList />
+                    <div className="question-info__explanation">
+                        <span className="emphasis">Explanation:</span> 2 + 2 = 4.
                     </div>
                 </div>
             );
-        },
-
-
-        onClickTakeExam: function(event) {
-            Router.path("/course/<courseId>/exam/<examId>/take",
-                        { examId: Stores.ExamStore().current().id,
-                          courseId: Stores.CourseStore().current().id });
         }
 
 
     }),
 
+
+    /* OLD STYLING, KEEPING TO REUSE SOME FUNCTIONALITY IN HERE */
 
     /**
      * The list of questions that the user created, displayed inside

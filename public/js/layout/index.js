@@ -9,12 +9,16 @@ var React = require('react'),
 
     Constants = require('../constants.js'),
     
+    splashLayout = require('./splash.js'),
     homeLayout = require('./home.js'),
     courseLayout = require('./course.js'),
     examLayout = require('./exam.js'),
-    errorPage = require('./404.js');
+    notifyLayout = require('./notify.js'),
+    resultLayout = require('./result.js');
 
 module.exports = {
+
+    splashLayout: splashLayout,
 
     homeLayout: homeLayout,
 
@@ -22,7 +26,9 @@ module.exports = {
 
     examLayout: examLayout,
 
-    errorPage: errorPage
+    notifyLayout: notifyLayout,
+
+    resultLayout: resultLayout
 
 };
 

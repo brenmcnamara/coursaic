@@ -2,12 +2,11 @@
  * CourseStore.js
  */
 
-var Stores = require('../Stores'),
+var Stores = require('../stores'),
     Dispatcher = require('shore').Dispatcher,
     Constants = require('../constants.js'),
     StoreBuilder = require('shore').StoreBuilder,
 
-    Field = require('./models.js').Field,
     Course = require('./models.js').Course,
 
     /**
@@ -40,19 +39,10 @@ var Stores = require('../Stores'),
                        .then(
                         // Success.
                         function() {
-                            var course = new Course(),
-                                fieldId = payload.fieldId;
-                            // Set the field object on the payload so
-                            // it is added to the new course instance.
-                            payload.field = new Field();
-                            payload.field.id = fieldId;
-                            // Add the school of the current user.
-                            payload.school = Stores.UserStore().current().get('school');
+                            var course = new Course();
                             // Enroll the current user into the course.
                             payload.enrolled = [ Stores.UserStore().current() ];
-                            // Remove the field id from the payload before
-                            // setting it on the course.
-                            delete payload.fieldId;
+
                             course.set(payload);
                             return new Promise(function(resolve, reject) {
                                 // TODO: Modify this using the
@@ -184,7 +174,7 @@ var Stores = require('../Stores'),
             },
 
 
-            LOAD_HOME: function (payload) {
+            LOGIN: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                             // Done waiting for the User Store.
@@ -245,8 +235,6 @@ var Stores = require('../Stores'),
          */
         _createCourseQuery: function(requestMap) {
             var query = new Parse.Query(Course);
-            // Only get schools for the user.
-            query.equalTo('school', Stores.UserStore().current().get('school'));
             query.limit(requestMap.limit);
             query.skip(requestMap.skip);
 
@@ -327,39 +315,15 @@ var Stores = require('../Stores'),
          *  the error describing the failure.
          */
         _loadCourse: function(course) {
-            var 
-                fieldPromise = Stores.FieldStore().fetchFieldForCourse(course),
-
-                schoolPromise = new Promise(function(resolve, reject) {
-                    course.get('school').fetch({
-                        success: function() {
-                            resolve(course);
-                        },
-                        error: function(error) {
-                            throw error;
-                        }
-                    });
-                });
-
-            return Promise.all([fieldPromise, schoolPromise])
-                          // Unify the promises to return a promise that will pass
-                          // a single parameter of the course that was loaded.
-                          .then(
-                            // Success.
-                            function() {
-                                return new Promise(function(resolve, reject) {
-                                    resolve(course);
-                                });
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            });
+            // TODO: Is there anything I need to do in here?
+            return new Promise(function (resolve) {
+                resolve();
+            });
         },
 
 
         /**
-         * Fetch the courses for a given school.
+         * Fetch the courses.
          *
          * @method fetch
          *

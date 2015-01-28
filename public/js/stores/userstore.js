@@ -10,8 +10,10 @@ var Stores = require('../stores'),
     StoreBuilder = require('shore').StoreBuilder,
     Constants = require('../constants.js'),
 
-    School = Parse.Object.extend("School"),
+    logger = require('shore').logger,
 
+
+    User = require('./models.js').User,
 
     /**
      * The Store that manages all user data as
@@ -40,60 +42,13 @@ var Stores = require('../stores'),
          *  called when the post-login process has completed.
          */
         _didLogin: function(user) {
-            var 
-                // Facebook promise will perform any operations needed
-                // with the facebook api.
-                fbPromise = new Promise(function(resolve, reject) {
-                    var params;
-                    if (!user.existed()) {
-                        // Get the user data from facebook.
-                        // Note: This information might change. Current implementation
-                        // assumes this never changes.
-                        params = {fields: 'first_name,last_name,picture.type(square)'};
-                        // TODO: Make sure to handle errors coming back from
-                        // the facebook api.
-                        
-                        FB.api("/me", params, function(response) {
+            var self = this;
 
-                            user.set("firstName", response.first_name);
-                            user.set("lastName", response.last_name);
-                            user.set("photoUrl", response.picture.data.url);
-
-                            // Save to the parse database. Response of save
-                            // is not being reaped, might want to change this later.
-                            user.save();
-                            resolve();
-                        });
-                        
-                        resolve();
-                    }
-                    else {
-                        resolve();
-                    }
-                }),
-
-                // Fetch school promise will get the school for the indicated
-                // user from the parse server.
-                fetchSchoolPromise = new Promise(function(resolve, reject) {
-                    // Upenn hard-coded here.
-                    var school = new School();
-                    school.id = "HLSpm7DJeB";
-                    user.set('school', school);
-                    user.get('school').fetch({
-                        success: function(model, response, options) {
-                            resolve();
-                        },
-
-                        error: function(model, response, options) {
-                            throw new Error("The school of the user could not be fetched.");
-                        }
-                    });
-                });
-
-            // Add the current user to the hash.
-            this._userHash[user.id] = user;
             // Combine all the promises into one promise.
-            return Promise.all([fbPromise, fetchSchoolPromise]);
+            return new Promise(function (resolve, reject) {
+                self._userHash[user.id] = user;
+                resolve();
+            });
         },
 
 
@@ -107,41 +62,21 @@ var Stores = require('../stores'),
          * @return {Promise} A promise object that gets called
          *  when the login process has completed.
          */
-        _login: function() {
+        _login: function(username, password) {
             var self = this;
-            return new Promise(function(resolve, reject) {
-                // Callback after the user has logged in successfully.
-                var onDidLoginSuccess = function() {
-                        resolve();
-                    },
 
-                    onDidLoginFailure = function(error) {
-                        throw error;
-                    };
-
-                // First check if the user connection status with Facebook.
-                // Check if they are logged in to Facebook, not just Parse.
-                FB.getLoginStatus(function(response) {
-                    if (response.status === "connected" && Parse.User.current()) {
-                        // They are logged in to Facebook.
-                        self._didLogin(self.current()).then(onDidLoginSuccess, onDidLoginFailure);
-                    }
-                    else {
-                        // They are NOT logged in to Facebook.
-
-                        // User is not logged in. Perform the login operation.
-                        Parse.FacebookUtils.logIn(null, {
-                            success: function(user) {
-                                self._didLogin(user).then(onDidLoginSuccess,
-                                                          onDidLoginFailure);
+            return Parse.User.logIn(username, password)
+                        .then(
+                            function (user) {
+                                logger.log(logger.Level.INFO, "Login successful.");
+                                return self._didLogin(user);
                             },
-                            error: function(user, error) {
-                                throw error;    
-                            }
-                        });
-                    }
-                }); 
-            });
+                            function (user, error) {
+                                // TODO: Set the error type to something
+                                // related to login failed.
+                                logger.log(logger.Level.Error, "Login error.");
+                                throw error;
+                            });
         },
 
 
@@ -166,9 +101,43 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
-            LOAD_HOME: function (payload) {
-                return this._login();
+
+            LOGIN: function (payload) {
+                // Check if the user is already logged in.
+                if (this.current()) {
+                    logger.log(logger.Level.INFO, "Skipping login. User already logged in.");
+
+                    // Return an empty promise, the user is
+                    // already logged in on the client.
+                    return new Promise(function (resolve) {
+                        resolve();
+                    });
+                }
+                else {
+                    logger.log(logger.Level.INFO, "Logging in user " + payload.username + ".");
+                    // Need to login the user.
+                    return this._login(payload.username, payload.password);
+                }
+            },
+
+
+            SIGNUP: function (payload) {
+                // Create a new user.
+                var user = new User();
+                user.set('firstName', payload.firstName);
+                user.set('lastName', payload.lastName);
+                user.set('username', payload.email);
+                user.set('email', payload.email);
+                user.set('password', payload.password);
+
+                return user.signUp(null);
+            },
+
+
+            RESET_PASSWORD: function (payload) {
+                return Parse.User.requestPasswordReset(payload.email);
             }
+
 
         },
 

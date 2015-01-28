@@ -11,219 +11,170 @@
  * on an individual basis
  */
 
-.main {
-    min-width: 800px;
+.emphasis {
+    font-weight: bold;
+    color: #666;
+    text-decoration: underline;
 }
-
 /* -------------------- *\
-         Widgets
+          Divide
 \* -------------------- */
-
-/* SHARED STYLING */
-
-.main-options,
-.my-courses {
-    margin: 30px 20px 0 20px;
-}
-
-/* The dividing line between
- * other elements
- */
 
 .divide,
 .divide--full {
     background: #F5A623;
-    height: 2px;
-    margin: 10px auto;
+    height: 1px;
 }
 
 .divide {
-    width: 80%;
+    margin: auto 2em;    
 }
 
 .divide--full {
-    width: 100%;
+    margin: 0 auto;
+}
+
+.gray-divide {
+    background: #888;
 }
 
 /* -------------------- *\
-         Content
+         Triangle
 \* -------------------- */
 
-.content {
-    display: flex;
-    display: -webkit-flex;
+/* A small trianlge element that can be used
+ * as some kind of pointer.
+ *
+ * NOTE: This should be placed inside an element that
+ * does not have a position: static;
+ */
+.black-triangle,
+.triangle {
+    top: -1em;
+    left: 0;
+    position: absolute;
 
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    border-left: solid transparent .5em;
+    border-right: solid transparent .5em;
+}
 
+.black-triangle {
+    border-bottom: solid black 1em;
+}
+
+/* -------------------- *\
+         Section
+\* -------------------- */
+
+.section-wrapper {
+    max-width: 100%;
     width: 100%;
 }
 
-.content__nav {
-    position: relative;
-
-    width: 200px;
-    min-width: 200px;
+.section {
+    padding: 1em 1em 1em 2em;
 }
 
-.content__body__wrapper {
-    margin: 0 20px 0 70px;
+.section__header {
+    /* Same margin-left as the divide element */
+    font-weight: normal;
+    color: rgb(245, 166, 35);
 }
 
-.content__body__title {
-    margin: 15px 0px 0px 0px;
-    margin-top: 15px;
+.section__subsection {
+    margin-top: 2em;
+    margin-left: 1em;
+}
 
-    font-size: 40px;
-    font-weight: bold;
+.section__subheader {
+    color: #999;
+}
+
+.section__course-grid {
+    margin-top: 2em;
+}
+
+/* A message that should show when
+ * a section is empty explaining why
+ * the section has no content */
+.section__empty {
+    font-size: 1.2em;
+    margin: 2em 3em;
+    text-align: center;
+    color: #999;
+}
+
+.section__paragraph {
+    font-size: 1.2em;
+    margin: 2em 3em;
     color: #444;
 }
 
-.content__body__description {
-    /* TODO: Move text styling to text css */
-    margin: 5px 0px; 
-    font-size: .8em;
-    color: #666;
-    
+.section__error {
+    /* Same a subheader text-indent */
+    margin-left: 1em;
+    position: relative;
 }
 
-/* styling for any category elements
-   inside of the nav */
-.content__nav > .category {
-    margin: 30px 20px 20px 20px;
+    .section__error i {
+        position: absolute;
+        font-size: 1.5em;
+    }
+
+    .section__error div {
+        margin-left: 2.25em;
+        color: #EC0000;
+    }
+
+/* SMALL SCREEN FOR SECTION */
+@media screen and (max-width: 48em) {
+    
+    /* Change the padding of some of the
+     * section elements so that things can
+     * become more centered on smaller screens.
+     */
+    .section {
+        padding: 1em;
+    }
+
+    .section__header {
+        text-align: center;
+    }
+
+    .section__subsection {
+        margin-left: 0em;
+    }
+
+    .section__subheader {
+        text-align: center;
+        text-indent: 0em;
+    }
+
+    .section__empty {
+        margin: 2em .5em;
+    }
+
+    .section__paragraph {
+        text-align: center;
+        margin: 2em .5em;
+    }
+
+    .section__error i {
+        position: static;
+        display: block;
+        text-align: center;
+        margin-bottom: .5em;
+    }
+
+    .section__error div {
+        margin: 0;
+        text-align: center;
+    }
 }
 
 /* -------------------- *\
-          Search
+         Buttons
 \* -------------------- */
-
-.search {
-
-    position: relative;
-
-    margin-top: -25px;
-    height: 50px;
-    
-    width: 650px;
-    margin-left: -325px;
-    
-    top: 50%;
-    left: 50%;
-}
-
-.search__input {
-    position: relative;
-
-    top: 5px;
-    width: 550px;
-    height: 30px;
-    padding-left: 5px;
-
-    border: solid #AAA 1px;
-    border-radius: 4px;
-    /* TODO: Do not hard-code font-size */
-    /* TODO: Move this to text.css */
-    font-size: 20px;
-}
-
-.search__submit {
-    position: relative;
-    
-    top: 11px;
-
-    margin-left: 30px;
-
-    width: 30px;
-    height: 30px;
-}
-
-
-/* -------------------- *\
-      Form Elements
-\* -------------------- */
-
-.text-input {
-    padding: 5px;    
-}
-
-.button--disabled,
-.button {
-    border: solid #CCC 1px;
-    padding: 5px 10px;
-    border-radius: 2px;
-    font-size: 1em;
-    background: #EAEAEA;
-}
-
-.button-wrapper {
-    text-align: center;
-}
-
-.button-wrapper > .button,
-.button-wrapper > .button--disabled {
-    margin: 0px 10px;
-}
-
-.button {
-    color: black;
-    cursor: pointer;
-}
-
-.button--disabled {
-    color: #999;
-    cursor: default;
-}
-
-.button:active {
-    background: #DDD;
-}
-
-.small-button,
-.small-button--positive,
-.small-button--negative,
-.large-button,
-.large-button--positive,
-.large-button--negative {
-    
-    border: none;
-    color: white;
-}
-
-.large-button,
-.large-button--positive,
-.large-button--negative {
-    font-size: 1.1em;
-    width: 200px;
-    height: 30px;
-}
-
-.small-button,
-.small-button--positive,
-.small-button--negative {
-    font-size: .8em;
-    width: 80px;
-    height: 25px;
-}
-
-.small-button--positive,
-.large-button--positive {
-    background: #4A90E2;
-}
-
-.small-button--positive:active,
-.large-button--positive:active {
-    background: #386dac;
-}
-
-.small-button--negative,
-.large-button--negative {
-    background: #e34d2f;
-}
-
-.small-button--negative:active,
-.large-button--negative:active {
-    background: #a53722
-}
 
 .inline-button {
     color: #4A90E2;
@@ -234,381 +185,236 @@
     text-decoration: underline;       
 }
 
-/* -------------------- *\
-       Main-Options
-\* -------------------- */
-
-/*
- * Main actions that the user
- * can take.
- */
-
-ul.main-options {
-    list-style: none;
-}
-
-.main-options {
-    padding: 0;
-}
-
-.main-options__item {
-    position: relative;
-    height: 35px;
-    margin: 0px 0px 4px 0px;
-}
-
-.main-options__item__icon--clickable,
-.main-options__item__icon--unclickable {
-    /* Note that height and margin
-     * should be specified inline for each
-     * image
-     */
-    position: absolute;
-    top: 50%;
-
-}
-
-.main-options__item__icon--clickable {
-    cursor: pointer;
-}
-
-.main-options__item__text--clickable,
-.main-options__item__text--unclickable {
-    line-height: 35px;
-    margin-left: 45px;
-}
-
-.main-options__item__text--clickable {
-    cursor: pointer;
-}
-
-/* -------------------- *\
-        Category
-\* -------------------- */
-
-/* Used to categorize
- * a list of items
- */
-
-.category {
-    position: relative;
-}
-
-ul.category__list {
-    list-style: none;
-}
-
-.category__list {
-    margin: 0 0 0 20px;
-    padding: 0;
-}
-
-.category__list > li {
-    margin: 10px 0 0 0;
-    cursor: pointer;
-}
-
-/* -------------------- *\
-        My-Courses
-\* -------------------- */
-
-/* List of Courses that
- * the user has enrolled in
- */
-
-.my-courses .category__list > li {
-    cursor: pointer;
-}
-
-.my-courses .category__list > li:hover {
-    text-decoration: underline;
-}
-
-/* -------------------- *\
-         Exam-List
-\* -------------------- */
-
-.exam-list__selection-bar {
-    position: absolute;
-    height: 22px;
-    width: 3px;
-    left: 0px;
-}
-
-.exam-list .category__list > li:hover {
-    text-decoration: underline;
-}
-
-/* -------------------- *\
-        Course-Info
-\* -------------------- */
-
-/* Course-Info is the box containing
- * some relevant information about a
- * course.
- */
-
-.course-info {
-    margin: 0px 10px 10px 0px;
-
-    display: flex;
-    display: -webkit-flex;
-
-    flex-direction: column;
-    -webkit-flex-direction: column;
-
-    float: left;
-
-    min-height: 150px;
-    height: 150px;
-
-    width: 200px;
-    min-width: 200px;
-
-    border: solid #979797 1px;
-
-    border-radius: 2px;
-
-    cursor: pointer;
-}
-
-
-.course-info__body {
-    position: relative;
-
-    -webkit-flex-grow: 1;
-    flex-grow: 1;
-    
-    overflow: hidden;
-}
-
-.course-info__header {
-    min-height: 40px;
-    line-height: 40px;
-
+.inline-input--small,
+.inline-input {
+    margin: 0 .25em;
     text-align: center;
+}
+
+.inline-input--small {
+    width: 3em;
+}
+
+.pure-button-disabled,
+.pure-button {
+    padding: 0.5em 2em;
+    border-radius: 5px;
+}
+
+.pure-button-disabled.large-button,
+.pure-button.large-button {
+    min-width: 15em;
+}
+
+.pure-button.blue-button {
+    background-color: #1f8dd6;
     color: white;
-    font-weight: normal;
 }
 
-.course-info__footer {
-    min-height: 30px;
-    line-height: 30px;
-
-    background: #D8D8D8;
-    padding-left: 5%;
+.pure-button-disabled.blue-button {
+    background-color: #135a8a;
+    color: rgb(216, 216, 216);
 }
 
-.course-info__body__text {
-    /* NOTE: Text truncating will have
-     * to be done in javascript code */
-     margin: 8px 10px;
+.pure-button.red-button {
+    background-color: #ff3a4c;
+    color: white;
+}
+
+.pure-button-disabled.red-button {
+    background-color: #a32530;
+    color: rgb(216, 216, 216);
 }
 
 /* -------------------- *\
-       Profile-Grid
+        Dashboard
 \* -------------------- */
 
-.profile-grid {
-    padding: 0;
-    margin: 0;
-
-    display: block;
-    width: 150px; /* width of 3 pics */
+.dashboard {
+    position: relative;
+    min-height: 15em;
+    background: rgb(216, 216, 216);
 }
 
-ul.profile-grid {
+.dashboard__content {
+    /* Same as parent */
+    min-height: 15em;
+    padding: 7em 0 0 0;
+}
+
+.dashboard-buttons {
+
+}
+
+.dashboard-buttons__item {
+    padding: .25em .5em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    .dashboard-buttons__item {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+}
+
+/* -------------------- *\
+           Tags
+\* -------------------- */
+
+.tag {
+    font-size: .8em;
+    padding: 0em .3em;
+    border-radius: 3px;
+}
+
+.tag-list {
+
+}
+
+.tag-list:after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+}
+
+.tag-list__item {
+    float: left;
+    margin: 0 0 .3em .3em;
+}
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+.question-info-list {
+    margin: 2em 0 0 0;
+    padding: 0;
+}
+
+.question-info-list {
     list-style: none;
 }
 
-.profile-grid__row__item {
-    float: left;
-}
+    .question-info-list > li {
+        margin-bottom: 2em;
+    }
 
-.member-count--square {
-    width: 50px;
-    height: 50px;
-
-    background: rgb(216, 216, 216);
-    color: #999;
-    /* TODO: Remove hard font-size */
-    font-size: 20px;
-    font-weight: bold;
-
-    text-align: center;
-    line-height: 50px;
-}
-
-/* -------------------- *\
-       Profile-Pic
-\* -------------------- */
-
-.profile-pic--circle--bordered,
-.profile-pic--circle,
-.profile-pic--square--bordered,
-.profile-pic--square {
+.question-info {
     position: relative;
-    display: block;
 }
 
-.profile-pic--circle--bordered,
-.profile-pic--square--bordered {
-    width: 56px;
-    height: 56px;
-
-    background: #DDD;
-}
-
-.profile-pic--circle,
-.profile-pic--square {
-    width: 50px;
-    height: 50px;
-}
-
-.profile-pic--circle {
-    border-radius: 25px;
-}
-
-.profile-pic--circle--bordered {
-    border-radius: 28px;
-}
-
-.profile-pic--circle > img,
-.profile-pic--circle--bordered > img,
-.profile-pic--square > img,
-.profile-pic--square--bordered > img {
-    position: absolute;
-
-    width: 50px;
-    height: 50px;
-}
-
-.profile-pic--circle > img,
-.profile-pic--square > img {
-    top: 0px;
-    left: 0px;
-}
-
-.profile-pic--circle--bordered > img,
-.profile-pic--square--bordered > img {
-    top: 3px;
-    left: 3px;
-}
-
-.profile-pic--circle > img,
-.profile-pic--circle--bordered > img {
-    border-radius: 25px;
-}
-
-/* TODO: Move this element to course styles */
-/* -------------------- *\
-      Course-Summary
-\* -------------------- */
-
-.course-summary {
-    position: absolute;
-
-    top: 85px;
-    left: 0px;
-
-    width: 350px;
-    height: 175px;
-
-    background: white;
-
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    box-shadow: 2px 3px 3px .5px #999;
-}
-
-.course-summary__banner {
-    float: left;
-    width: 20px;
-    height: 100%;
-}
-
-.course-summary__code {
-    margin: 10px 15px 0px 40px;
-
-    font-size: 30px;
-    font-weight: medium;
-}
-
-.course-summary__name,
-.course-summary__field {
-    font-size: 14px;
+.question-info__ask,
+.question-info__explanation {
     font-weight: bold;
-}
-
-.course-summary__name {
-    margin: 7px 15px 0px 40px; 
-}
-
-.course-summary__field {
-    margin: 4px 15px 0px 40px;
     color: #444;
 }
 
-.course-summary__creator-profile {
-    margin-top: 10px;
-    left: 35px;
-}
-
-.course-summary__creator-info {
-    position: absolute;
-
-    margin: 0;
-    top: 120px;
-    left: 95px;
-
-    width: 180px;
-}
-
-.course-summary__stats {
-    margin-left: 40px;
-    padding: 0px;
-}
-
-ul.course-summary__stats {
-    list-style: none;
-}
-
-.course-summary__stats__item {
-    margin-top: 5px;    
+.question-info__explanation {
+    margin: 1.5em 1em 0 1em;
 }
 
 /* -------------------- *\
-       Page Error
+       Multi Choice
 \* -------------------- */
 
-.page-error {
+/*
+ * For questions that are formatted as
+ * multiple choice questions, this is the
+ * set of options that are available for
+ * the question (the choices you can pick
+ * from in a multi choice question)
+ */
+.multi-choice-info__options-list--lettered,
+.multi-choice-info__options-list {
+    margin: 1em 0 0 3em;
+    padding: 0;
+}
+
+/* Styling for the list of multiple choice options. */
+.multi-choice-info__options-list {
+    list-style-type: upper-alpha;
+}
+
+/* Styling for the multiple choice list when
+ * it is designed for the user to select an
+ * options from a radio button
+ */
+.multi-choice-info__options-list--lettered {
+    list-style-type: none;
+}
+
+.multi-choice-info__options-list__item,
+.multi-choice-info__options-list__item--correct {
+    margin-bottom: .5em;
+}
+
+.multi-choice-info__options-list__item {
+    color: #444;
+}
+
+.multi-choice-info__options-list__item--correct {
+    font-weight: bold;
+    color: #4A90E2;
+}
+
+    /* 
+     * Styling if there is an input element for a multi-choice
+     * options.
+     */
+    .multi-choice-info__options-list__item input {
+        margin-right: .5em;
+    }
+/* -------------------- *\
+         Notify
+\* -------------------- */
+
+.notify {
     position: absolute;
-    
-    margin-top: -125px;
-    margin-left: -250px;
+
+    margin-top: -8em;
+    margin-bottom: 3em;
     
     top: 50%;
-    left: 50%;
     
-    width: 500px;
-    height: 250px;
-
+    max-width: 100%;
+    width: 100%;
+    min-height: 10em;
 }
 
-.page-error > h1 {
+.notify-icon {
+    font-size: 4em;
+    margin-bottom: .25em;
+    display: block;
     text-align: center;
-    font-size: 5.5em;
-    margin: 10px 0 5px 0;
 }
 
-.page-error > h3 {
+.notify__head {
     text-align: center;
     font-size: 2.1em;
     margin: 5px 0;
 }
 
-.page-error > p {
+.notify__subhead {
     text-align: center;
     font-size: 1.3em;
-    margin: 20px 0;
+    margin: 1em 5em;
 }
+
+
+.notify__form {
+    text-align: center;
+    margin: auto;
+    width: 20em;
+}
+
+@media screen and (max-width: 48em) {
+
+    .notify__form {
+        width: 10em;
+    }
+
+}
+

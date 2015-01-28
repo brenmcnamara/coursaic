@@ -1,50 +1,59 @@
 /**
- * content.css
+ * main.home.css
  *
- * Styling for root elements in the content
- * tag.
+ * Styling for the home page.
  */
 
-/* -------------------- *\
-     General Styling
-\* -------------------- */
-
-.home-image {
-   display: block;
-   position: relative;
-   width: 100%;
-   height: 325px;
-   /* Note: This will probably not look good
-      for screens with more than 1400 px width
-    */
-   background-image: url('../img/homeFiller.png');
-}
-
-.home-search {
-    position: relative;
-
-    width: 100%;
-    height: 50px;
-
-    width: 100%;
-    height: 80px;
-}
-
-.home-content {
-    margin: 20px 0 40px 0;
-}
 
 /* -------------------- *\
-      Course Search
+       Course Box
 \* -------------------- */
 
-.home-content__courses {
-    position: relative;
+/* NOTE THAT THE COURSE BOX ELEMENT
+   SHOULD BE INSIDE THE section__course-grid
+   element */
 
-    -webkit-flex-grow: 1;
-    flex-grow: 1;
+.course-box {
+
 }
 
-.course-grid {
-    margin: 30px 70px 0px 70px;
+.course-box__content {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    margin: .5em;
+    border-radius: 5px;
+    overflow: hidden;
+    border: solid #888 1px;
+}
+
+.course-box__content__header {
+    font-size: 1.5em;
+    height: 1.7em;
+    line-height: 1.7em;
+    min-height: 1.7em;
+    text-align: center;
+
+    color: rgb(74, 144, 226);
+    background: rgb(216, 216, 216);
+}
+
+.course-box__content__body {
+    padding: .5em .75em;
+    line-height: 1.5em;
+    color: #444;
+}
+
+.course-box__content__body > div {
+    margin-bottom: 1em;
+}
+
+.course-box__content__footer {
+    height: 1.8em;
+    line-height: 1.8em;
+    min-height: 1.5em;
+    text-align: center;
+    background: rgb(216, 216, 216);
+    color: rgb(74, 144, 226);
 }
