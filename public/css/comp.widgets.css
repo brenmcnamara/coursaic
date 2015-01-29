@@ -176,6 +176,15 @@
          Buttons
 \* -------------------- */
 
+.form-text-input {
+    padding: .3em;
+    width: 20em;
+}
+
+/* -------------------- *\
+         Buttons
+\* -------------------- */
+
 .inline-button {
     color: #4A90E2;
     cursor: pointer;

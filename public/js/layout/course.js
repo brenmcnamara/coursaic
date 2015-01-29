@@ -9,6 +9,8 @@
 
 var React = require('react'),
 
+    WidgetsLayout = require('./widgets.js'),
+    FormLayout = require('./form.js'),
     HeaderLayout = require('./header.js'),
     PopupsLayout = require('./popups.js'),
 
@@ -51,23 +53,19 @@ var React = require('react'),
             );
         },
 
-
         onChange: function() {
             this.forceUpdate();
         },
-
 
         componentWillMount: function() {
             Stores.CourseStore().on(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
-
         componentWillUnmount: function() {
             Stores.CourseStore().removeListener(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
         }
-
 
     }),
 
@@ -96,7 +94,6 @@ var React = require('react'),
             );
         }
 
-
     }),
 
 
@@ -119,7 +116,6 @@ var React = require('react'),
     
         }
 
-
     }),
 
 
@@ -137,7 +133,6 @@ var React = require('react'),
                 </div>
             );
         }
-
 
     }),
 
@@ -202,11 +197,9 @@ var React = require('react'),
             );
         },
 
-
         onClick: function() {
             // Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
         }
-
 
     }),
 
@@ -276,7 +269,6 @@ var React = require('react'),
                 </section>
             );
         }
-
 
     }),
 
@@ -349,17 +341,14 @@ var React = require('react'),
             );
         },
 
-
         componentDidMount: function () {
             this.renderPieChart();
             window.addEventListener("resize", this.renderPieChart);
         },
 
-
         componentWillUnmount: function () {
             window.removeEventListener("resize", this.renderPieChart);
         },
-
 
         renderPieChart: function () {
             // TODO: Move these colors to the page store.
@@ -397,7 +386,6 @@ var React = require('react'),
                 chart.render();
                 
         }
-
 
     }),
 
@@ -455,17 +443,14 @@ var React = require('react'),
             );
         },
 
-
         componentDidMount: function () {
             this.renderProgressBar();
             window.addEventListener('resize', this.renderProgressBar);
         },
 
-
         componentWillUnmount: function () {
             window.removeEventListener('resize', this.renderProgressBar);
         },
-
 
         renderProgressBar: function () {
             var
@@ -484,7 +469,6 @@ var React = require('react'),
 
             bar.render();
         }
-
 
     }),
 
@@ -535,7 +519,6 @@ var React = require('react'),
                 </section>
             );
         }
-
 
     }),
 
@@ -674,26 +657,32 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="question-info">
-                    <div className="question-info__ask">What is 2 + 2?</div>
+                <form className="question-info">
+                    <div className="question-info__ask">
+                        <FormLayout.TextInput value="What is 2 + 2?" placeholder="Enter Text here" />
+                    </div>
                     <ul className="multi-choice-info__options-list">
                         <li className="multi-choice-info__options-list__item">
-                            <input type="radio" name="question-here" /> 17
+                            <FormLayout.RadioOption name="question-here" value="17"
+                                                    presentationValue={ <FormLayout.TextInput value="17" placeholder="Option 1" /> } />
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <input type="radio" name="question-here" /> 16,322,471
+                            <FormLayout.RadioOption name="question-here" value="4"
+                                                    presentationValue={ <FormLayout.TextInput value="4" placeholder="Option 1" /> } />
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <input type="radio" name="question-here" /> 4
+                            <FormLayout.RadioOption name="question-here" value="643"
+                                                    presentationValue={ <FormLayout.TextInput value="643" placeholder="Option 1" /> } />
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <input type="radio" name="question-here" /> 3
+                            <FormLayout.RadioOption name="question-here" value="22"
+                                                    presentationValue={ <FormLayout.TextInput value="22" placeholder="Option 1" /> } />
                         </li>
                     </ul>
                     <div className="question-info__explanation">
                         Just because!
                     </div>
-                </div>
+                </form>
             );
         }
 

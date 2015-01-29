@@ -51,6 +51,8 @@ var React = require('react'),
 
 
 module.exports = {
+
     Divide: Divide,
     DivideFull: DivideFull
+
 };
