@@ -213,7 +213,7 @@ var React = require('react'),
                         <div className="question-info__ask">
                             <span>{ this.props.index }.</span> What is 2 + 2?
                         </div>
-                        <ul className="multi-choice-info__options-list--lettered">
+                        <ul className="multi-choice-info__options-list">
                             <ExamForm_Question_MultiChoice_Item />
                             <ExamForm_Question_MultiChoice_Item />
                             <ExamForm_Question_MultiChoice_Item />

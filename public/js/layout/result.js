@@ -113,7 +113,7 @@ var
                 <li className="solution-item--multi-choice">
                     <div className="question-info">
                         <div className="question-info__ask">What is 2 + 2?</div>
-                        <ul className="multi-choice-info__options-list">
+                        <ul className="multi-choice-info__options-list--lettered">
                             <ExamResults_SolutionList_MultiChoice_Item />
                             <ExamResults_SolutionList_MultiChoice_Item />
                             <ExamResults_SolutionList_MultiChoice_Item />

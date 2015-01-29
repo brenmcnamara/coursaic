@@ -504,7 +504,7 @@ var React = require('react'),
                     <div className="section__subsection">
                         <h3><span className="inline-button">Click here</span> to create a new question.</h3>
                         <ul className="question-info-list">
-                            <QuestionItem />
+                            <QuestionItem_Edit />
                             <li className="divide gray-divide"></li>
                             <QuestionItem />
                             <li className="divide gray-divide"></li>
@@ -580,6 +580,46 @@ var React = require('react'),
     }),
 
 
+    QuestionItem_Edit = React.createClass({
+
+        render: function () {
+            return (
+                <li className="pure-g">
+                    <div className="pure-u-1">
+                        <ul className="question-item__issue-list">
+                            <li className="question-item__issue-list__item--error">
+                                <i className="fa fa-exclamation-circle"></i>
+                                <div className="question-item__issue-list__item--error__message">
+                                    This question has been disabled by the owner of the course.
+                                </div>
+                            </li>
+                            <li className="question-item__issue-list__item--warning">
+                                <i className="fa fa-exclamation-triangle"></i>
+                                <div className="question-item__issue-list__item--warning__message">
+                                    This question has been flagged by <strong>3 people</strong>.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="question-topic pure-u-1">
+                        <span className="question-topic__content">Java Syntax</span>
+                    </div>
+                    <div className="pure-u-1">
+                        <div className="question-item__icon-set--2 pure-g">
+                            <div className="pure-u-1-2 question-item__icon-set__item--danger"><i className="fa fa-minus-circle"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--safe"><i className="fa fa-floppy-o"></i></div>
+                        </div>
+                        <div className="question-item__content">
+                            <QuestionInfo_Edit />
+                        </div>
+                    </div>
+                </li>
+            );
+        }
+
+    }),
+
+
     FlaggedQuestionItem = React.createClass({
 
         render: function () {
@@ -593,12 +633,11 @@ var React = require('react'),
                                     This question has been flagged by <strong>4 people</strong>.
                                 </div>
                             </li>
-                            <li></li>
                         </ul>
                     </div>
                         <div className="pure-u-1">
                         <div className="question-item__icon-set--1 pure-g">
-                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-minus-circle"></i></div>
+                            <div className="pure-u-1 question-item__icon-set__item--danger"><i className="fa fa-ban"></i></div>
                         </div>
                         <div className="question-item__content"><QuestionInfo /></div>
                     </div>
@@ -615,7 +654,7 @@ var React = require('react'),
             return (
                 <div className="question-info">
                     <div className="question-info__ask">What is 2 + 2?</div>
-                    <ul className="multi-choice-info__options-list">
+                    <ul className="multi-choice-info__options-list--lettered">
                         <li className="multi-choice-info__options-list__item">17</li>
                         <li className="multi-choice-info__options-list__item">16,322,471</li>
                         <li className="multi-choice-info__options-list__item--correct">4</li>
@@ -628,6 +667,35 @@ var React = require('react'),
             );
         }
 
+    }),
+
+
+    QuestionInfo_Edit = React.createClass({
+
+        render: function () {
+            return (
+                <div className="question-info">
+                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <ul className="multi-choice-info__options-list">
+                        <li className="multi-choice-info__options-list__item">
+                            <input type="radio" name="question-here" /> 17
+                        </li>
+                        <li className="multi-choice-info__options-list__item">
+                            <input type="radio" name="question-here" /> 16,322,471
+                        </li>
+                        <li className="multi-choice-info__options-list__item">
+                            <input type="radio" name="question-here" /> 4
+                        </li>
+                        <li className="multi-choice-info__options-list__item">
+                            <input type="radio" name="question-here" /> 3
+                        </li>
+                    </ul>
+                    <div className="question-info__explanation">
+                        Just because!
+                    </div>
+                </div>
+            );
+        }
 
     }),
 
