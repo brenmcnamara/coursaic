@@ -585,7 +585,12 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="question-topic pure-u-1">
-                        <span className="question-topic__content">Java Syntax</span>
+                        <span className="question-topic__content">
+                            <FormLayout.Select options={ ["Algorithms",
+                                                          "Java Syntax",
+                                                          "Compilter/Runtime Errors",
+                                                          "Looping Constructs" ] } />
+                        </span>
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">

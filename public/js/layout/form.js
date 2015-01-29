@@ -29,7 +29,6 @@ var
 
     }),
 
-
     TextInput = React.createClass({
 
         render: function () {
@@ -41,29 +40,16 @@ var
 
     }),
 
-
-    RadioOptionWithTextInput = React.createClass({
+    Select = React.createClass({
 
         render: function () {
-            if (this.props.checked) {
-                return (
-                    <div>
-                        <input type="radio" value={ this.props.value } name={ this.props.name } checked />
-                        <TextInput placeholder={ this.props.placeholder } value={ this.props.value } />
-                    </div>
-                );                
-            }
-            else {
-                return (
-                    <div>
-                        <input type="radio"
-                               value={ this.props.value }
-                               name={ this.props.name } checked />
-                        <TextInput placeholder={ this.props.placeholder }
-                                   value={ this.props.presentationValue } />
-                    </div>
-                ); 
-            }
+            return (
+                <select className="form-select">
+                    { this.props.options.map(function (optionItem) {
+                        return <option>{ optionItem }</option>
+                    }) }
+                </select>
+            );
         }
 
     });
@@ -72,6 +58,7 @@ var
 module.exports = {
 
     RadioOption: RadioOption,
-    TextInput: TextInput
+    TextInput: TextInput,
+    Select: Select
 
 };
