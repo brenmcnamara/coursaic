@@ -90,6 +90,7 @@ var React = require('react'),
             return (
                 <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
                     <div className="dashboard__summary__content">
+                        <h2 className="dashboard__summary__content__header">Welcome, Brendan!</h2>
                     </div>
                 </div>
             );

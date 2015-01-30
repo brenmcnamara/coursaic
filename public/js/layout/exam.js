@@ -31,7 +31,7 @@ var React = require('react'),
                     <Timer time="01:13" />
                     <div className="content-wrapper">
                         <Dashboard />
-                        <ExamForm />
+                        <Section_ExamForm />
                     </div>
                 </div>
             );
@@ -93,7 +93,7 @@ var React = require('react'),
             return (
                 <div className="dashboard">
                     <div className="dashboard__content">
-
+                        <Dashboard_Summary></Dashboard_Summary>
                     </div>
                 </div>
             );
@@ -101,6 +101,23 @@ var React = require('react'),
 
     }),
 
+
+    Dashboard_Summary = React.createClass({
+
+        render: function () {
+            return (
+                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
+                    <div className="dashboard__summary__content">
+                        <h2 className="dashboard__summary__content__header">Practice Exam</h2>
+                        <p className="dashboard__summary__content__subheader">
+                            25 questions and <span className="inline-button">4 topics</span>.
+                        </p>
+                    </div>
+                </div>
+            );
+        }
+
+    }),
 
     /**
      * The form of questions that the user
@@ -111,7 +128,7 @@ var React = require('react'),
      * @class ExamForm
      * @private
      */
-    ExamForm = React.createClass({
+    Section_ExamForm = React.createClass({
 
         getInitialState: function() {
             return { guesses: {} };
@@ -121,13 +138,14 @@ var React = require('react'),
         render: function() {
             var exam = Stores.ExamStore().current();
             return (
-                <div className="section exam">
-                    <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
-                    <ExamForm_Buttons onSubmit={ this.onSubmit } />
+                <div className="section-wrapper">
+                    <div className="section exam">
+                        <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
+                        <ExamForm_Buttons onSubmit={ this.onSubmit } />
+                    </div>
                 </div>
             );
         },
-
 
         onChangeQuestion: function(event, index) {
             var guesses = Util.copy(this.state.guesses);
@@ -135,11 +153,9 @@ var React = require('react'),
             this.setState({ guesses: guesses });
         },
 
-
         onSubmit: function(event) {
             // Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
         }
-
 
     }),
 
@@ -166,29 +182,24 @@ var React = require('react'),
                     <ExamForm_QuestionList_MultiChoice index={ 4 } />
                     <li><WidgetsLayout.Divide /></li>
                 </ul>
-            );           
+            );
         },
 
-      
         onChange: function(event) {
             this.forceUpdate();
         },
-
 
         onChangeQuestion: function(event, index) {
             this.props.onChange(event, index);
         },
 
-
         componentWillMount: function() {
             Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
         },
 
-
         componentWillUnmount: function() {
             Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
         }
-
 
     }),
 
