@@ -643,13 +643,13 @@ var React = require('react'),
                 <div className="question-info">
                     <div className="question-info__ask">What is 2 + 2?</div>
                     <ul className="multi-choice-info__options-list--lettered">
-                        <li className="multi-choice-info__options-list__item">17</li>
+                        <li className="multi-choice-info__options-list__item">17. This is going to be a long option. I am doing this to test that the list works with longer options. The options should span multiple lines. I had it looks decent. I probably need to make some small changes to the styling though.</li>
                         <li className="multi-choice-info__options-list__item">16,322,471</li>
                         <li className="multi-choice-info__options-list__item--correct">4</li>
                         <li className="multi-choice-info__options-list__item">3</li>
                     </ul>
                     <div className="question-info__explanation">
-                        Just because!
+                        Just because!  Just because!  Just because!  Just because! Just because! Just because! Just because! Just because!  Just because!  Just because!  Just because! Just because! Just because! Just because!Just because!  Just because!  Just because!  Just because! Just because! Just because! Just because!Just because!  Just because!  Just because!  Just because! Just because! Just because! Just because!Just because!  Just because!  Just because!  Just because! Just because! Just because! Just because!
                     </div>
                 </div>
             );
