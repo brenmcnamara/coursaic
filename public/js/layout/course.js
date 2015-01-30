@@ -101,7 +101,6 @@ var React = require('react'),
             return (
                 <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
                     <div className="dashboard__summary__content">
-                        <div className="dashboard__summary__content__banner" />
                         <h2 className="dashboard__summary__content__header">CS 101</h2>
                         <h5 className="dashboard__summary__content__subheader">Introduction to Computer Science.</h5>
                         <ul className="dashboard__summary__content__details">

@@ -73,11 +73,27 @@ var React = require('react'),
         render: function () {
             return (
                 <div className="dashboard">
-                    <div className="dashboard__content"></div>
+                    <div className="dashboard__content">
+                        <Dashboard_Summary />
+                    </div>
                 </div>
             );
         }
 
+
+    }),
+
+
+    Dashboard_Summary = React.createClass({
+
+        render: function () {
+            return (
+                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
+                    <div className="dashboard__summary__content">
+                    </div>
+                </div>
+            );
+        }
 
     }),
 

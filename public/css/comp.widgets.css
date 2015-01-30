@@ -67,6 +67,7 @@
 \* -------------------- */
 
 .section-wrapper {
+    margin-top: 4em;
     max-width: 100%;
     width: 100%;
 }
@@ -129,6 +130,10 @@
 /* SMALL SCREEN FOR SECTION */
 @media screen and (max-width: 48em) {
     
+    .section-wrapper {
+        margin-top: 0;
+    }
+
     /* Change the padding of some of the
      * section elements so that things can
      * become more centered on smaller screens.
@@ -286,11 +291,14 @@
     background: white;
 }
 
-.dashboard__summary__content__banner {
+.dashboard__summary__content:before {
+    display: block;
     float: left;
     width: 2em;
     height: 100%;
     background: #4A90E2;
+
+    content: "";
 }
 
 .dashboard__summary__content__header,
