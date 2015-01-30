@@ -11,72 +11,7 @@
         Dashboard
 \* -------------------- */
 
-.course-dashboard {
-    /* SPANS THE REMAINING WIDTH BELOW THE DASHBOARD */
-    min-height: 10em;
 
-}
-
-.course-dashboard__summary {
-    min-height: 10em;
-    position: relative;
-}
-
-.course-dashboard__summary__content {
-    width: 100%;
-    height: 12em;
-
-    background: white;
-}
-
-.course-dashboard__summary__content__banner {
-    float: left;
-    width: 2em;
-    height: 100%;
-    background: #4A90E2;
-}
-
-.course-dashboard__summary__content__header,
-.course-dashboard__summary__content__subheader {
-    margin: 20px 10px 10px 50px;
-}
-
-.course-dashboard__summary__content__details {
-    list-style: none;
-    padding: 0;
-    margin: 30px 10px 10px 50px;
-}
-
-    .course-dashboard__summary__content__details li {
-        margin-bottom: .5em;
-        color: #888;
-        font-weight: bold;
-    }
-
-/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
-@media only screen and (min-width: 48em) {
-
-    .course-dashboard__summary__content {
-        position: absolute;
-        bottom: -2em;
-
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        box-shadow: 2px 3px 3px .5px #999;
-        
-    }
-
-}
-
-/* SMALL SCREENS FOR COURSE DASHBOARD */
-@media only screen and (max-width: 48em) {
-
-    .course-dashboard__summary__content {
-        border-top: solid #666 1px;
-        border-bottom: solid #666 1px;
-    }
-
-}
 
 /* -------------------- *\
          Section

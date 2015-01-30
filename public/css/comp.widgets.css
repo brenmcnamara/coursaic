@@ -267,6 +267,50 @@
     padding: .25em .5em;
 }
 
+
+/*
+ * The dashboard summary is the element
+ * that sticks out of the dashboard, displaying
+ * any important information that the user should
+ * be aware of.
+ */
+.dashboard__summary {
+    min-height: 10em;
+    position: relative;
+}
+
+.dashboard__summary__content {
+    width: 100%;
+    height: 12em;
+
+    background: white;
+}
+
+.dashboard__summary__content__banner {
+    float: left;
+    width: 2em;
+    height: 100%;
+    background: #4A90E2;
+}
+
+.dashboard__summary__content__header,
+.dashboard__summary__content__subheader {
+    margin: 20px 10px 10px 50px;
+}
+
+.dashboard__summary__content__details {
+    list-style: none;
+    padding: 0;
+    margin: 30px 10px 10px 50px;
+}
+
+    .dashboard__summary__content__details li {
+        margin-bottom: .5em;
+        color: #888;
+        font-weight: bold;
+    }
+
+/* SMALL SCREENS FOR COURSE DASHBOARD */
 @media only screen and (max-width: 48em) {
 
     .dashboard-buttons__item {
@@ -275,7 +319,29 @@
         text-align: center;
     }
 
+    .dashboard__summary__content {
+        border-top: solid #666 1px;
+        border-bottom: solid #666 1px;
+    }
+
 }
+
+/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
+@media only screen and (min-width: 48em) {
+
+    .dashboard__summary__content {
+        position: absolute;
+        bottom: -2em;
+
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 2px 3px 3px .5px #999;
+        
+    }
+
+}
+
+
 
 /* -------------------- *\
            Tags
