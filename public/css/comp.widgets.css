@@ -364,11 +364,17 @@
     color: #444;
 }
 
+.question-info__ask {
+    line-height: 1.3em;
+    max-width: 35em;
+}
+
 .question-info__explanation:before {
     content: 'Explanation:';
     margin-right: .5em;
     text-decoration: underline;
 }
+
 
 .question-info__explanation,
 .question-info__explanation--edit {
