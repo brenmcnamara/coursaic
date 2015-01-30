@@ -661,28 +661,44 @@ var React = require('react'),
             return (
                 <form className="question-info">
                     <div className="question-info__ask">
-                        <FormLayout.TextInput value="What is 2 + 2?" placeholder="Enter Text here" />
+                        <FormLayout.TextInput placeholder="Enter Text here">
+                            What is 2 + 2?
+                        </FormLayout.TextInput>
                     </div>
                     <ul className="multi-choice-info__options-list">
                         <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="17"
-                                                    presentationValue={ <FormLayout.TextInput value="17" placeholder="Option 1" /> } />
+                            <FormLayout.RadioOption name="question-here" value="17">
+                                <FormLayout.TextInput placeholder="Option 1">
+                                    17
+                                </FormLayout.TextInput>
+                            </FormLayout.RadioOption>
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="4"
-                                                    presentationValue={ <FormLayout.TextInput value="4" placeholder="Option 1" /> } />
+                            <FormLayout.RadioOption name="question-here" value="4">
+                                <FormLayout.TextInput placeholder="Option 1">
+                                    4
+                                </FormLayout.TextInput>
+                            </FormLayout.RadioOption>
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="643"
-                                                    presentationValue={ <FormLayout.TextInput value="643" placeholder="Option 1" /> } />
+                            <FormLayout.RadioOption name="question-here" value="643">
+                                <FormLayout.TextInput placeholder="Option 1">
+                                    643
+                                </FormLayout.TextInput>
+                            </FormLayout.RadioOption>
                         </li>
                         <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="22"
-                                                    presentationValue={ <FormLayout.TextInput value="22" placeholder="Option 1" /> } />
+                            <FormLayout.RadioOption name="question-here" value="22">
+                                <FormLayout.TextInput placeholder="Option 1">
+                                    22
+                                </FormLayout.TextInput>
+                            </FormLayout.RadioOption>
                         </li>
                     </ul>
                     <div className="question-info__explanation--edit">
-                        <FormLayout.TextAreaInput value="Just because!" placeholder="Explanation" />
+                        <FormLayout.TextAreaInput placeholder="Explanation">
+                            Just because!
+                        </FormLayout.TextAreaInput>
                     </div>
                 </form>
             );

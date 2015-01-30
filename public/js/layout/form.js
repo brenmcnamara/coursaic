@@ -13,7 +13,7 @@ var
                 return (
                     <div>
                         <input type="radio" value={ this.props.value } name={ this.props.name } checked />
-                        { this.props.presentationValue }
+                        { this.props.children }
                     </div>
                 );
             }
@@ -21,7 +21,7 @@ var
                 return (
                     <div>
                         <input type="radio" value={ this.props.value } name={ this.props.name } />
-                        { this.props.presentationValue }
+                        { this.props.children }
                     </div>
                 );
             }
@@ -34,7 +34,7 @@ var
         render: function () {
             return (
                 <input className="form-text-input" placeholder={ this.props.placeholder }
-                                                   value={ this.props.value } />
+                                                   value={ this.props.children } />
             );
         }
 
@@ -46,7 +46,7 @@ var
             return (
                 <textarea className="form-textarea-input"
                           placeholder={ this.props.placeholder } >
-                    { this.props.value }
+                    { this.props.children }
                 </textarea>
             );
         }
