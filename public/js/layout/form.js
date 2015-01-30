@@ -40,6 +40,19 @@ var
 
     }),
 
+    TextAreaInput = React.createClass({
+
+        render: function () {
+            return (
+                <textarea className="form-textarea-input"
+                          placeholder={ this.props.placeholder } >
+                    { this.props.value }
+                </textarea>
+            );
+        }
+
+    }),
+
     Select = React.createClass({
 
         render: function () {
@@ -59,6 +72,7 @@ module.exports = {
 
     RadioOption: RadioOption,
     TextInput: TextInput,
+    TextAreaInput: TextAreaInput,
     Select: Select
 
 };
