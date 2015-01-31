@@ -98,44 +98,13 @@ var React = require('react'),
                             <div>27 enrolled</div>
                         </Dashboard.Summary.Details>
                     </Dashboard.Summary>
-                    <Dashboard_Buttons />
-                </Dashboard>
-            );
-        }
-
-    }),
-
-
-    Dashboard_CourseSummary = React.createClass({
-        
-        render: function () {
-            return (
-                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
-                    <div className="dashboard__summary__content">
-                        <h2 className="dashboard__summary__content__header">CS 101</h2>
-                        <h5 className="dashboard__summary__content__subheader">Introduction to Computer Science.</h5>
-                        
-                    </div>
-                </div>
-            );
-    
-        }
-
-    }),
-
-
-    Dashboard_Buttons = React.createClass({
-
-        render: function () {
-            return (
-                <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
-                    <div className="dashboard-buttons__item">
+                    
+                    <Dashboard.Buttons>
                         <EnrollButton />
-                    </div>
-                    <div className="dashboard-buttons__item">
                         <AllQuestionsButton />
-                    </div>
-                </div>
+                    </Dashboard.Buttons>
+
+                </Dashboard>
             );
         }
 

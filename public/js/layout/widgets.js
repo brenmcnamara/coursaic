@@ -123,15 +123,45 @@ var React = require('react'),
     Dashboard.Summary.Details = React.createClass({
 
         render: function () {
+            var children = (Array.isArray(this.props.children)) ?
+                           this.props.children :
+                           [ this.props.children ];
+
             return (
                 <ul className="dashboard__summary__content__details">
-                    { this.props.children.map(function (el) { return <li>{ el }</li> }) }
+                    { children.map(function (el) { return <li>{ el }</li> }) }
                 </ul>
             );
         }
 
     });
 
+
+    /**
+     * A tag to add buttons to the dashboard.
+     */
+    Dashboard.Buttons = React.createClass({
+
+        render: function () {
+            var children = (Array.isArray(this.props.children)) ?
+                           this.props.children :
+                           [ this.props.children ];
+            return (
+                <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
+
+                    { 
+                        children.map(function (btn) {
+                            return (
+                                <div className="dashboard-buttons__item">{ btn }</div>
+                            );
+                        }) 
+                    }
+
+                </div>
+            );
+        }
+
+    });
 
 module.exports = {
 
