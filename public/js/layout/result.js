@@ -9,6 +9,7 @@ var
     widgetsLayout = require('./widgets.js'),
     headerLayout = require('./header.js'),
 
+    Dashboard = widgetsLayout.Dashboard,
 
     Root = React.createClass({
 
@@ -17,7 +18,7 @@ var
                 <div className="main">
                     <headerLayout.Header />
                     <div className="content-wrapper">
-                        <Dashboard />
+                        <ResultDashboard />
                         <Section_ExamResults />
                     </div>
                     
@@ -28,13 +29,16 @@ var
     }),
 
 
-    Dashboard = React.createClass({
+    ResultDashboard = React.createClass({
 
         render: function () {
 
             return (
-                <div className="dashboard">
-                </div>
+                <Dashboard>
+                    <Dashboard.Summary>
+                        <Dashboard.Summary.Header>Results</Dashboard.Summary.Header>
+                    </Dashboard.Summary>
+                </Dashboard>
             );
         }
 

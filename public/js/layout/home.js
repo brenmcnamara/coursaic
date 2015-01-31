@@ -21,6 +21,8 @@ var React = require('react'),
 
     Formatter = require('../formatter.js'),
 
+    Dashboard = WidgetsLayout.Dashboard,
+
     /**
      * The root element for the home page. All other
      * elements on the home page will exist inside
@@ -41,7 +43,7 @@ var React = require('react'),
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
-                        <Dashboard />
+                        <HomeDashboard />
                         <Content />
                     </div>
 
@@ -68,33 +70,18 @@ var React = require('react'),
     }),
 
 
-    Dashboard = React.createClass({
+    HomeDashboard = React.createClass({
 
         render: function () {
             return (
-                <div className="dashboard">
-                    <div className="dashboard__content">
-                        <Dashboard_Summary />
-                    </div>
-                </div>
+                <Dashboard>
+                    <Dashboard.Summary>
+                        <Dashboard.Summary.Header>Welcome, Brendan!</Dashboard.Summary.Header>
+                    </Dashboard.Summary>
+                </Dashboard>
             );
         }
 
-
-    }),
-
-
-    Dashboard_Summary = React.createClass({
-
-        render: function () {
-            return (
-                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
-                    <div className="dashboard__summary__content">
-                        <h2 className="dashboard__summary__content__header">Welcome, Brendan!</h2>
-                    </div>
-                </div>
-            );
-        }
 
     }),
 

@@ -15,6 +15,8 @@ var React = require('react'),
 
     Util = require('shore').Util,
 
+    Dashboard = WidgetsLayout.Dashboard,
+
     /*
      * The root element of the exam page.
      *
@@ -30,7 +32,7 @@ var React = require('react'),
                     <HeaderLayout.Header />
                     <Timer time="01:13" />
                     <div className="content-wrapper">
-                        <Dashboard />
+                        <ExamDashboard />
                         <Section_ExamForm />
                     </div>
                 </div>
@@ -87,37 +89,23 @@ var React = require('react'),
     }),
 
 
-    Dashboard = React.createClass({
+    ExamDashboard = React.createClass({
 
         render: function () {
             return (
-                <div className="dashboard">
-                    <div className="dashboard__content">
-                        <Dashboard_Summary></Dashboard_Summary>
-                    </div>
-                </div>
-            );
-        }
-
-    }),
-
-
-    Dashboard_Summary = React.createClass({
-
-        render: function () {
-            return (
-                <div className="pure-u-1 pure-u-md-2-5 pure-u-lg-1-3 dashboard__summary">
-                    <div className="dashboard__summary__content">
-                        <h2 className="dashboard__summary__content__header">Practice Exam</h2>
-                        <p className="dashboard__summary__content__subheader">
+                <Dashboard>
+                    <Dashboard.Summary>
+                        <Dashboard.Summary.Header>Practice Exam</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Subheader>
                             25 questions and 4 topics.
-                        </p>
-                    </div>
-                </div>
+                        </Dashboard.Summary.Subheader>
+                    </Dashboard.Summary>
+                </Dashboard>
             );
         }
 
     }),
+
 
     /**
      * The form of questions that the user

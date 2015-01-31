@@ -26,6 +26,8 @@ var React = require('react'),
 
     widgets = require('../widgets.js'),
 
+    Dashboard = WidgetsLayout.Dashboard,
+
     /**
      * The root element on the Course
      * page.
@@ -45,7 +47,7 @@ var React = require('react'),
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
-                        <Dashboard />
+                        <CourseDashboard />
                         <Sections />
                     </div>
                     
@@ -79,16 +81,25 @@ var React = require('react'),
      * @submodule Course
      * @class Dashboard
      */
-    Dashboard = React.createClass({
+    CourseDashboard = React.createClass({
         
         render: function() {
             return (
-                <div className="dashboard">
-                    <div className="dashboard__content pure-g">
-                        <Dashboard_CourseSummary />
-                        <Dashboard_Buttons />
-                    </div>
-                </div>
+                <Dashboard>
+                    <Dashboard.Summary>
+                        <Dashboard.Summary.Header>CS 101</Dashboard.Summary.Header>
+
+                        <Dashboard.Summary.Subheader>
+                            Introduction to Computer Science
+                        </Dashboard.Summary.Subheader>
+
+                        <Dashboard.Summary.Details>
+                            <div>Created 2 weeks ago</div>
+                            <div>27 enrolled</div>
+                        </Dashboard.Summary.Details>
+                    </Dashboard.Summary>
+                    <Dashboard_Buttons />
+                </Dashboard>
             );
         }
 
@@ -103,10 +114,7 @@ var React = require('react'),
                     <div className="dashboard__summary__content">
                         <h2 className="dashboard__summary__content__header">CS 101</h2>
                         <h5 className="dashboard__summary__content__subheader">Introduction to Computer Science.</h5>
-                        <ul className="dashboard__summary__content__details">
-                            <li>Created 2 weeks ago</li>
-                            <li>27 enrolled</li>
-                        </ul>
+                        
                     </div>
                 </div>
             );
