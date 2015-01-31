@@ -43,7 +43,7 @@
 \* -------------------- */
 
 .popover-wrapper {
-
+    position: relative;
 }
 
 .popover-target {

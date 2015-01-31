@@ -110,7 +110,7 @@ var React = require('react'),
                     <div className="dashboard__summary__content">
                         <h2 className="dashboard__summary__content__header">Practice Exam</h2>
                         <p className="dashboard__summary__content__subheader">
-                            25 questions and <span className="inline-button">4 topics</span>.
+                            25 questions and 4 topics.
                         </p>
                     </div>
                 </div>
