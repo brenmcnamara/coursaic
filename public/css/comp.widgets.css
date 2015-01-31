@@ -39,26 +39,45 @@
 }
 
 /* -------------------- *\
-         Triangle
+         Popover
 \* -------------------- */
 
-/* A small trianlge element that can be used
- * as some kind of pointer.
- *
- * NOTE: This should be placed inside an element that
- * does not have a position: static;
+.popover-wrapper {
+
+}
+
+.popover-target {
+    cursor: pointer;
+}
+
+.popover--hide,
+.popover {
+    font-size: .8em;
+    margin: 1em 0 0 0;
+    width: 20em;
+
+    position: absolute;
+    background: black;
+    color: white;
+}
+
+.popover--hide {
+    display: none;
+}
+
+/* Create a triangle at the top right
+ * corner of the popover box
  */
-.black-triangle,
-.triangle {
-    top: -1em;
+.popover:before {
+    content: "";
+    display: block;
+    top: -.95em;
     left: 0;
     position: absolute;
 
     border-left: solid transparent .5em;
     border-right: solid transparent .5em;
-}
 
-.black-triangle {
     border-bottom: solid black 1em;
 }
 

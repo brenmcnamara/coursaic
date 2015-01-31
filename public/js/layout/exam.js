@@ -215,8 +215,8 @@ var React = require('react'),
 
         render: function() {
             var flagOptionsClass = 
-                ((this.state.showFlagOptions) ? "question-flag__options-list":
-                                                "question-flag__options-list--hide");
+                ((this.state.showFlagOptions) ? "popover question-flag__options-list":
+                                                "popover--hide question-flag__options-list");
 
             return (
                 <li className="pure-g">
@@ -232,16 +232,19 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="question-flag pure-u-1 pure-u-md-1-2">
-                        <div className="question-flag__button"
+                        <div className="popover-wrapper question-flag__button"
                              onClick={ this.onClickFlagButton } >
-                            <i className="fa fa-flag"></i>Flag this question.
+
+                            <div className="popover-target question-flag__button">
+                                <i className="fa fa-flag"></i>Flag this question.
+                            </div>
+                            <ul className={ flagOptionsClass } >
+                                <li>Not relevant to the material</li>
+                                <li>Does not make sense</li>
+                                <li>Similar to another question I have seen</li>
+                            </ul>
                         </div>
-                        <ul className={ flagOptionsClass } >
-                            <div className="triangle black-triangle" style={ { top: '-.9em' } }></div>
-                            <li>Not relevant to the material</li>
-                            <li>Does not make sense</li>
-                            <li>Similar to another question I have seen</li>
-                        </ul>
+                            
                         <ul className="question-flag__action-list">
                             <li className="inline-button">Swap this question for another question.</li>
                             <li className="inline-button">Remove this question.</li>
