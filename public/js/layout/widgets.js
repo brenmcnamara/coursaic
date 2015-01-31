@@ -50,6 +50,19 @@ var React = require('react'),
     }),
 
 
+    SectionSet = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section-wrapper">
+                    { this.props.children }
+                </div>
+            );
+        }
+
+    }),
+
+
     /**
      * The dashboard element that shows up at the top
      * of each page.
@@ -163,11 +176,38 @@ var React = require('react'),
 
     });
 
+
+    SectionSet.Section = React.createClass({
+
+        render: function () {
+            return (
+                <section className="section">
+                    { this.props.children }
+                </section>
+            );
+        }
+
+    });
+
+
+    SectionSet.Section.Header = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__header">
+                    { this.props.children }
+                </div>
+            );
+        }
+
+    });
+
 module.exports = {
 
     Divide: Divide,
     DivideFull: DivideFull,
 
-    Dashboard: Dashboard
+    Dashboard: Dashboard,
+    SectionSet: SectionSet
 
 };

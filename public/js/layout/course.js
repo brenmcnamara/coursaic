@@ -27,6 +27,7 @@ var React = require('react'),
     widgets = require('../widgets.js'),
 
     Dashboard = WidgetsLayout.Dashboard,
+    SectionSet = WidgetsLayout.SectionSet,
 
     /**
      * The root element on the Course
@@ -182,12 +183,12 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="section-wrapper course__section-wrapper">
+                <SectionSet>
                     <Sections_Description />
                     <Sections_Overview />
                     <Sections_MyQuestions />
                     <Sections_FlaggedQuestions />
-                </div>
+                </SectionSet>
             );
         }
 
@@ -199,7 +200,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <section className="section">
+                <SectionSet.Section>
                     <h1 className="section__header">Description</h1>
                     <div className="divide"></div>
                     <div className="section__subsection">
@@ -225,7 +226,7 @@ var React = require('react'),
                              Computer Science
                         </div>
                     </div>                  
-                </section>
+                </SectionSet.Section>
             );
         }
 
@@ -235,12 +236,12 @@ var React = require('react'),
         
         render: function () {
             return (
-                <section className="section">
+                <SectionSet.Section>
                     <h1 className="section__header">Overview</h1>
                     <div className="divide" />
                     <Sections_Overview_ByTopic />
                     <Sections_Overview_TakeExam />
-                </section>
+                </SectionSet.Section>
             );
         }
 
@@ -456,7 +457,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <section className="section">
+                <SectionSet.Section>
                     <h1 className="section__header">My Questions</h1>
                     <div className="divide" />
                     <div className="section__subsection">
@@ -468,7 +469,7 @@ var React = require('react'),
                             <li className="divide gray-divide"></li>
                         </ul>
                     </div>
-                </section>
+                </SectionSet.Section>
             );
         }
 
@@ -479,7 +480,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <section className="section">
+                <SectionSet.Section>
                     <h1 className="section__header">Flagged Questions</h1>
                     <div className="divide" />
                     <div className="section__subsection">
@@ -490,7 +491,7 @@ var React = require('react'),
                             <li><FlaggedQuestionItem /></li>
                         </ul>
                     </div>
-                </section>
+                </SectionSet.Section>
             );
         }
 
