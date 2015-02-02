@@ -254,7 +254,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section.Subsection>
-                    <h3 className="section__subheader">There are <span className="emphasis">4 topics</span> of questions</h3>
+                    <h3 className="section__subsection__header">There are <span className="emphasis">4 topics</span> of questions</h3>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
                             <canvas className="question-data__pie-chart"
@@ -371,7 +371,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section.Subsection>
-                    <h3 className="section__subheader">There are <span className="emphasis">56 questions</span> total</h3>
+                    <h3 className="section__subsection__header">There are <span className="emphasis">56 questions</span> total</h3>
                     <div className="question-filter">
                         <div className="question-filter__section question-filter__bar-wrapper">
                             <canvas id="js-question-filter__bar"
