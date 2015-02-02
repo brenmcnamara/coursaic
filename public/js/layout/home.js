@@ -115,7 +115,7 @@ var React = require('react'),
                         <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
                         <div className="divide"></div>
                         
-                        <div className="pure-g section__course-grid">
+                        <div className="pure-g course-grid">
                             
                             <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
                                 <div className="course-box__content">
