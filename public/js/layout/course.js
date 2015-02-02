@@ -254,7 +254,9 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section.Subsection>
-                    <h3 className="section__subsection__header">There are <span className="emphasis">4 topics</span> of questions</h3>
+                    <SectionSet.Section.Subsection.Header>
+                        There are <span className="emphasis">4 topics</span> of questions
+                    </SectionSet.Section.Subsection.Header>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
                             <canvas className="question-data__pie-chart"
@@ -371,7 +373,9 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section.Subsection>
-                    <h3 className="section__subsection__header">There are <span className="emphasis">56 questions</span> total</h3>
+                    <SectionSet.Section.Subsection.Header>
+                        There are <span className="emphasis">56 questions</span> total
+                    </SectionSet.Section.Subsection.Header>
                     <div className="question-filter">
                         <div className="question-filter__section question-filter__bar-wrapper">
                             <canvas id="js-question-filter__bar"
@@ -484,14 +488,14 @@ var React = require('react'),
                 <SectionSet.Section>
                     <h1 className="section__header">Flagged Questions</h1>
                     <div className="divide" />
-                    <div className="section__subsection">
+                    <SectionSet.Section.Subsection>
                         <ul className="question-info-list">
                             <li><FlaggedQuestionItem /></li>
                             <li><FlaggedQuestionItem /></li>
                             <li><FlaggedQuestionItem /></li>
                             <li><FlaggedQuestionItem /></li>
                         </ul>
-                    </div>
+                    </SectionSet.Section.Subsection>
                 </SectionSet.Section>
             );
         }

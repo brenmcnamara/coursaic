@@ -216,6 +216,19 @@ var React = require('react'),
     });
 
 
+    SectionSet.Section.Subsection.Header = React.createClass({
+
+        render: function () {
+            return (
+                <h3 className="section__subsection__header">
+                    { this.props.children }
+                </h3>
+            );
+        }
+
+    });
+
+
 module.exports = {
 
     Divide: Divide,
