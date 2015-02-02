@@ -194,9 +194,9 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="section__header">
+                <h2 className="section__header">
                     { this.props.children }
-                </div>
+                </h2>
             );
         }
 

@@ -23,6 +23,8 @@ var React = require('react'),
 
     Dashboard = WidgetsLayout.Dashboard,
 
+    SectionSet = WidgetsLayout.SectionSet,
+
     /**
      * The root element for the home page. All other
      * elements on the home page will exist inside
@@ -99,19 +101,18 @@ var React = require('react'),
 
         render: function() {
             return (
-                <div className="pure-g section-wrapper">
-
-                    <section className="pure-u-1 section">
-                        <h2 className="section__header">My Courses</h2>
+                <SectionSet>
+                    <SectionSet.Section>
+                        <SectionSet.Section.Header>My Courses</SectionSet.Section.Header>
                         <div className="divide"></div>
                         
                         <div className="section__empty">
                             There are no courses here yet.
                         </div>
-                    </section>
+                    </SectionSet.Section>
 
-                    <section className="pure-u-1 section">
-                        <h2 className="section__header">Popular Courses</h2>
+                    <SectionSet.Section>
+                        <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
                         <div className="divide"></div>
                         
                         <div className="pure-g section__course-grid">
@@ -209,8 +210,9 @@ var React = require('react'),
                             
                         </div>
 
-                    </section>
-                </div>
+                    </SectionSet.Section>
+                </SectionSet>
+
             );
         }
 

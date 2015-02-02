@@ -201,7 +201,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section>
-                    <h1 className="section__header">Description</h1>
+                    <SectionSet.Section.Header>Description</SectionSet.Section.Header>
                     <div className="divide"></div>
                     <SectionSet.Section.Subsection>
                         <p className="section__paragraph">
@@ -238,7 +238,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section>
-                    <h1 className="section__header">Overview</h1>
+                    <SectionSet.Section.Header>Overview</SectionSet.Section.Header>
                     <div className="divide" />
                     <Sections_Overview_ByTopic />
                     <Sections_Overview_TakeExam />
@@ -463,7 +463,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section>
-                    <h1 className="section__header">My Questions</h1>
+                    <SectionSet.Section.Header>My Questions</SectionSet.Section.Header>
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
                         <h3><span className="inline-button">Click here</span> to create a new question.</h3>
@@ -486,7 +486,7 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet.Section>
-                    <h1 className="section__header">Flagged Questions</h1>
+                    <SectionSet.Section.Header>Flagged Questions</SectionSet.Section.Header>
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
                         <ul className="question-info-list">
