@@ -203,7 +203,7 @@ var React = require('react'),
                 <SectionSet.Section>
                     <h1 className="section__header">Description</h1>
                     <div className="divide"></div>
-                    <div className="section__subsection">
+                    <SectionSet.Section.Subsection>
                         <p className="section__paragraph">
                             An intensive introduction to algorithm development
                             and problem solving on the computer. Structured problem
@@ -211,21 +211,22 @@ var React = require('react'),
                             Running, debugging, and testing programs. Program
                             documentation.
                         </p>
-                    </div>
-                    <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
+                        <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
                         <div className="tag tag-list__item"
-                             style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                             Java
-                        </div>
-                        <div className="tag tag-list__item"
-                             style={ { backgroundColor: "#087a34", color: "white"} }>
-                             Vanderbilt
-                        </div>
-                        <div className="tag tag-list__item"
-                             style={ { backgroundColor: "#e25a58", color: "white"} }>
-                             Computer Science
-                        </div>
-                    </div>                  
+                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
+                                 Java
+                            </div>
+                            <div className="tag tag-list__item"
+                                 style={ { backgroundColor: "#087a34", color: "white"} }>
+                                 Vanderbilt
+                            </div>
+                            <div className="tag tag-list__item"
+                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
+                                 Computer Science
+                            </div>
+                        </div> 
+                    </SectionSet.Section.Subsection>
+                                     
                 </SectionSet.Section>
             );
         }
@@ -252,7 +253,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="section__subsection">
+                <SectionSet.Section.Subsection>
                     <h3 className="section__subheader">There are <span className="emphasis">4 topics</span> of questions</h3>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
@@ -312,7 +313,7 @@ var React = require('react'),
                             </div>
                         </div>
                     </div>
-                </div>
+                </SectionSet.Section.Subsection>
             );
         },
 
@@ -369,7 +370,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="section__subsection">
+                <SectionSet.Section.Subsection>
                     <h3 className="section__subheader">There are <span className="emphasis">56 questions</span> total</h3>
                     <div className="question-filter">
                         <div className="question-filter__section question-filter__bar-wrapper">
@@ -414,7 +415,7 @@ var React = require('react'),
                             </div>
                         </div> 
                     </div>
-                </div>
+                </SectionSet.Section.Subsection>
             );
         },
 
@@ -460,7 +461,7 @@ var React = require('react'),
                 <SectionSet.Section>
                     <h1 className="section__header">My Questions</h1>
                     <div className="divide" />
-                    <div className="section__subsection">
+                    <SectionSet.Section.Subsection>
                         <h3><span className="inline-button">Click here</span> to create a new question.</h3>
                         <ul className="question-info-list">
                             <QuestionItem_Edit />
@@ -468,7 +469,7 @@ var React = require('react'),
                             <QuestionItem />
                             <li className="divide gray-divide"></li>
                         </ul>
-                    </div>
+                    </SectionSet.Section.Subsection>
                 </SectionSet.Section>
             );
         }

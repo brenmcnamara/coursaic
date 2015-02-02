@@ -202,6 +202,20 @@ var React = require('react'),
 
     });
 
+
+    SectionSet.Section.Subsection = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__subsection">
+                    { this.props.children }
+                </div>
+            );
+        }
+
+    });
+
+
 module.exports = {
 
     Divide: Divide,
