@@ -11,6 +11,8 @@ var
 
     Dashboard = widgetsLayout.Dashboard,
 
+    SectionSet = widgetsLayout.SectionSet,
+
     Root = React.createClass({
 
         render: function () {
@@ -19,7 +21,9 @@ var
                     <headerLayout.Header />
                     <div className="content-wrapper">
                         <ResultDashboard />
-                        <Section_ExamResults />
+                        <SectionSet>
+                            <Section_ExamResults />
+                        </SectionSet>
                     </div>
                     
                 </div>
@@ -36,7 +40,10 @@ var
             return (
                 <Dashboard>
                     <Dashboard.Summary>
-                        <Dashboard.Summary.Header>Results</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Header>Wow, You Suck!</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Subheader>
+                            <span className="exam-score--good">Overall Score: 43%</span>
+                        </Dashboard.Summary.Subheader>
                     </Dashboard.Summary>
                 </Dashboard>
             );
@@ -49,33 +56,10 @@ var
 
         render: function () {
             return (
-                <section className="section">
-                    <ExamScore />
-                    <widgetsLayout.DivideFull />
+                <SectionSet.Section>
                     <ExamResults />
-                </section>
+                </SectionSet.Section>
             );
-        }
-
-    }),
-
-
-    /**
-     * The element showing the score the user got
-     * on an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamScore
-     */
-    ExamScore = React.createClass({
-
-        render: function() {
-            return (
-                <div className="exam-run-results__score">
-                    You scored <span className="exam-run-results__score__percent">87%</span>
-                </div>
-            );        
         }
 
     }),

@@ -67,6 +67,29 @@
     }
 
 /* -------------------- *\
+        Exam Score
+\* -------------------- */
+
+.exam-score--great,
+.exam-score--good,
+.exam-score--bad,
+.exam-score {
+    font-size: 1.2em;
+}
+
+.exam-score--great {
+    color: #11BC44;
+}
+
+.exam-score--good {
+    color: #CA7C0E;
+}
+
+.exam-score--bad {
+    color: #EC0000;
+}
+
+/* -------------------- *\
         Exam Button
 \* -------------------- */
 

@@ -280,11 +280,9 @@ var React = require('react'),
             );
         },
 
-
         onChange: function(event) {
             this.props.onChangeItem(event);
         }
-
 
     }),
 
@@ -318,11 +316,9 @@ var React = require('react'),
             );
         },
 
-
         onClickCancel: function() {
            // Action.send(Constants.Action.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
         }
-
 
     });
 
