@@ -17,6 +17,8 @@ var React = require('react'),
 
     Dashboard = WidgetsLayout.Dashboard,
 
+    SectionSet = WidgetsLayout.SectionSet,
+
     /*
      * The root element of the exam page.
      *
@@ -126,12 +128,14 @@ var React = require('react'),
         render: function() {
             var exam = Stores.ExamStore().current();
             return (
-                <div className="section-wrapper">
-                    <div className="section exam">
-                        <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
-                        <ExamForm_Buttons onSubmit={ this.onSubmit } />
-                    </div>
-                </div>
+                <SectionSet>
+                    <SectionSet.Section>
+                        <div className="exam">
+                            <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
+                            <ExamForm_Buttons onSubmit={ this.onSubmit } />
+                        </div>
+                    </SectionSet.Section>
+                </SectionSet>
             );
         },
 
