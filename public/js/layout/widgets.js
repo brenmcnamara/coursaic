@@ -203,6 +203,19 @@ var React = require('react'),
     });
 
 
+    SectionSet.Section.Empty = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__empty">
+                    { this.props.children }
+                </div>
+            );
+        }
+
+    });
+
+
     SectionSet.Section.Subsection = React.createClass({
 
         render: function () {

@@ -106,9 +106,9 @@ var React = require('react'),
                         <SectionSet.Section.Header>My Courses</SectionSet.Section.Header>
                         <div className="divide"></div>
                         
-                        <div className="section__empty">
+                        <SectionSet.Section.Empty>
                             There are no courses here yet.
-                        </div>
+                        </SectionSet.Section.Empty>
                     </SectionSet.Section>
 
                     <SectionSet.Section>
