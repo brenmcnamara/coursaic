@@ -6,12 +6,12 @@
 
 var
     React = require('react'),
-    widgetsLayout = require('./widgets.js'),
+    ComponentsLayout = require('./components.js'),
     headerLayout = require('./header.js'),
 
-    Dashboard = widgetsLayout.Dashboard,
+    Dashboard = ComponentsLayout.Dashboard,
 
-    SectionSet = widgetsLayout.SectionSet,
+    SectionSet = ComponentsLayout.SectionSet,
 
     Root = React.createClass({
 

@@ -9,7 +9,7 @@
 
 var React = require('react'),
 
-    WidgetsLayout = require('./widgets.js'),
+    ComponentsLayout = require('./components.js'),
     FormLayout = require('./form.js'),
     HeaderLayout = require('./header.js'),
     PopupsLayout = require('./popups.js'),
@@ -26,8 +26,8 @@ var React = require('react'),
 
     widgets = require('../widgets.js'),
 
-    Dashboard = WidgetsLayout.Dashboard,
-    SectionSet = WidgetsLayout.SectionSet,
+    Dashboard = ComponentsLayout.Dashboard,
+    SectionSet = ComponentsLayout.SectionSet,
 
     /**
      * The root element on the Course

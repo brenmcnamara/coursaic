@@ -6,7 +6,7 @@ var React = require('react'),
     Stores = require('../stores'),
 
     HeaderLayout = require('./header.js'),
-    WidgetsLayout = require('./widgets.js'),
+    ComponentsLayout = require('./components.js'),
     PopupsLayout = require('./popups.js'),
 
     Action = require('shore').Action,
@@ -15,9 +15,9 @@ var React = require('react'),
 
     Util = require('shore').Util,
 
-    Dashboard = WidgetsLayout.Dashboard,
+    Dashboard = ComponentsLayout.Dashboard,
 
-    SectionSet = WidgetsLayout.SectionSet,
+    SectionSet = ComponentsLayout.SectionSet,
 
     /*
      * The root element of the exam page.
@@ -166,13 +166,13 @@ var React = require('react'),
             return (
                 <ul className="question-info-list">
                     <ExamForm_QuestionList_MultiChoice index={ 1 } />
-                    <li><WidgetsLayout.Divide /></li>
+                    <li><ComponentsLayout.Divide /></li>
                     <ExamForm_QuestionList_MultiChoice index={ 2 } />
-                    <li><WidgetsLayout.Divide /></li>
+                    <li><ComponentsLayout.Divide /></li>
                     <ExamForm_QuestionList_MultiChoice index={ 3 } />
-                    <li><WidgetsLayout.Divide /></li>
+                    <li><ComponentsLayout.Divide /></li>
                     <ExamForm_QuestionList_MultiChoice index={ 4 } />
-                    <li><WidgetsLayout.Divide /></li>
+                    <li><ComponentsLayout.Divide /></li>
                 </ul>
             );
         },

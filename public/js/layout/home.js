@@ -9,7 +9,7 @@
 
 var React = require('react'),
     
-    WidgetsLayout = require('./widgets.js'),
+    ComponentsLayout = require('./components.js'),
     PopupsLayout = require('./popups.js'),
     HeaderLayout = require('./header.js'),
 
@@ -21,9 +21,9 @@ var React = require('react'),
 
     Formatter = require('../formatter.js'),
 
-    Dashboard = WidgetsLayout.Dashboard,
+    Dashboard = ComponentsLayout.Dashboard,
 
-    SectionSet = WidgetsLayout.SectionSet,
+    SectionSet = ComponentsLayout.SectionSet,
 
     /**
      * The root element for the home page. All other
