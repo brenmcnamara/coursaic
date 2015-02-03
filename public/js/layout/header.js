@@ -36,8 +36,8 @@ var React = require('react'),
                 menu;
 
             if (this.props.menu) {
-                menu = this.props.menu.map(function (item) {
-                    return <li>{ item }</li>;
+                menu = this.props.menu.map(function (item, index) {
+                    return <HeaderItem key={ index.toString() }>{ item }</HeaderItem>;
                 });
             }
             else {
@@ -91,6 +91,14 @@ var React = require('react'),
             Stores.ExamStore().removeListener(Constants.Event.DID_END_EDITING, this.didEndEditing);
         }
 
+
+    }),
+
+    HeaderItem = React.createClass({
+
+        render: function () {
+            return (<li>{ this.props.children } </li>);
+        }
 
     });
 

@@ -465,9 +465,9 @@ var React = require('react'),
                         <h3><span className="inline-button">Click here</span> to create a new question.</h3>
                         <ul className="question-info-list">
                             <QuestionItem_Edit />
-                            <li className="divide gray-divide"></li>
+                            <QuestionDivide key="needs a key" />
                             <QuestionItem />
-                            <li className="divide gray-divide"></li>
+                            <QuestionDivide key="needs a key 2" />
                         </ul>
                     </SectionSet.Section.Subsection>
                 </SectionSet.Section>
@@ -475,6 +475,9 @@ var React = require('react'),
         }
 
     }),
+
+
+
 
 
     Sections_FlaggedQuestions = React.createClass({
@@ -606,6 +609,17 @@ var React = require('react'),
                         <div className="question-item__content"><QuestionInfo /></div>
                     </div>
                 </div>
+            );
+        }
+
+    }),
+
+
+    QuestionDivide = React.createClass({
+
+        render: function () {
+            return (
+                <li className="divide gray-divide"></li>
             );
         }
 
