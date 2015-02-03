@@ -34,6 +34,25 @@ var
 
     Formatter = {
 
+        Time: {
+
+            /**
+             * Takes the time in secons and returns a string representing that
+             * time.
+             */
+            format: function (time, options) {
+                var minutes = Math.floor(time / 60),
+                    seconds = Math.floor(time % 60),
+
+                    minutesText = (minutes < 10) ? '0' + minutes.toString() : minutes.toString(),
+                    secondsText = (seconds < 10) ? '0' + seconds.toString() : seconds.toString();
+
+                return minutesText + ':' + secondsText;
+            }
+
+        },
+
+
         Date: {
 
             format: function (date, options) {

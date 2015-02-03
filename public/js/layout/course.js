@@ -212,7 +212,7 @@ var React = require('react'),
                             documentation.
                         </p>
                         <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
-                        <div className="tag tag-list__item"
+                            <div className="tag tag-list__item"
                                  style={ { backgroundColor: "#e93a0a", color: "white"} }>
                                  Java
                             </div>

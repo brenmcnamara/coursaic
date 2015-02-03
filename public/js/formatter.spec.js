@@ -4,6 +4,32 @@
 
 var Formatter = require('./formatter.js');
 
+describe("Time Formatter", function () {
+
+    "use strict";
+
+    it("should format the time correctly when seconds is less than 10.", function () {
+        expect(Formatter.Time.format(8)).toBe("00:08");
+    });
+
+
+    it("should format the time correctly when seconds is between 10 and 60.", function () {
+        expect(Formatter.Time.format(43)).toBe("00:43");
+    });
+
+
+    it("should format the time correctly when seconds is between 60 and 600.", function () {
+        // This case is when minutes are between 1 and 10.
+        expect(Formatter.Time.format(134)).toBe("02:14");
+    });
+
+    it("should format the time correctly when seconds is greater than 600.", function () {
+        expect(Formatter.Time.format(721)).toBe("12:01");
+    });
+
+});
+
+
 describe("Date Formatter", function() {
 
     "use strict";
