@@ -478,8 +478,8 @@
 }
 
 .question-item__icon-set__item i,
-.question-item__icon-set__item--danger i,
-.question-item__icon-set__item--safe i {
+.question-item__icon-set__item--bad i,
+.question-item__icon-set__item--good i {
     width: 100%;
     text-align: center;
     font-size: 1.5em;
@@ -490,11 +490,11 @@
  * dangerous actions to occur when clicked,
  * such as deleting something 
  */
-.question-item__icon-set__item--danger i {
+.question-item__icon-set__item--bad i {
     color: #EC0000;
 }
 
-.question-item__icon-set__item--safe i {
+.question-item__icon-set__item--good i {
     color: #4A90E2;
 }
 
@@ -531,25 +531,25 @@
      * page (above styling).
      */
     .question-item__icon-set__item,
-    .question-item__icon-set__item--danger,
-    .question-item__icon-set__item--safe {
+    .question-item__icon-set__item--bad,
+    .question-item__icon-set__item--good {
         font-size: 1.5em;
         margin: 0 0 1em 0;
         padding: 0 .5em;
     }
 
     .question-item__icon-set__item i,
-    .question-item__icon-set__item--danger i,
-    .question-item__icon-set__item--safe i {
+    .question-item__icon-set__item--bad i,
+    .question-item__icon-set__item--good i {
         border-radius: 4px;
     }
     
-    .question-item__icon-set__item--danger i {
+    .question-item__icon-set__item--bad i {
         /* Same color as icon */
         border: solid #EC0000 1px;
     }
 
-    .question-item__icon-set__item--safe i {
+    .question-item__icon-set__item--good i {
         /* Same color as icon */
         border: solid #4A90E2 1px;
     }

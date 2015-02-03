@@ -101,7 +101,7 @@ var
                 <li>
                     <div className="question-item">
                         <div className="question-item__icon-set--1">
-                            <div className="question-item__icon-set__item--safe">
+                            <div className="question-item__icon-set__item--good">
                                 <i className="fa fa-check" />
                             </div>
                         </div>
@@ -123,7 +123,7 @@ var
                 <li>
                     <div className="question-item">
                         <div className="question-item__icon-set--1">
-                            <div className="question-item__icon-set__item--danger">
+                            <div className="question-item__icon-set__item--bad">
                                 <i className="fa fa-times" />
                             </div>
                         </div>

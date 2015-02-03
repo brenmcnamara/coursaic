@@ -529,8 +529,8 @@ var React = require('react'),
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
-                            <div className="pure-u-1-2 question-item__icon-set__item--danger clickable"><i className="fa fa-trash"></i></div>
-                            <div className="pure-u-1-2 question-item__icon-set__item--safe clickable"><i className="fa fa-pencil-square-o"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"><i className="fa fa-trash"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-pencil-square-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo />
@@ -574,8 +574,8 @@ var React = require('react'),
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
-                            <div className="pure-u-1-2 question-item__icon-set__item--danger clickable"><i className="fa fa-minus-circle"></i></div>
-                            <div className="pure-u-1-2 question-item__icon-set__item--safe clickable"><i className="fa fa-floppy-o"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"><i className="fa fa-minus-circle"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo_Edit />
@@ -605,7 +605,7 @@ var React = require('react'),
                     </div>
                         <div className="pure-u-1">
                         <div className="question-item__icon-set--1 pure-g">
-                            <div className="pure-u-1 question-item__icon-set__item--danger clickable"><i className="fa fa-ban"></i></div>
+                            <div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>
                         </div>
                         <div className="question-item__content"><QuestionInfo /></div>
                     </div>
