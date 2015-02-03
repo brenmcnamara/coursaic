@@ -104,8 +104,8 @@ var React = require('react'),
                     </Dashboard.Summary>
                     
                     <Dashboard.Buttons>
-                        <EnrollButton />
-                        <AllQuestionsButton />
+                        <EnrollButton key="1" />
+                        <AllQuestionsButton key="2" />
                     </Dashboard.Buttons>
 
                 </Dashboard>
@@ -489,10 +489,10 @@ var React = require('react'),
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
                         <ul className="question-info-list">
-                            <li><FlaggedQuestionItem /></li>
-                            <li><FlaggedQuestionItem /></li>
-                            <li><FlaggedQuestionItem /></li>
-                            <li><FlaggedQuestionItem /></li>
+                            <FlaggedQuestionItem key="needs key 1" />
+                            <FlaggedQuestionItem key="needs key 2" />
+                            <FlaggedQuestionItem key="needs key 3" />
+                            <FlaggedQuestionItem key="needs key 4" />
                         </ul>
                     </SectionSet.Section.Subsection>
                 </SectionSet.Section>
@@ -591,24 +591,26 @@ var React = require('react'),
 
         render: function () {
             return (
-                <div className="pure-g">
-                    <div className="pure-u-1">
-                        <ul className="question-item__issue-list">
-                            <li className="question-item__issue-list__item--warning">
-                                <i className="fa fa-exclamation-triangle"></i>
-                                <div className="question-item__issue-list__item--warning__message">
-                                    This question has been flagged by <strong>4 people</strong>.
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                <li>
+                    <div className="pure-g">
                         <div className="pure-u-1">
-                        <div className="question-item__icon-set--1 pure-g">
-                            <div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>
+                            <ul className="question-item__issue-list">
+                                <li className="question-item__issue-list__item--warning">
+                                    <i className="fa fa-exclamation-triangle"></i>
+                                    <div className="question-item__issue-list__item--warning__message">
+                                        This question has been flagged by <strong>4 people</strong>.
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div className="question-item__content"><QuestionInfo /></div>
+                            <div className="pure-u-1">
+                            <div className="question-item__icon-set--1 pure-g">
+                                <div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>
+                            </div>
+                            <div className="question-item__content"><QuestionInfo /></div>
+                        </div>
                     </div>
-                </div>
+                </li>
             );
         }
 

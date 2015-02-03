@@ -58,8 +58,8 @@ var
         render: function () {
             return (
                 <select className="form-select">
-                    { this.props.options.map(function (optionItem) {
-                        return <option>{ optionItem }</option>
+                    { this.props.options.map(function (optionItem, index) {
+                        return <option key={ index.toString() }>{ optionItem }</option>
                     }) }
                 </select>
             );

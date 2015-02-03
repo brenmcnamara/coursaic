@@ -154,12 +154,13 @@ var React = require('react'),
 
             return (
                 <ul className="dashboard__summary__content__details">
-                    { children.map(function (el) { return <li>{ el }</li> }) }
+                    { children.map(function (el) { return el; }) }
                 </ul>
             );
         }
 
     });
+
 
 
     /**
@@ -175,9 +176,9 @@ var React = require('react'),
                 <div className="pure-u-1 pure-u-md-3-5 pure-u-lg-2-3 dashboard-buttons">
 
                     { 
-                        children.map(function (btn) {
+                        children.map(function (btn, index) {
                             return (
-                                <div className="dashboard-buttons__item">{ btn }</div>
+                                <div key={ index.toString() } className="dashboard-buttons__item">{ btn }</div>
                             );
                         }) 
                     }
