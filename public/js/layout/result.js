@@ -75,58 +75,38 @@ var
         render: function () {
             return (
                 <SectionSet.Section>
-                    <ExamResults />
+                    <ul className="question-info-list">
+                        <QuestionItem_Incorrect />
+                        <QuestionItem_Incorrect />
+                        <QuestionItem_Correct />
+                        <QuestionItem_Incorrect />
+                        <QuestionItem_Correct />
+                        <QuestionItem_Correct />
+                    </ul>
                 </SectionSet.Section>
             );
         }
 
     }),
 
-    
-    /**
-     * The list of solution for the exam the user
-     * has just taken.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList
-     */
-    ExamResults = React.createClass({
-
-        render: function() {
-            return (
-                <ul className="exam-run-results__list">
-                    <ExamResults_SolutionList_MultiChoice />
-                </ul>
-            );
-        }
-
-    }),
 
     /**
      * A single mutliple choice solution to the results
      * of an exam
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList_MultiChoice
-     * @private
      */
-    ExamResults_SolutionList_MultiChoice = React.createClass({
+    QuestionItem_Correct = React.createClass({
 
         render: function() {
             return (
-                <li className="solution-item--multi-choice">
-                    <div className="question-info">
-                        <div className="question-info__ask">What is 2 + 2?</div>
-                        <ul className="multi-choice-info__options-list--lettered">
-                            <ExamResults_SolutionList_MultiChoice_Item />
-                            <ExamResults_SolutionList_MultiChoice_Item />
-                            <ExamResults_SolutionList_MultiChoice_Item />
-                            <ExamResults_SolutionList_MultiChoice_Item />
-                        </ul>
-                        <div className="question-info__explanation">
-                            Just because!!
+                <li>
+                    <div className="question-item">
+                        <div className="question-item__icon-set--1">
+                            <div className="question-item__icon-set__item--safe">
+                                <i className="fa fa-check" />
+                            </div>
+                        </div>
+                        <div className="question-item__content">
+                            <QuestionInfo />
                         </div>
                     </div>
                 </li>
@@ -136,24 +116,90 @@ var
     }),
 
     
-    /**
-     * An single multiple choice item for a multiple choice
-     * question in the results of taking an exam.
-     *
-     * @module Layout
-     * @submodule Exam
-     * @class ExamResults_SolutionList_MultiChoice_Item
-     * @private
-     */
-    ExamResults_SolutionList_MultiChoice_Item = React.createClass({
+    QuestionItem_Incorrect = React.createClass({
 
-        render: function() {
+        render: function () {
             return (
-                <li className="multi-choice-info__options-list__item">37</li>
+                <li>
+                    <div className="question-item">
+                        <div className="question-item__icon-set--1">
+                            <div className="question-item__icon-set__item--danger">
+                                <i className="fa fa-times" />
+                            </div>
+                        </div>
+                        <div className="question-item__content">
+                            <QuestionInfo />
+                        </div>
+                    </div>
+                </li>
             );
         }
 
-    });;
+    }),
+
+
+    QuestionInfo = React.createClass({
+
+        render: function () {
+            return (
+                <div className="question-info">
+                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <ul className="multi-choice-info__options-list--lettered">
+                        <MultiChoiceItem_OptionItem>22</MultiChoiceItem_OptionItem>
+                        <MultiChoiceItem_OptionItem>25</MultiChoiceItem_OptionItem>
+                        <MultiChoiceItem_OptionItem_Correct>4</MultiChoiceItem_OptionItem_Correct>
+                        <MultiChoiceItem_OptionItem_Incorrect>12</MultiChoiceItem_OptionItem_Incorrect>                                                                                    
+                    </ul>
+                    <div className="question-info__explanation">
+                        Just because!!
+                    </div>
+                </div>
+            );
+        }
+
+    }),
+
+
+    /**
+     * A single multiple choice item for a multiple choice
+     * question in the results of taking an exam.
+     */
+    MultiChoiceItem_OptionItem = React.createClass({
+
+        render: function() {
+            return (
+                <li className="multi-choice-info__options-list__item">{ this.props.children }</li>
+            );
+        }
+
+    }),
+
+    /**
+     * A single multiple choice option that is styled to be correct.
+     */
+    MultiChoiceItem_OptionItem_Correct = React.createClass({
+
+        render: function () {
+            return (
+                <li className="multi-choice-info__options-list__item--correct">{ this.props.children }</li>
+            );
+        }
+
+    }),
+
+
+    /**
+     * A single multiple choice option that is styled to be incorrect.
+     */
+    MultiChoiceItem_OptionItem_Incorrect = React.createClass({
+
+        render: function () {
+            return (
+                <li className="multi-choice-info__options-list__item--incorrect">{ this.props.children }</li>
+            );
+        }
+
+    });
 
 
 module.exports = {

@@ -11,6 +11,10 @@
  * on an individual basis
  */
 
+.clickable {
+    cursor: pointer;
+}
+
 .emphasis {
     font-weight: bold;
     color: #666;
@@ -364,8 +368,6 @@
 
 }
 
-
-
 /* -------------------- *\
            Tags
 \* -------------------- */
@@ -424,6 +426,141 @@
     }
 
 }
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+/* Note that the question-info element sits
+ * inside the question-edit element */
+
+.question-item__issue-list {
+    font-size: .8em;
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    list-style: none;
+}
+
+.question-item_issue-list__item,
+.question-item__issue-list__item--error,
+.question-item__issue-list__item--warning {
+    position: relative;
+    font-size: 1.1em;
+    margin-bottom: .75em;
+}
+
+    .question-item__issue-list__item i,
+    .question-item__issue-list__item--error i,
+    .question-item__issue-list__item--warning i {
+        position: absolute;
+    }
+
+.question-item__issue-list__item__message,
+.question-item__issue-list__item--error__message,
+.question-item__issue-list__item--warning__message {
+    margin-left: 1.5em;
+}
+
+.question-item__issue-list__item--error i,
+.question-item__issue-list__item--error__message {
+    color: #EC0000;
+}
+
+.question-item__issue-list__item--warning i,
+.question-item__issue-list__item--warning__message {
+    color: #EC0000;
+}
+
+.question-item__icon-set,
+.question-item__icon-set--1,
+.question-item__icon-set--2 {
+    position: absolute;
+}
+
+.question-item__icon-set__item i,
+.question-item__icon-set__item--danger i,
+.question-item__icon-set__item--safe i {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-right: .5em;
+}
+
+/* A dangerous icon is one that causes
+ * dangerous actions to occur when clicked,
+ * such as deleting something 
+ */
+.question-item__icon-set__item--danger i {
+    color: #EC0000;
+}
+
+.question-item__icon-set__item--safe i {
+    color: #4A90E2;
+}
+
+/* A safe icon is one that is not dangerous */
+
+/* Style the content of a question item next to an
+ * icon-set class. The styling should make it so
+ * that the content does not overlap the icon set.
+ */
+.question-item__icon-set--1 + .question-item__content {
+    margin-left: 4em;
+}
+
+.question-item__icon-set--2 + .question-item__content {
+    margin-left: 6em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    /* Bring the icon set back into
+     * the flow of the page so that it
+     * can be placed above the question.
+     */
+    .question-item__icon-set--1,
+    .question-item__icon-set--2,
+    .question-item__icon-set {
+        position: static;
+        margin: auto;
+    }
+
+    /* Remove the margin that is created
+     * for the icon set overlap, since on small
+     * screens, the icon set is in the flow of the
+     * page (above styling).
+     */
+    .question-item__icon-set__item,
+    .question-item__icon-set__item--danger,
+    .question-item__icon-set__item--safe {
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 0 .5em;
+    }
+
+    .question-item__icon-set__item i,
+    .question-item__icon-set__item--danger i,
+    .question-item__icon-set__item--safe i {
+        border-radius: 4px;
+    }
+    
+    .question-item__icon-set__item--danger i {
+        /* Same color as icon */
+        border: solid #EC0000 1px;
+    }
+
+    .question-item__icon-set__item--safe i {
+        /* Same color as icon */
+        border: solid #4A90E2 1px;
+    }
+
+    .question-item__icon-set--1 + .question-item__content,
+    .question-item__icon-set--2 + .question-item__content {
+        margin-left: 0;
+    }
+
+}
+
 
 /* -------------------- *\
       Question Info
@@ -503,7 +640,8 @@
 }
 
 .multi-choice-info__options-list__item,
-.multi-choice-info__options-list__item--correct {
+.multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list__item--incorrect {
     line-height: 1.3em;
     max-width: 35em;
     margin-bottom: .5em;
@@ -518,13 +656,19 @@
     color: #4A90E2;
 }
 
+.multi-choice-info__options-list__item--incorrect {
+    font-weight: bold;
+    color: #EC0000;
+}
+
 /*
  * For multi-choice options inside the lettered
  * list, increase the padding to account for the letter
  * that precedes the list item.
  */
 .multi-choice-info__options-list--lettered .multi-choice-info__options-list__item,
-.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--correct {
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--incorrect {
     margin-left: 1.5em;
 }
 
