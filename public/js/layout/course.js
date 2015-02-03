@@ -691,9 +691,7 @@ var React = require('react'),
                         </li>
                     </ul>
                     <div className="question-info__explanation--edit">
-                        <FormLayout.TextAreaInput placeholder="Explanation">
-                            Just because!
-                        </FormLayout.TextAreaInput>
+                        <FormLayout.TextAreaInput placeholder="Explanation" value="Just because!" />
                     </div>
                 </form>
             );

@@ -12,7 +12,11 @@ var
             if (this.props.checked) {
                 return (
                     <div>
-                        <input type="radio" value={ this.props.value } name={ this.props.name } checked />
+                        <input type="radio"
+                               value={ this.props.value }
+                               name={ this.props.name }
+                               onChange={ this.props.onChange }
+                               checked />
                         { this.props.children }
                     </div>
                 );
@@ -20,7 +24,10 @@ var
             else {
                 return (
                     <div>
-                        <input type="radio" value={ this.props.value } name={ this.props.name } />
+                        <input type="radio"
+                               value={ this.props.value }
+                               name={ this.props.name }
+                               onChange={ this.props.onChange } />
                         { this.props.children }
                     </div>
                 );
@@ -34,7 +41,8 @@ var
         render: function () {
             return (
                 <input className="form-text-input" placeholder={ this.props.placeholder }
-                                                   value={ this.props.children } />
+                                                   value={ this.props.children }
+                                                   onChange={ this.props.onChange } />
             );
         }
 
@@ -45,9 +53,10 @@ var
         render: function () {
             return (
                 <textarea className="form-textarea-input"
-                          placeholder={ this.props.placeholder } >
-                    { this.props.children }
-                </textarea>
+                          placeholder={ this.props.placeholder }
+                          value={ this.props.value }
+                          onChange={ this.props.onChange } />
+
             );
         }
 
@@ -57,7 +66,7 @@ var
 
         render: function () {
             return (
-                <select className="form-select">
+                <select className="form-select" onChange={ this.props.onChange } >
                     { this.props.options.map(function (optionItem, index) {
                         return <option key={ index.toString() }>{ optionItem }</option>
                     }) }
