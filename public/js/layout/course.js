@@ -27,7 +27,10 @@ var React = require('react'),
     widgets = require('../widgets.js'),
 
     Dashboard = ComponentsLayout.Dashboard,
+
     SectionSet = ComponentsLayout.SectionSet,
+
+    TagSet = ComponentsLayout.TagSet,
 
     /**
      * The root element on the Course
@@ -212,18 +215,11 @@ var React = require('react'),
                             documentation.
                         </p>
                         <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
-                            <div className="tag tag-list__item"
-                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                 Java
-                            </div>
-                            <div className="tag tag-list__item"
-                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                 Vanderbilt
-                            </div>
-                            <div className="tag tag-list__item"
-                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                 Computer Science
-                            </div>
+                            <TagSet>
+                                <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
+                                <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
+                                <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
+                            </TagSet>
                         </div> 
                     </SectionSet.Section.Subsection>
                                      

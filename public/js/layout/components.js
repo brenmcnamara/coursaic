@@ -79,6 +79,18 @@ var React = require('react'),
             );
         }
 
+    }),
+
+    TagSet = React.createClass({
+
+        render: function () {
+            return (
+                <div className="tag-list">
+                    { this.props.children }
+                </div>
+            );
+        }
+
     });
 
 
@@ -242,12 +254,28 @@ var React = require('react'),
     });
 
 
+    TagSet.Tag = React.createClass({
+
+        render: function () {
+            return (
+                <div className="tag-list__item tag"
+                     style={ { backgroundColor: this.props.color, color: "white" } }>
+
+                    { this.props.children }
+
+                </div>
+            );
+        }
+
+    });
+
 module.exports = {
 
     Divide: Divide,
     DivideFull: DivideFull,
 
     Dashboard: Dashboard,
-    SectionSet: SectionSet
+    SectionSet: SectionSet,
+    TagSet: TagSet
 
 };

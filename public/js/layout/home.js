@@ -24,6 +24,7 @@ var React = require('react'),
     Dashboard = ComponentsLayout.Dashboard,
 
     SectionSet = ComponentsLayout.SectionSet,
+    TagSet = ComponentsLayout.TagSet,
 
     /**
      * The root element for the home page. All other
@@ -157,20 +158,13 @@ var React = require('react'),
                                             Understand the basics of the Java programming language
                                             to create simple software with simple applications.
                                         </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
+
+                                        <TagSet>
+                                            <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
+                                            <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
+                                            <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
+                                        </TagSet>
+
                                     </div>
                                     <footer className="course-box__content__footer">
                                         10 enrolled
