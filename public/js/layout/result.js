@@ -25,7 +25,6 @@ var
                             <Section_ExamResults />
                         </SectionSet>
                     </div>
-                    
                 </div>
             );
         }
@@ -39,13 +38,32 @@ var
 
             return (
                 <Dashboard>
+
                     <Dashboard.Summary>
                         <Dashboard.Summary.Header>Wow, You Suck!</Dashboard.Summary.Header>
                         <Dashboard.Summary.Subheader>
-                            <span className="exam-score--good">Overall Score: 43%</span>
+                            <span className="exam-score--bad">Overall Score: 43%</span>
                         </Dashboard.Summary.Subheader>
                     </Dashboard.Summary>
+
+                    <Dashboard.Buttons>
+                        <BackToCourseButton />
+                    </Dashboard.Buttons>
+
                 </Dashboard>
+            );
+        }
+
+    }),
+
+
+    BackToCourseButton = React.createClass({
+
+        render: function () {
+            return (
+                <button className="pure-button blue-button large-button">
+                    Back to CS 101
+                </button>
             );
         }
 

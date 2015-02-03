@@ -122,7 +122,7 @@ var React = require('react'),
 
         render: function () {
             return (
-                <h5 className="dashboard__summary__content__subheader">{ this.props.children }</h5>
+                <h4 className="dashboard__summary__content__subheader">{ this.props.children }</h4>
             );
         }
 

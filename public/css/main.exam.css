@@ -70,12 +70,7 @@
         Exam Score
 \* -------------------- */
 
-.exam-score--great,
-.exam-score--good,
-.exam-score--bad,
-.exam-score {
-    font-size: 1.2em;
-}
+/* Styling for showing the score that the user got */
 
 .exam-score--great {
     color: #11BC44;
