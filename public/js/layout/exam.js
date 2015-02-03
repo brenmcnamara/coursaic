@@ -13,6 +13,8 @@ var React = require('react'),
     Constants = require('../constants.js'),
     Router = require('shore').Router,
 
+    Formatter = require('../formatter.js'),
+
     Util = require('shore').Util,
 
     Dashboard = ComponentsLayout.Dashboard,
@@ -28,11 +30,16 @@ var React = require('react'),
      */
     Root = React.createClass({
 
+        getInitialState: function () {
+            return { timeInSeconds: 0 };
+        },
+
+
         render: function() {
             return (
                 <div className="main">
                     <HeaderLayout.Header />
-                    <Timer time="01:13" />
+                    <Timer time={ Formatter.Time.format(this.state.timeInSeconds) } />
                     <div className="content-wrapper">
                         <ExamDashboard />
                         <Section_ExamForm />
@@ -48,6 +55,15 @@ var React = require('react'),
         componentWillMount: function() {
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
             Stores.ExamStore().on(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
+        },
+
+        componentDidMount: function () {
+            // Create the timer.
+            var self = this;
+
+            setInterval(function () {
+                self.setState({ timeInSeconds: self.state.timeInSeconds + 1 });
+            }, 1000);
         },
 
         componentWillUnmount: function() {
