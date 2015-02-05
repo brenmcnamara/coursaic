@@ -39,7 +39,7 @@ var React = require('react'),
 
         render: function() {
             var menu = [
-                (<a href="#">Logout</a>)
+                (<a onClick={ this.onClickLogout } >Logout</a>)
             ];
 
             return (
@@ -67,6 +67,15 @@ var React = require('react'),
 
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+        },
+
+
+        onClickLogout: function () {
+            Router.setPath("/", 
+                           {}, // No Arg map.
+                           {
+                             action: Constants.Action.LOGOUT
+                           });
         }
 
 
@@ -250,7 +259,7 @@ var React = require('react'),
 
 
         handleClick: function(event) {
-            Router.path("/course/<courseId>", { courseId: this.props.course.id });
+            // Router.path("/course/<courseId>", { courseId: this.props.course.id });
         }
 
 

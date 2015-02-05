@@ -130,14 +130,12 @@ var router = require('shore').Router,
             return { email: "", password: "" };
         },
 
-
         isValid: function () {
             var isEmailRegExp = /^[^\/\@]+@[^\.\/\@]+\.[^\.\/\@]+$/i;
 
             return isEmailRegExp.test(this.state.email) && this.state.password.length > 0;
 
         },
-
 
         render: function () {
             var loginButton;
@@ -183,28 +181,29 @@ var router = require('shore').Router,
             );
         },
 
-
         onEmailChange: function (event) {
             this.setState({ email: event.target.value });
         },
-
 
         onPasswordChange: function (event) {
             this.setState({ password: event.target.value });
         },
 
-
         onLogin: function () {
             if (this.isValid()) {
-                router.setPathWithPayload("/home", {
-                    username: this.state.email,
-                    password: this.state.password
-                });
+                router.setPath("/home",
+                               { }, // No arg map.
+                               {
+                                    payload: {
+                                       username: this.state.email,
+                                       password: this.state.password 
+                                    }
+                               });
             }
         },
 
         onForgotPassword: function () {
-            router.path("/resetpassword");
+            router.setPath("/resetpassword");
         }
 
 

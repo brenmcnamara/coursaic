@@ -27,7 +27,8 @@ module.exports = {
                 route: "/",
                 component: layout.splashLayout.Root,
                 preRouteCheck: function (request) {
-                    if (stores.UserStore().current()) {
+                    if (request.getAction() !== constants.Action.LOGOUT &&
+                        stores.UserStore().current()) {
                         // Redirect to the home page if the
                         // user is already logged in.
                         request.redirect("/home");

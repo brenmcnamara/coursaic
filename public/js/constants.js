@@ -77,6 +77,8 @@ var
 
         LOGIN: 'LOGIN',
 
+        LOGOUT: 'LOGOUT',
+
         RESET_PASSWORD: 'RESET_PASSWORD',
 
         SIGNUP: 'SIGNUP',

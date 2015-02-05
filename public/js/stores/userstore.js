@@ -121,6 +121,14 @@ var Stores = require('../stores'),
             },
 
 
+            LOGOUT: function (payload) {
+                return new Promise(function (resolve) {
+                    Parse.User.logOut();
+                    resolve();
+                });
+            },
+
+
             SIGNUP: function (payload) {
                 // Create a new user.
                 var user = new User();
