@@ -21,10 +21,6 @@ var Stores = require('../stores'),
     CourseStore = StoreBuilder.createStore({
 
         initialize: function () {
-            this._isFetching = false;
-            this._page = 0;
-            this._limit = 30;
-
             this._courses = [];
         },
 
@@ -183,21 +179,13 @@ var Stores = require('../stores'),
                            .then(
                             // Success.
                             function() {
-                                return self.fetchPage();
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
+                                return self.fetchCourses();
                             })
                            // Finished getting the next set of courses.
                            .then(
                                 // Success.
                                 function() {
                                     self.emit(Constants.Event.DID_FETCH_COURSES);
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
                                 });
             },
 
@@ -219,28 +207,6 @@ var Stores = require('../stores'),
             }
 
             
-        },
-
-
-        /**
-         * Create a query object used to fetch courses. This method
-         * should only be called after a User has been logged in.
-         *
-         * @method _createQuery
-         * @private
-         *
-         * @param requestMap {Object} The request parameters
-         *  to configure the requests.
-         *
-         * @return {Parse.Query} The query to perform
-         *  a network request.
-         */
-        _createCourseQuery: function(requestMap) {
-            var query = new Parse.Query(Course);
-            query.limit(requestMap.limit);
-            query.skip(requestMap.skip);
-
-            return query;
         },
 
 
@@ -327,24 +293,17 @@ var Stores = require('../stores'),
         /**
          * Fetch the courses.
          *
-         * @method fetch
+         * @method fetchCourses
          *
          * @return {Promise} A promise that executed when the
          *  asynchronous call has returned.
          */
-        fetchPage: function() {
+        fetchCourses: function() {
             var self = this;
-            if (this._isFetching) {
-                throw new Error("Cannot fetch courses while a fetch is in progress.");
-            }
 
-            this._isFetching = true;
             return new Promise(function (resolve, reject) {
-                var query = self._createCourseQuery(
-                {
-                    limit: self._limit,
-                    skip: self._page * self._limit
-                });
+                var query = new Parse.Query(Course);
+
                 query.find({
                     success: function(results) {
                         // Reduce the list of results to courses
@@ -365,7 +324,6 @@ var Stores = require('../stores'),
                         self._courses.push.apply(self._courses, results);
 
                         // Increment the paging value for the next fetch.
-                        self._page += 1;
 
                         // Get the promises that are mapped
                         // from all the _loadCourses calls.
@@ -374,17 +332,11 @@ var Stores = require('../stores'),
                         })).then(
                             // Success
                             function() {
-                                self._isFetching = false;
                                 resolve();
-                            },
-                            // Error
-                            function() {
-                                throw new Error("Failed to fetch data for courses");
                             }
                         );
                     },
                     error: function(error) {
-                        self._isFetching = false;
                         throw error;
                     }
                 });

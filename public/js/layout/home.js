@@ -14,6 +14,7 @@ var React = require('react'),
     HeaderLayout = require('./header.js'),
 
     Stores = require('../stores'),
+    UserStore = Stores.UserStore(),
 
     Router = require('shore').Router,
     Action = require('shore').Action,
@@ -85,7 +86,7 @@ var React = require('react'),
     HomeDashboard = React.createClass({
 
         render: function () {
-            var user = Stores.UserStore().getOne(Stores.UserStore().query.current());
+            var user = UserStore.getOne(UserStore.query.current());
             return (
                 <Dashboard>
                     <Dashboard.Summary>
