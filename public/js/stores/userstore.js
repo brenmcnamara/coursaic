@@ -15,6 +15,8 @@ var Stores = require('../stores'),
 
     User = require('./models.js').User,
 
+    Query = require('./query.js'),
+
     /**
      * The Store that manages all user data as
      * well as login and logout operations.
@@ -24,8 +26,59 @@ var Stores = require('../stores'),
      */
     UserStore = StoreBuilder.createStore({
 
-        initialize: function () {
-            this._userHash = {};
+
+        /***********************************\
+                   PRIVATE METHODS
+        \***********************************/
+
+        /**
+         * Add a user to the collection.
+         *
+         * @method _addUser
+         * @private
+         *
+         * @param user {Parse.User} The user to add to
+         *  the store.
+         */
+        _addUser: function(user) {
+            // Avoid updating the user if it is the current
+            // user. This may cause consistency issues with
+            // Parse.
+            if (user.id !== this.currentUser().id) {
+                this._userHash[user.id] = user;
+            }
+        },
+
+
+        /**
+         * @method current
+         *
+         * @return {Parse.User} The current user.
+         */
+        _currentUser: function () {
+            return Parse.User.current();
+        },
+
+
+        /**
+         * Get all the users in the store
+         * in array form.
+         *
+         * @method _getUserList
+         *
+         * @return {Array} An array of all the
+         *  users in the user store.
+         */
+        _getUserList: function () {
+            var list = [],
+                prop;
+
+            for (prop in this._userHash) {
+                if (this._userHash.hasOwnProperty(prop)) {
+                    list.push(this._userHash[prop]);
+                }
+            }
+            return list;
         },
 
 
@@ -80,38 +133,87 @@ var Stores = require('../stores'),
         },
 
 
-        /**
-         * Add a user to the collection.
-         *
-         * @method _addUser
-         * @private
-         *
-         * @param user {Parse.User} The user to add to
-         *  the store.
-         */
-        _addUser: function(user) {
-            // Avoid updating the user if it is the current
-            // user. This may cause consistency issues with
-            // Parse.
-            if (user.id !== this.current().id) {
-                this._userHash[user.id] = user;
-            }
+        /***********************************\
+                    PUBLIC METHODS
+        \***********************************/
+
+        initialize: function () {
+            this._userHash = {};
         },
 
+
+        /**
+         * Get the author of the exam for the course.
+         *
+         * @method fetchAuthorOfExam
+         *
+         * @param exam {Exam} The exam to get the author for.
+         *
+         * @return {Promise} The promise that gets called when
+         *  fetching the author has completed.
+         */
+        fetchAuthorOfExam: function (exam) {
+            var self = this;
+            return new Promise(function(resolve, reject) {
+                exam.get('author').fetch({
+                    success: function (user) {
+                        self._addUser(user);
+                        resolve();
+                    },
+
+                    error: function (error) {
+                        throw error;
+                    }
+                });
+            });
+        },
+
+
+        /**
+         * A variadic method that takes query objects
+         * and generates a single user after performing
+         * all the queries. If multiple users exist from
+         * the queries, then the first one in the set
+         * will be returned.
+         *
+         * @method getOne
+         *
+         * @return {User} A user object.
+         */
+        getOne: function () {
+            return this.getAll.apply(this, arguments)[0] || null;
+        },
+
+
+        /**
+         * A variadic method that takes query objects
+         * and generates a set of users after performing
+         * all the queries.
+         *
+         * @method getAll
+         *
+         * @return {Array} An array of users.
+         */
+        getAll: function () {
+            return [].reduce.call(arguments, function (memo, query) {
+                return query(memo);
+            }, this._getUserList());
+        },
+
+
+        /***********************************\
+                      NAMESPACES
+        \***********************************/
 
         actionHandler: {
 
 
             LOGIN: function (payload) {
                 // Check if the user is already logged in.
-                if (this.current()) {
+                if (this._currentUser()) {
                     logger.log(logger.Level.INFO, "Skipping login. User already logged in.");
 
-                    // Return an empty promise, the user is
-                    // already logged in on the client.
-                    return new Promise(function (resolve) {
-                        resolve();
-                    });
+                    return this._didLogin(this._currentUser());
                 }
                 else {
                     logger.log(logger.Level.INFO, "Logging in user " + payload.username + ".");
@@ -150,44 +252,21 @@ var Stores = require('../stores'),
         },
 
 
-        /**
-         * @method current
-         *
-         * @return {Parse.User} The current user.
-         */
-        current: function() {
-            return Parse.User.current();
-        },
+        query: {
 
-
-        /**
-         * Get the author of the exam for the course.
-         *
-         * @method fetchAuthorOfExam
-         *
-         * @param exam {Exam} The exam to get the author for.
-         *
-         * @return {Promise} The promise that gets called when
-         *  fetching the author has completed.
-         */
-        fetchAuthorOfExam: function(exam) {
-            var self = this;
-            return new Promise(function(resolve, reject) {
-                exam.get('author').fetch({
-                    success: function(user) {
-                        self._addUser(user);
-                        resolve();
-                    },
-
-                    error: function(error) {
-                        throw error;
-                    }
+            current: Query.createQuery(function (data) {
+                return data.filter(function (user) {
+                    return user.id === store._currentUser().id;
                 });
-            });
+            })
+
         }
-    
-
-    });
 
 
-module.exports = new UserStore();
+    }),
+
+    // Instance of the user store for local reference.
+    store = new UserStore();
+
+
+module.exports = store;

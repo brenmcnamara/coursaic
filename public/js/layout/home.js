@@ -85,10 +85,11 @@ var React = require('react'),
     HomeDashboard = React.createClass({
 
         render: function () {
+            var user = Stores.UserStore().getOne(Stores.UserStore().query.current());
             return (
                 <Dashboard>
                     <Dashboard.Summary>
-                        <Dashboard.Summary.Header>Welcome, Brendan!</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Header>Welcome, { user.get('firstName') }!</Dashboard.Summary.Header>
                     </Dashboard.Summary>
                 </Dashboard>
             );
@@ -221,8 +222,6 @@ var React = require('react'),
 
 
     }),
-
-
 
 
     /**

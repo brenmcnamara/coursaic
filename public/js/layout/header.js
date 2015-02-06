@@ -31,9 +31,8 @@ var React = require('react'),
 
         
         render: function() {
-            var user = Stores.UserStore().current(),
                 // Modify the menu items and add them into the header.
-                menu;
+                var menu;
 
             if (this.props.menu) {
                 menu = this.props.menu.map(function (item, index) {

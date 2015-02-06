@@ -9,6 +9,8 @@ var Stores = require('../stores'),
 
     Course = require('./models.js').Course,
 
+    Query = require('./query.js'),
+
     /**
      * A Store containing all data related to
      * courses.
@@ -438,28 +440,23 @@ var Stores = require('../stores'),
          * @return {Course} The current course. If the pageKey
          *  is not 'course', this will return null.
          */
-        current: function() {
+        currentCourse: function() {
             // TODO: Maybe make this throw an
             // error if the current key is not called on
             // the correct page.
             return (Stores.PageStore().courseId()) ?
                     this.courseWithId(Stores.PageStore().courseId()) :
                     null;
-        },
-
-
-        forEach: function(callback) {
-            this._courses.forEach(callback);
-        },
-
-
-        map: function(callback) {
-            return this._courses.map(callback);
         }
 
 
-    });
+    }),
 
 
-module.exports = new CourseStore();
+    // Create an instance of the course store
+    // to use as a local reference.
+    store = new CourseStore();
+
+
+module.exports = store;
 
