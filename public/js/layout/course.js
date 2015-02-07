@@ -202,6 +202,14 @@ var React = require('react'),
     Sections_Description = React.createClass({
 
         render: function () {
+            /*
+             *<TagSet>
+                                <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
+                                <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
+                                <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
+                            </TagSet>
+             */
+
             return (
                 <SectionSet.Section>
                     <SectionSet.Section.Header>Description</SectionSet.Section.Header>
@@ -215,11 +223,7 @@ var React = require('react'),
                             documentation.
                         </p>
                         <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
-                            <TagSet>
-                                <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
-                                <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
-                                <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
-                            </TagSet>
+                            Tag Set Goes Here
                         </div> 
                     </SectionSet.Section.Subsection>
                                      

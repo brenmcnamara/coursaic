@@ -50,7 +50,7 @@ module.exports = {
             },
 
             {
-                route: "/course",
+                route: "/course/<courseId>",
                 component: layout.courseLayout.Root
             },
 

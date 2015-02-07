@@ -16,6 +16,17 @@ var
      */
     User = Parse.User.extend({
 
+        /**
+         * Check if a user is enrolled in a course.
+         *
+         * @method isEnrolled
+         *
+         * @param course {Course} The course to check if the
+         *  user is enrolled in.
+         *
+         * @return {Boolean} True if the user is enrolled in the
+         *  course, false otherwise.
+         */
         isEnrolled: function (course) {
             var enrolled = this.get('enrolled') || [];
 
@@ -24,6 +35,18 @@ var
             }, false);
         },
 
+        /**
+         * Check if a user is the owner of a particular course.
+         *
+         * @method isOwner
+         *
+         * @param course {Course} The course to check for ownership.
+         *
+         * @return {Boolean} True if the user is an owner, false otherwise.
+         */
+        isOwner: function (course) {
+            return course.get('owner') && course.get('owner').id === this.id;
+        },
 
         /**
          * Enroll a user in a particular course.

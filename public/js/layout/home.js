@@ -246,6 +246,7 @@ var React = require('react'),
 
         onClick: function(event) {
             Logger.log(Logger.Level.INFO, "Course selected: " + this.props.course.id);
+            Router.setPath("/course/<courseId>", { courseId: this.props.course.id });
         }
 
     });
