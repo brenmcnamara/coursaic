@@ -17,6 +17,7 @@ var React = require('react'),
     Stores = require('../stores'),
     PageStore = Stores.PageStore(),
     CourseStore = Stores.CourseStore(),
+    UserStore = Stores.UserStore(),
 
     Formatter = require('../formatter.js'),
 
@@ -45,13 +46,13 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function() {
+            console.log("Re-rendering.");
             var courseId = PageStore.courseId(),
                 course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId)),
                 menu = [
                 (<a href="#">Logout</a>)
             ];
 
-            console.log(courseId);
             return (
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
@@ -69,12 +70,12 @@ var React = require('react'),
         },
 
         componentWillMount: function() {
-            Stores.CourseStore().on(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
+            Stores.CourseStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(Constants.Event.DID_CHANGE_ENROLLMENT, this.onChange);
+            Stores.CourseStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
         }
 
@@ -93,7 +94,11 @@ var React = require('react'),
     CourseDashboard = React.createClass({
         
         render: function() {
-            var course = this.props.course;
+            var user = UserStore.getOne(UserStore.query.current()),
+                course = this.props.course,
+
+                renderEnrollButton = (user.isEnrolled(course)) ? 
+                    (<UnenrollButton />) : (<EnrollButton />);
 
             return (
                 <Dashboard>
@@ -109,7 +114,7 @@ var React = require('react'),
                     </Dashboard.Summary>
                     
                     <Dashboard.Buttons>
-                        <EnrollButton />
+                        { renderEnrollButton }
                     </Dashboard.Buttons>
 
                 </Dashboard>
@@ -140,24 +145,11 @@ var React = require('react'),
         },
 
         onClick: function() {
-            // Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: PageStore.courseId() });
         }
 
     }),
 
-
-    AllQuestionsButton = React.createClass({
-
-        render: function () {
-            return (
-                <button type="button"
-                        className="pure-button blue-button large-button">
-                    View All Questions
-                </button>
-            );
-        }
-
-    }),
 
     /**
      * The unenroll button allowing a user to unenroll
@@ -180,7 +172,21 @@ var React = require('react'),
         },
 
         onClick: function() {
-            // Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: Stores.CourseStore().current().id });
+            Action.send(Constants.Action.UNENROLL_CURRENT_USER, { courseId: PageStore.courseId() });
+        }
+
+    }),
+
+
+    AllQuestionsButton = React.createClass({
+
+        render: function () {
+            return (
+                <button type="button"
+                        className="pure-button blue-button large-button">
+                    View All Questions
+                </button>
+            );
         }
 
     }),
@@ -220,14 +226,6 @@ var React = require('react'),
                         </div>
                     ) : 
                     (null);
-
-            /*
-             *<TagSet>
-                                <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
-                                <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
-                                <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
-                            </TagSet>
-             */
 
             return (
                 <SectionSet.Section>

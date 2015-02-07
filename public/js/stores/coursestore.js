@@ -292,6 +292,7 @@ var Stores = require('../stores'),
          * @return {User} A course object.
          */
         getOne: function () {
+            console.log("Get one was called.");
             return this.getAll.apply(this, arguments)[0] || null;
         },
 
@@ -320,9 +321,10 @@ var Stores = require('../stores'),
 
             LOAD_COURSE: function (payload) {
                 var self = this;
-                // Wait for the User to be loaded.
-                // Load all the information for the course.
-                return new Promise(function (resolve) {
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+
+                // After the user store has completed what it needs to do.
+                .then(function () {
                     var course;
                     // Get the course if the course does not
                     // already exist.
@@ -330,13 +332,7 @@ var Stores = require('../stores'),
                         // Don't have the course, need to fetch it.
                         course = new Course();
                         course.id = payload.courseId;
-                        self._fetchCourse(course)
-                            .then(function () {
-                                resolve();
-                            });
-                    }
-                    else {
-                        resolve();
+                        return self._fetchCourse(course);
                     }
                 });
             },
@@ -367,6 +363,7 @@ var Stores = require('../stores'),
             filter: {
 
                 courseWithId: Query.createQuery(function (data) {
+                    console.log("Course with id filter");
                     var courseId = this.params[0];
                     return data.filter(function (course) {
                         return courseId === course.id;

@@ -207,6 +207,33 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
+            ENROLL_CURRENT_USER: function (payload) {
+                var self = this,
+                    CourseStore = Stores.CourseStore(),
+                    courseId = payload.courseId,
+                    course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+
+                this._currentUser().enroll(course);
+                return this._currentUser().save().then(function () {
+                    self.emit(Constants.Event.CHANGED_ENROLLMENT);
+                });
+            },
+
+            LOAD_COURSE: function (payload) {
+                var error;
+                if (!this._currentUser()) {
+                    logger.log(logger.Level.ERROR,
+                               "Not logged into the app, must be logged in for LOAD_COURSE.");
+
+                    error = Error("Must be logged in to see course page.");
+                    error.type = Constants.ErrorType.NO_USER_CREDENTIALS;
+                    throw error;
+                }
+
+                // Otherwise, the user is logged in.
+                return this._didLogin(this._currentUser());
+            },
+
             LOGIN: function (payload) {
                 // Check if the user is already logged in.
                 if (this._currentUser()) {
@@ -221,7 +248,6 @@ var Stores = require('../stores'),
                 }
             },
 
-
             LOGOUT: function (payload) {
                 return new Promise(function (resolve) {
                     Parse.User.logOut();
@@ -229,6 +255,9 @@ var Stores = require('../stores'),
                 });
             },
 
+            RESET_PASSWORD: function (payload) {
+                return Parse.User.requestPasswordReset(payload.email);
+            },
 
             SIGNUP: function (payload) {
                 // Create a new user.
@@ -242,11 +271,18 @@ var Stores = require('../stores'),
                 return user.signUp(null);
             },
 
+            UNENROLL_CURRENT_USER: function (payload) {
 
-            RESET_PASSWORD: function (payload) {
-                return Parse.User.requestPasswordReset(payload.email);
+                var self = this,
+                    CourseStore = Stores.CourseStore(),
+                    courseId = payload.courseId,
+                    course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+
+                this._currentUser().unenroll(course);
+                return this._currentUser().save().then(function () {
+                    self.emit(Constants.Event.CHANGED_ENROLLMENT);
+                });
             }
-
 
         },
 

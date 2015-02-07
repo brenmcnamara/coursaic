@@ -79,6 +79,7 @@ var
          *  user from.
          */
          unenroll: function (course) {
+            console.log("Unenrolling.");
             var enrolled = this.get('enrolled') || [],
                 courseIndex;
 
