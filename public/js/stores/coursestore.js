@@ -292,7 +292,6 @@ var Stores = require('../stores'),
          * @return {User} A course object.
          */
         getOne: function () {
-            console.log("Get one was called.");
             return this.getAll.apply(this, arguments)[0] || null;
         },
 
@@ -363,7 +362,6 @@ var Stores = require('../stores'),
             filter: {
 
                 courseWithId: Query.createQuery(function (data) {
-                    console.log("Course with id filter");
                     var courseId = this.params[0];
                     return data.filter(function (course) {
                         return courseId === course.id;
