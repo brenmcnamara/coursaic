@@ -15,6 +15,7 @@ var React = require('react'),
 
     Stores = require('../stores'),
     UserStore = Stores.UserStore(),
+    CourseStore = Stores.CourseStore(),
 
     Router = require('shore').Router,
     Action = require('shore').Action,
@@ -26,6 +27,8 @@ var React = require('react'),
 
     SectionSet = ComponentsLayout.SectionSet,
     TagSet = ComponentsLayout.TagSet,
+
+    Logger = require('shore').logger,
 
     /**
      * The root element for the home page. All other
@@ -112,6 +115,7 @@ var React = require('react'),
     Content = React.createClass({
 
         render: function() {
+
             return (
                 <SectionSet>
                     <SectionSet.Section>
@@ -123,104 +127,61 @@ var React = require('react'),
                         </SectionSet.Section.Empty>
                     </SectionSet.Section>
 
-                    <SectionSet.Section>
-                        <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
-                        <div className="divide"></div>
-                        
-                        <div className="pure-g course-grid">
-                            
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
+                    <PopularCourses />
 
-
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-
-                                        <TagSet>
-                                            <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
-                                            <TagSet.Tag color="#087a34">Vanderbilt</TagSet.Tag>
-                                            <TagSet.Tag color="#e25a58">Computer Science</TagSet.Tag>
-                                        </TagSet>
-
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
-                            
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                    </SectionSet.Section>
                 </SectionSet>
 
             );
         }
 
+
+    }),
+
+
+    MyCourses = React.createClass({
+
+        render: function () {
+
+        }
+
+    }),
+
+
+    /**
+     * A section containing the popular courses to present
+     * to the user.
+     */
+    PopularCourses = React.createClass({
+
+        render: function () {
+            var user = UserStore.getOne(UserStore.query.current()),
+                courses = CourseStore.getAll(CourseStore.query.filter.coursesNotForUser(user)),
+
+                courseBoxes = courses.map(function (course) {
+                    return <CourseBox key={ course.id } course={ course } />
+                }),
+
+                // If there are no courses, then render a message saying there
+                // are no courses in this section.
+                renderGrid = (courseBoxes.length === 0) ?
+                             (<SectionSet.Section.Empty>
+                                There are no courses here yet.
+                             </SectionSet.Section.Empty>) :
+
+                             (courseBoxes);
+            
+            return (
+                <SectionSet.Section>
+                    <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
+                    <div className="divide"></div>
+                    
+                    <div className="pure-g course-grid">
+                        { renderGrid }
+                    </div>
+
+                </SectionSet.Section>
+            );
+        }
 
     }),
 
@@ -239,29 +200,36 @@ var React = require('react'),
         
         render: function() {
             var course = this.props.course,
-                enrollMessage = course.enrollCount() + ' enrolled';
-            return (
-                <div onClick= { this.handleClick }
-                     className="home-content__courses__grid__course course-info">
+                tags = course.get('tags'),
 
-                    <header className="course-info__header">
-                        { course.get('code') }
-                    </header>
-                    <div className="course-info__body">
-                        <div className="course-info__body__text">
-                            { Formatter.Text.truncate(course.get('description'), { maxlen: 75 }) }
+                // The list of tags for the course. 
+                tagListEl = (tags.length === 0) ?
+                            (null) :
+                            (<TagSet>
+                                { tags.map(function (tag) {
+                                    return (<TagSet.Tag key={ tag.id } tag={ tag } />);
+                                  })
+                                }
+                             </TagSet>);
+
+
+            return (
+                <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box"
+                     onClick={ this.onClick }>
+                    <div className="course-box__content">
+                        <header className="course-box__content__header">{ course.get('alias') }</header>
+                        <div className="course-box__content__body">
+                            <div>{ course.get('description') }</div>
+                            { tagListEl }
                         </div>
                     </div>
-                    <footer className="course-info__footer">{ enrollMessage }</footer>
                 </div>
             );
         },
 
-
-        handleClick: function(event) {
-            // Router.path("/course/<courseId>", { courseId: this.props.course.id });
+        onClick: function(event) {
+            Logger.log(Logger.Level.INFO, "Course selected: " + this.props.course.id);
         }
-
 
     });
 

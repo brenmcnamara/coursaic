@@ -16,6 +16,15 @@ var
      */
     User = Parse.User.extend({
 
+        isEnrolled: function (course) {
+            var enrolled = this.get('enrolled') || [];
+
+            return enrolled.reduce(function (isEnrolled, enrolledCourse) {
+                return isEnrolled || enrolledCourse.id === course.id;
+            }, false);
+        },
+
+
         /**
          * Enroll a user in a particular course.
          *
@@ -27,11 +36,9 @@ var
         enroll: function (course) {
             var enrolled = this.get('enrolled') || [];
 
-            enrolled.forEach(function (enrolledCourse) {
-                if (enrolledCourse.id === course.id) {
-                    throw Error("The User is already enrolled in the course " + course.id);
-                }
-            });
+            if (this.isEnrolled(course)) {
+                throw Error("The User is already enrolled in the course " + course.id);
+            }
 
             enrolled.push(course);
 
@@ -50,7 +57,11 @@ var
          */
          unenroll: function (course) {
             var enrolled = this.get('enrolled') || [],
-                courseIndex = -1;
+                courseIndex;
+
+            if (!this.isEnrolled(course)) {
+                throw Error("The user cannot be unenrolled from the course " + course.id);
+            }
 
             enrolled.forEach(function (enrolledCourse, index) {
                 if (enrolledCourse.id === course.id) {
@@ -58,16 +69,12 @@ var
                 }
             });
 
-            if (courseIndex >= 0) {
-                enrolled = enrolled.slice(0, courseIndex)
-                                   .concat(enrolled.slice(courseIndex + 1,
-                                                          enrolled.length - courseIndex - 1));
+            enrolled = enrolled.slice(0, courseIndex)
+                               .concat(enrolled.slice(courseIndex + 1,
+                                                      enrolled.length - courseIndex - 1));
 
-                this.set('enrolled', enrolled);
-            }
-            else {
-                throw Error("The user cannot be unenrolled from the course " + course.id);
-            }
+            this.set('enrolled', enrolled);
+
          }
 
     }),

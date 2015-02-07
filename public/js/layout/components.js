@@ -258,11 +258,13 @@ var React = require('react'),
     TagSet.Tag = React.createClass({
 
         render: function () {
+            var tag = this.props.tag;
+
             return (
                 <div className="tag-list__item tag"
-                     style={ { backgroundColor: this.props.color, color: "white" } }>
+                     style={ { backgroundColor: tag.get('color'), color: "white" } }>
 
-                    { this.props.children }
+                    { tag.get('name') }
 
                 </div>
             );
