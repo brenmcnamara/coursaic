@@ -51,6 +51,7 @@ module.exports = {
 
             {
                 route: "/course/<courseId>",
+                action: constants.Action.LOAD_COURSE,
                 component: layout.courseLayout.Root
             },
 
@@ -62,18 +63,6 @@ module.exports = {
             {
                 route: "/result",
                 component: layout.resultLayout.Root
-            },
-
-            {
-                route: "/course/<courseId>",
-                action: constants.Action.LOAD_COURSE,
-                component: layout.courseLayout.Root
-            },
-
-            {
-                route: "/course/<courseId>/exam/<examId>",
-                action: constants.Action.LOAD_COURSE,
-                component: layout.courseLayout.Root
             },
 
             {

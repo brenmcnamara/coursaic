@@ -18,7 +18,11 @@ window.onload = function () {
             // the Validator module has already been configured.
             preDispatchValidator: function (action, payload) {
                 // Make sure that the schema of the payload is valid.
-                var result = validator.validate(action, payload);
+                return null;
+                // THERE IS A STRANGE BUG DOWN HERE THAT NEEDS TO
+                // GET FIXED.
+                /*
+                validator.validate(action, payload);
                 if (result.valid || !result.hasSchema) {
                     return null;
                 }
@@ -28,6 +32,7 @@ window.onload = function () {
                               '"' + result.errors[0].message) + '".';
                 error.type = result.errors[0].type;
                 return result.errors[0];
+                */
             }
         },
 

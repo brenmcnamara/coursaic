@@ -15,6 +15,8 @@ var React = require('react'),
     PopupsLayout = require('./popups.js'),
 
     Stores = require('../stores'),
+    PageStore = Stores.PageStore(),
+    CourseStore = Stores.CourseStore(),
 
     Formatter = require('../formatter.js'),
 
@@ -43,16 +45,19 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function() {
-            var menu = [
+            var courseId = PageStore.courseId(),
+                course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId)),
+                menu = [
                 (<a href="#">Logout</a>)
             ];
 
+            console.log(courseId);
             return (
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
-                        <CourseDashboard />
-                        <Sections />
+                        <CourseDashboard course={ course } />
+                        <Sections course={ course } />
                     </div>
                     
                 </div>
@@ -88,14 +93,14 @@ var React = require('react'),
     CourseDashboard = React.createClass({
         
         render: function() {
+            var course = this.props.course;
+
             return (
                 <Dashboard>
                     <Dashboard.Summary>
-                        <Dashboard.Summary.Header>CS 101</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Header>{ course.get('alias') }</Dashboard.Summary.Header>
 
-                        <Dashboard.Summary.Subheader>
-                            Introduction to Computer Science
-                        </Dashboard.Summary.Subheader>
+                        <Dashboard.Summary.Subheader>{ course.get('name') }</Dashboard.Summary.Subheader>
 
                         <Dashboard.Summary.Details>
                             <div>Created 2 weeks ago</div>
@@ -104,8 +109,7 @@ var React = require('react'),
                     </Dashboard.Summary>
                     
                     <Dashboard.Buttons>
-                        <EnrollButton key="1" />
-                        <AllQuestionsButton key="2" />
+                        <EnrollButton />
                     </Dashboard.Buttons>
 
                 </Dashboard>
@@ -187,10 +191,10 @@ var React = require('react'),
         render: function () {
             return (
                 <SectionSet>
-                    <Sections_Description />
-                    <Sections_Overview />
-                    <Sections_MyQuestions />
-                    <Sections_FlaggedQuestions />
+                    <Sections_Description course={ this.props.course }/>
+                    <Sections_Overview course={ this.props.course } />
+                    <Sections_MyQuestions course={ this.props.course }/>
+                    <Sections_FlaggedQuestions course={ this.props.course } />
                 </SectionSet>
             );
         }
@@ -202,6 +206,21 @@ var React = require('react'),
     Sections_Description = React.createClass({
 
         render: function () {
+            var course = this.props.course,
+                tags = course.get('tags'),
+                renderTags = (tags.length) ?
+                    (
+                        <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em' } }>
+                            <TagSet>
+                                {   tags.map(function (tag) {
+                                        return <TagSet.Tag key={ tag.id } tag={ tag } />;
+                                    })
+                                }
+                            </TagSet>
+                        </div>
+                    ) : 
+                    (null);
+
             /*
              *<TagSet>
                                 <TagSet.Tag color="#e93a0a">Java</TagSet.Tag>
@@ -215,16 +234,8 @@ var React = require('react'),
                     <SectionSet.Section.Header>Description</SectionSet.Section.Header>
                     <div className="divide"></div>
                     <SectionSet.Section.Subsection>
-                        <p className="section__paragraph">
-                            An intensive introduction to algorithm development
-                            and problem solving on the computer. Structured problem
-                            definition, top down and modular algorithm design.
-                            Running, debugging, and testing programs. Program
-                            documentation.
-                        </p>
-                        <div className="tag-list" style={ { marginLeft: '2em', fontSize: '1.4em'} }>
-                            Tag Set Goes Here
-                        </div> 
+                        <p className="section__paragraph">{ course.get('description') }</p>
+                        { renderTags }
                     </SectionSet.Section.Subsection>
                                      
                 </SectionSet.Section>

@@ -389,62 +389,6 @@ var Stores = require('../stores'),
             },
 
 
-            LOAD_COURSE: function (payload) {
-                var self = this;
-                // Wait for the course to get loaded, then
-                // load all the exams for the course and questions
-                // for the exam.
-                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
-                    // After the CourseStore has finished.
-                    .then(
-                        // Success.
-                        function() {
-                            var course = Stores.CourseStore().courseWithId(payload.courseId);
-                            return self._fetchExamsForCourse(course);
-
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
-                    // After the exams have been fetched for the course.
-                    .then(
-                        // Success.
-                        function(exams) {
-                            // Map the exams in the course into
-                            // a list of promises.
-                            return Promise.all(exams.map(function(exam) {
-                                // Load all the data in the exam.
-                                return self._loadExam(exam);
-                            }));
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
-                    // After all the exams have been loaded.
-                    .then(
-                        // Success.
-                        function() {
-                            // NOTE: This case is for both exam
-                            // and courses. In the exam case, we
-                            // have to generate an exam run to use.
-                            if (payload.pageKey === 'exam') {
-                                self._examRun = self._generateExamRun();
-                                self.emit(Constants.Event.DID_CREATE_EXAM_RUN);
-                            }
-                            self.emit(Constants.Event.DID_FETCH_EXAMS,
-                                      { courseId: payload.courseId });
-                        },
-
-                        // Error.
-                        function(error) {
-                            throw error;
-                        });
-
-            },
-
-
             LOAD_EXAM_RUN: function (payload) {
                 var self = this;
                 // Wait for the course to get loaded, then

@@ -7,21 +7,16 @@
 var 
     validator = new (require('jsonschema').Validator)(),
 
+    stateMap = {
+
+        // The regular expression used to validate
+        // object ids. This regular expression must
+        // be provided from the config method.
+        objectIdRegExp: null
+
+    },
+
     schemas = {
-
-        LOAD_HOME: function () {
-            return ({
-                type: "object",
-
-                properties: {
-                    path: {
-                        type: "string",
-                        pattern: /((^\/$)|(^(\/([^_\/\(\)\[\]])+)+$))/
-                    }
-                }
-            });
-        },
-
 
         LOAD_COURSE: function () {
             return ({
@@ -37,41 +32,9 @@ var
                         }
                     }
             });
-        },
-
-
-        LOAD_EXAM_RUN: function () {
-            return ({
-                type: "object",
-                properties: {
-                    path: {
-                        type: "string",
-                        pattern: /((^\/$)|(^(\/([^_\/\(\)\[\]])+)+$))/
-                    },
-                    courseId: {
-                        type: "string",
-                        pattern: stateMap.objectIdRegExp
-                    },
-                    examId: {
-                        type: "string",
-                        pattern: stateMap.objectIdRegExp
-                    }
-                }
-            });
         }
 
     },
-
-
-    stateMap = {
-
-        // The regular expression used to validate
-        // object ids. This regular expression must
-        // be provided from the config method.
-        objectIdRegExp: null
-
-    },
-
 
     /**
      * Configure this module so that it is
@@ -112,6 +75,7 @@ var
      *  any errors and whether or not the validation has succeeded.
      */
     validate = function (action, payload) {
+        console.log("In validate.");
         var result;
         if (schemas[action]) {
             result = validator.validate(payload, schemas[action]());

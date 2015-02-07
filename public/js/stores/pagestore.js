@@ -168,8 +168,7 @@ var Dispatcher = require('shore').Dispatcher,
 
             LOAD_COURSE: function (payload) {
                 var self = this;
-                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
                                  .then(function () {
                                     self._removeMode({fromMode: self.currentMode()});
                                  });
@@ -266,19 +265,6 @@ var Dispatcher = require('shore').Dispatcher,
          */
         courseId: function () {
             return Router.matchArguments("/course/<courseId>").courseId || null;
-        },
-
-
-        /**
-         * The exam id for the current page.
-         *
-         * @method examId
-         *
-         * @return {String} The exam id for the current page,
-         *  or null if the page has no exam id.
-         */
-        examId: function () {
-            return Router.matchArguments("/course/<_>/exam/<examId>").examId || null;
         },
 
 

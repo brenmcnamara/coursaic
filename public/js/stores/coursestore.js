@@ -48,6 +48,8 @@ var Stores = require('../stores'),
                             function() {
                                 // Add the course to the course array.
                                 var i, n, foundCourse;
+                                // If the course already exists in the _courses
+                                // array, then replace the element with this course.
                                 for (i = 0, n = self._courses.length && !foundCourse; i < n; ++i) {
                                     if (course.id === self._courses[i].id) {
                                         // Refresh the course in the collection.
@@ -97,10 +99,7 @@ var Stores = require('../stores'),
          *  the error describing the failure.
          */
         _loadCourse: function(course) {
-            // TODO: Is there anything I need to do in here?
-            return new Promise(function (resolve) {
-                resolve();
-            });
+            return this._loadTagsForCourse(course);
         },
 
 
@@ -217,7 +216,7 @@ var Stores = require('../stores'),
             // Now time to load the tags for each of those courses.
             .then(function (courses) {
                 return Promise.all(courses.map(function (course) {
-                    return self._loadTagsForCourse(course);
+                    return self._loadCourse(course);
                 }));
             });
         },
@@ -319,67 +318,11 @@ var Stores = require('../stores'),
         
         actionHandler: {
 
-            CREATE_COURSE: function (payload) {
-                var self = this;
-                // TODO: Note that if this fails,
-                // createCourse mode will be exited since this
-                // is getting called after the config store.
-                // Not strongly exception-safe.
-                return Dispatcher.waitFor([ Stores.PageStore().dispatcherIndex ])
-                       // Wait for the config store to update the hash.
-                       .then(
-                        // Success.
-                        function() {
-                            var course = new Course();
-                            // Enroll the current user into the course.
-                            payload.enrolled = [ Stores.UserStore().current() ];
-
-                            course.set(payload);
-                            return new Promise(function(resolve, reject) {
-                                // TODO: Modify this using the
-                                // promise syntax.
-                                course.save({
-                                    success: function(course) {
-                                        self._courses.push(course);
-                                        // Pass along the course.
-                                        resolve(course);
-                                    },
-
-                                    error: function(error) {
-                                        throw error;
-                                    }
-                                });
-                            });
-                        })
-
-                        // Wait for the course to be saved.
-                        .then(
-                        // Success.
-                        function(course) {
-                            return self._loadCourse(course);
-                        })
-
-                        // Wait for the course to be saved.
-                        .then(
-                        // Success.
-                        function() {
-                            // TODO: Maybe pass the course as a parameter
-                            // to this event.
-                            self.emit(Constants.Event.DID_CREATE_COURSE);
-                        });
-
-            },
-
-
             LOAD_COURSE: function (payload) {
                 var self = this;
                 // Wait for the User to be loaded.
                 // Load all the information for the course.
-                // NOTE: This is needed by the exam page key so that
-                // the exam store can load the exam and question related
-                // to the single exam of the course.
-                // Just make sure the single course is loaded.
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     var course;
                     // Get the course if the course does not
                     // already exist.
@@ -388,53 +331,15 @@ var Stores = require('../stores'),
                         course = new Course();
                         course.id = payload.courseId;
                         self._fetchCourse(course)
-                            .then(
-                                function () {
-                                    resolve();
-                                },
-
-                                function (error) {
-                                    reject(error);
-                                });
+                            .then(function () {
+                                resolve();
+                            });
                     }
                     else {
                         resolve();
                     }
                 });
             },
-
-
-            LOAD_EXAM_RUN: function (payload) {
-                var self = this;
-                // Load all the information for the course.
-                // NOTE: This is needed by the exam page key so that
-                // the exam store can load the exam and question related
-                // to the single exam of the course.
-                // Just make sure the single course is loaded.
-                return new Promise(function (resolve, reject) {
-                    var course;
-                    // Get the course if the course does not
-                    // already exist.
-                    if (!self.courseWithId(payload.courseId)) {
-                        // Don't have the course, need to fetch it.
-                        course = new Course();
-                        course.id = payload.courseId;
-                        self._fetchCourse(course)
-                            .then(
-                                function () {
-                                    resolve();
-                                },
-
-                                function (error) {
-                                    reject(error);
-                                });
-                    }
-                    else {
-                        resolve();
-                    }
-                });
-            },
-
 
             LOGIN: function (payload) {
                 // When the user is logged in, we need to get course data.
@@ -453,7 +358,6 @@ var Stores = require('../stores'),
                                     self.emit(Constants.Event.DID_FETCH_COURSES);
                                 });
             }
-
             
         },
 
@@ -461,6 +365,13 @@ var Stores = require('../stores'),
         query: {
 
             filter: {
+
+                courseWithId: Query.createQuery(function (data) {
+                    var courseId = this.params[0];
+                    return data.filter(function (course) {
+                        return courseId === course.id;
+                    });
+                }),
 
                 coursesForUser: Query.createQuery(function (data) {
                     var user = this.params[0];
