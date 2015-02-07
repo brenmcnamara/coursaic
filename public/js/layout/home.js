@@ -118,17 +118,8 @@ var React = require('react'),
 
             return (
                 <SectionSet>
-                    <SectionSet.Section>
-                        <SectionSet.Section.Header>My Courses</SectionSet.Section.Header>
-                        <div className="divide"></div>
-                        
-                        <SectionSet.Section.Empty>
-                            There are no courses here yet.
-                        </SectionSet.Section.Empty>
-                    </SectionSet.Section>
-
+                    <MyCourses />
                     <PopularCourses />
-
                 </SectionSet>
 
             );
@@ -141,7 +132,33 @@ var React = require('react'),
     MyCourses = React.createClass({
 
         render: function () {
+            var user = UserStore.getOne(UserStore.query.current()),
+                courses = CourseStore.getAll(CourseStore.query.filter.coursesForUser(user)),
 
+                courseBoxes = courses.map(function (course) {
+                    return <CourseBox key={ course.id } course={ course } />
+                }),
+
+                // If there are no courses, then render a message saying there
+                // are no courses in this section.
+                renderContent = (courseBoxes.length === 0) ?
+                             (<SectionSet.Section.Empty>
+                                There are no courses here yet.
+                             </SectionSet.Section.Empty>) :
+
+                             (<div className="pure-g course-grid">
+                                { courseBoxes }
+                              </div>);
+            
+            return (
+                <SectionSet.Section>
+                    <SectionSet.Section.Header>My Courses</SectionSet.Section.Header>
+                    <div className="divide"></div>
+                    
+                    { renderContent }
+
+                </SectionSet.Section>
+            );
         }
 
     }),
@@ -163,21 +180,21 @@ var React = require('react'),
 
                 // If there are no courses, then render a message saying there
                 // are no courses in this section.
-                renderGrid = (courseBoxes.length === 0) ?
+                renderContent = (courseBoxes.length === 0) ?
                              (<SectionSet.Section.Empty>
                                 There are no courses here yet.
                              </SectionSet.Section.Empty>) :
 
-                             (courseBoxes);
+                             (<div className="pure-g course-grid">
+                                { courseBoxes }
+                              </div>);
             
             return (
                 <SectionSet.Section>
                     <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
                     <div className="divide"></div>
                     
-                    <div className="pure-g course-grid">
-                        { renderGrid }
-                    </div>
+                    { renderContent }
 
                 </SectionSet.Section>
             );

@@ -207,7 +207,6 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
-
             LOGIN: function (payload) {
                 // Check if the user is already logged in.
                 if (this._currentUser()) {

@@ -24,6 +24,9 @@
 .course-box__content {
     display: flex;
     display: -webkit-flex;
+
+    cursor: pointer;
+
     flex-direction: column;
     -webkit-flex-direction: column;
     margin: .5em;
