@@ -286,11 +286,11 @@
 
     .notify__form {
         font-size: 1.1em;
-	width: 41.67%;
+        width: 41.67%;
     }
     
     .notify__subhead {
-	margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
   }
 
 }
@@ -298,16 +298,16 @@
 @media screen and (max-width: 36em) {
 
     .notify {
-	top: 40%;
+        top: 40%;
     }
     
     .notify__form {
-	font-size: 1.2em;
+        font-size: 1.2em;
         width: 12.5em;
     }
     
     .notify__subhead {
-	margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
     }
 
 }
