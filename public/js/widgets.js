@@ -131,12 +131,29 @@ PieChart.prototype = {
         var self = this,
             centerX = this._context.canvas.width / 2,
             centerY = this._context.canvas.height / 2,
-            radius = Math.min(centerX, centerY);
+            radius = Math.min(centerX, centerY),
 
-        this._data.forEach(function (segMap, index) {
-            self._drawSegment(index);
-        });
+            totalSize = this._data.reduce(function (memo, segMap) {
+                return memo + segMap.value;
+            }, 0);
 
+        if (totalSize === 0) {
+            // The value of all elements is 0, just fill in the pie
+            // chart with a black color.
+            this._context.beginPath();
+            this._context.moveTo(centerX, centerY);
+            this._context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+            this._context.closePath();
+
+            this._context.fillStyle = "black";
+            this._context.fill();
+        }
+        else {
+            this._data.forEach(function (segMap, index) {
+                self._drawSegment(index);
+            });
+        }
+    
         // Clear the middle of the circle.
         this._context.save();
         this._context.beginPath();

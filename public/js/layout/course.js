@@ -402,23 +402,23 @@ var React = require('react'),
                 data = [
                     {
                         color: '#0001d6',
-                        value: 12
+                        value: 0
                     },
                     {
                         color: '#01af00',
-                        value: 22
+                        value: 0
                     },
                     {
                         color: '#681eab',
-                        value: 21
+                        value: 0
                     },
                     {
                         color: '#FFFF00',
-                        value: 32
+                        value: 0
                     },
                     {
                         color: '#EC0000',
-                        value: 15
+                        value: 0
                     }
 
                 ],
