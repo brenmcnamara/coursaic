@@ -280,14 +280,13 @@
 
 @media screen and (max-width: 48em) {
   
-  
     .notify {
-	top: 45%;
+        top: 45%;
     }
 
     .notify__form {
-	font-size: 1.1em;
-        width: 41.67%;
+        font-size: 1.1em;
+	width: 41.67%;
     }
     
     .notify__subhead {
