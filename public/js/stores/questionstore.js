@@ -126,6 +126,17 @@ var Stores = require('../stores'),
                     return data.filter(function (question) {
                         return question.get('course').id === course.id;
                     });
+                }),
+
+                questionsForTopics: Query.createQuery(function (data) {
+                    // Keep in mind that the topics array is a
+                    // pseudo-array.
+                    var topics = this.params;
+                    return data.filter(function (question) {
+                        return [].reduce.call(topics, function (hasTopic, topic) {
+                            return hasTopic || question.get('topic').id === topic.id;
+                        }, false);
+                    });
                 })
 
             }

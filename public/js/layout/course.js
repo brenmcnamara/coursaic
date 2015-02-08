@@ -15,10 +15,11 @@ var React = require('react'),
     PopupsLayout = require('./popups.js'),
 
     Stores = require('../stores'),
-    PageStore = Stores.PageStore(),
     CourseStore = Stores.CourseStore(),
-    UserStore = Stores.UserStore(),
+    PageStore = Stores.PageStore(),
+    QuestionStore = Stores.QuestionStore(),
     TopicStore = Stores.TopicStore(),
+    UserStore = Stores.UserStore(),
 
     Formatter = require('../formatter.js'),
 
@@ -344,6 +345,7 @@ var React = require('react'),
 
         render: function () {
             var course = this.props.course,
+                // An array of colors, each topic is assigned a color.
                 colors = this.state.colors,
                 topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
 
@@ -352,18 +354,9 @@ var React = require('react'),
                             {
                                 topics.map(function (topic, index) {
                                     return (
-                                        <div className="question-data__legend__item">
-                                            <div className="question-data__legend__item__color"
-                                                  style= { { backgroundColor: colors[index] } } ></div>
-                                            <div className="question-data__legend__item__text">
-                                                <span className="question-data__legend__item__text__topic">
-                                                    { topic.get('name') }
-                                                </span>
-                                                <span className="question-data__legend__item__text__question">
-                                                    12 questions
-                                                </span>
-                                            </div>   
-                                        </div>
+                                        <Sections_Overview_ByTopic_LegendItem key={ topic.id }
+                                                                              color={ colors[index] }
+                                                                              topic={ topic } />
                                     );
                                 })
                             }
@@ -431,6 +424,36 @@ var React = require('react'),
                 canvas.height = canvas.offsetHeight;
                 chart.render();
                 
+        }
+
+    }),
+
+
+    Sections_Overview_ByTopic_LegendItem = React.createClass({
+
+        render: function () {
+            var topic = this.props.topic,
+                color = this.props.color,
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForTopics(topic)),
+                questionCount = questions.length,
+
+                renderQuestionCount = (questionCount === 1)
+                    ? "1 question" : questionCount + " questions";
+
+            return (
+                <div className="question-data__legend__item">
+                    <div className="question-data__legend__item__color"
+                          style= { { backgroundColor: color } } ></div>
+                    <div className="question-data__legend__item__text">
+                        <span className="question-data__legend__item__text__topic">
+                            { topic.get('name') }
+                        </span>
+                        <span className="question-data__legend__item__text__question">
+                            { renderQuestionCount }
+                        </span>
+                    </div>   
+                </div>
+            );
         }
 
     }),
