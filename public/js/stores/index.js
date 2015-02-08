@@ -17,14 +17,12 @@ module.exports = {
         return cache.CourseStore;
     },
 
-
     ExamStore: function () {
         if (!cache.ExamStore) {
             cache.ExamStore = require('./examstore.js');
         }
         return cache.ExamStore;
     },
-
 
     PageStore: function () {
         if (!cache.PageStore) {
@@ -33,6 +31,12 @@ module.exports = {
         return cache.PageStore;
     },
 
+    TopicStore: function () {
+        if (!cache.TopicStore) {
+            cache.TopicStore = require('./topicstore.js');
+        }
+        return cache.TopicStore;
+    },
 
     UserStore: function () {
         if (!cache.UserStore) {
@@ -40,6 +44,5 @@ module.exports = {
         }
         return cache.UserStore;
     }
-
 
 };

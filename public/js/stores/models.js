@@ -79,7 +79,6 @@ var
          *  user from.
          */
          unenroll: function (course) {
-            console.log("Unenrolling.");
             var enrolled = this.get('enrolled') || [],
                 courseIndex;
 
@@ -105,6 +104,14 @@ var
 
 
     /**
+     * Represents a Topic within a course.
+     *
+     * @module Models
+     * @class 
+     */
+    Topic = Parse.Object.extend("Topic"),
+
+    /**
      * Represents a single field.
      *
      * @module Models
@@ -120,15 +127,6 @@ var
      * @class Course
      */
     Course = Parse.Object.extend("Course"),
-
-
-    /**
-     * Represents a single school.
-     *
-     * @module Models
-     * @class School
-     */
-    School = Parse.Object.extend("School"),
 
 
     /**
@@ -319,7 +317,10 @@ module.exports = {
     ExamRun: ExamRun,
     Field: Field,
     Question: Question,
-    School: School,
-    User: User
+    // TODO: Delete me!
+    School: Parse.Object.extend("School"),
+    Topic: Topic,
+    User: User,
+
 
 };

@@ -11,7 +11,7 @@ window.onload = function () {
         
         dispatcher: {
             stores: [Stores.CourseStore(), Stores.ExamStore(),
-                     Stores.PageStore(), Stores.UserStore()],
+                     Stores.PageStore(), Stores.UserStore(), Stores.TopicStore() ],
 
             // Validator that gets called before the action
             // is propogated through the stores. This assumes that

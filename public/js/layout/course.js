@@ -18,6 +18,7 @@ var React = require('react'),
     PageStore = Stores.PageStore(),
     CourseStore = Stores.CourseStore(),
     UserStore = Stores.UserStore(),
+    TopicStore = Stores.TopicStore(),
 
     Formatter = require('../formatter.js'),
 
@@ -45,20 +46,40 @@ var React = require('react'),
      */
     Root = React.createClass({
         
+        render: function () {
+            var user = UserStore.getOne(UserStore.query.current()),
+                courseId = PageStore.courseId(),
+                course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+
+            if (user.isOwner(course)) {
+                return <Root_Owner course={course} />;
+            }
+            else {
+                return <Root_User course={course} />;
+            }
+        }
+
+    }),
+
+
+    /**
+     * The root of the course page for
+     * owners of the course.
+     */
+    Root_Owner = React.createClass({
+
         render: function() {
-            console.log("Re-rendering.");
-            var courseId = PageStore.courseId(),
-                course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId)),
+            var course = this.props.course
                 menu = [
-                (<a href="#">Logout</a>)
-            ];
+                    (<a href="#">Logout</a>)
+                ];
 
             return (
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
                         <CourseDashboard course={ course } />
-                        <Sections course={ course } />
+                        <Sections_Owner course={ course } />
                     </div>
                     
                 </div>
@@ -81,6 +102,47 @@ var React = require('react'),
 
     }),
 
+
+    /**
+     * The root of the course page for
+     * normal users of the course. This includes
+     * anyone who is not enrolled in the course.
+     */
+    Root_User = React.createClass({
+        
+        render: function() {
+            var course = this.props.course,
+                menu = [
+                    (<a href="#">Logout</a>)
+                ];
+
+            return (
+                <div className="main">
+                    <HeaderLayout.Header menu={ menu } />
+                    <div className="content-wrapper">
+                        <CourseDashboard course={ course } />
+                        <Sections_User course={ course } />
+                    </div>
+                    
+                </div>
+            );
+        },
+
+        onChange: function() {
+            this.forceUpdate();
+        },
+
+        componentWillMount: function() {
+            Stores.CourseStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
+        },
+
+        componentWillUnmount: function() {
+            Stores.CourseStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
+        }
+
+    }),
 
     /**
      * The dashboard under the header element
@@ -192,7 +254,7 @@ var React = require('react'),
     }),
 
 
-    Sections = React.createClass({
+    Sections_Owner = React.createClass({
 
         render: function () {
             return (
@@ -205,6 +267,21 @@ var React = require('react'),
             );
         }
 
+
+    }),
+
+
+    Sections_User = React.createClass({
+
+        render: function () {
+            return (
+                <SectionSet>
+                    <Sections_Description course={ this.props.course }/>
+                    <Sections_Overview course={ this.props.course } />
+                    <Sections_MyQuestions course={ this.props.course }/>
+                </SectionSet>
+            );
+        }
 
     }),
 
@@ -249,7 +326,7 @@ var React = require('react'),
                 <SectionSet.Section>
                     <SectionSet.Section.Header>Overview</SectionSet.Section.Header>
                     <div className="divide" />
-                    <Sections_Overview_ByTopic />
+                    <Sections_Overview_ByTopic course={ this.props.course } />
                     <Sections_Overview_TakeExam />
                 </SectionSet.Section>
             );
@@ -260,7 +337,39 @@ var React = require('react'),
 
     Sections_Overview_ByTopic = React.createClass({
 
+        getInitialState: function () {
+            // Load the colors of the different topics.
+            return { colors: ['#0001d6', '#EC0000', '#FFFF00', '#01af00', '#681eab' ] };
+        },
+
         render: function () {
+            var course = this.props.course,
+                colors = this.state.colors,
+                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+
+                renderTopicLegend = (topics.length) ? (
+                        <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
+                            {
+                                topics.map(function (topic, index) {
+                                    return (
+                                        <div className="question-data__legend__item">
+                                            <div className="question-data__legend__item__color"
+                                                  style= { { backgroundColor: colors[index] } } ></div>
+                                            <div className="question-data__legend__item__text">
+                                                <span className="question-data__legend__item__text__topic">
+                                                    { topic.get('name') }
+                                                </span>
+                                                <span className="question-data__legend__item__text__question">
+                                                    12 questions
+                                                </span>
+                                            </div>   
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+                    ) : (null);
+
             return (
                 <SectionSet.Section.Subsection>
                     <SectionSet.Section.Subsection.Header>
@@ -272,57 +381,7 @@ var React = require('react'),
                                     id="js-question-data__pie-chart">
                             </canvas>
                         </div>
-                        <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
-                            <div className="question-data__legend__item">
-                                <div className="question-data__legend__item__color"
-                                      style= { { backgroundColor: '#0001d6' } } ></div>
-                                <div className="question-data__legend__item__text">
-                                    <span className="question-data__legend__item__text__topic">
-                                        Java Syntax
-                                    </span>
-                                    <span className="question-data__legend__item__text__question">
-                                        12 questions
-                                    </span>
-                                </div>   
-                            </div>
-                            <div className="question-data__legend__item">
-                                <div className="question-data__legend__item__color"
-                                      style= { { backgroundColor: '#01af00' } } ></div>
-                                <div className="question-data__legend__item__text">
-                                    <span className="question-data__legend__item__text__topic">
-                                        Compiler/Runtime Errors
-                                    </span>
-                                    <span className="question-data__legend__item__text__question">
-                                        22 questions
-                                    </span>
-                                </div>
-                                
-                            </div>
-                            <div className="question-data__legend__item">
-                                <div className="question-data__legend__item__color"
-                                      style= { { backgroundColor: '#FFFF00' } } ></div>
-                                <div className="question-data__legend__item__text">
-                                    <span className="question-data__legend__item__text__topic">
-                                        Looping Constructs
-                                    </span>
-                                    <span className="question-data__legend__item__text__question">
-                                        32 questions
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="question-data__legend__item">
-                                <span className="question-data__legend__item__color"
-                                      style= { { backgroundColor: '#EC0000' } } ></span>
-                                <div className="question-data__legend__item__text">
-                                    <span className="question-data__legend__item__text__topic">
-                                        Algorithms
-                                    </span>
-                                    <span className="question-data__legend__item__text__question">
-                                        15 questions
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                        { renderTopicLegend }
                     </div>
                 </SectionSet.Section.Subsection>
             );

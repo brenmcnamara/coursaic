@@ -263,27 +263,9 @@ var Stores = require('../stores'),
 
 
         /**
-         * Get the current course for the page.
-         *
-         * @method current
-         *
-         * @return {Course} The current course. If the pageKey
-         *  is not 'course', this will return null.
-         */
-        currentCourse: function() {
-            // TODO: Maybe make this throw an
-            // error if the current key is not called on
-            // the correct page.
-            return (Stores.PageStore().courseId()) ?
-                    this.courseWithId(Stores.PageStore().courseId()) :
-                    null;
-        },
-
-
-        /**
          * A variadic method that takes query objects
          * and generates a single course after performing
-         * all the queries. If multiple users exist from
+         * all the queries. If multiple courses exist from
          * the queries, then the first one in the set
          * will be returned.
          *
