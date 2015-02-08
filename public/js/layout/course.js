@@ -361,12 +361,16 @@ var React = require('react'),
                                 })
                             }
                         </div>
-                    ) : (null);
+                    ) : (null),
+
+                renderTopicCount = (topics.length === 1) ?
+                    (<span>There is <span className="emphasis">1 topic</span> of questions</span>) :
+                    (<span>There are <span className="emphasis">{ topics.length } topics</span> of questions</span>);
 
             return (
                 <SectionSet.Section.Subsection>
                     <SectionSet.Section.Subsection.Header>
-                        There are <span className="emphasis">4 topics</span> of questions
+                        { renderTopicCount }
                     </SectionSet.Section.Subsection.Header>
                     <div className="question-data pure-g">
                         <div className="question-data__pie-chart-wrapper pure-u-1 pure-u-md-2-5 pure-u-lg-1-4">
@@ -390,31 +394,22 @@ var React = require('react'),
         },
 
         renderPieChart: function () {
-            // TODO: Move these colors to the page store.
-            var 
-                data = [
-                    {
-                        color: '#0001d6',
-                        value: 0
-                    },
-                    {
-                        color: '#01af00',
-                        value: 0
-                    },
-                    {
-                        color: '#681eab',
-                        value: 0
-                    },
-                    {
-                        color: '#FFFF00',
-                        value: 0
-                    },
-                    {
-                        color: '#EC0000',
-                        value: 0
-                    }
+            // TODO: If there are too many topics, should render
+            // "other" section. Limiting to 5 topics max.
+            var colors = this.state.colors,
+                course = this.props.course,
+                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+                data = topics.map(function (topic, index) {
+                    var questions =
+                            QuestionStore.getAll(QuestionStore.query.filter.questionsForTopics(topic));
 
-                ],
+                    return {
+                        color: colors[index],
+                        value: questions.length
+                    };
+
+                }),
+
                 canvas = document.getElementById('js-question-data__pie-chart'),
                 context = canvas.getContext('2d'),
                 chart = new widgets.PieChart(context, data);
@@ -423,7 +418,6 @@ var React = require('react'),
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
                 chart.render();
-                
         }
 
     }),
