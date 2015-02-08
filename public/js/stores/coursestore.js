@@ -271,7 +271,7 @@ var Stores = require('../stores'),
          *
          * @method getOne
          *
-         * @return {User} A course object.
+         * @return {Course} A course object.
          */
         getOne: function () {
             return this.getAll.apply(this, arguments)[0] || null;

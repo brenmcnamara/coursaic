@@ -1,7 +1,7 @@
 /**
- * topicstore.js
+ * questionstore.js
  *
- * A store for all the topics in any course.
+ * A store that manages all the course questions.
  */
 
 var Stores = require('../stores'),
@@ -9,118 +9,129 @@ var Stores = require('../stores'),
     Constants = require('../constants.js'),
     StoreBuilder = require('shore').StoreBuilder,
 
-    Course = require('./models.js').Course,
-    Topic = require('./models.js').Topic,
+    Question = require('./models.js').Question,
 
     Query = require('./query.js'),
 
-    TopicStore = StoreBuilder.createStore({
+    /**
+     * A Store containing all data related to
+     * courses.
+     *
+     * @module Store
+     * @class QuestionStore
+     */
+    QuestionStore = StoreBuilder.createStore({
 
         /***********************************\
                    PRIVATE METHODS
         \***********************************/
 
-        _topicsForCourse: function (course) {
+        _fetchQuestionsForCourse: function (course) {
             var self = this,
-                asyncQuery = new Parse.Query(Topic);
+                asyncQuery = new Parse.Query(Question);
 
-            asyncQuery.equalTo("course", course);
+            asyncQuery.equalTo('course', course);
 
-            return asyncQuery.find().then(function (topics) {
-                topics.forEach(function (topic) {
-                    self._topicHash[topic.id] = topic;
+            return asyncQuery.find().then(function (questions) {
+                questions.forEach(function (question) {
+                    self._questionHash[question.id] = question;
                 });
             });
         },
 
-        _topicList: function () {
-            var topics = [],
+
+        _getQuestionList: function () {
+            var list = [],
                 prop;
-            for (prop in this._topicHash) {
-                if (this._topicHash.hasOwnProperty(prop)) {
-                    topics.push(this._topicHash[prop]);
+
+            for (prop in this._questionHash) {
+                if (this._questionHash.hasOwnProperty(prop)) {
+                    list.push(this._questionHash[prop]);
                 }
             }
-            return topics;
+            return list;
         },
+
 
         /***********************************\
                     PUBLIC METHODS
         \***********************************/
 
         initialize: function () {
-            this._topicHash = {};
+            this._questionHash = {};
         },
+
 
         /**
          * A variadic method that takes query objects
-         * and generates a single topic after performing
-         * all the queries. If multiple topics exist from
+         * and generates a single question after performing
+         * all the queries. If multiple questions exist from
          * the queries, then the first one in the set
          * will be returned.
          *
          * @method getOne
          *
-         * @return {Topic} A topic object.
+         * @return {Question} A Question object.
          */
         getOne: function () {
             return this.getAll.apply(this, arguments)[0] || null;
         },
 
+
         /**
          * A variadic method that takes query objects
-         * and generates a set of topics after performing
+         * and generates a set of courses after performing
          * all the queries.
          *
          * @method getAll
          *
-         * @return {Array} An array of topics.
+         * @return {Array} An array of courses.
          */
         getAll: function () {
             return [].reduce.call(arguments, function (memo, query) {
                 return query(memo);
-            }, this._topicList());
+            }, this._getQuestionList());
         },
 
+
         /***********************************\
-                     NAMESPACES
+                      NAMESPACES
         \***********************************/
 
         actionHandler: {
 
             LOAD_COURSE: function (payload) {
                 var self = this;
+
                 return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
 
-                // Course Store has completed.
+                // Done calling the Course Store.
                 .then(function () {
                     var CourseStore = Stores.CourseStore(),
                         courseId = payload.courseId,
                         course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
 
-                    return self._topicsForCourse(course);
+                    return self._fetchQuestionsForCourse(course);
                 });
-            }
 
+            }
         },
 
         query: {
 
             filter: {
 
-                topicsForCourse: Query.createQuery(function (data) {
+                questionsForCourse: Query.createQuery(function (data) {
                     var course = this.params[0];
-
-                    return data.filter(function (topic) {
-                        return topic.get('course').id === course.id;
+                    return data.filter(function (question) {
+                        return question.get('course').id === course.id;
                     });
                 })
 
             }
+
         }
 
     });
 
-module.exports = new TopicStore();
-
-
+module.exports = new QuestionStore();

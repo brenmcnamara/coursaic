@@ -43,6 +43,13 @@ module.exports = {
             cache.UserStore = require('./userstore.js');
         }
         return cache.UserStore;
+    },
+
+    QuestionStore: function () {
+        if (!cache.QuestionStore) {
+            cache.QuestionStore = require('./questionstore.js');
+        }
+        return cache.QuestionStore;
     }
 
 };

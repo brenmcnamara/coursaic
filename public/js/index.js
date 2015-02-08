@@ -10,7 +10,7 @@ window.onload = function () {
     shore.config({
         
         dispatcher: {
-            stores: [Stores.CourseStore(), Stores.ExamStore(),
+            stores: [Stores.CourseStore(), Stores.ExamStore(), Stores.QuestionStore(),
                      Stores.PageStore(), Stores.UserStore(), Stores.TopicStore() ],
 
             // Validator that gets called before the action
