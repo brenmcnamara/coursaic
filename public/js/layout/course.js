@@ -551,12 +551,15 @@ var React = require('react'),
 
         renderProgressBar: function () {
             var
+                course = this.props.course,
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
                 data = {
-                    total: 47,
-                    current: 42,
-                    selected: 37
+                    total: questions.length,
+                    current: questions.length,
+                    selected: questions.length
                 },
 
                 bar = new widgets.ProgressBar(context, data);
@@ -615,9 +618,6 @@ var React = require('react'),
         }
 
     }),
-
-
-
 
 
     Sections_FlaggedQuestions = React.createClass({

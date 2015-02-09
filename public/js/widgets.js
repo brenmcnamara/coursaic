@@ -270,6 +270,7 @@ PieChart.prototype = {
 ProgressBar = function (context, data) {
     this._context = context;
     this._data = data;
+    this._xPadding = 20;
 };
 
 
@@ -282,7 +283,11 @@ ProgressBar.prototype = {
      * @method render
      */
     render: function () {
-        this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+        this._context.clearRect(this._xPadding,
+                                0,
+                                this._context.canvas.width - 2 * this._xPadding,
+                                this._context.canvas.height);
+
         this._renderWithData(this._data);
     },
 
@@ -406,8 +411,8 @@ ProgressBar.prototype = {
 
             canvasHeight = this._context.canvas.height,
             barHeight = Math.min(canvasHeight * BAR_PORTION, 40),
-            width = this._context.canvas.width,
-            startX = 0,
+            width = this._context.canvas.width - 2 * this._xPadding,
+            startX = this._xPadding,
             startY = (canvasHeight - barHeight) / 2,
             
             currentRatio = data.current / data.total,
@@ -449,14 +454,14 @@ ProgressBar.prototype = {
         this._context.strokeStyle = "#4A90E2";
         
 
-        this._renderTooltip(width * selectedRatio,
+        this._renderTooltip(startX + width * selectedRatio,
                             startY - TOOLTIP_PADDING,
                             Math.floor(data.selected),
                             { direction: "up" });
 
         // Only render the tooltip for "current" if it is not the same as selected.
         if (Math.floor(data.selected) !== Math.floor(data.current)) {
-            this._renderTooltip(width * currentRatio,
+            this._renderTooltip(startX + width * currentRatio,
                                 barHeight + startY + TOOLTIP_PADDING,
                                 Math.floor(data.current));
         }
