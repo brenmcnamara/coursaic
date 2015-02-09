@@ -328,7 +328,7 @@ var React = require('react'),
                     <SectionSet.Section.Header>Overview</SectionSet.Section.Header>
                     <div className="divide" />
                     <Sections_Overview_ByTopic course={ this.props.course } />
-                    <Sections_Overview_TakeExam />
+                    <Sections_Overview_TakeExam course={ this.props.course } />
                 </SectionSet.Section>
             );
         }
@@ -456,10 +456,42 @@ var React = require('react'),
     Sections_Overview_TakeExam = React.createClass({
 
         render: function () {
+            var course = this.props.course,
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course));
+
+            if (questions.length === 0) {
+                return (<Sections_Overview_TakeExam_Issue issue="You cannot take a practice exam because there are no questions for this course." />);
+            }
+            else {
+                return (<Sections_Overview_TakeExam_Content course={ course } />);
+            }
+        }
+
+    }),
+
+
+    /**
+     * The component that a user interacts with if they want to
+     * configure the options for taking an exam and start the
+     * exam taking process.
+     *
+     * NOTE: This component assumes that there is at least 1 question
+     * for this course.
+     */
+    Sections_Overview_TakeExam_Content = React.createClass({
+
+        render: function () {
+            var course = this.props.course,
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course));
+
+                renderQuestionCount = (questions.length === 1) ?
+                    (<span>There is only <span className="emphasis">1 question.</span></span>) :
+                    (<span>There are <span className="emphasis">{ questions.length } questions</span> total.</span>);
+
             return (
                 <SectionSet.Section.Subsection>
                     <SectionSet.Section.Subsection.Header>
-                        There are <span className="emphasis">56 questions</span> total
+                        { renderQuestionCount }
                     </SectionSet.Section.Subsection.Header>
                     <div className="question-filter">
                         <div className="question-filter__section question-filter__bar-wrapper">
@@ -533,6 +565,25 @@ var React = require('react'),
             canvas.height = canvas.offsetHeight;
 
             bar.render();
+        }
+
+    }),
+
+
+    /**
+     * This component is rendered instea of the
+     * Sections_Overview_TakeExam_Issue.
+     */
+    Sections_Overview_TakeExam_Issue = React.createClass({
+
+        render: function () {
+            return (
+                <SectionSet.Section.Subsection>
+                    <SectionSet.Section.Error>
+                        { this.props.issue }
+                    </SectionSet.Section.Error>
+                </SectionSet.Section.Subsection>
+            );
         }
 
     }),

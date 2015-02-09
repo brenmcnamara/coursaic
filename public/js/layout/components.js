@@ -255,6 +255,19 @@ var React = require('react'),
     });
 
 
+    SectionSet.Section.Error = React.createClass({
+
+        render: function () {
+            return (
+                <div className="section__error">
+                    <i className="fa fa-exclamation-circle" />
+                    <div>{this.props.children }</div>
+                </div>
+            );
+        }
+
+    });
+
     TagSet.Tag = React.createClass({
 
         render: function () {

@@ -134,9 +134,11 @@
     /* Same a subheader text-indent */
     margin-left: 1em;
     position: relative;
+    font-size: 1.3em;
 }
 
     .section__error i {
+        color: #EC0000;
         position: absolute;
         font-size: 1.5em;
     }
