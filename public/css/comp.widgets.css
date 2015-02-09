@@ -690,6 +690,7 @@
     margin-bottom: 3em;
     
     top: 50%;
+    /*Maybe reduce top value based on reduced width */
     
     max-width: 100%;
     width: 100%;
@@ -712,7 +713,7 @@
 .notify__subhead {
     text-align: center;
     font-size: 1.3em;
-    margin: 1em 5em;
+    margin: 1em 5em; 
 }
 
 
@@ -723,9 +724,35 @@
 }
 
 @media screen and (max-width: 48em) {
+  
+    .notify {
+        top: 45%;
+    }
 
     .notify__form {
-        width: 10em;
+        font-size: 1.1em;
+        width: 41.67%;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+  }
+
+}
+
+@media screen and (max-width: 36em) {
+
+    .notify {
+        top: 40%;
+    }
+    
+    .notify__form {
+        font-size: 1.2em;
+        width: 12.5em;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
     }
 
 }
