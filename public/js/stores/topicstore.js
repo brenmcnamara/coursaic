@@ -114,6 +114,17 @@ var Stores = require('../stores'),
                     return data.filter(function (topic) {
                         return topic.get('course').id === course.id;
                     });
+                }),
+
+                topicsForIds: Query.createQuery(function (data) {
+                    // Keep in mind topicIds is a pseudo-array.
+                    var topicIds = this.params;
+
+                    return data.filter(function (topic) {
+                        return [].reduce.call(topicIds, function (hasTopicId, topicId) {
+                            return hasTopicId || topicId === topic.id;
+                        }, false);
+                    });
                 })
 
             }

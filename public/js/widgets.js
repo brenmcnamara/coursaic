@@ -283,9 +283,9 @@ ProgressBar.prototype = {
      * @method render
      */
     render: function () {
-        this._context.clearRect(this._xPadding,
+        this._context.clearRect(0,
                                 0,
-                                this._context.canvas.width - 2 * this._xPadding,
+                                this._context.canvas.width,
                                 this._context.canvas.height);
 
         this._renderWithData(this._data);
@@ -293,63 +293,55 @@ ProgressBar.prototype = {
 
 
     /**
-     * Change the "current" value of the progress bar.
+     * Change the values of the progress bar. This can be
+     * animated.
      *
-     * @method changeCurrent
+     * @method change
      *
-     * @param val {Number} The value to set "current" to.
+     * @param changeMap {Object} The set of changes to make
+     *  to the data.
      *
-     * @param options {Object} Any options to configure the
-     *  setting.
+     * @param options {Object} Any extra options to add to the
+     *  change of the element. This may include a silent change
+     *  or an animated change.
      */
-    changeCurrent: function (val, options) {
+    change: function (changeMap, options) {
+        var current = changeMap.current,
+            selected = changeMap.selected;
 
         options = options || {};
 
-        if (!options.silent) {
-
-            if (options.animate) {
-                this._animateChange({ total: this._data.total,
-                                      current: val,
-                                      selected: Math.min(this._data.selected, val) },
-                                    EasingFunctions.easeOutQuad);
-            }
-            else {
-                this._data.current = val;
-                this._data.selected = Math.min(this._data.selected, val);
-                this.render();
-            }
-
+        if (+current !== +current) {
+            // Current value was not added to the
+            // change map.
+            current = this._data.current;
         }
-    },
 
-
-    /**
-     * Change the "selected" value of the progress bar.
-     *
-     * @method changeSelected
-     *
-     * @param val {Number} The value to change the "selected"
-     *  value to.
-     *
-     * @param options {Object} Any options used to configure the
-     *  setting of selected.
-     */
-    changeSelected: function (val, options) {
-        options = options || {};
-
-        if (!options.silent) {
-
-            if (options.animate) {
-                this._animateChange({ total: this._data.total, selected: val, current: this._data.current },
-                                    EasingFunctions.easeOutQuad);
-            }
-            else {
-                this._data.selected = val;
-                this.render();
-            }
-
+        if (+selected !== +selected) {
+            selected = this._data.selected;
         }
+
+        if (options.silent) {
+            // Change the state without re-rendering the bar.
+            this._data.current = current;
+            this._data.selected = selected;
+            return;
+        }
+
+        if (options.animate) {
+            this._animateChange({ 
+                total: this._data.total,
+                selected: selected,
+                current: current
+            },
+            EasingFunctions.easeOutQuad);
+        }
+        else {
+            this._data.current = current;
+            this._data.selected = selected;
+            this.render();
+        }
+
     },
 
 
@@ -406,8 +398,11 @@ ProgressBar.prototype = {
      */
     _renderWithData: function (data) {
         var
+            RATIO_OFFSET = 0.01,
             BAR_PORTION = 0.35,
             TOOLTIP_PADDING = 2,
+
+            NORMALIZED_RATIO_OFFSET = RATIO_OFFSET / (1 - RATIO_OFFSET),
 
             canvasHeight = this._context.canvas.height,
             barHeight = Math.min(canvasHeight * BAR_PORTION, 40),
@@ -415,8 +410,11 @@ ProgressBar.prototype = {
             startX = this._xPadding,
             startY = (canvasHeight - barHeight) / 2,
             
-            currentRatio = data.current / data.total,
-            selectedRatio = data.selected / data.total;
+            // Add a bit of extra value to the ratio
+            // so that the bar still shows when the
+            // current or selected value is 0.
+            currentRatio = ((data.current / data.total) + NORMALIZED_RATIO_OFFSET) / (1 + NORMALIZED_RATIO_OFFSET),
+            selectedRatio = ((data.selected / data.total) + NORMALIZED_RATIO_OFFSET) / (1 + NORMALIZED_RATIO_OFFSET);
 
         if (data.total < data.current || data.total < data.selected) {
             throw Error("The total value of the progress bar cannot " +

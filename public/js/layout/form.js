@@ -74,6 +74,25 @@ var
             );
         }
 
+    }),
+
+    Checkbox = React.createClass({
+
+        render: function () {
+            // TODO: Why do I need pure-u-1 to fix the styling. How can I do this without
+            // adding that?
+            var renderCheckbox = (this.props.checked) ?
+                (<input type="checkbox" onChange={ this.props.onChange } name={ this.props.name } value={ this.props.value } defaultChecked />) :
+                (<input type="checkbox" onChange={ this.props.onChange } name={ this.props.name } value={ this.props.value } />);
+
+            return (
+                <label htmlFor="cb" className="pure-u-1 pure-checkbox">
+                    { renderCheckbox }
+                    <div>{ this.props.children }</div>
+                </label>
+            );
+        }
+
     });
 
 
@@ -82,6 +101,7 @@ module.exports = {
     RadioOption: RadioOption,
     TextInput: TextInput,
     TextAreaInput: TextAreaInput,
-    Select: Select
+    Select: Select,
+    Checkbox: Checkbox
 
 };

@@ -137,6 +137,19 @@ var Stores = require('../stores'),
                             return hasTopic || question.get('topic').id === topic.id;
                         }, false);
                     });
+                }),
+
+                unflaggedQuestions: Query.createQuery(function (data) {
+                    // TODO: Implement me!
+                    return data;
+                }),
+
+                questionsNotByUser: Query.createQuery(function (data) {
+                    var user = this.params[0];
+
+                    return data.filter(function (question) {
+                        return question.get('author').id !== user.id;
+                    });
                 })
 
             }

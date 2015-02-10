@@ -459,6 +459,9 @@ var React = require('react'),
             var course = this.props.course,
                 questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course));
 
+            // Note that if there are no topics, there can be
+            // no questions. This also takes care of the case where
+            // there are no topics.
             if (questions.length === 0) {
                 return (<Sections_Overview_TakeExam_Issue issue="You cannot take a practice exam because there are no questions for this course." />);
             }
@@ -480,13 +483,116 @@ var React = require('react'),
      */
     Sections_Overview_TakeExam_Content = React.createClass({
 
-        render: function () {
+        getInitialState: function () {
+            console.log("Getting INITIAL STATE");
+            var
+                user = UserStore.getOne(UserStore.query.current()),
+                course = this.props.course,
+                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+
+                // "topics" is an object that maps topic id's to boolean
+                // flags that are true if the topic is selected, false otherwise.
+                // "otherFilters" is an object that maps the name of the filter
+                // to a boolean flag indicating if the filter is selected.
+                initialState = {
+
+                    // Set the defaults of these filters to false,
+                    // indicating that these questions should not be
+                    // removed from the set. Note that checking the filter
+                    // will cause the filter to NOT be added to the list of
+                    // filters.
+                    otherFilters: {
+                        unflaggedQuestions: {
+                            isChecked: true,
+                            filter: QuestionStore.query.filter.unflaggedQuestions()
+                        },
+                        questionsNotByUser: {
+                            isChecked: true,
+                            filter: QuestionStore.query.filter.questionsNotByUser(user)
+                        }
+
+                    },
+        
+                    // Add all the topics to the initial state, default as true.
+                    topics: topics.reduce(function (topicHash, topic) {
+                        topicHash[topic.id] = true;
+                        return topicHash;
+                    }, {})
+
+                };
+
+            return initialState;
+        },
+
+        /**
+         * An array of all the questions that are left after all
+         * the filters have been applies.
+         */
+        remainingQuestions: function () {
             var course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course));
+                allQuestions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+                otherFiltersHash = this.state.otherFilters,
+                topicsHash = this.state.topics,
+                questionFilters = [],
+                topicIds = [],
+                selectedTopics = [],
+                prop;
+
+            for (prop in this.state.topics) {
+                if (topicsHash.hasOwnProperty(prop)) {
+                    // If the topic is selected, then add it to the array.
+                    if (topicsHash[prop]) {
+                        topicIds.push(prop);
+                    }
+                }
+            }
+
+            // Filter out the selected topic ids.
+            selectedTopics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course),
+                                               TopicStore.query.filter.topicsForIds.apply(null, topicIds));
+
+            // Add the selected topics to the question filters.
+            questionFilters.push(
+                QuestionStore.query.filter.questionsForTopics.apply(null, selectedTopics));
+
+            for (prop in otherFiltersHash) {
+
+                if (otherFiltersHash.hasOwnProperty(prop)) {
+                    // Perform these filters only if they are not checked.
+                    if (!otherFiltersHash[prop].isChecked) {
+                        questionFilters.push(otherFiltersHash[prop].filter);
+                    }
+                }
+            }
+
+            // Apply all the filters and get out any relevant questions.
+            return QuestionStore.getAll.apply(QuestionStore, questionFilters);
+        },
+
+        render: function () {
+            var state = this.state,
+                course = this.props.course,
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+
+                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
 
                 renderQuestionCount = (questions.length === 1) ?
                     (<span>There is only <span className="emphasis">1 question.</span></span>) :
-                    (<span>There are <span className="emphasis">{ questions.length } questions</span> total.</span>);
+                    (<span>There are <span className="emphasis">{ questions.length } questions</span> total.</span>),
+
+                // Note: We can assume that there is at least 1 topic filter.
+                renderTopicFilters = topics.map(function (topic) {
+                    return (
+                        <div className="pure-u-1 pure-u-md-1-2">
+                            <FormLayout.Checkbox name="topic-filter"
+                                                 checked={ state.topics[topic.id] }
+                                                 value={ topic.id }
+                                                 onChange={ this.onClickTopicFilter } >
+                                { topic.get('name') }
+                            </FormLayout.Checkbox>
+                        </div>
+                    );
+                }.bind(this));
 
             return (
                 <SectionSet.Section.Subsection>
@@ -510,34 +616,55 @@ var React = require('react'),
                         <div className="pure-u-1 pure-u-md-1-2">
                             <h4>Topics</h4>
                             <div className="question-filter__form__filters pure-g">
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Algorithms</div>
-                                </label>
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Java Syntax</div>
-                                </label>
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Looping Constructs</div>
-                                </label>
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Compiler/Runtime Errors</div>
-                                </label>
+                                { renderTopicFilters }
                             </div>
                         </div>
                         <div className="pure-u-1 pure-u-md-1-2">
                             <h4>Filters</h4>
                             <div className="question-filter__form__filters pure-g">
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Include my questions</div>
-                                </label>
-                                <label htmlFor="cb" className="pure-u-1 pure-u-md-1-2 pure-checkbox">
-                                    <input type="checkbox" /><div>Include flagged questions</div>
-                                </label>
+                                <FormLayout.Checkbox name="other-filter"
+                                                     checked={ state.otherFilters.unflaggedQuestions.isChecked }
+                                                     value="unflaggedQuestions"
+                                                     onChange={ this.onClickOtherFilter } >
+                                    Include Flagged Questions
+                                </FormLayout.Checkbox>
+                                <FormLayout.Checkbox name="other-filter"
+                                                     checked={ state.otherFilters.questionsNotByUser.isChecked }
+                                                     value="questionsNotByUser"
+                                                     onChange={ this.onClickOtherFilter } >
+                                    Include My Questions
+                                </FormLayout.Checkbox>
                             </div>
                         </div> 
                     </div>
                 </SectionSet.Section.Subsection>
             );
+        },
+
+        onClickTopicFilter: function (event) {
+            var topicId = event.target.value,
+                state = this.state,
+                selected;
+
+            // Toggle topic flag.
+            state.topics[topicId] = !state.topics[topicId];
+            // Query the remaining questions after changing the state.
+            selected = this.remainingQuestions().length
+            state.bar.change({ selected: selected, current: selected }, { animate: true });
+            this.setState(state);
+        },
+
+        onClickOtherFilter: function (event) {
+            var filterName = event.target.value,
+                state = this.state,
+                selected;
+
+            // Toggle "isChecked".
+            state.otherFilters[filterName].isChecked = !state.otherFilters[filterName].isChecked;
+            // Get the remaining questions after making changes to the state.
+            selected = this.remainingQuestions().length;
+            state.bar.change({ selected: selected, current: selected }, { animate: true });
+            this.setState(state);
         },
 
         componentDidMount: function () {
@@ -558,16 +685,23 @@ var React = require('react'),
                 context = canvas.getContext('2d'),
                 data = {
                     total: questions.length,
-                    current: questions.length,
-                    selected: questions.length
+                    current: this.remainingQuestions().length,
+                    selected: this.remainingQuestions().length
                 },
 
+                bar = this.state.bar;
+
+            // Lazy instantiation of the bar.
+            if (!this.state.bar) {
                 bar = new widgets.ProgressBar(context, data);
+            }
 
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
             bar.render();
+
+            this.setState({ bar: bar });
         }
 
     }),
@@ -957,26 +1091,21 @@ var React = require('react'),
             }
         },
 
-
         changedMode: function(event) {
             this.forceUpdate();
         },
-
 
         onClick: function() {
             Action.send(Constants.Action.TO_MODE_CREATE_QUESTION, { examId: Stores.ExamStore().current().id });
         },
 
-
         componentWillMount: function() {
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
         },
 
-
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
         }
-
 
     }),
 
