@@ -569,6 +569,10 @@ var React = require('react'),
             return QuestionStore.getAll.apply(QuestionStore, questionFilters);
         },
 
+        /***********************************\
+                      Rendering
+        \***********************************/
+
         render: function () {
             var state = this.state,
                 course = this.props.course,
@@ -613,7 +617,9 @@ var React = require('react'),
                             <div>{ renderRemainingQuestionCount }</div>
                             <div>
                                 <strong><span className="inline-button">Click here</span></strong> to take a practice exam
-                                with <input className="pure-input-1 inline-input--small" type="text" value="37" />questions.
+                                with <input className="pure-input-1 inline-input--small"
+                                            onChange={ this.onChangeSelected }
+                                            type="text" defaultValue="37" />questions.
                             </div>
                         </div>
                     </div>
@@ -646,41 +652,6 @@ var React = require('react'),
             );
         },
 
-        onClickTopicFilter: function (event) {
-            var topicId = event.target.value,
-                state = this.state,
-                selected;
-
-            // Toggle topic flag.
-            state.topics[topicId] = !state.topics[topicId];
-            // Query the remaining questions after changing the state.
-            selected = this.remainingQuestions().length
-            state.bar.change({ selected: selected, current: selected }, { animate: true });
-            this.setState(state);
-        },
-
-        onClickOtherFilter: function (event) {
-            var filterName = event.target.value,
-                state = this.state,
-                selected;
-
-            // Toggle "isChecked".
-            state.otherFilters[filterName].isChecked = !state.otherFilters[filterName].isChecked;
-            // Get the remaining questions after making changes to the state.
-            selected = this.remainingQuestions().length;
-            state.bar.change({ selected: selected, current: selected }, { animate: true });
-            this.setState(state);
-        },
-
-        componentDidMount: function () {
-            this.renderProgressBar();
-            window.addEventListener('resize', this.renderProgressBar);
-        },
-
-        componentWillUnmount: function () {
-            window.removeEventListener('resize', this.renderProgressBar);
-        },
-
         renderProgressBar: function () {
             var
                 course = this.props.course,
@@ -707,6 +678,57 @@ var React = require('react'),
             bar.render();
 
             this.setState({ bar: bar });
+        },
+
+        /***********************************\
+                    Event Handling
+        \***********************************/
+ 
+        /**
+         * Handles click event for if the user changes
+         * which topics are selected for taking an exam.
+         */
+        onClickTopicFilter: function (event) {
+            var topicId = event.target.value,
+                state = this.state,
+                selected;
+
+            // Toggle topic flag.
+            state.topics[topicId] = !state.topics[topicId];
+            // Query the remaining questions after changing the state.
+            selected = this.remainingQuestions().length
+            state.bar.change({ selected: selected, current: selected }, { animate: true });
+            this.setState(state);
+        },
+
+        /**
+         * Handles click event for if the user changes
+         * the filters for the questions.
+         */
+        onClickOtherFilter: function (event) {
+            var filterName = event.target.value,
+                state = this.state,
+                selected;
+
+            // Toggle "isChecked".
+            state.otherFilters[filterName].isChecked = !state.otherFilters[filterName].isChecked;
+            // Get the remaining questions after making changes to the state.
+            selected = this.remainingQuestions().length;
+            state.bar.change({ selected: selected, current: selected }, { animate: true });
+            this.setState(state);
+        },
+
+        /***********************************\
+                     Life Cycle
+        \***********************************/
+
+        componentDidMount: function () {
+            this.renderProgressBar();
+            window.addEventListener('resize', this.renderProgressBar);
+        },
+
+        componentWillUnmount: function () {
+            window.removeEventListener('resize', this.renderProgressBar);
         }
 
     }),
