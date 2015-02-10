@@ -573,6 +573,7 @@ var React = require('react'),
             var state = this.state,
                 course = this.props.course,
                 questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+                remainingQuestions = this.remainingQuestions(),
 
                 topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
 
@@ -592,7 +593,11 @@ var React = require('react'),
                             </FormLayout.Checkbox>
                         </div>
                     );
-                }.bind(this));
+                }.bind(this)),
+
+                renderRemainingQuestionCount = (remainingQuestions.length === 1) ?
+                    (<span><span className="emphasis">Only 1 question</span> after applying filters.</span>) :
+                    (<span><span className="emphasis">{ remainingQuestions.length } questions</span> after applying filters.</span>);
 
             return (
                 <SectionSet.Section.Subsection>
@@ -605,7 +610,7 @@ var React = require('react'),
                                     className="question-filter__bar"></canvas>
                         </div>
                         <div className="question-filter__section question-filter__description">
-                            <div><span className="emphasis">42 questions</span> after applying filters.</div>
+                            <div>{ renderRemainingQuestionCount }</div>
                             <div>
                                 <strong><span className="inline-button">Click here</span></strong> to take a practice exam
                                 with <input className="pure-input-1 inline-input--small" type="text" value="37" />questions.
