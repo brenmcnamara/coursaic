@@ -396,7 +396,20 @@ ProgressBar.prototype = {
             };
 
             self._context.clearRect(0, 0, self._context.canvas.width, self._context.canvas.height);
-            self._renderWithData(self._animationProgress);
+            // If there is any error with rendering the data, then
+            // we need to end the animation and render the
+            // progress bar using the state prior to the
+            // animation.
+            try {
+                self._renderWithData(self._animationProgress);
+            }
+            catch (e) {
+                clearInterval(self._animationId);
+                self._animationId = null;
+                self.render();
+                throw e;
+            }
+
 
             // Clear the interval once the duration has been completed.
             if (steps * DELTA >= ANIMATION_DURATION) {
@@ -462,7 +475,6 @@ ProgressBar.prototype = {
 
         this._context.save();
 
-
         this._context.fillStyle = "rgb(216, 216, 216)";
         fillRoundedRect(this._context, startX, startY, width, barHeight, 5, true, false);
 
@@ -476,7 +488,6 @@ ProgressBar.prototype = {
         // Set the color and stroke of the tool tip.
         this._context.fillStyle = "#4A90E2";
         this._context.strokeStyle = "#4A90E2";
-        
 
         this._renderTooltip(startX + width * selectedRatio,
                             startY - TOOLTIP_PADDING,
@@ -489,8 +500,6 @@ ProgressBar.prototype = {
                                 barHeight + startY + TOOLTIP_PADDING,
                                 Math.floor(data.current));
         }
-    
-        
 
         this._context.restore();
     },
