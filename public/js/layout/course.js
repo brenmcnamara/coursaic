@@ -616,10 +616,10 @@ var React = require('react'),
                         <div className="question-filter__section question-filter__description">
                             <div>{ renderRemainingQuestionCount }</div>
                             <div>
-                                <strong><span className="inline-button">Click here</span></strong> to take a practice exam
-                                with <input className="pure-input-1 inline-input--small"
-                                            onChange={ this.onChangeSelected }
-                                            type="text" defaultValue="37" />questions.
+                                <strong>
+                                    <span className="inline-button">Click here</span>
+                                </strong> to take a practice exam with
+                                <Sections_Overview_TakeExam_Content_SelectQuestionsInput onChange={ this.onChangeSelected } />questions.
                             </div>
                         </div>
                     </div>
@@ -684,6 +684,11 @@ var React = require('react'),
                     Event Handling
         \***********************************/
  
+        onChangeSelected: function (event) {
+            console.log("on change was called.");
+        },
+
+
         /**
          * Handles click event for if the user changes
          * which topics are selected for taking an exam.
@@ -729,6 +734,52 @@ var React = require('react'),
 
         componentWillUnmount: function () {
             window.removeEventListener('resize', this.renderProgressBar);
+        }
+
+    }),
+
+
+    /**
+     * A react component allowing the user to select
+     * the number of questions for their exam.
+     */
+    Sections_Overview_TakeExam_Content_SelectQuestionsInput = React.createClass({
+
+        /**
+         * Check if the value entered in the input are
+         * valid.
+         */
+        isValid: function (value) {
+            // Check if the value is an integer
+            if (+value !== +value) {
+                return false;
+            }
+
+            return true;
+        },
+
+        render: function () {
+            var selected = this.props.selected,
+                upperLimit = this.props.selected;
+
+            return (
+                <input className="pure-input-1 inline-input--small"
+                       onChange={ this.onChangeSelected }
+                       type="text"
+                       defaultValue="37" />
+            );
+        },
+
+        /***********************************\
+                    Event Handling
+        \***********************************/
+
+        /**
+         * An event that listens for when the value in the input field
+         * is changed.
+         */
+        onChangeSelected: function (event) {
+            console.log("Changed!");
         }
 
     }),

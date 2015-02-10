@@ -352,32 +352,58 @@ ProgressBar.prototype = {
             ANIMATION_STEPS = 60,
             DELTA = ANIMATION_DURATION / ANIMATION_STEPS,
 
-            startCurrent,
-            endCurrent,
-            watchId,
+            // The next "current" and "selected" values that are
+            // to be rendered.
+            nextCurrent,
+            nextSelected,
+
             steps = 0;
 
-        watchId = setInterval(function () {
+        if (this._animationId) {
 
-            var
-                nextCurrent = easingFunction(steps * DELTA,
-                                             self._data.current,
-                                             newData.current - self._data.current,
-                                             ANIMATION_DURATION),
+            // End the current animation.            
+            clearInterval(this._animationId);
+            this._animationId = null;
 
-                nextSelected = easingFunction(steps * DELTA,
-                                              self._data.selected,
-                                              newData.selected - self._data.selected,
-                                              ANIMATION_DURATION);
+            // Update the data to reflect how far the last
+            // animation got, then let the new animation move the
+            // values their new locations.
+            this._data = this._animationProgress;
+        }
+
+        this._animationId = setInterval(function () {
+
+            // Cache the animation progress in an
+            // instance variable. The purpose of
+            // this is so that animations can be
+            // properly handled in the case that
+            // a user causes a new animation to
+            // begin while an animation is in
+            // progress.
+            self._animationProgress = {
+
+                current: easingFunction(steps * DELTA,
+                                        self._data.current,
+                                        newData.current - self._data.current,
+                                        ANIMATION_DURATION),
+
+                selected: easingFunction(steps * DELTA,
+                                         self._data.selected,
+                                         newData.selected - self._data.selected,
+                                         ANIMATION_DURATION),
+
+                total: newData.total
+            };
 
             self._context.clearRect(0, 0, self._context.canvas.width, self._context.canvas.height);
-            self._renderWithData({ total: newData.total,
-                                   selected: nextSelected,
-                                   current: nextCurrent });
+            self._renderWithData(self._animationProgress);
 
             // Clear the interval once the duration has been completed.
             if (steps * DELTA >= ANIMATION_DURATION) {
-                clearInterval(watchId);
+                // Clear the animation id and set it to null,
+                // indicating that no animation is executing.
+                clearInterval(self._animationId);
+                self._animationId = null;
                 // Set the current data to the new data now
                 // that the animation has finished..
                 self._data = newData;
