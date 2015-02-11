@@ -525,6 +525,17 @@ var React = require('react'),
         },
 
         /**
+         * Get the number of questions the
+         * user has selected.
+         */
+        getSelectedCount: function () {
+            // If the user has not explicitly set the number of
+            // questions they would like their exam to take, then
+            // let the exam be all the questions that are available.
+            return this.state.selected || this.remainingQuestions().length;
+        },
+
+        /**
          * An array of all the questions that are left after all
          * the filters have been applies.
          */
@@ -576,14 +587,16 @@ var React = require('react'),
         render: function () {
             var state = this.state,
                 course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
-                remainingQuestions = this.remainingQuestions(),
+                
+                totalQuestionCount = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)).length,
+                remainingQuestionCount = this.remainingQuestions().length,
+                selectedQuestionCount = this.getSelectedCount(),
 
                 topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
 
-                renderQuestionCount = (questions.length === 1) ?
+                renderQuestionCount = (totalQuestionCount === 1) ?
                     (<span>There is only <span className="emphasis">1 question.</span></span>) :
-                    (<span>There are <span className="emphasis">{ questions.length } questions</span> total.</span>),
+                    (<span>There are <span className="emphasis">{ totalQuestionCount } questions</span> total.</span>),
 
                 // Note: We can assume that there is at least 1 topic filter.
                 renderTopicFilters = topics.map(function (topic) {
@@ -599,9 +612,9 @@ var React = require('react'),
                     );
                 }.bind(this)),
 
-                renderRemainingQuestionCount = (remainingQuestions.length === 1) ?
+                renderRemainingQuestionCount = (remainingQuestionCount === 1) ?
                     (<span><span className="emphasis">Only 1 question</span> after applying filters.</span>) :
-                    (<span><span className="emphasis">{ remainingQuestions.length } questions</span> after applying filters.</span>);
+                    (<span><span className="emphasis">{ remainingQuestionCount } questions</span> after applying filters.</span>);
 
             return (
                 <SectionSet.Section.Subsection>
@@ -619,7 +632,9 @@ var React = require('react'),
                                 <strong>
                                     <span className="inline-button">Click here</span>
                                 </strong> to take a practice exam with
-                                <Sections_Overview_TakeExam_Content_SelectQuestionsInput onChange={ this.onChangeSelected } />questions.
+                                <Sections_Overview_TakeExam_Content_SelectQuestionsInput onChange={ this.onChangeSelected }
+                                                                                         maxValue={ remainingQuestionCount }
+                                                                                         value={ selectedQuestionCount } />questions.
                             </div>
                         </div>
                     </div>
@@ -685,7 +700,8 @@ var React = require('react'),
         \***********************************/
  
         onChangeSelected: function (event) {
-            console.log("on change was called.");
+            // Animate the changes to the selected bar value.
+            this.setState({ selected: +(event.target.value) });
         },
 
 
@@ -696,14 +712,18 @@ var React = require('react'),
         onClickTopicFilter: function (event) {
             var topicId = event.target.value,
                 state = this.state,
-                selected;
+                current;
 
             // Toggle topic flag.
             state.topics[topicId] = !state.topics[topicId];
             // Query the remaining questions after changing the state.
-            selected = this.remainingQuestions().length
-            state.bar.change({ selected: selected, current: selected }, { animate: true });
+            current = this.remainingQuestions().length
+            // The current value is less than the number
+            // of questions the user has selected. Need to decrement the
+            // questions the user has selected.
             this.setState(state);
+
+            state.bar.change({ current: current, selected: current }, { animate: true });
         },
 
         /**
@@ -745,28 +765,53 @@ var React = require('react'),
      */
     Sections_Overview_TakeExam_Content_SelectQuestionsInput = React.createClass({
 
+        getInitialState: function () {
+            return { };
+        },
+
+        getValue: function () {
+            // If there is a value in the state, then use
+            // that value. Otherwise, use the value that was
+            // passed from the parent.
+            if (+this.state.value !== +this.state.value) {
+                return this.props.value || 0;
+            }
+            return this.state.value;            
+        },
+
         /**
          * Check if the value entered in the input are
          * valid.
          */
         isValid: function (value) {
+            var maxValue = this.props.maxValue;
+
             // Check if the value is an integer
             if (+value !== +value) {
                 return false;
             }
 
-            return true;
+            if (value > this.props.maxValue) {
+                return false;
+            }
+
+            return value > 0;
         },
 
         render: function () {
-            var selected = this.props.selected,
-                upperLimit = this.props.selected;
+            var value = this.getValue(),
 
+                style = (this.isValid(value)) ?
+                    ({ border: 'solid #CCC 1px'}) :
+                    ({ border: 'solid #EC0000 1px', outlineColor: '#EC0000' });
+
+            console.log("IsValid " + this.isValid(value));
             return (
                 <input className="pure-input-1 inline-input--small"
+                       style={ style }
                        onChange={ this.onChangeSelected }
                        type="text"
-                       defaultValue="37" />
+                       value={ value.toString() } />
             );
         },
 
@@ -779,7 +824,13 @@ var React = require('react'),
          * is changed.
          */
         onChangeSelected: function (event) {
-            console.log("Changed!");
+            this.setState({ value: event.target.value });
+            if (this.isValid(event.target.value) && this.props.onChange) {
+                console.log("Calling parent!");
+                // Notify the parent of input changing to a
+                // valid value.
+                this.props.onChange(event);
+            }
         }
 
     }),

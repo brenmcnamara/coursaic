@@ -276,6 +276,18 @@ ProgressBar = function (context, data) {
 
 ProgressBar.prototype = {
 
+    getTotal: function () {
+        return this._data.total;
+    },
+
+    getSelected: function () {
+        return this._data.selected;
+    },
+
+    getCurrent: function () {
+        return this._data.current;
+    },
+
     /**
      * Render the progress bar in the
      * context.
@@ -352,11 +364,6 @@ ProgressBar.prototype = {
             ANIMATION_STEPS = 60,
             DELTA = ANIMATION_DURATION / ANIMATION_STEPS,
 
-            // The next "current" and "selected" values that are
-            // to be rendered.
-            nextCurrent,
-            nextSelected,
-
             steps = 0;
 
         if (this._animationId) {
@@ -369,8 +376,11 @@ ProgressBar.prototype = {
             // animation got, then let the new animation move the
             // values their new locations.
             this._data = this._animationProgress;
+            self._animationProgress = null;
         }
 
+        console.log("Beginning animation with data: " + JSON.stringify(self._data));
+        console.log("And new data: " + JSON.stringify(newData));
         this._animationId = setInterval(function () {
 
             // Cache the animation progress in an
@@ -418,7 +428,7 @@ ProgressBar.prototype = {
                 clearInterval(self._animationId);
                 self._animationId = null;
                 // Set the current data to the new data now
-                // that the animation has finished..
+                // that the animation has finished.
                 self._data = newData;
             }
             ++steps;
