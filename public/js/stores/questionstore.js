@@ -10,6 +10,7 @@ var Stores = require('../stores'),
     StoreBuilder = require('shore').StoreBuilder,
 
     Question = require('./models.js').Question,
+    Flag = require('./models.js').Flag,
 
     Query = require('./query.js'),
 
@@ -36,6 +37,25 @@ var Stores = require('../stores'),
                 questions.forEach(function (question) {
                     self._questionHash[question.id] = question;
                 });
+                // Now load all the data we need from each question,
+                // and create a promise that completed when all question
+                // data has been loaded.
+                return Promise.all(questions.map(function (question) {
+                    return self._loadQuestion(question);
+                }));
+
+            });
+        },
+
+
+        _loadQuestion: function (question) {
+            console.log("Loading a question.");
+            var self = this,
+                query = new Parse.Query(Flag);
+
+            query.equalTo('question', question);
+            return query.find().then(function (flags) {
+                self._flagsHash[question.id] = flags;
             });
         },
 
@@ -59,6 +79,10 @@ var Stores = require('../stores'),
 
         initialize: function () {
             this._questionHash = {};
+            // The flag hash has keys as question ids,
+            // and the value is an array of flags for that
+            // question.
+            this._flagsHash = {};
         },
 
 
@@ -128,6 +152,13 @@ var Stores = require('../stores'),
                     });
                 }),
 
+                questionsNotFlagged: Query.createQuery(function (data) {
+                    return data.filter(function (question) {
+                        return !store._flagsHash[question.id] ||
+                               store._flagsHash[question.id].length === 0;
+                    });
+                }),
+
                 questionsForCourse: Query.createQuery(function (data) {
                     var course = this.params[0];
                     return data.filter(function (question) {
@@ -146,11 +177,6 @@ var Stores = require('../stores'),
                     });
                 }),
 
-                unflaggedQuestions: Query.createQuery(function (data) {
-                    // TODO: Implement me!
-                    return data;
-                }),
-
                 questionsNotByUser: Query.createQuery(function (data) {
                     var user = this.params[0];
 
@@ -163,6 +189,9 @@ var Stores = require('../stores'),
 
         }
 
-    });
+    }),
 
-module.exports = new QuestionStore();
+    // Local reference to the question store instance.
+    store = new QuestionStore();
+
+module.exports = store;

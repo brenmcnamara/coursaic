@@ -487,7 +487,6 @@ var React = require('react'),
     Sections_Overview_TakeExam_Content = React.createClass({
 
         getInitialState: function () {
-            console.log("Getting INITIAL STATE");
             var
                 user = UserStore.getOne(UserStore.query.current()),
                 course = this.props.course,
@@ -505,9 +504,9 @@ var React = require('react'),
                     // will cause the filter to NOT be added to the list of
                     // filters.
                     otherFilters: {
-                        unflaggedQuestions: {
+                        questionsNotFlagged: {
                             isChecked: true,
-                            filter: QuestionStore.query.filter.unflaggedQuestions()
+                            filter: QuestionStore.query.filter.questionsNotFlagged()
                         },
                         questionsNotByUser: {
                             isChecked: true,
@@ -655,8 +654,8 @@ var React = require('react'),
                             <h4>Filters</h4>
                             <div className="question-filter__form__filters pure-g">
                                 <FormLayout.Checkbox name="other-filter"
-                                                     checked={ state.otherFilters.unflaggedQuestions.isChecked }
-                                                     value="unflaggedQuestions"
+                                                     checked={ state.otherFilters.questionsNotFlagged.isChecked }
+                                                     value="questionsNotFlagged"
                                                      onChange={ this.onClickOtherFilter } >
                                     Include Flagged Questions
                                 </FormLayout.Checkbox>

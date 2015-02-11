@@ -102,6 +102,10 @@ var
 
     }),
 
+    /**
+     * Represents a flag object.
+     */
+    Flag = Parse.Object.extend("Flag"),
 
     /**
      * Represents a Topic within a course.
@@ -321,6 +325,5 @@ module.exports = {
     School: Parse.Object.extend("School"),
     Topic: Topic,
     User: User,
-
-
+    Flag: Flag
 };
