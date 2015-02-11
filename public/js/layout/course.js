@@ -401,7 +401,8 @@ var React = require('react'),
                 topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
                 data = topics.map(function (topic, index) {
                     var questions =
-                            QuestionStore.getAll(QuestionStore.query.filter.questionsForTopics(topic));
+                            QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                 QuestionStore.query.filter.questionsForTopics(topic));
 
                     return {
                         color: colors[index],
@@ -428,7 +429,8 @@ var React = require('react'),
         render: function () {
             var topic = this.props.topic,
                 color = this.props.color,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForTopics(topic)),
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                 QuestionStore.query.filter.questionsForTopics(topic)),
                 questionCount = questions.length,
 
                 renderQuestionCount = (questionCount === 1)
@@ -457,7 +459,8 @@ var React = require('react'),
 
         render: function () {
             var course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course));
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                 QuestionStore.query.filter.questionsForCourse(course));
 
             // Note that if there are no topics, there can be
             // no questions. This also takes care of the case where
@@ -541,10 +544,12 @@ var React = require('react'),
          */
         remainingQuestions: function () {
             var course = this.props.course,
-                allQuestions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+                allQuestions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                    QuestionStore.query.filter.questionsForCourse(course)),
                 otherFiltersHash = this.state.otherFilters,
                 topicsHash = this.state.topics,
-                questionFilters = [],
+                // Start with a filter of non-disabled questions.
+                questionFilters = [ QuestionStore.query.filter.questionsNotDisabled() ],
                 topicIds = [],
                 selectedTopics = [],
                 prop;
@@ -588,7 +593,8 @@ var React = require('react'),
             var state = this.state,
                 course = this.props.course,
                 
-                totalQuestionCount = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)).length,
+                totalQuestionCount = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                          QuestionStore.query.filter.questionsForCourse(course)).length,
                 remainingQuestionCount = this.remainingQuestions().length,
                 selectedQuestionCount = this.getSelectedCount(),
 
@@ -670,7 +676,8 @@ var React = require('react'),
         renderProgressBar: function () {
             var
                 course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsForCourse(course)),
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
+                                                 QuestionStore.query.filter.questionsForCourse(course)),
 
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
@@ -682,6 +689,7 @@ var React = require('react'),
 
                 bar = this.state.bar;
 
+            console.log("DATA: " + JSON.stringify(data));
             // Lazy instantiation of the bar.
             if (!this.state.bar) {
                 bar = new widgets.ProgressBar(context, data);

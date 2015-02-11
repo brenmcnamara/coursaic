@@ -121,6 +121,13 @@ var Stores = require('../stores'),
 
             filter: {
 
+                questionsNotDisabled: Query.createQuery(function (data) {
+                    var course = this.params[0];
+                    return data.filter(function (question) {
+                        return !question.get('disabled');
+                    });
+                }),
+
                 questionsForCourse: Query.createQuery(function (data) {
                     var course = this.params[0];
                     return data.filter(function (question) {
