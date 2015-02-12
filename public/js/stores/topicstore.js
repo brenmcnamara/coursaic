@@ -108,6 +108,14 @@ var Stores = require('../stores'),
 
             filter: {
 
+                topicForQuestion: Query.createQuery(function (data) {
+                    var question = this.params[0];
+
+                    return data.filter(function (topic) {
+                        return question.get('topic').id === topic.id;
+                    });
+                }),
+
                 topicsForCourse: Query.createQuery(function (data) {
                     var course = this.params[0];
 

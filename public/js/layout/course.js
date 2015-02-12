@@ -931,7 +931,8 @@ var React = require('react'),
     QuestionItem = React.createClass({
 
         render: function () {
-            var question = this.props.question;
+            var question = this.props.question,
+                topic = TopicStore.getOne(TopicStore.query.filter.topicForQuestion(question));
 
             return (
                 <li className="pure-g">
@@ -952,7 +953,7 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="question-topic pure-u-1">
-                        <span className="question-topic__content">{ question.get('topic').get('name') }</span>
+                        <span className="question-topic__content">{ topic.get('name') }</span>
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
