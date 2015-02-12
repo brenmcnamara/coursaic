@@ -870,18 +870,17 @@ var React = require('react'),
     Sections_MyQuestions = React.createClass({
 
         render: function () {
+            var user = UserStore.getOne(UserStore.query.current()),
+                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsByUser(user));
+
+
             return (
                 <SectionSet.Section>
                     <SectionSet.Section.Header>My Questions</SectionSet.Section.Header>
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
                         <h3><span className="inline-button">Click here</span> to create a new question.</h3>
-                        <ul className="question-info-list">
-                            <QuestionItem_Edit />
-                            <QuestionDivide key="needs a key" />
-                            <QuestionItem />
-                            <QuestionDivide key="needs a key 2" />
-                        </ul>
+                        <QuestionList questions={ questions } />
                     </SectionSet.Section.Subsection>
                 </SectionSet.Section>
             );
@@ -912,9 +911,28 @@ var React = require('react'),
     }),
 
 
+    QuestionList = React.createClass({
+
+        render: function () {
+            return (
+                <ul className="question-info-list">
+                    {
+                        this.props.questions.map(function (question) {
+                            return (<QuestionItem key={ question.id } question={ question } />);
+                        })
+
+                    }
+                </ul>
+            );
+        }
+
+    }),
+
     QuestionItem = React.createClass({
 
         render: function () {
+            var question = this.props.question;
+
             return (
                 <li className="pure-g">
                     <div className="pure-u-1">
@@ -934,7 +952,7 @@ var React = require('react'),
                         </ul>
                     </div>
                     <div className="question-topic pure-u-1">
-                        <span className="question-topic__content">Java Syntax</span>
+                        <span className="question-topic__content">{ question.get('topic').get('name') }</span>
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
@@ -942,7 +960,7 @@ var React = require('react'),
                             <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-pencil-square-o"></i></div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo />
+                            <QuestionInfo question={ question } />
                         </div>
                     </div>
                 </li>
@@ -1041,14 +1059,41 @@ var React = require('react'),
     QuestionInfo = React.createClass({
 
         render: function () {
+            var 
+                dummyQuestion = {
+                    
+                    get: function () {
+                        return "Here is a question";
+                    },
+
+                    isCorrect: function () {
+                        return false;
+                    },
+
+                    getOptions: function () {
+                        return ["Option 1", "Option 2", "Option 3", "Option 4"];
+                    }
+                },
+                question = this.props.question || dummyQuestion,
+                options = question.getOptions();
+
             return (
                 <div className="question-info">
-                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <div className="question-info__ask">{ question.get('ask') }</div>
                     <ul className="multi-choice-info__options-list--lettered">
-                        <li className="multi-choice-info__options-list__item">17</li>
-                        <li className="multi-choice-info__options-list__item">16,322,471</li>
-                        <li className="multi-choice-info__options-list__item--correct">4</li>
-                        <li className="multi-choice-info__options-list__item">3</li>
+                        {
+                            options.map(function (option, index) {
+                                var
+                                    className = (question.isCorrect(option)) ?
+                                        ("multi-choice-info__options-list__item--correct") :
+                                        ("multi-choice-info__options-list__item");
+
+                                return (<li className={ className }
+                                            key={ question.id + "-" + index.toString() }>
+                                            { option }
+                                        </li>);
+                            })
+                        }
                     </ul>
                     <div className="question-info__explanation">
                         Just because!
