@@ -192,6 +192,19 @@ var Stores = require('../stores'),
                     });
                 })
 
+            },
+
+            sort: {
+
+                byDescendingEditDate: Query.createQuery(function (data) {
+
+                    data.sort(function (question1, question2) {
+                        return question2.updatedAt.getTime() - question1.updatedAt.getTime();
+                    });
+
+                    return data;
+                })
+
             }
 
         }

@@ -14,12 +14,16 @@ var React = require('react'),
     HeaderLayout = require('./header.js'),
     PopupsLayout = require('./popups.js'),
 
+    // Stores
     Stores = require('../stores'),
     CourseStore = Stores.CourseStore(),
     PageStore = Stores.PageStore(),
     QuestionStore = Stores.QuestionStore(),
     TopicStore = Stores.TopicStore(),
     UserStore = Stores.UserStore(),
+
+    // Queries
+    QuestionQuery = QuestionStore.query,
 
     Formatter = require('../formatter.js'),
 
@@ -459,8 +463,8 @@ var React = require('react'),
 
         render: function () {
             var course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                 QuestionStore.query.filter.questionsForCourse(course));
+                questions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
+                                                 QuestionQuery.filter.questionsForCourse(course));
 
             // Note that if there are no topics, there can be
             // no questions. This also takes care of the case where
@@ -543,12 +547,13 @@ var React = require('react'),
          */
         remainingQuestions: function () {
             var course = this.props.course,
-                allQuestions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                    QuestionStore.query.filter.questionsForCourse(course)),
+                allQuestions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
+                                                    QuestionQuery.filter.questionsForCourse(course)),
+
                 otherFiltersHash = this.state.otherFilters,
                 topicsHash = this.state.topics,
                 // Start with a filter of non-disabled questions.
-                questionFilters = [ QuestionStore.query.filter.questionsNotDisabled() ],
+                questionFilters = [ QuestionQuery.filter.questionsNotDisabled() ],
                 topicIds = [],
                 selectedTopics = [],
                 prop;
@@ -592,8 +597,9 @@ var React = require('react'),
             var state = this.state,
                 course = this.props.course,
                 
-                totalQuestionCount = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                          QuestionStore.query.filter.questionsForCourse(course)).length,
+                totalQuestionCount = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
+                                                          QuestionQuery.filter.questionsForCourse(course)).length,
+
                 remainingQuestionCount = this.remainingQuestions().length,
                 selectedQuestionCount = this.getSelectedCount(),
 
@@ -675,8 +681,8 @@ var React = require('react'),
         renderProgressBar: function () {
             var
                 course = this.props.course,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                 QuestionStore.query.filter.questionsForCourse(course)),
+                questions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
+                                                 QuestionQuery.filter.questionsForCourse(course)),
 
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
@@ -871,7 +877,8 @@ var React = require('react'),
 
         render: function () {
             var user = UserStore.getOne(UserStore.query.current()),
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsByUser(user));
+                questions = QuestionStore.getAll(QuestionQuery.filter.questionsByUser(user),
+                                                 QuestionQuery.sort.byDescendingEditDate());
 
 
             return (
