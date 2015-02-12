@@ -878,7 +878,7 @@ var React = require('react'),
         render: function () {
             var user = UserStore.getOne(UserStore.query.current()),
                 questions = QuestionStore.getAll(QuestionQuery.filter.questionsByUser(user),
-                                                 QuestionQuery.sort.byDescendingEditDate());
+                                                 QuestionQuery.sort.byDescendingCreationDate());
 
 
             return (
