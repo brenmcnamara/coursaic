@@ -207,7 +207,7 @@ var Stores = require('../stores'),
 
                 byDescendingCreationDate: Query.createQuery(function (data) {
                     data.sort(function (question1, question2) {
-                        return question2.createAt.getTime() - question1.createdAt.getTime();
+                        return question2.createdAt.getTime() - question1.createdAt.getTime();
                     });
 
                     return data;
