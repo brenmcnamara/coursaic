@@ -31,6 +31,19 @@ var Stores = require('../stores'),
                    PRIVATE METHODS
         \***********************************/
 
+        _Query: Query.queryBuilder({
+
+            currentUser: function () {
+                console.log("Current user was called");
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (user) {
+                        return user.id === store._currentUser().id;
+                    })
+                });
+            }
+
+        }),
+
         /**
          * Add a user to the collection.
          *
@@ -141,6 +154,9 @@ var Stores = require('../stores'),
             this._userHash = {};
         },
 
+        query: function () {
+            return new this._Query(this._getUserList());
+        },
 
         /**
          * Get the author of the exam for the course.
@@ -167,39 +183,6 @@ var Stores = require('../stores'),
                 });
             });
         },
-
-
-        /**
-         * A variadic method that takes query objects
-         * and generates a single user after performing
-         * all the queries. If multiple users exist from
-         * the queries, then the first one in the set
-         * will be returned.
-         *
-         * @method getOne
-         *
-         * @return {User} A user object.
-         */
-        getOne: function () {
-            return this.getAll.apply(this, arguments)[0] || null;
-        },
-
-
-        /**
-         * A variadic method that takes query objects
-         * and generates a set of users after performing
-         * all the queries.
-         *
-         * @method getAll
-         *
-         * @return {Array} An array of users.
-         */
-        getAll: function () {
-            return [].reduce.call(arguments, function (memo, query) {
-                return query(memo);
-            }, this._getUserList());
-        },
-
 
         /***********************************\
                       NAMESPACES
@@ -284,19 +267,7 @@ var Stores = require('../stores'),
                 });
             }
 
-        },
-
-
-        query: {
-
-            current: Query.createQuery(function (data) {
-                return data.filter(function (user) {
-                    return user.id === store._currentUser().id;
-                });
-            })
-
         }
-
 
     }),
 

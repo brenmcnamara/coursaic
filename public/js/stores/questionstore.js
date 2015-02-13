@@ -27,6 +27,71 @@ var Stores = require('../stores'),
                    PRIVATE METHODS
         \***********************************/
 
+        _Query: Query.queryBuilder({
+
+            questionsNotDisabled: function () {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return !question.get('disabled');
+                    })
+                });
+            },
+
+            questionsNotFlagged: function () {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return !store._flagsHash[question.id] ||
+                               store._flagsHash[question.id].length === 0;
+                    })
+                });
+            },
+
+            questionsForCourse: function (course) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return question.get('course').id === course.id;
+                    })
+                });
+            },
+
+            questionsForTopics: function () {
+                var topics = arguments;
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return [].reduce.call(topics, function (hasTopic, topic) {
+                            return hasTopic || question.get('topic').id === topic.id;
+                        }, false);
+                    })
+                });
+            },
+
+            questionsByUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return question.get('author').id === user.id;
+                    })
+                });
+            },
+
+            questionsNotByUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return question.get('author').id !== user.id;
+                    })
+                });
+            },
+
+            sortByDescendingCreationDate: function () {
+                return new Query.Pipe({
+                    data: this.pipe.data.sort(function (question1, question2) {
+                        return question2.createdAt.getTime() - question1.createdAt.getTime();
+                    })
+                });
+            }
+
+        }),
+
+
         _fetchQuestionsForCourse: function (course) {
             var self = this,
                 asyncQuery = new Parse.Query(Question);
@@ -49,7 +114,6 @@ var Stores = require('../stores'),
 
 
         _loadQuestion: function (question) {
-            console.log("Loading a question.");
             var self = this,
                 query = new Parse.Query(Flag);
 
@@ -85,38 +149,9 @@ var Stores = require('../stores'),
             this._flagsHash = {};
         },
 
-
-        /**
-         * A variadic method that takes query objects
-         * and generates a single question after performing
-         * all the queries. If multiple questions exist from
-         * the queries, then the first one in the set
-         * will be returned.
-         *
-         * @method getOne
-         *
-         * @return {Question} A Question object.
-         */
-        getOne: function () {
-            return this.getAll.apply(this, arguments)[0] || null;
+        query: function () {
+            return new this._Query(this._getQuestionList());
         },
-
-
-        /**
-         * A variadic method that takes query objects
-         * and generates a set of courses after performing
-         * all the queries.
-         *
-         * @method getAll
-         *
-         * @return {Array} An array of courses.
-         */
-        getAll: function () {
-            return [].reduce.call(arguments, function (memo, query) {
-                return query(memo);
-            }, this._getQuestionList());
-        },
-
 
         /***********************************\
                       NAMESPACES
@@ -133,88 +168,12 @@ var Stores = require('../stores'),
                 .then(function () {
                     var CourseStore = Stores.CourseStore(),
                         courseId = payload.courseId,
-                        course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+                        course = CourseStore.query().courseWithId(courseId).getOne();
 
                     return self._fetchQuestionsForCourse(course);
                 });
 
             }
-        },
-
-        query: {
-
-            filter: {
-
-                questionsNotDisabled: Query.createQuery(function (data) {
-                    var course = this.params[0];
-                    return data.filter(function (question) {
-                        return !question.get('disabled');
-                    });
-                }),
-
-                questionsNotFlagged: Query.createQuery(function (data) {
-                    return data.filter(function (question) {
-                        return !store._flagsHash[question.id] ||
-                               store._flagsHash[question.id].length === 0;
-                    });
-                }),
-
-                questionsForCourse: Query.createQuery(function (data) {
-                    var course = this.params[0];
-                    return data.filter(function (question) {
-                        return question.get('course').id === course.id;
-                    });
-                }),
-
-                questionsForTopics: Query.createQuery(function (data) {
-                    // Keep in mind that the topics array is a
-                    // pseudo-array.
-                    var topics = this.params;
-                    return data.filter(function (question) {
-                        return [].reduce.call(topics, function (hasTopic, topic) {
-                            return hasTopic || question.get('topic').id === topic.id;
-                        }, false);
-                    });
-                }),
-
-                questionsByUser: Query.createQuery(function (data) {
-                    var user = this.params[0];
-                    return data.filter(function (question) {
-                        return question.get('author').id === user.id;
-                    });
-                }),
-
-                questionsNotByUser: Query.createQuery(function (data) {
-                    var user = this.params[0];
-
-                    return data.filter(function (question) {
-                        return question.get('author').id !== user.id;
-                    });
-                })
-
-            },
-
-            sort: {
-
-                byDescendingEditDate: Query.createQuery(function (data) {
-
-                    data.sort(function (question1, question2) {
-                        return question2.updatedAt.getTime() - question1.updatedAt.getTime();
-                    });
-
-                    return data;
-                }),
-
-                byDescendingCreationDate: Query.createQuery(function (data) {
-                    data.sort(function (question1, question2) {
-                        return question2.createdAt.getTime() - question1.createdAt.getTime();
-                    });
-
-                    return data;
-                })
-
-            }
-
         }
 
     }),

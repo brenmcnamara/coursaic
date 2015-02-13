@@ -24,6 +24,34 @@ var Stores = require('../stores'),
                    PRIVATE METHODS
         \***********************************/
 
+        _Query: Query.queryBuilder({
+
+            courseWithId: function (courseId) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return courseId === course.id;
+                    })
+                });
+            },
+
+            coursesForUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return user.isEnrolled(course);
+                    })
+                });
+            },
+
+            coursesNotForUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return !user.isEnrolled(course);
+                    })
+                });
+            }
+
+        }),
+
         /**
          * Fetch all the data for a course and all the course's
          * properties.
@@ -77,7 +105,6 @@ var Stores = require('../stores'),
             });
         },
 
-
         /**
          * Load all the data for a single course.
          * This loading may occur asynchronously. This method
@@ -101,7 +128,6 @@ var Stores = require('../stores'),
         _loadCourse: function(course) {
             return this._loadTagsForCourse(course);
         },
-
 
         /**
          * Load all the tags in the course and add them
@@ -147,7 +173,6 @@ var Stores = require('../stores'),
             });
         },
 
-
         /***********************************\
                     PUBLIC METHODS
         \***********************************/
@@ -158,6 +183,10 @@ var Stores = require('../stores'),
             this._tagHash = {};
         },
 
+        query: function () {
+            console.log("Calling query");
+            return new this._Query(this._courses);
+        },
 
         /**
          * Fetch the courses.
@@ -262,38 +291,6 @@ var Stores = require('../stores'),
         },
 
 
-        /**
-         * A variadic method that takes query objects
-         * and generates a single course after performing
-         * all the queries. If multiple courses exist from
-         * the queries, then the first one in the set
-         * will be returned.
-         *
-         * @method getOne
-         *
-         * @return {Course} A course object.
-         */
-        getOne: function () {
-            return this.getAll.apply(this, arguments)[0] || null;
-        },
-
-
-        /**
-         * A variadic method that takes query objects
-         * and generates a set of courses after performing
-         * all the queries.
-         *
-         * @method getAll
-         *
-         * @return {Array} An array of courses.
-         */
-        getAll: function () {
-            return [].reduce.call(arguments, function (memo, query) {
-                return query(memo);
-            }, this._courses);
-        },
-
-
         /***********************************\
                       NAMESPACES
         \***********************************/
@@ -336,39 +333,9 @@ var Stores = require('../stores'),
                                 });
             }
             
-        },
-
-
-        query: {
-
-            filter: {
-
-                courseWithId: Query.createQuery(function (data) {
-                    var courseId = this.params[0];
-                    return data.filter(function (course) {
-                        return courseId === course.id;
-                    });
-                }),
-
-                coursesForUser: Query.createQuery(function (data) {
-                    var user = this.params[0];
-                    return data.filter(function (course) {
-                        return user.isEnrolled(course);
-                    });
-                }),
-
-                coursesNotForUser: Query.createQuery(function (data) {
-                    var user = this.params[0];
-                    return data.filter(function (course) {
-                        return !user.isEnrolled(course);
-                    });
-                })
-
-            }
         }
 
     }),
-
 
     // Create an instance of the course store
     // to use as a local reference.

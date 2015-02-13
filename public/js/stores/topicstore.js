@@ -20,6 +20,37 @@ var Stores = require('../stores'),
                    PRIVATE METHODS
         \***********************************/
 
+        _Query: Query.queryBuilder({
+
+            topicForQuestion: function (question) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (topic) {
+                        return question.get('topic').id === topic.id;
+                    })
+                });
+            },
+
+            topicsForCourse: function (course) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (topic) {
+                        return topic.get('course').id === course.id;
+                    })
+                });
+            },
+
+            topicsForIds: function () {
+                var topicIds = arguments;
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (topic) {
+                        return [].reduce.call(topicIds, function (hasTopicId, topicId) {
+                            return hasTopicId || topicId === topic.id;
+                        }, false);
+                    })
+                });
+            }
+
+        }),
+
         _topicsForCourse: function (course) {
             var self = this,
                 asyncQuery = new Parse.Query(Topic);
@@ -50,6 +81,10 @@ var Stores = require('../stores'),
 
         initialize: function () {
             this._topicHash = {};
+        },
+
+        query: function () {
+            return new this._Query(this._topicList());
         },
 
         /**
@@ -96,46 +131,12 @@ var Stores = require('../stores'),
                 .then(function () {
                     var CourseStore = Stores.CourseStore(),
                         courseId = payload.courseId,
-                        course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+                        course = CourseStore.query().courseWithId(courseId).getOne();
 
                     return self._topicsForCourse(course);
                 });
             }
 
-        },
-
-        query: {
-
-            filter: {
-
-                topicForQuestion: Query.createQuery(function (data) {
-                    var question = this.params[0];
-
-                    return data.filter(function (topic) {
-                        return question.get('topic').id === topic.id;
-                    });
-                }),
-
-                topicsForCourse: Query.createQuery(function (data) {
-                    var course = this.params[0];
-
-                    return data.filter(function (topic) {
-                        return topic.get('course').id === course.id;
-                    });
-                }),
-
-                topicsForIds: Query.createQuery(function (data) {
-                    // Keep in mind topicIds is a pseudo-array.
-                    var topicIds = this.params;
-
-                    return data.filter(function (topic) {
-                        return [].reduce.call(topicIds, function (hasTopicId, topicId) {
-                            return hasTopicId || topicId === topic.id;
-                        }, false);
-                    });
-                })
-
-            }
         }
 
     });

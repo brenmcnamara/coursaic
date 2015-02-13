@@ -22,9 +22,6 @@ var React = require('react'),
     TopicStore = Stores.TopicStore(),
     UserStore = Stores.UserStore(),
 
-    // Queries
-    QuestionQuery = QuestionStore.query,
-
     Formatter = require('../formatter.js'),
 
     Action = require('shore').Action,
@@ -52,9 +49,10 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function () {
-            var user = UserStore.getOne(UserStore.query.current()),
+            console.log("Rendering root");
+            var user = UserStore.query().currentUser().getOne(),
                 courseId = PageStore.courseId(),
-                course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+                course = CourseStore.query().courseWithId(courseId).getOne();
 
             if (user.isOwner(course)) {
                 return <Root_Owner course={course} />;
@@ -161,7 +159,7 @@ var React = require('react'),
     CourseDashboard = React.createClass({
         
         render: function() {
-            var user = UserStore.getOne(UserStore.query.current()),
+            var user = UserStore.query().currentUser().getOne(),
                 course = this.props.course,
 
                 renderEnrollButton = (user.isEnrolled(course)) ? 
@@ -351,7 +349,7 @@ var React = require('react'),
             var course = this.props.course,
                 // An array of colors, each topic is assigned a color.
                 colors = this.state.colors,
-                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+                topics = TopicStore.query().topicsForCourse(course).getAll(),
 
                 renderTopicLegend = (topics.length) ? (
                         <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
@@ -402,12 +400,12 @@ var React = require('react'),
             // "other" section. Limiting to 5 topics max.
             var colors = this.state.colors,
                 course = this.props.course,
-                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+                topics = TopicStore.query().topicsForCourse(course).getAll(),
                 data = topics.map(function (topic, index) {
-                    var questions =
-                            QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                 QuestionStore.query.filter.questionsForTopics(topic));
-
+                    var questions = QuestionStore.query()
+                                                 .questionsNotDisabled()
+                                                 .questionsForTopics(topic)
+                                                 .getAll();
                     return {
                         color: colors[index],
                         value: questions.length
@@ -433,8 +431,11 @@ var React = require('react'),
         render: function () {
             var topic = this.props.topic,
                 color = this.props.color,
-                questions = QuestionStore.getAll(QuestionStore.query.filter.questionsNotDisabled(),
-                                                 QuestionStore.query.filter.questionsForTopics(topic)),
+                questions = QuestionStore.query()
+                                          .questionsNotDisabled()
+                                          .questionsForTopics(topic)
+                                          .getAll(),
+
                 questionCount = questions.length,
 
                 renderQuestionCount = (questionCount === 1)
@@ -463,8 +464,10 @@ var React = require('react'),
 
         render: function () {
             var course = this.props.course,
-                questions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
-                                                 QuestionQuery.filter.questionsForCourse(course));
+                questions = QuestionStore.query()
+                                         .questionsNotDisabled()
+                                         .questionsForCourse(course)
+                                         .getAll();
 
             // Note that if there are no topics, there can be
             // no questions. This also takes care of the case where
@@ -492,9 +495,9 @@ var React = require('react'),
 
         getInitialState: function () {
             var
-                user = UserStore.getOne(UserStore.query.current()),
+                user = UserStore.query().currentUser().getOne(),
                 course = this.props.course,
-                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+                topics = TopicStore.query().topicsForCourse(course).getAll(),
 
                 // "topics" is an object that maps topic id's to boolean
                 // flags that are true if the topic is selected, false otherwise.
@@ -510,11 +513,11 @@ var React = require('react'),
                     otherFilters: {
                         questionsNotFlagged: {
                             isChecked: true,
-                            filter: QuestionStore.query.filter.questionsNotFlagged()
+                            params: []
                         },
                         questionsNotByUser: {
                             isChecked: true,
-                            filter: QuestionStore.query.filter.questionsNotByUser(user)
+                            params: [ user ]
                         }
 
                     },
@@ -547,46 +550,39 @@ var React = require('react'),
          */
         remainingQuestions: function () {
             var course = this.props.course,
-                allQuestions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
-                                                    QuestionQuery.filter.questionsForCourse(course)),
-
-                otherFiltersHash = this.state.otherFilters,
-                topicsHash = this.state.topics,
-                // Start with a filter of non-disabled questions.
-                questionFilters = [ QuestionQuery.filter.questionsNotDisabled() ],
+                prop,
                 topicIds = [],
-                selectedTopics = [],
-                prop;
+                topicHash = this.state.topics,
+                otherFiltersHash = this.state.otherFilters,
+                topicQuery,
+                topics,
+                questionQuery = QuestionStore.query()
+                                             .questionsNotDisabled()
+                                             .questionsForCourse(course);
 
-            for (prop in this.state.topics) {
-                if (topicsHash.hasOwnProperty(prop)) {
+            for (prop in topicHash) {
+                if (topicHash.hasOwnProperty(prop)) {
                     // If the topic is selected, then add it to the array.
-                    if (topicsHash[prop]) {
+                    if (topicHash[prop]) {
                         topicIds.push(prop);
                     }
                 }
             }
 
-            // Filter out the selected topic ids.
-            selectedTopics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course),
-                                               TopicStore.query.filter.topicsForIds.apply(null, topicIds));
-
-            // Add the selected topics to the question filters.
-            questionFilters.push(
-                QuestionStore.query.filter.questionsForTopics.apply(null, selectedTopics));
+            topicQuery = TopicStore.query();
+            topics = topicQuery.topicsForCourse(course).topicsForIds.apply(topicQuery, topicIds).getAll();
+            questionQuery.questionsForTopics.apply(questionQuery, topics);
 
             for (prop in otherFiltersHash) {
-
                 if (otherFiltersHash.hasOwnProperty(prop)) {
-                    // Perform these filters only if they are not checked.
                     if (!otherFiltersHash[prop].isChecked) {
-                        questionFilters.push(otherFiltersHash[prop].filter);
+                        // Apply the query using the declarative otherFilter
+                        // object.
+                        questionQuery[prop].apply(questionQuery, otherFiltersHash[prop].params);
                     }
                 }
             }
-
-            // Apply all the filters and get out any relevant questions.
-            return QuestionStore.getAll.apply(QuestionStore, questionFilters);
+            return questionQuery.getAll();
         },
 
         /***********************************\
@@ -597,13 +593,15 @@ var React = require('react'),
             var state = this.state,
                 course = this.props.course,
                 
-                totalQuestionCount = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
-                                                          QuestionQuery.filter.questionsForCourse(course)).length,
+                totalQuestionCount = QuestionStore.query()
+                                                  .questionsNotDisabled()
+                                                  .questionsForCourse(course)
+                                                  .getAll().length,
 
                 remainingQuestionCount = this.remainingQuestions().length,
                 selectedQuestionCount = this.getSelectedCount(),
 
-                topics = TopicStore.getAll(TopicStore.query.filter.topicsForCourse(course)),
+                topics = TopicStore.query().topicsForCourse(course).getAll(),
 
                 renderQuestionCount = (totalQuestionCount === 1) ?
                     (<span>There is only <span className="emphasis">1 question.</span></span>) :
@@ -681,8 +679,7 @@ var React = require('react'),
         renderProgressBar: function () {
             var
                 course = this.props.course,
-                questions = QuestionStore.getAll(QuestionQuery.filter.questionsNotDisabled(),
-                                                 QuestionQuery.filter.questionsForCourse(course)),
+                questions = QuestionStore.query().questionsNotDisabled().questionsForCourse(course).getAll(),
 
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
@@ -876,10 +873,11 @@ var React = require('react'),
     Sections_MyQuestions = React.createClass({
 
         render: function () {
-            var user = UserStore.getOne(UserStore.query.current()),
-                questions = QuestionStore.getAll(QuestionQuery.filter.questionsByUser(user),
-                                                 QuestionQuery.sort.byDescendingCreationDate());
-
+            var user = UserStore.query().currentUser().getOne(),
+                questions = QuestionStore.query()
+                                         .questionsByUser(user)
+                                         .sortByDescendingCreationDate()
+                                         .getAll();
 
             return (
                 <SectionSet.Section>
@@ -939,7 +937,7 @@ var React = require('react'),
 
         render: function () {
             var question = this.props.question,
-                topic = TopicStore.getOne(TopicStore.query.filter.topicForQuestion(question));
+                topic = TopicStore.query().topicForQuestion(question).getOne();
 
             return (
                 <li className="pure-g">

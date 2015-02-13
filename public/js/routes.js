@@ -30,7 +30,7 @@ module.exports = {
                     var userStore = stores.UserStore();
 
                     if (request.getAction() !== constants.Action.LOGOUT &&
-                        userStore.getOne(userStore.query.current())) {
+                        userStore.query().current().getOne()) {
                         // Redirect to the home page if the
                         // user is already logged in.
                         request.redirect("/home");

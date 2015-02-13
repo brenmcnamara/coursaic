@@ -6,34 +6,86 @@ var Query = require('./query.js');
 
 describe("Query Object", function () {
 
-    it("should generate a simple filter query.", function () {
+    it("creates simple data pipes.", function () {
 
-        var filterByEvens = Query.createQuery(function (data) {
-            return data.filter(function (val) {
-                return val % 2 === 0;
-            });
+        var Ctor = Query.queryBuilder({
+
+            filterEvenNumbers: function () {
+                var data = this.pipe.data;
+
+                return new Query.Pipe({
+                    data: data.filter(function (val) {
+                        return val % 2 === 0;
+                    })
+                });
+            }
+
         }),
 
-            process = filterByEvens();
+        query = new Ctor([1, 2, 3, 4]);
 
-        expect(process([1, 2, 3])).toEqual([2]);
+        expect(query.filterEvenNumbers().getAll()).toEqual([2, 4]);
     });
 
+    it("allows fetching single objects.", function () {
 
-    it("should generate a filter that takes parameters.", function () {
+        var Ctor = Query.queryBuilder({
 
-        var filterBetweenValues = Query.createQuery(function (data) {
-            var lowerBound = this.params[0],
-                upperBound = this.params[1];
+            filterNumbersGreaterThan: function (number) {
+                var data = this.pipe.data;
 
-            return data.filter(function (val) {
-                return val >= lowerBound && val <= upperBound;
-            });
+                return new Query.Pipe({
+                    data: data.filter(function (val) {
+                        return val > number;
+                    })
+                });
+            }
+
         }),
 
-            process = filterBetweenValues(1, 10);
+        query = new Ctor([8, 12, 15, 17]);
 
-        expect(process([-5, -2, 1, 4, 7, 11])).toEqual([1, 4, 7]);
+        expect(query.filterNumbersGreaterThan(10).getOne()).toEqual(12);
+
+    });
+
+    it("chains together query calls.", function () {
+        var Ctor = Query.queryBuilder({
+
+            filterNumbersGreaterThan: function (number) {
+                var data = this.pipe.data;
+                return new Query.Pipe({
+                    data: data.filter(function (val) {
+                        return val > number;
+                    })
+                });
+            },
+
+            filterEvenNumbers: function () {
+                var data = this.pipe.data;
+                return new Query.Pipe({
+                    data: data.filter(function (val) {
+                        return val % 2 === 0;
+                    })
+                });
+            }
+
+
+        }),
+
+        query = new Ctor([1, 2, 3, 9, 10, 11, 12 ,13, 14]);
+
+        expect(query.filterNumbersGreaterThan(10).filterEvenNumbers().getAll()).toEqual([12, 14]);
+    });
+
+    it("maps objects in the query.", function () {
+        var Ctor = Query.queryBuilder({ }),
+            query = new Ctor([1, 2, 3, 4]),
+            doubleValue = function (val) {
+                return val * 2;
+            };
+
+        expect(query.map(doubleValue).getAll()).toEqual([2, 4, 6, 8]);
     });
 
 });
