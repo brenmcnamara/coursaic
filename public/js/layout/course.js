@@ -49,7 +49,6 @@ var React = require('react'),
     Root = React.createClass({
         
         render: function () {
-            console.log("Rendering root");
             var user = UserStore.query().currentUser().getOne(),
                 courseId = PageStore.courseId(),
                 course = CourseStore.query().courseWithId(courseId).getOne();
@@ -173,7 +172,9 @@ var React = require('react'),
                         <Dashboard.Summary.Subheader>{ course.get('name') }</Dashboard.Summary.Subheader>
 
                         <Dashboard.Summary.Details>
-                            <div>Created 2 weeks ago</div>
+                            <div>
+                                Created { Formatter.Date.format(course.createdAt) }
+                            </div>
                             <div>27 enrolled</div>
                         </Dashboard.Summary.Details>
                     </Dashboard.Summary>
@@ -691,7 +692,6 @@ var React = require('react'),
 
                 bar = this.state.bar;
 
-            console.log("DATA: " + JSON.stringify(data));
             // Lazy instantiation of the bar.
             if (!this.state.bar) {
                 bar = new widgets.ProgressBar(context, data);
@@ -815,7 +815,6 @@ var React = require('react'),
                     ({ border: 'solid #CCC 1px'}) :
                     ({ border: 'solid #EC0000 1px', outlineColor: '#EC0000' });
 
-            console.log("IsValid " + this.isValid(value));
             return (
                 <input className="pure-input-1 inline-input--small"
                        style={ style }
@@ -836,7 +835,6 @@ var React = require('react'),
         onChangeSelected: function (event) {
             this.setState({ value: event.target.value });
             if (this.isValid(event.target.value) && this.props.onChange) {
-                console.log("Calling parent!");
                 // Notify the parent of input changing to a
                 // valid value.
                 this.props.onChange(event);
@@ -937,25 +935,31 @@ var React = require('react'),
 
         render: function () {
             var question = this.props.question,
-                topic = TopicStore.query().topicForQuestion(question).getOne();
+                topic = TopicStore.query().topicForQuestion(question).getOne(),
+
+                isFlagged = QuestionStore.query().questionsFlagged().contains(question),
+                isDisabled = QuestionStore.query().questionsDisabled().contains(question),
+
+                renderDisabledIssue = (isDisabled) ?
+                    (<QuestionItem_Issues_Error>This question has been disabled by the owner of the course.</QuestionItem_Issues_Error>) :
+                    (null),
+
+                renderFlaggedIssue = (isFlagged) ?
+                    (<QuestionItem_Issues_Warning>This question has been flagged.</QuestionItem_Issues_Warning>) :
+                    (null),
+
+                renderIssueList = (isFlagged || isDisabled) ?
+                    (<QuestionItem_Issues>
+                        { renderDisabledIssue }
+                        { renderFlaggedIssue }   
+                     </QuestionItem_Issues>) :
+                    (null) ;
+
 
             return (
                 <li className="pure-g">
                     <div className="pure-u-1">
-                        <ul className="question-item__issue-list">
-                            <li className="question-item__issue-list__item--error">
-                                <i className="fa fa-exclamation-circle"></i>
-                                <div className="question-item__issue-list__item--error__message">
-                                    This question has been disabled by the owner of the course.
-                                </div>
-                            </li>
-                            <li className="question-item__issue-list__item--warning">
-                                <i className="fa fa-exclamation-triangle"></i>
-                                <div className="question-item__issue-list__item--warning__message">
-                                    This question has been flagged by <strong>3 people</strong>.
-                                </div>
-                            </li>
-                        </ul>
+                        { renderIssueList }
                     </div>
                     <div className="question-topic pure-u-1">
                         <span className="question-topic__content">{ topic.get('name') }</span>
@@ -975,6 +979,48 @@ var React = require('react'),
 
     }),
 
+
+    QuestionItem_Issues = React.createClass({
+
+        render: function () {
+            return (
+                <ul className="question-item__issue-list">
+                    { this.props.children }
+                </ul>
+            );
+        }
+
+    }),
+
+    QuestionItem_Issues_Error = React.createClass({
+
+        render: function () {
+            return (
+                <li className="question-item__issue-list__item--error">
+                    <i className="fa fa-exclamation-circle"></i>
+                    <div className="question-item__issue-list__item--error__message">
+                        { this.props.children }
+                    </div>
+                </li>
+            );
+        }
+
+    }),
+
+    QuestionItem_Issues_Warning = React.createClass({
+
+        render: function () {
+            return (
+                <li className="question-item__issue-list__item--warning">
+                    <i className="fa fa-exclamation-triangle"></i>
+                    <div className="question-item__issue-list__item--warning__message">
+                        { this.props.children }
+                    </div>
+                </li>
+            );
+        }
+
+    }),
 
     QuestionItem_Edit = React.createClass({
 

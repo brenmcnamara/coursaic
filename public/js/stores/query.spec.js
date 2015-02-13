@@ -88,4 +88,27 @@ describe("Query Object", function () {
         expect(query.map(doubleValue).getAll()).toEqual([2, 4, 6, 8]);
     });
 
+    it("uses 'contains' to check if an object is in the query.", function () {
+        var Ctor = Query.queryBuilder({ }),
+            query = new Ctor([1, 2, 3, 4]);
+
+        expect(query.contains(3)).toBeTruthy();
+        expect(query.contains(7)).toBeFalsy();
+    });
+
+    it("permits overriding of the 'isEqual' to customize behavior of 'contains'", function () {
+        var 
+            Ctor = Query.queryBuilder({ 
+
+                isEqual: function (obj1, obj2) {
+                    return obj1.id === obj2.id;
+                }
+
+            }),
+            query = new Ctor([{ id: 1}, { id: 2}, { id: 3}]);
+
+        expect(query.contains({ id: 2})).toBeTruthy();
+        expect(query.contains({ id: 4})).toBeFalsy();
+    });
+
 });

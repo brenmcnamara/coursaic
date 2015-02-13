@@ -34,7 +34,6 @@ var Stores = require('../stores'),
         _Query: Query.queryBuilder({
 
             currentUser: function () {
-                console.log("Current user was called");
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (user) {
                         return user.id === store._currentUser().id;
