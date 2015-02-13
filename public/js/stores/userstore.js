@@ -194,7 +194,7 @@ var Stores = require('../stores'),
                 var self = this,
                     CourseStore = Stores.CourseStore(),
                     courseId = payload.courseId,
-                    course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+                    course = CourseStore.query().courseWithId(courseId).getOne();
 
                 this._currentUser().enroll(course);
                 return this._currentUser().save().then(function () {
@@ -259,7 +259,8 @@ var Stores = require('../stores'),
                 var self = this,
                     CourseStore = Stores.CourseStore(),
                     courseId = payload.courseId,
-                    course = CourseStore.getOne(CourseStore.query.filter.courseWithId(courseId));
+                    course = CourseStore.query().courseWithId(courseId).getOne();
+
 
                 this._currentUser().unenroll(course);
                 return this._currentUser().save().then(function () {

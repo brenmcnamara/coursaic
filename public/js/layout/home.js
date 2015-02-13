@@ -89,7 +89,7 @@ var React = require('react'),
     HomeDashboard = React.createClass({
 
         render: function () {
-            var user = UserStore.getOne(UserStore.query.current());
+            var user = UserStore.query().currentUser().getOne();
             return (
                 <Dashboard>
                     <Dashboard.Summary>
@@ -132,8 +132,8 @@ var React = require('react'),
     MyCourses = React.createClass({
 
         render: function () {
-            var user = UserStore.getOne(UserStore.query.current()),
-                courses = CourseStore.getAll(CourseStore.query.filter.coursesForUser(user)),
+            var user = UserStore.query().currentUser().getOne(),
+                courses = CourseStore.query().coursesForUser(user).getAll();
 
                 courseBoxes = courses.map(function (course) {
                     return <CourseBox key={ course.id } course={ course } />
@@ -171,8 +171,8 @@ var React = require('react'),
     PopularCourses = React.createClass({
 
         render: function () {
-            var user = UserStore.getOne(UserStore.query.current()),
-                courses = CourseStore.getAll(CourseStore.query.filter.coursesNotForUser(user)),
+            var user = UserStore.query().currentUser().getOne(),
+                courses = CourseStore.query().coursesNotForUser(user).getAll();
 
                 courseBoxes = courses.map(function (course) {
                     return <CourseBox key={ course.id } course={ course } />
