@@ -16,7 +16,7 @@ var
                                value={ this.props.value }
                                name={ this.props.name }
                                onChange={ this.props.onChange }
-                               checked />
+                               defaultChecked />
                         { this.props.children }
                     </div>
                 );
@@ -41,7 +41,7 @@ var
         render: function () {
             return (
                 <input className="form-text-input" placeholder={ this.props.placeholder }
-                                                   value={ this.props.children }
+                                                   defaultValue={ this.props.children }
                                                    onChange={ this.props.onChange } />
             );
         }
@@ -54,7 +54,7 @@ var
             return (
                 <textarea className="form-textarea-input"
                           placeholder={ this.props.placeholder }
-                          value={ this.props.value }
+                          defaultValue={ this.props.value }
                           onChange={ this.props.onChange } />
 
             );
@@ -65,11 +65,23 @@ var
     Select = React.createClass({
 
         render: function () {
+            var selectedIndex = this.props.options.reduce(function (selected, option, index) {
+                if (this.props.value === selected) {
+                    return index;
+                }
+                return selected;
+            }.bind(this), 0);
+
             return (
-                <select className="form-select" onChange={ this.props.onChange } >
-                    { this.props.options.map(function (optionItem, index) {
-                        return <option key={ index.toString() }>{ optionItem }</option>
-                    }) }
+                <select className="form-select" onChange={ this.props.onChange } defaultValue={ this.props.value } >
+                    {
+                        this.props.options.map(function (optionItem, index) {
+                            if (optionItem === this.props.value) {
+                                return <option key={ index.toString() }>{ optionItem }</option>;
+                            }
+                            return <option key={ index.toString() }>{ optionItem }</option>;
+                        }.bind(this))
+                    }
                 </select>
             );
         }

@@ -611,7 +611,7 @@ var React = require('react'),
                 // Note: We can assume that there is at least 1 topic filter.
                 renderTopicFilters = topics.map(function (topic) {
                     return (
-                        <div className="pure-u-1 pure-u-md-1-2">
+                        <div key={ "topic-filter-" + topic.id } className="pure-u-1 pure-u-md-1-2">
                             <FormLayout.Checkbox name="topic-filter"
                                                  checked={ state.topics[topic.id] }
                                                  value={ topic.id }
@@ -1087,7 +1087,6 @@ var React = require('react'),
                      </QuestionItem_Issues>) :
                     (null);
 
-
             return (
                 <li className="pure-g">
                     <div className="pure-u-1">
@@ -1095,8 +1094,9 @@ var React = require('react'),
                     </div>
                     <div className="question-topic pure-u-1">
                         <span className="question-topic__content">
-                            <FormLayout.Select defaultValue={ selectedTopicName }
-                                               options={ allTopicNames } />
+                            <FormLayout.Select value={ selectedTopicName }
+                                               options={ allTopicNames }
+                                               onChange={ this.onChangeOption } />
                         </span>
                     </div>
                     <div className="pure-u-1">
@@ -1115,6 +1115,10 @@ var React = require('react'),
 
         onClickCancel: function () {
             Action.send(Constants.Action.QUIT_MODE_EDIT_QUESTION);
+        },
+
+        onChangeOption: function () {
+            console.log("DID CHANGE OPTION");
         }
 
     }),
@@ -1225,16 +1229,37 @@ var React = require('react'),
             return (
                 <form className="question-info">
                     <div className="question-info__ask">
-                        <FormLayout.TextInput placeholder="Enter Text here">
+                        <FormLayout.TextInput placeholder="Enter a question"
+                                              onChange={ this.onChangeAsk } >
                             { question.get('ask') }
                         </FormLayout.TextInput>
                     </div>
-                    <MultiChoice_Edit_Options question={ question } />
+                    <MultiChoice_Edit_Options question={ question }
+                                              onChangeCorrect={ this.onChangeCorrect }
+                                              onChangeOption={ this.onChangeOption } />
                     <div className="question-info__explanation--edit">
-                        <FormLayout.TextAreaInput placeholder="Explanation" value={ question.get('explanation') } />
+                        <FormLayout.TextAreaInput placeholder="Explanation"
+                                                  value={ question.get('explanation') }
+                                                  onChange={ this.onChangeExplain } />
                     </div>
                 </form>
             );
+        },
+
+        onChangeAsk: function (event) {
+            console.log("On change ask.");
+        },
+
+        onChangeExplain: function (event) {
+            console.log("On change explain.");
+        },
+
+        onChangeOption: function (event) {
+            console.log("On change option");
+        },
+
+        onChangeCorrect: function (event) {
+            console.log("On change correct.");
         }
 
     }),
@@ -1250,22 +1275,34 @@ var React = require('react'),
                     {
                         options.map(function (option, index) {
                             return (
-                                <li className="multi-choice-info__options-list__item">
+                                <li key={ index.toString() } className="multi-choice-info__options-list__item">
                                     <FormLayout.RadioOption name={ "edit-" + question.id }
                                                             value={ index }
-                                                            checked={ question.isCorrect(option) }>
+                                                            checked={ question.isCorrect(option) }
+                                                            onChange={ this.onChangeRadio } >
 
-                                        <FormLayout.TextInput placeholder={ "Option " + (index + 1) }>
+                                        <FormLayout.TextInput placeholder={ "Option " + (index + 1) }
+                                                              onChange={ this.onChangeTextGenerator(index) } >
                                             { option }
                                         </FormLayout.TextInput>
 
                                     </FormLayout.RadioOption>
                                 </li>
                             );
-                        })
+                        }.bind(this))
                     }
                 </ul>
             );
+        },
+
+        onChangeRadio: function (event) {
+            console.log("On change radio.");
+        },
+
+        onChangeTextGenerator: function (index) {
+            return function (event) {
+                console.log("On change text.");
+            }
         }
 
     }),
