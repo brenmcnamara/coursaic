@@ -112,6 +112,17 @@ var Stores = require('../stores'),
                         return question2.createdAt.getTime() - question1.createdAt.getTime();
                     })
                 });
+            },
+
+            sortByDescendingFlagCount: function () {
+                return new Query.Pipe({
+                    data: this.pipe.data.sort(function (question1, question2) {
+                        var flag1Count = (store._flagsHash[question1.id]) ? store._flagsHash[question1.id].length : 0,
+                            flag2Count = (store._flagsHash[question2.id]) ? store._flagsHash[question2.id].length : 0;
+                        return flag2Count - flag1Count;
+
+                    })
+                });
             }
 
         }),

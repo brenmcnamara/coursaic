@@ -895,16 +895,21 @@ var React = require('react'),
     Sections_FlaggedQuestions = React.createClass({
 
         render: function () {
+
             return (
                 <SectionSet.Section>
                     <SectionSet.Section.Header>Flagged Questions</SectionSet.Section.Header>
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
                         <ul className="question-info-list">
-                            <FlaggedQuestionItem key="needs key 1" />
-                            <FlaggedQuestionItem key="needs key 2" />
-                            <FlaggedQuestionItem key="needs key 3" />
-                            <FlaggedQuestionItem key="needs key 4" />
+                            {
+                                QuestionStore.query().questionsFlagged()
+                                                     .sortByDescendingFlagCount()
+                                                     .getAll().map(function (question) {
+
+                                    return (<FlaggedQuestionItem key={ question.id } question={ question } />);
+                                })
+                            }
                         </ul>
                     </SectionSet.Section.Subsection>
                 </SectionSet.Section>
@@ -921,15 +926,34 @@ var React = require('react'),
                 <ul className="question-info-list">
                     {
                         this.props.questions.map(function (question) {
+                            if (PageStore.currentMode() === PageStore.Mode.EDIT_QUESTION &&
+                                PageStore.currentPayload().questionId === question.id) {
+                                // Render the question in edit mode.
+                                return (<QuestionItem_Edit key={ question.id } question={ question} />);
+                            }
+                            // Not in edit mode for this question.
                             return (<QuestionItem key={ question.id } question={ question } />);
                         })
 
                     }
                 </ul>
             );
+        },
+
+        onChangedMode: function () {
+            this.forceUpdate();
+        },
+
+        componentWillMount: function () {
+            PageStore.on(Constants.Event.CHANGED_MODE, this.onChangedMode);
+        },
+
+        componentsDidUnmount: function () {
+            PageStore.removeListener(Constants.Event.CHANGED_MODE, this.onChangedMode);
         }
 
     }),
+
 
     QuestionItem = React.createClass({
 
@@ -953,7 +977,7 @@ var React = require('react'),
                         { renderDisabledIssue }
                         { renderFlaggedIssue }   
                      </QuestionItem_Issues>) :
-                    (null) ;
+                    (null);
 
 
             return (
@@ -967,7 +991,8 @@ var React = require('react'),
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
                             <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"><i className="fa fa-trash"></i></div>
-                            <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-pencil-square-o"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--good clickable"
+                                 onClick={ this.onClickEdit }><i className="fa fa-pencil-square-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo question={ question } />
@@ -975,6 +1000,10 @@ var React = require('react'),
                     </div>
                 </li>
             );
+        },
+
+        onClickEdit: function () {
+            Action.send(Constants.Action.TO_MODE_EDIT_QUESTION, { questionId: this.props.question.id });
         }
 
     }),
@@ -992,6 +1021,7 @@ var React = require('react'),
 
     }),
 
+
     QuestionItem_Issues_Error = React.createClass({
 
         render: function () {
@@ -1006,6 +1036,7 @@ var React = require('react'),
         }
 
     }),
+
 
     QuestionItem_Issues_Warning = React.createClass({
 
@@ -1022,33 +1053,50 @@ var React = require('react'),
 
     }),
 
+
     QuestionItem_Edit = React.createClass({
 
         render: function () {
+            var 
+                courseId = PageStore.courseId(),
+                course = CourseStore.query().courseWithId(courseId).getOne(),
+
+                question = this.props.question,
+
+                allTopicNames = TopicStore.query().topicsForCourse(course)
+                                                  .getAll()
+                                                  .map(function (topic) { return topic.get('name'); }),
+
+                selectedTopicName = TopicStore.query().topicForQuestion(question).getOne().get('name'),
+
+                isFlagged = QuestionStore.query().questionsFlagged().contains(question),
+                isDisabled = QuestionStore.query().questionsDisabled().contains(question),
+
+                renderDisabledIssue = (isDisabled) ?
+                    (<QuestionItem_Issues_Error>This question is currently disabled.</QuestionItem_Issues_Error>) :
+                    (null),
+
+                renderFlaggedIssue = (isFlagged) ?
+                    (<QuestionItem_Issues_Warning>This question has been flagged.</QuestionItem_Issues_Warning>) :
+                    (null),
+
+                renderIssueList = (isFlagged || isDisabled) ?
+                    (<QuestionItem_Issues>
+                        { renderDisabledIssue }
+                        { renderFlaggedIssue }   
+                     </QuestionItem_Issues>) :
+                    (null);
+
+
             return (
                 <li className="pure-g">
                     <div className="pure-u-1">
-                        <ul className="question-item__issue-list">
-                            <li className="question-item__issue-list__item--error">
-                                <i className="fa fa-exclamation-circle"></i>
-                                <div className="question-item__issue-list__item--error__message">
-                                    This question has been disabled by the owner of the course.
-                                </div>
-                            </li>
-                            <li className="question-item__issue-list__item--warning">
-                                <i className="fa fa-exclamation-triangle"></i>
-                                <div className="question-item__issue-list__item--warning__message">
-                                    This question has been flagged by <strong>3 people</strong>.
-                                </div>
-                            </li>
-                        </ul>
+                        { renderIssueList }
                     </div>
                     <div className="question-topic pure-u-1">
                         <span className="question-topic__content">
-                            <FormLayout.Select options={ ["Algorithms",
-                                                          "Java Syntax",
-                                                          "Compilter/Runtime Errors",
-                                                          "Looping Constructs" ] } />
+                            <FormLayout.Select defaultValue={ selectedTopicName }
+                                               options={ allTopicNames } />
                         </span>
                     </div>
                     <div className="pure-u-1">
@@ -1057,7 +1105,7 @@ var React = require('react'),
                             <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo_Edit />
+                            <QuestionInfo_Edit question={ question } />
                         </div>
                     </div>
                 </li>
@@ -1070,24 +1118,45 @@ var React = require('react'),
     FlaggedQuestionItem = React.createClass({
 
         render: function () {
+            var question = this.props.question,
+                topic = TopicStore.query().topicForQuestion(question).getOne(),
+
+                isFlagged = QuestionStore.query().questionsFlagged().contains(question),
+                isDisabled = QuestionStore.query().questionsDisabled().contains(question),
+
+                renderDisabledIssue = (isDisabled) ?
+                    (<QuestionItem_Issues_Error>This question is currently disabled.</QuestionItem_Issues_Error>) :
+                    (null),
+
+                renderFlaggedIssue = (isFlagged) ?
+                    (<QuestionItem_Issues_Warning>This question has been flagged.</QuestionItem_Issues_Warning>) :
+                    (null),
+
+                renderIssueList = (isFlagged || isDisabled) ?
+                    (<QuestionItem_Issues>
+                        { renderDisabledIssue }
+                        { renderFlaggedIssue }   
+                     </QuestionItem_Issues>) :
+                    (null),
+
+                renderIcon = (isDisabled) ?
+                    (<div className="pure-u-1 question-item__icon-set__item--good clickable"><i className="fa fa-check-square-o"></i></div>) :
+                    (<div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>);
+
             return (
                 <li>
                     <div className="pure-g">
                         <div className="pure-u-1">
-                            <ul className="question-item__issue-list">
-                                <li className="question-item__issue-list__item--warning">
-                                    <i className="fa fa-exclamation-triangle"></i>
-                                    <div className="question-item__issue-list__item--warning__message">
-                                        This question has been flagged by <strong>4 people</strong>.
-                                    </div>
-                                </li>
-                            </ul>
+                            { renderIssueList }
                         </div>
-                            <div className="pure-u-1">
+                        <div className="question-topic pure-u-1">
+                            <span className="question-topic__content">{ topic.get('name') }</span>
+                        </div>
+                        <div className="pure-u-1">
                             <div className="question-item__icon-set--1 pure-g">
-                                <div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>
+                                { renderIcon }
                             </div>
-                            <div className="question-item__content"><QuestionInfo /></div>
+                            <div className="question-item__content"><QuestionInfo question={ question } /></div>
                         </div>
                     </div>
                 </li>
@@ -1111,21 +1180,7 @@ var React = require('react'),
     QuestionInfo = React.createClass({
 
         render: function () {
-            var 
-                dummyQuestion = {
-                    
-                    get: function () {
-                        return "Here is a question";
-                    },
-
-                    isCorrect: function () {
-                        return false;
-                    },
-
-                    getOptions: function () {
-                        return ["Option 1", "Option 2", "Option 3", "Option 4"];
-                    }
-                },
+            var
                 question = this.props.question || dummyQuestion,
                 options = question.getOptions();
 
@@ -1148,7 +1203,7 @@ var React = require('react'),
                         }
                     </ul>
                     <div className="question-info__explanation">
-                        Just because!
+                        { question.get('explanation') }
                     </div>
                 </div>
             );
@@ -1160,47 +1215,51 @@ var React = require('react'),
     QuestionInfo_Edit = React.createClass({
 
         render: function () {
+            var question = this.props.question;
+
             return (
                 <form className="question-info">
                     <div className="question-info__ask">
                         <FormLayout.TextInput placeholder="Enter Text here">
-                            What is 2 + 2?
+                            { question.get('ask') }
                         </FormLayout.TextInput>
                     </div>
-                    <ul className="multi-choice-info__options-list">
-                        <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="17">
-                                <FormLayout.TextInput placeholder="Option 1">
-                                    17
-                                </FormLayout.TextInput>
-                            </FormLayout.RadioOption>
-                        </li>
-                        <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="4">
-                                <FormLayout.TextInput placeholder="Option 1">
-                                    4
-                                </FormLayout.TextInput>
-                            </FormLayout.RadioOption>
-                        </li>
-                        <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="643">
-                                <FormLayout.TextInput placeholder="Option 1">
-                                    643
-                                </FormLayout.TextInput>
-                            </FormLayout.RadioOption>
-                        </li>
-                        <li className="multi-choice-info__options-list__item">
-                            <FormLayout.RadioOption name="question-here" value="22">
-                                <FormLayout.TextInput placeholder="Option 1">
-                                    22
-                                </FormLayout.TextInput>
-                            </FormLayout.RadioOption>
-                        </li>
-                    </ul>
+                    <MultiChoice_Edit_Options question={ question } />
                     <div className="question-info__explanation--edit">
-                        <FormLayout.TextAreaInput placeholder="Explanation" value="Just because!" />
+                        <FormLayout.TextAreaInput placeholder="Explanation" value={ question.get('explanation') } />
                     </div>
                 </form>
+            );
+        }
+
+    }),
+
+
+    MultiChoice_Edit_Options = React.createClass({
+
+        render: function () {
+            var question = this.props.question,
+                options = question.getOptions();
+            return (
+                <ul className="multi-choice-info__options-list">
+                    {
+                        options.map(function (option, index) {
+                            return (
+                                <li className="multi-choice-info__options-list__item">
+                                    <FormLayout.RadioOption name={ "edit-" + question.id }
+                                                            value={ index }
+                                                            checked={ question.isCorrect(option) }>
+
+                                        <FormLayout.TextInput placeholder={ "Option " + (index + 1) }>
+                                            { option }
+                                        </FormLayout.TextInput>
+
+                                    </FormLayout.RadioOption>
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
             );
         }
 
