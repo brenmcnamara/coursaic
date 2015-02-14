@@ -1101,7 +1101,8 @@ var React = require('react'),
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
-                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"><i className="fa fa-minus-circle"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"
+                                 onClick={ this.onClickCancel } ><i className="fa fa-minus-circle"></i></div>
                             <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
@@ -1110,6 +1111,10 @@ var React = require('react'),
                     </div>
                 </li>
             );
+        },
+
+        onClickCancel: function () {
+            Action.send(Constants.Action.QUIT_MODE_EDIT_QUESTION);
         }
 
     }),
