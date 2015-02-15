@@ -22,6 +22,14 @@ var Stores = require('../stores'),
 
         _Query: Query.queryBuilder({
 
+            topicForName: function (topicName) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (topic) {
+                        return topic.get('name') === topicName;
+                    })
+                });
+            },
+
             topicForQuestion: function (question) {
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (topic) {

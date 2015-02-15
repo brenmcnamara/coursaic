@@ -2,11 +2,22 @@
  * changerequest.js
  */
 
+/*global Parse */
+
 var
 	ChangeRequest,
 	
 	EditQuestion;
 
+/***********************************\
+           	Change Request                    
+\***********************************/
+
+ObjectType = function (className, objectId) {
+	var obj = new Parse.Object.extend(className);
+	obj.id = objectId;
+	return obj;
+};
 
 /***********************************\
            	Change Request                    
@@ -44,6 +55,23 @@ ChangeRequest.prototype.isValid = function () {
 	return true;
 };
 
+/***********************************\
+           	Change Request                    
+\***********************************/
+
+EditRequest = function () { };
+
+EditRequest.prototype = new ChangeRequest();
+
+
+EditRequest.prototype.getOriginalObject = function () {
+	return this._object;
+};
+
+
+EditRequest.prototype.getChangeMap = function () {
+	return this._attributes;
+};
 
 /***********************************\
            	Edit Question
@@ -53,12 +81,10 @@ EditQuestion = function (question) {
 	if (!(this instanceof ChangeRequest)) {
 		return new EditQuestion(question);
 	}
-
-	this._object = question;
 };
 
 
-EditQuestion.prototype = new ChangeRequest();
+EditQuestion.prototype = new EditRequest();
 
 
 /***********************************\
@@ -151,5 +177,6 @@ EditMultiChoice.prototype.setOptionAtIndex = function (index, option) {
 
 module.exports = {
 	EditQuestion: EditQuestion,
-	EditMultiChoice: EditMultiChoice
+	EditMultiChoice: EditMultiChoice,
+	ObjectType: ObjectType
 };

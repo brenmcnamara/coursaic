@@ -1113,7 +1113,8 @@ var React = require('react'),
                         <div className="question-item__icon-set--2 pure-g">
                             <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"
                                  onClick={ this.onClickCancel } ><i className="fa fa-minus-circle"></i></div>
-                            <div className={ saveIconClassName }><i className="fa fa-floppy-o"></i></div>
+                            <div className={ saveIconClassName }
+                                 onClick={ this.onClickSave }><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo_Edit question={ question }
@@ -1131,8 +1132,13 @@ var React = require('react'),
             Action.send(Constants.Action.QUIT_MODE_EDIT_QUESTION);
         },
 
+        onClickSave: function (event) {
+            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { editQuestion: this.state.editQuestion });
+        },
+
         onChangeTopic: function (event) {
-            console.log("Changing topic to " + event.target.value);
+            var topic = TopicStore.query().topicForName(event.target.value).getOne();
+            this.state.editQuestion.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
             this.forceUpdate();
         },
 
