@@ -56,6 +56,18 @@ describe("MultiChoice change request", function () {
 		expect(Request.isValid()).toBeTruthy();
 	});
 
+	it("invalidates a question if the ask value is an empty string.", function () {
+		var Request = ChangeRequest.EditMultiChoice(question);
+		Request.set('ask', "");
+		expect(Request.isValid()).toBeFalsy();
+	});
+
+	it("invalidates a question if the explanation values is an empty string.", function () {
+		var Request = ChangeRequest.EditMultiChoice(question);
+		Request.set("explanation", "");
+		expect(Request.isValid()).toBeFalsy();
+	});
+
 	it("invalidates a question if there are multiple options that are identical.", function () {
 		var Request = ChangeRequest.EditMultiChoice(question);
 		Request.setOptionAtIndex(0, '4');

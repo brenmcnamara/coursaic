@@ -30,7 +30,12 @@ ChangeRequest.prototype.set = function (key, val) {
 
 
 ChangeRequest.prototype.get = function (key) {
-	var value = this._attributes[key] || this._object.get(key);
+	if (this._attributes[key] === undefined || this._attributes[key] === null) {
+		return this._object.get(key);
+	}
+	else {
+		return this._attributes[key];
+	}
 	return value;
 };
 
@@ -104,6 +109,14 @@ EditMultiChoice.prototype.isValid = function () {
 				return false;
 			}
 		}
+	}
+
+	if (this.get('ask').trim().length === 0) {
+		return false;
+	}
+
+	if (this.get('explanation').trim().length === 0) {
+		return false;
 	}
 
 	return true;
