@@ -242,6 +242,7 @@ var Stores = require('../stores'),
             },
 
             SIGNUP: function (payload) {
+                logger.log(logger.Level.INFO, "Signing up new user");
                 // Create a new user.
                 var user = new User();
                 user.set('firstName', payload.firstName);
@@ -249,6 +250,7 @@ var Stores = require('../stores'),
                 user.set('username', payload.email);
                 user.set('email', payload.email);
                 user.set('password', payload.password);
+                console.log(JSON.stringify(payload));
 
                 return user.signUp(null);
             },

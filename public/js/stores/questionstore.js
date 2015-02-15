@@ -209,6 +209,20 @@ var Stores = require('../stores'),
                     return self._fetchQuestionsForCourse(course);
                 });
 
+            },
+
+            RESOLVE_MODE_EDIT_QUESTION: function (payload) {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var question = payload.editQuestion.getOriginalObject();
+                    payload.editQuestion.forEachChange(function (key, val) {
+                        question.set(key, val);
+                    });
+                    return question.save().then(function () {
+                        resolve();
+                    });
+                });
+
             }
         }
 

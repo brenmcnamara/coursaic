@@ -116,7 +116,7 @@ var router = require('shore').Router,
 
         onSignUpClicked: function () {
             if (this.isValid()) {
-                router.setPathWithPayload("/signup", this.state);
+                router.setPath("/signup", null, { payload: this.state });
             }
         }
 

@@ -1423,14 +1423,14 @@ var React = require('react'),
         },
 
 
-        changedMode: function(event) {
+        onChangedMode: function(event) {
             this.forceUpdate();
         },
 
 
         componentWillMount: function() {
             Stores.ExamStore().on(Constants.Event.DID_FETCH_EXAMS, this.didFetchExams);
-            Stores.ExamStore().on(Constants.Event.CHANGED_MODE, this.changedMode);
+            Stores.ExamStore().on(Constants.Event.CHANGED_MODE, this.onChangedMode);
             Stores.ExamStore().on(Constants.Event.DID_CREATE_QUESTION, this.didCreateQuestion);
         },
 

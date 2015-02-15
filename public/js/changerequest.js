@@ -14,7 +14,7 @@ var
 \***********************************/
 
 ObjectType = function (className, objectId) {
-	var obj = new Parse.Object.extend(className);
+	var obj = new (Parse.Object.extend(className))();
 	obj.id = objectId;
 	return obj;
 };
@@ -71,6 +71,17 @@ EditRequest.prototype.getOriginalObject = function () {
 
 EditRequest.prototype.getChangeMap = function () {
 	return this._attributes;
+};
+
+
+EditRequest.prototype.forEachChange = function (callback) {
+	var prop, changeMap = this.getChangeMap();
+
+	for (prop in this.getChangeMap()) {
+		if (changeMap.hasOwnProperty(prop)) {
+			callback(prop, changeMap[prop]);
+		}
+	}
 };
 
 /***********************************\

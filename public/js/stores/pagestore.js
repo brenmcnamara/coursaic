@@ -166,6 +166,14 @@ var Dispatcher = require('shore').Dispatcher,
                                  });
             },
 
+            RESOLVE_MODE_EDIT_QUESTION: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.QuestionStore().dispatcherIndex ])
+                        .then(function () {
+                            self._removeMode({ fromMode: self.currentMode() });
+                        });
+            },
+
             SUBMIT_EXAM_RUN: function (payload) {
                 return this._addMode({ toMode: this.Mode.VIEW_EXAM_RESULTS,
                                        toPayload: payload });
