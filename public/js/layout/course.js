@@ -22,6 +22,8 @@ var React = require('react'),
     TopicStore = Stores.TopicStore(),
     UserStore = Stores.UserStore(),
 
+    ChangeRequest = require('../changerequest.js'),
+
     Formatter = require('../formatter.js'),
 
     Action = require('shore').Action,
@@ -1056,6 +1058,10 @@ var React = require('react'),
 
     QuestionItem_Edit = React.createClass({
 
+        getInitialState: function () {
+            return { editQuestion: ChangeRequest.EditMultiChoice(this.props.question) };
+        },
+
         render: function () {
             var 
                 courseId = PageStore.courseId(),
@@ -1096,7 +1102,7 @@ var React = require('react'),
                         <span className="question-topic__content">
                             <FormLayout.Select value={ selectedTopicName }
                                                options={ allTopicNames }
-                                               onChange={ this.onChangeOption } />
+                                               onChange={ this.onChangeTopic } />
                         </span>
                     </div>
                     <div className="pure-u-1">
@@ -1106,19 +1112,41 @@ var React = require('react'),
                             <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo_Edit question={ question } />
+                            <QuestionInfo_Edit question={ question }
+                                               onChangeOption={ this.onChangeOption }
+                                               onChangeCorrect={ this.onChangeCorrect }
+                                               onChangeAsk={ this.onChangeAsk }
+                                               onChangeExplain={ this.onChangeExplain } />
                         </div>
                     </div>
                 </li>
             );
         },
 
-        onClickCancel: function () {
+        onClickCancel: function (event) {
             Action.send(Constants.Action.QUIT_MODE_EDIT_QUESTION);
         },
 
-        onChangeOption: function () {
-            console.log("DID CHANGE OPTION");
+        onChangeTopic: function (event) {
+            console.log("Changing topic to " + event.target.value);
+            this.state.editQuestion.set('topic', event.target.value);
+        },
+
+        onChangeCorrect: function (event) {
+            var correctIndex = +(event.target.value);
+            this.state.editQuestion.setSolutionToIndex(correctIndex);
+        },
+
+        onChangeAsk: function (event) {
+            this.state.editQuestion.set('ask', event.target.value);
+        },
+
+        onChangeExplain: function (event) {
+            this.state.editQuestion.set("explanation", event.target.value);
+        },
+
+        onChangeOption: function (event) {
+            this.state.editQuestion.setOptionAtIndex(event.index, event.target.value);
         }
 
     }),
@@ -1230,9 +1258,9 @@ var React = require('react'),
                 <form className="question-info">
                     <div className="question-info__ask">
                         <FormLayout.TextInput placeholder="Enter a question"
-                                              onChange={ this.onChangeAsk } >
-                            { question.get('ask') }
-                        </FormLayout.TextInput>
+                                              onChange={ this.onChangeAsk }
+                                              isValid={ this.isValidText }
+                                              value={ question.get('ask') } />
                     </div>
                     <MultiChoice_Edit_Options question={ question }
                                               onChangeCorrect={ this.onChangeCorrect }
@@ -1240,26 +1268,31 @@ var React = require('react'),
                     <div className="question-info__explanation--edit">
                         <FormLayout.TextAreaInput placeholder="Explanation"
                                                   value={ question.get('explanation') }
-                                                  onChange={ this.onChangeExplain } />
+                                                  onChange={ this.onChangeExplain }
+                                                  isValid={ this.isValidText } />
                     </div>
                 </form>
             );
         },
 
+        isValidText: function (text) {
+            return text && text.trim().length > 0;
+        },
+
         onChangeAsk: function (event) {
-            console.log("On change ask.");
+            this.props.onChangeAsk(event);
         },
 
         onChangeExplain: function (event) {
-            console.log("On change explain.");
+            this.props.onChangeExplain(event);
         },
 
         onChangeOption: function (event) {
-            console.log("On change option");
+            this.props.onChangeOption(event);
         },
 
         onChangeCorrect: function (event) {
-            console.log("On change correct.");
+            this.props.onChangeCorrect(event);
         }
 
     }),
@@ -1282,10 +1315,9 @@ var React = require('react'),
                                                             onChange={ this.onChangeRadio } >
 
                                         <FormLayout.TextInput placeholder={ "Option " + (index + 1) }
-                                                              onChange={ this.onChangeTextGenerator(index) } >
-                                            { option }
-                                        </FormLayout.TextInput>
-
+                                                              onChange={ this.onChangeTextGenerator(index) }
+                                                              isValid={ this.isValidText }
+                                                              value={ option } />
                                     </FormLayout.RadioOption>
                                 </li>
                             );
@@ -1295,14 +1327,19 @@ var React = require('react'),
             );
         },
 
+        isValidText: function (text) {
+            return text && text.trim().length > 0;
+        },
+
         onChangeRadio: function (event) {
-            console.log("On change radio.");
+            this.props.onChangeCorrect(event);
         },
 
         onChangeTextGenerator: function (index) {
             return function (event) {
-                console.log("On change text.");
-            }
+                event.index = index;
+                this.props.onChangeOption(event);
+            }.bind(this)
         }
 
     }),

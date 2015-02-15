@@ -158,11 +158,19 @@ var
 
         // TODO: Document this.
         getOptions: function() {
+            var parsed;
             // NOTE: This is assuming that the type
             // of the question is multiple choice. Should
             // change this when adding other types of
             // questions.  
-            return JSON.parse(this.get('options'));
+            try {
+                parsed = JSON.parse(this.get('options'));
+            }
+            catch (e) {
+                throw Error("Error while parsing question options from backend: " + this.get('option') + " .");
+            }
+            return parsed;
+
         },
 
         // TODO: Document this.

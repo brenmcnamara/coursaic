@@ -38,26 +38,62 @@ var
 
     TextInput = React.createClass({
 
+        getInitialState: function () {
+            return { value: this.props.value };
+        },
+
         render: function () {
+            var style = { border: 'solid 1px #CCC' };
+            if (this.props.isValid && !this.props.isValid(this.state.value)) {
+                style = { outlineColor: "#EC0000", border: 'solid red 1px' };
+            }
+
             return (
-                <input className="form-text-input" placeholder={ this.props.placeholder }
-                                                   defaultValue={ this.props.children }
-                                                   onChange={ this.props.onChange } />
+                <input className="form-text-input"
+                       style={ style }
+                       placeholder={ this.props.placeholder }
+                       defaultValue={ this.props.value }
+                       onChange={ this.onChange } />
             );
+        },
+
+        onChange: function (event) {
+            this.setState({ value: event.target.value });
+            if (!this.props.isValid || this.props.isValid(event.target.value)) {
+                this.props.onChange(event);
+            }
+
         }
 
     }),
 
     TextAreaInput = React.createClass({
 
+        getInitialState: function () {
+            return { value: this.props.value };
+        },
+
         render: function () {
+            var style = { borderColor: 'solid #CCC 1px' };
+            if (this.props.isValid && !this.props.isValid(this.state.value)) {
+                style = { outlineColor: '#EC0000', border: "solid #EC0000 1px" };
+            }
+
             return (
                 <textarea className="form-textarea-input"
+                          style={ style }
                           placeholder={ this.props.placeholder }
                           defaultValue={ this.props.value }
-                          onChange={ this.props.onChange } />
+                          onChange={ this.onChange } />
 
             );
+        },
+
+        onChange: function (event) {
+            this.setState({ value: event.target.value });
+            if (!this.props.isValid || this.props.isValid(event.target.value)) {
+                this.props.onChange(event);
+            }
         }
 
     }),

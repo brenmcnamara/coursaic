@@ -184,7 +184,6 @@ var Stores = require('../stores'),
         },
 
         query: function () {
-            console.log("Calling query");
             return new this._Query(this._courses);
         },
 
