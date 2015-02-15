@@ -59,10 +59,7 @@ var
 
         onChange: function (event) {
             this.setState({ value: event.target.value });
-            if (!this.props.isValid || this.props.isValid(event.target.value)) {
-                this.props.onChange(event);
-            }
-
+            this.props.onChange(event);
         }
 
     }),
@@ -91,9 +88,7 @@ var
 
         onChange: function (event) {
             this.setState({ value: event.target.value });
-            if (!this.props.isValid || this.props.isValid(event.target.value)) {
-                this.props.onChange(event);
-            }
+            this.props.onChange(event);
         }
 
     }),

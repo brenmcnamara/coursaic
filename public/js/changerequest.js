@@ -122,6 +122,7 @@ EditMultiChoice.prototype.isValid = function () {
 	return true;
 };
 
+
 EditMultiChoice.prototype.setSolutionToIndex = function (index) {
 	var options = this._parseOptions();
 	if (!options[index]) {

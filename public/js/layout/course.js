@@ -1091,7 +1091,11 @@ var React = require('react'),
                         { renderDisabledIssue }
                         { renderFlaggedIssue }   
                      </QuestionItem_Issues>) :
-                    (null);
+                    (null),
+
+                saveIconClassName = (this.state.editQuestion.isValid()) ?
+                    ("pure-u-1-2 question-item__icon-set__item--good clickable") :
+                    ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
 
             return (
                 <li className="pure-g">
@@ -1109,7 +1113,7 @@ var React = require('react'),
                         <div className="question-item__icon-set--2 pure-g">
                             <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"
                                  onClick={ this.onClickCancel } ><i className="fa fa-minus-circle"></i></div>
-                            <div className="pure-u-1-2 question-item__icon-set__item--good clickable"><i className="fa fa-floppy-o"></i></div>
+                            <div className={ saveIconClassName }><i className="fa fa-floppy-o"></i></div>
                         </div>
                         <div className="question-item__content">
                             <QuestionInfo_Edit question={ question }
@@ -1129,24 +1133,28 @@ var React = require('react'),
 
         onChangeTopic: function (event) {
             console.log("Changing topic to " + event.target.value);
-            this.state.editQuestion.set('topic', event.target.value);
+            this.forceUpdate();
         },
 
         onChangeCorrect: function (event) {
             var correctIndex = +(event.target.value);
             this.state.editQuestion.setSolutionToIndex(correctIndex);
+            this.forceUpdate();
         },
 
         onChangeAsk: function (event) {
             this.state.editQuestion.set('ask', event.target.value);
+            this.forceUpdate();
         },
 
         onChangeExplain: function (event) {
             this.state.editQuestion.set("explanation", event.target.value);
+            this.forceUpdate();
         },
 
         onChangeOption: function (event) {
             this.state.editQuestion.setOptionAtIndex(event.index, event.target.value);
+            this.forceUpdate();
         }
 
     }),
