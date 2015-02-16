@@ -195,6 +195,22 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
+            DISABLE_QUESTION: function (payload) {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var request = payload.changeRequest,
+                        question = request.getOriginalObject();
+
+                    question.set('disabled', request.get('disabled'));
+                    question.save().then(function () {
+                        self._questionHash[question.id] = question;
+                        self.emit(Constants.Event.CHANGED_DISABLE_QUESTION_STATE);
+                        resolve();
+                    });
+                });
+
+            },
+
             LOAD_COURSE: function (payload) {
                 var self = this;
 
@@ -214,8 +230,9 @@ var Stores = require('../stores'),
             RESOLVE_MODE_EDIT_QUESTION: function (payload) {
                 var self = this;
                 return new Promise(function (resolve) {
-                    var question = payload.editQuestion.getOriginalObject();
-                    payload.editQuestion.forEachChange(function (key, val) {
+                    // TODO: Move this change request handling to another layer.
+                    var question = payload.changeRequest.getOriginalObject();
+                    payload.changeRequest.forEachChange(function (key, val) {
                         question.set(key, val);
                     });
                     return question.save().then(function () {
@@ -223,7 +240,24 @@ var Stores = require('../stores'),
                     });
                 });
 
-            }
+            },
+
+            UNDISABLE_QUESTION: function (payload) {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var request = payload.changeRequest,
+                        question = request.getOriginalObject();
+
+                    question.set('disabled', request.get('disabled'));
+                    question.save().then(function () {
+                        self._questionHash[question.id] = question;
+                        self.emit(Constants.Event.CHANGED_DISABLE_QUESTION_STATE);
+                        resolve();
+                    });
+                });
+
+            },
+
         }
 
     }),

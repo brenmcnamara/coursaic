@@ -92,6 +92,9 @@ EditQuestion = function (question) {
 	if (!(this instanceof ChangeRequest)) {
 		return new EditQuestion(question);
 	}
+
+	this._attributes = {};
+	this._object = question;
 };
 
 

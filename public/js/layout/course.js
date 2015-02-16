@@ -61,7 +61,21 @@ var React = require('react'),
             else {
                 return <Root_User course={course} />;
             }
-        }
+        },
+
+        onChangeDisableQuestionState: function () {
+            this.forceUpdate();
+        },
+
+        componentWillMount: function () {
+            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE,
+                             this.onChangeDisableQuestionState);
+        },
+
+        componentsDidUnmount: function () {
+            QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE,
+                                         this.onChangeDisableQuestionState);
+        },
 
     }),
 
@@ -214,7 +228,7 @@ var React = require('react'),
 
         onClick: function() {
             Action.send(Constants.Action.ENROLL_CURRENT_USER, { courseId: PageStore.courseId() });
-        }
+        },
 
     }),
 
@@ -698,7 +712,10 @@ var React = require('react'),
             if (!this.state.bar) {
                 bar = new widgets.ProgressBar(context, data);
             }
-
+            else {
+                // Change the data of the current bar.
+                bar.reset(data);
+            }
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
@@ -762,10 +779,12 @@ var React = require('react'),
         componentDidMount: function () {
             this.renderProgressBar();
             window.addEventListener('resize', this.renderProgressBar);
+            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
         },
 
         componentWillUnmount: function () {
             window.removeEventListener('resize', this.renderProgressBar);
+            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
         }
 
     }),
@@ -1059,7 +1078,7 @@ var React = require('react'),
     QuestionItem_Edit = React.createClass({
 
         getInitialState: function () {
-            return { editQuestion: ChangeRequest.EditMultiChoice(this.props.question) };
+            return { changeRequest: ChangeRequest.EditMultiChoice(this.props.question) };
         },
 
         render: function () {
@@ -1093,7 +1112,7 @@ var React = require('react'),
                      </QuestionItem_Issues>) :
                     (null),
 
-                saveIconClassName = (this.state.editQuestion.isValid()) ?
+                saveIconClassName = (this.state.changeRequest.isValid()) ?
                     ("pure-u-1-2 question-item__icon-set__item--good clickable") :
                     ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
 
@@ -1133,33 +1152,33 @@ var React = require('react'),
         },
 
         onClickSave: function (event) {
-            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { editQuestion: this.state.editQuestion });
+            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { changeRequest: this.state.changeRequest });
         },
 
         onChangeTopic: function (event) {
             var topic = TopicStore.query().topicForName(event.target.value).getOne();
-            this.state.editQuestion.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
+            this.state.changeRequest.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
             this.forceUpdate();
         },
 
         onChangeCorrect: function (event) {
             var correctIndex = +(event.target.value);
-            this.state.editQuestion.setSolutionToIndex(correctIndex);
+            this.state.changeRequest.setSolutionToIndex(correctIndex);
             this.forceUpdate();
         },
 
         onChangeAsk: function (event) {
-            this.state.editQuestion.set('ask', event.target.value);
+            this.state.changeRequest.set('ask', event.target.value);
             this.forceUpdate();
         },
 
         onChangeExplain: function (event) {
-            this.state.editQuestion.set("explanation", event.target.value);
+            this.state.changeRequest.set("explanation", event.target.value);
             this.forceUpdate();
         },
 
         onChangeOption: function (event) {
-            this.state.editQuestion.setOptionAtIndex(event.index, event.target.value);
+            this.state.changeRequest.setOptionAtIndex(event.index, event.target.value);
             this.forceUpdate();
         }
 
@@ -1191,8 +1210,10 @@ var React = require('react'),
                     (null),
 
                 renderIcon = (isDisabled) ?
-                    (<div className="pure-u-1 question-item__icon-set__item--good clickable"><i className="fa fa-check-square-o"></i></div>) :
-                    (<div className="pure-u-1 question-item__icon-set__item--bad clickable"><i className="fa fa-ban"></i></div>);
+                    (<div className="pure-u-1 question-item__icon-set__item--good clickable"
+                          onClick={ this.onClickUnDisable }><i className="fa fa-check-square-o"></i></div>) :
+                    (<div className="pure-u-1 question-item__icon-set__item--bad clickable"
+                          onClick={ this.onClickDisable }><i className="fa fa-ban"></i></div>);
 
             return (
                 <li>
@@ -1212,6 +1233,18 @@ var React = require('react'),
                     </div>
                 </li>
             );
+        },
+
+        onClickDisable: function (event) {
+            var changeRequest = ChangeRequest.EditQuestion(this.props.question);
+            changeRequest.set('disabled', true);
+            Action.send(Constants.Action.DISABLE_QUESTION, { changeRequest: changeRequest });
+        },
+
+        onClickUnDisable: function (event) {
+            var changeRequest = ChangeRequest.EditQuestion(this.props.question);
+            changeRequest.set('disabled', false);
+            Action.send(Constants.Action.UNDISABLE_QUESTION, { changeRequest: changeRequest });
         }
 
     }),

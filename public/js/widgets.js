@@ -305,6 +305,20 @@ ProgressBar.prototype = {
 
 
     /**
+     * Reset the progress bar with new data.
+     *
+     * @method reset
+     *
+     * @param data { Object } The data that goes into
+     *  the progress bar.
+     */
+    reset: function (data) {
+        this._data = data;
+        this.render();
+    },
+
+
+    /**
      * Change the values of the progress bar. This can be
      * animated.
      *
@@ -379,8 +393,6 @@ ProgressBar.prototype = {
             self._animationProgress = null;
         }
 
-        console.log("Beginning animation with data: " + JSON.stringify(self._data));
-        console.log("And new data: " + JSON.stringify(newData));
         this._animationId = setInterval(function () {
 
             // Cache the animation progress in an
