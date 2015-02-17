@@ -780,11 +780,13 @@ var React = require('react'),
             this.renderProgressBar();
             window.addEventListener('resize', this.renderProgressBar);
             QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
+            PageStore.on(Constants.Event.CHANGED_MODE, this.renderProgressBar);
         },
 
         componentWillUnmount: function () {
             window.removeEventListener('resize', this.renderProgressBar);
-            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
+            QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
+            PageStore.removeListener(Constants.Event.CHANGED_MODE, this.renderProgressBar);
         }
 
     }),
@@ -1103,10 +1105,6 @@ var React = require('react'),
                     ("pure-u-1-2 question-item__icon-set__item--good clickable") :
                     ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
 
-            // Set the currently selected topic on the change request.
-            // request.
-            this.state.changeRequest.set('topic',
-                                         ChangeRequest.ObjectType('topic', selectedTopic.id));
             return (
                 <li className="pure-g">
                     <div className="question-topic pure-u-1">
@@ -1134,6 +1132,22 @@ var React = require('react'),
             );
         },
 
+        componentDidMount: function () {
+            var 
+                courseId = PageStore.courseId(),
+                course = CourseStore.query().courseWithId(courseId).getOne(),
+
+                allTopics = TopicStore.query().topicsForCourse(course).getAll(),
+                selectedTopic = allTopics[0];
+
+            // Set the currently selected topic on the change request.
+            // request.
+            this.state.changeRequest.set('topic',
+                                         ChangeRequest.ObjectType('Topic', selectedTopic.id));
+            this.state.changeRequest.set('course',
+                                         ChangeRequest.ObjectType('Course', courseId));
+        },
+
         onClickCancel: function (event) {
             Action.send(Constants.Action.QUIT_MODE_CREATE_QUESTION);
         },
@@ -1149,6 +1163,7 @@ var React = require('react'),
         onChangeTopic: function (event) {
             var topic = TopicStore.query().topicForName(event.target.value).getOne();
             this.state.changeRequest.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
+
             this.forceUpdate();
         },
 

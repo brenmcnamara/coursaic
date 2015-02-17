@@ -72,6 +72,18 @@ CreateRequest = function () { };
 CreateRequest.prototype = new ChangeRequest();
 
 
+CreateRequest.prototype.forEachChange = function (callback) {
+	var prop;
+
+	for (prop in this._attributes) {
+		if (this._attributes.hasOwnProperty(prop)) {
+			callback(prop, this._attributes[prop]);
+		}
+	}
+
+};
+
+
 /***********************************\
            	New Question
 \***********************************/
@@ -97,11 +109,23 @@ CreateMultiChoice = function () {
 		return new CreateMultiChoice();
 	}
 
-	this._attributes = { };
+	this._attributes = { type: 1 };
 };
 
 
 CreateMultiChoice.prototype = new CreateQuestion();
+
+
+CreateMultiChoice.prototype.forEachChange = function (callback) {
+
+	CreateQuestion.prototype.forEachChange.call(this, callback);
+	// The solution is not cached in the attributes of
+	// object since it is a dynamic property. Must
+	// add the solution to the callback.
+	if (this.get('solution')) {
+		callback('solution', this.get('solution'));
+	}
+};
 
 
 CreateMultiChoice.prototype.isValid = function () {

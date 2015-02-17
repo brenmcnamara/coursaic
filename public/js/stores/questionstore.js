@@ -227,19 +227,37 @@ var Stores = require('../stores'),
 
             },
 
-            RESOLVE_MODE_EDIT_QUESTION: function (payload) {
-                var self = this;
-                return new Promise(function (resolve) {
-                    // TODO: Move this change request handling to another layer.
-                    var question = payload.changeRequest.getOriginalObject();
-                    payload.changeRequest.forEachChange(function (key, val) {
-                        question.set(key, val);
-                    });
-                    return question.save().then(function () {
-                        resolve();
-                    });
+            RESOLVE_MODE_CREATE_QUESTION: function (payload) {
+                var user = Stores.UserStore().query().currentUser().getOne(),
+                    question = new Question(),
+                    changeRequest = payload.changeRequest;
+
+                changeRequest.forEachChange(function (key, val) {
+                    question.set(key, val);
                 });
 
+                // Any additional properties that are
+                // not set by the user.
+                question.set('author', user);
+                question.set('disabled', false);
+
+                return question.save().then(function (question) {
+                    this._questionHash[question.id] = question;
+                }.bind(this));
+            },
+
+            RESOLVE_MODE_EDIT_QUESTION: function (payload) {
+                // TODO: Move this change request handling to another layer.
+                var question = payload.changeRequest.getOriginalObject();
+
+                payload.changeRequest.forEachChange(function (key, val) {
+                    question.set(key, val);
+                });
+
+
+                return question.save().then(function (question) {
+                    this._questionHash[question.id] = question;
+                }.bind(this));
             },
 
             UNDISABLE_QUESTION: function (payload) {

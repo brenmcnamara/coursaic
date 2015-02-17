@@ -166,11 +166,20 @@ var Dispatcher = require('shore').Dispatcher,
                                  });
             },
 
+            RESOLVE_MODE_CREATE_QUESTION: function (payload) {
+                var self = this;
+
+                return Dispatcher.waitFor([ Stores.QuestionStore().dispatcherIndex ])
+                        .then(function () {
+                            self._removeMode({ fromMode: self.Mode.CREATE_QUESTION });
+                        });
+            },
+
             RESOLVE_MODE_EDIT_QUESTION: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.QuestionStore().dispatcherIndex ])
                         .then(function () {
-                            self._removeMode({ fromMode: self.currentMode() });
+                            self._removeMode({ fromMode: self.Mode.EDIT_QUESTION });
                         });
             },
 
