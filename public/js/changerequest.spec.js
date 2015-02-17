@@ -20,6 +20,10 @@ describe("MultiChoice change request", function () {
 
 			get: function (key) {
 				return question.attributes[key];
+			},
+
+			isCorrect: function (option) {
+				return option === this.get('solution');
 			}
 
 		};
@@ -37,7 +41,7 @@ describe("MultiChoice change request", function () {
 		expect(JSON.parse(Request.get('options'))).toEqual(['3', '4', '16', '6']);
 	});
 
-	it("updates the option and solution when setting changing the correct option.", function () {
+	it("updates the option and solution when changing the correct option.", function () {
 		var Request = ChangeRequest.EditMultiChoice(question);
 		Request.setOptionAtIndex(1, '12');
 		expect(JSON.parse(Request.get('options'))).toEqual(['3', '12', '5', '6']);
@@ -90,13 +94,6 @@ describe("MultiChoice change request", function () {
 		var Request = ChangeRequest.EditMultiChoice(question);
 		Request.setOptionAtIndex(1, "\t\t\n   ");
 		expect(Request.isValid()).toBeFalsy();
-	});
-
-	it("throws an error if trying to set the solution to an index out of bounds.", function () {
-		var Request = ChangeRequest.EditMultiChoice(question);
-		expect(function () {
-			Request.setSolutionToIndex(4);
-		}).toThrow();
 	});
 
 	it("throws an error if trying to set an option to a falsy value.", function () {

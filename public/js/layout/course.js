@@ -1139,7 +1139,11 @@ var React = require('react'),
         },
 
         onClickSave: function (event) {
-            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { changeRequest: this.state.changeRequest });
+            if (this.state.changeRequest.isValid()) {
+                Action.send(Constants.Action.RESOLVE_MODE_CREATE_QUESTION,
+                            { changeRequest: this.state.changeRequest });
+            }
+
         },
 
         onChangeTopic: function (event) {
@@ -1249,7 +1253,11 @@ var React = require('react'),
         },
 
         onClickSave: function (event) {
-            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { changeRequest: this.state.changeRequest });
+            if (this.state.changeRequest.isValid()) {
+                Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION,
+                            { changeRequest: this.state.changeRequest });
+            }
+
         },
 
         onChangeTopic: function (event) {

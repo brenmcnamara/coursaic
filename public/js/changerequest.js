@@ -126,6 +126,18 @@ CreateMultiChoice.prototype.isValid = function () {
 };
 
 
+CreateMultiChoice.prototype.get = function (key) {
+	if (key === 'solution') {
+		// Customize getting the solution to avoid
+		// certain bugs.
+		return this.getOptions()[this._solutionIndex];
+	}
+	else {
+		// Call the super class' implementation.
+		return CreateQuestion.prototype.get.call(this, key);
+	}
+};
+
 CreateMultiChoice.prototype.getOptions = function (index, option) {
 	return (this.get('options')) ? (JSON.parse(this.get('options'))) : (["", "", "", ""]);
 };
@@ -139,8 +151,7 @@ CreateMultiChoice.prototype.setOptionAtIndex = function (index, option) {
 
 
 CreateMultiChoice.prototype.setSolutionToIndex = function (index) {
-	var options = this.getOptions();
-	this.set('solution', options[index]);
+	this._solutionIndex = index;
 };
 
 
@@ -213,6 +224,15 @@ EditMultiChoice = function (question) {
 	}
 	this._attributes = {};
 	this._object = question;
+
+
+	// Find the correct option and set the solution index
+	// to reflect this option.
+	this._parseOptions().forEach(function (option, index) {
+		if (question.isCorrect(option)) {
+			this._solutionIndex = index;
+		}
+	}.bind(this));
 };
 
 
@@ -231,6 +251,29 @@ EditMultiChoice.prototype._parseOptions = function () {
 };
 
 
+EditMultiChoice.prototype.get = function (key) {
+	if (key === 'solution') {
+		return this._parseOptions()[this._solutionIndex];
+	}
+	else {
+		return EditQuestion.prototype.get.call(this, key);
+	}
+};
+
+
+EditMultiChoice.prototype.forEachChange = function (callback) {
+	// Override this method to include the solution value.
+	// Need to do this because the callback checks the change map
+	// for any changes and the solution is a dynamic property that
+	// is not cached in the change map.
+	EditQuestion.prototype.forEachChange.call(this, callback);
+
+	if (this.get('solution') !== this._object.get('solution')) {
+		callback('solution', this.get('solution'));
+	}
+};
+
+
 EditMultiChoice.prototype.isValid = function () {
 	var options = this._parseOptions(),
 		i, j;
@@ -242,7 +285,7 @@ EditMultiChoice.prototype.isValid = function () {
 	// Check if any 2 options are identical or if any option
 	// is set to the empty string.
 	for (i = 0; i < options.length; ++i) {
-		if (options[i].length === 0) {
+		if (!options[i]) {
 			return false;
 		}
 
@@ -266,12 +309,7 @@ EditMultiChoice.prototype.isValid = function () {
 
 
 EditMultiChoice.prototype.setSolutionToIndex = function (index) {
-	var options = this._parseOptions();
-	if (!options[index]) {
-		throw Error("Setting the solution to an invalid value.");
-	}
-	this.set('solution', options[index]);
-	return this;
+	this._solutionIndex = index;
 };
 
 
@@ -279,12 +317,6 @@ EditMultiChoice.prototype.setOptionAtIndex = function (index, option) {
 	var options = this._parseOptions();
 
 	option = option.trim();
-
-	if (this.get('solution') === options[index]) {
-		// Changing the text of the solution. Must modify the
-		// solution to reflect the new option as well.
-		this.set('solution', option);
-	}
 	options[index] = option;
 	this.set('options', JSON.stringify(options));
 	return this;
