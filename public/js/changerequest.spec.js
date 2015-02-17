@@ -4,7 +4,7 @@
 
 var ChangeRequest = require('./changerequest.js');
 
-describe("MultiChoice change request", function () {
+describe("Edit MultiChoice change request", function () {
 
 	var question;
 

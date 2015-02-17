@@ -105,13 +105,21 @@ CreateMultiChoice.prototype = new CreateQuestion();
 
 
 CreateMultiChoice.prototype.isValid = function () {
-	var options = this.getOptions();
+	var options = this.getOptions(),
+		i, j;
 
-	// Make sure that all the options have values and there are at least
-	// 4 options.
-	if (!options.reduce(function (hasOption, option) {return hasOption && option; }, true) &&
-		options.length >= 4) {
-		return false;
+	// Check if any 2 options are identical or if any option
+	// is set to the empty string.
+	for (i = 0; i < options.length; ++i) {
+		if (!options[i]) {
+			return false;
+		}
+
+		for (j = i + 1; j < options.length; ++j) {
+			if (options[i] === options[j]) {
+				return false;
+			}
+		}
 	}
 
 	if (!this.get('ask') || !this.get('explanation') || !this.get('solution')) {
@@ -137,6 +145,7 @@ CreateMultiChoice.prototype.get = function (key) {
 		return CreateQuestion.prototype.get.call(this, key);
 	}
 };
+
 
 CreateMultiChoice.prototype.getOptions = function (index, option) {
 	return (this.get('options')) ? (JSON.parse(this.get('options'))) : (["", "", "", ""]);
