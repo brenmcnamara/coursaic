@@ -211,6 +211,10 @@ var Dispatcher = require('shore').Dispatcher,
 
             QUIT_MODE_EDIT_QUESTION: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.EDIT_QUESTION });
+            },
+
+            QUIT_MODE_CREATE_QUESTION: function (payload) {
+                return this._removeMode({ fromMode: this.Mode.CREATE_QUESTION });
             }
 
         },

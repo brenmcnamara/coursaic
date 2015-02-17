@@ -903,11 +903,16 @@ var React = require('react'),
                     <SectionSet.Section.Header>My Questions</SectionSet.Section.Header>
                     <div className="divide" />
                     <SectionSet.Section.Subsection>
-                        <h3><span className="inline-button">Click here</span> to create a new question.</h3>
+                        <h3><span className="inline-button"
+                                  onClick={ this.onClickCreateQuestion }>Click here</span> to create a new question.</h3>
                         <QuestionList questions={ questions } />
                     </SectionSet.Section.Subsection>
                 </SectionSet.Section>
             );
+        },
+
+        onClickCreateQuestion: function () {
+            Action.send(Constants.Action.TO_MODE_CREATE_QUESTION);
         }
 
     }),
@@ -943,8 +948,13 @@ var React = require('react'),
     QuestionList = React.createClass({
 
         render: function () {
+            var newQuestion = (PageStore.currentMode() === PageStore.Mode.CREATE_QUESTION) ?
+                (<QuestionItem_New />) :
+                (null);
+
             return (
                 <ul className="question-info-list">
+                    { newQuestion }
                     {
                         this.props.questions.map(function (question) {
                             if (PageStore.currentMode() === PageStore.Mode.EDIT_QUESTION &&
@@ -1070,6 +1080,93 @@ var React = require('react'),
                     </div>
                 </li>
             );
+        }
+
+    }),
+
+
+    QuestionItem_New = React.createClass({
+
+        getInitialState: function () {
+            return { changeRequest: ChangeRequest.CreateMultiChoice() };
+        },
+
+        render: function () {
+            var 
+                courseId = PageStore.courseId(),
+                course = CourseStore.query().courseWithId(courseId).getOne(),
+
+                allTopics = TopicStore.query().topicsForCourse(course).getAll(),
+                selectedTopic = allTopics[0],
+
+                saveIconClassName = (this.state.changeRequest.isValid()) ?
+                    ("pure-u-1-2 question-item__icon-set__item--good clickable") :
+                    ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
+
+            // Set the currently selected topic on the change request.
+            // request.
+            this.state.changeRequest.set('topic',
+                                         ChangeRequest.ObjectType('topic', selectedTopic.id));
+            return (
+                <li className="pure-g">
+                    <div className="question-topic pure-u-1">
+                        <span className="question-topic__content">
+                            <FormLayout.Select value={ selectedTopic.get('name') }
+                                               options={ allTopics.map(function (topic) {return topic.get('name'); }) }
+                                               onChange={ this.onChangeTopic } />
+                        </span>
+                    </div>
+                    <div className="pure-u-1">
+                        <div className="question-item__icon-set--2 pure-g">
+                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"
+                                 onClick={ this.onClickCancel } ><i className="fa fa-minus-circle"></i></div>
+                            <div className={ saveIconClassName }
+                                 onClick={ this.onClickSave }><i className="fa fa-floppy-o"></i></div>
+                        </div>
+                        <div className="question-item__content">
+                            <QuestionInfo_New  onChangeOption={ this.onChangeOption }
+                                               onChangeCorrect={ this.onChangeCorrect }
+                                               onChangeAsk={ this.onChangeAsk }
+                                               onChangeExplain={ this.onChangeExplain } />
+                        </div>
+                    </div>
+                </li>
+            );
+        },
+
+        onClickCancel: function (event) {
+            Action.send(Constants.Action.QUIT_MODE_CREATE_QUESTION);
+        },
+
+        onClickSave: function (event) {
+            Action.send(Constants.Action.RESOLVE_MODE_EDIT_QUESTION, { changeRequest: this.state.changeRequest });
+        },
+
+        onChangeTopic: function (event) {
+            var topic = TopicStore.query().topicForName(event.target.value).getOne();
+            this.state.changeRequest.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
+            this.forceUpdate();
+        },
+
+        onChangeCorrect: function (event) {
+            var correctIndex = +(event.target.value);
+            this.state.changeRequest.setSolutionToIndex(correctIndex);
+            this.forceUpdate();
+        },
+
+        onChangeAsk: function (event) {
+            this.state.changeRequest.set('ask', event.target.value);
+            this.forceUpdate();
+        },
+
+        onChangeExplain: function (event) {
+            this.state.changeRequest.set("explanation", event.target.value);
+            this.forceUpdate();
+        },
+
+        onChangeOption: function (event) {
+            this.state.changeRequest.setOptionAtIndex(event.index, event.target.value);
+            this.forceUpdate();
         }
 
     }),
@@ -1296,6 +1393,50 @@ var React = require('react'),
     }),
 
 
+    QuestionInfo_New = React.createClass({
+
+        render: function () {
+            return (
+                <form className="question-info">
+                    <div className="question-info__ask">
+                        <FormLayout.TextInput placeholder="Enter a question"
+                                              onChange={ this.onChangeAsk }
+                                              isValid={ this.isValidText } />
+                    </div>
+                    <MultiChoice_New_Options  onChangeCorrect={ this.onChangeCorrect }
+                                              onChangeOption={ this.onChangeOption } />
+                    <div className="question-info__explanation--edit">
+                        <FormLayout.TextAreaInput placeholder="Explanation"
+                                                  onChange={ this.onChangeExplain }
+                                                  isValid={ this.isValidText } />
+                    </div>
+                </form>
+            );
+        },
+
+        isValidText: function (text) {
+            return text && text.trim().length > 0;
+        },
+
+        onChangeAsk: function (event) {
+            this.props.onChangeAsk(event);
+        },
+
+        onChangeExplain: function (event) {
+            this.props.onChangeExplain(event);
+        },
+
+        onChangeOption: function (event) {
+            this.props.onChangeOption(event);
+        },
+
+        onChangeCorrect: function (event) {
+            this.props.onChangeCorrect(event);
+        }
+
+    }),
+
+
     QuestionInfo_Edit = React.createClass({
 
         render: function () {
@@ -1340,6 +1481,49 @@ var React = require('react'),
 
         onChangeCorrect: function (event) {
             this.props.onChangeCorrect(event);
+        }
+
+    }),
+
+
+    MultiChoice_New_Options = React.createClass({
+
+        render: function () {
+            return (
+                <ul className="multi-choice-info__options-list">
+                    {
+                        [1, 2, 3, 4].map(function (val, index) {
+                            return (
+                                <li key={ index.toString() } className="multi-choice-info__options-list__item">
+                                    <FormLayout.RadioOption name={ "edit-new" }
+                                                            value={ index }
+                                                            onChange={ this.onChangeRadio } >
+
+                                        <FormLayout.TextInput placeholder={ "Option " + (val) }
+                                                              onChange={ this.onChangeTextGenerator(index) }
+                                                              isValid={ this.isValidText } />
+                                    </FormLayout.RadioOption>
+                                </li>
+                            );
+                        }.bind(this))
+                    }
+                </ul>
+            );
+        },
+
+        isValidText: function (text) {
+            return text && text.trim().length > 0;
+        },
+
+        onChangeRadio: function (event) {
+            this.props.onChangeCorrect(event);
+        },
+
+        onChangeTextGenerator: function (index) {
+            return function (event) {
+                event.index = index;
+                this.props.onChangeOption(event);
+            }.bind(this)
         }
 
     }),

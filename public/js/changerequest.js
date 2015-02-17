@@ -7,7 +7,18 @@
 var
 	ChangeRequest,
 	
-	EditQuestion;
+	NewRequest,
+
+	NewQuestion,
+
+	NewMultiChoice,
+
+	EditRequest,
+
+	EditQuestion,
+
+	EditMultiChoice;
+
 
 /***********************************\
            	Change Request                    
@@ -18,6 +29,7 @@ ObjectType = function (className, objectId) {
 	obj.id = objectId;
 	return obj;
 };
+
 
 /***********************************\
            	Change Request                    
@@ -41,6 +53,108 @@ ChangeRequest.prototype.set = function (key, val) {
 
 
 ChangeRequest.prototype.get = function (key) {
+	return this._attributes[key];
+};
+
+
+ChangeRequest.prototype.isValid = function () {
+	return true;
+};
+
+
+/***********************************\
+           	New Request                  
+\***********************************/
+
+CreateRequest = function () { };
+
+
+CreateRequest.prototype = new ChangeRequest();
+
+
+/***********************************\
+           	New Question
+\***********************************/
+
+CreateQuestion = function () { 
+	if (!(this instanceof CreateQuestion)) {
+		return new CreateQuestion();
+	}
+
+	this._attributes = { };
+};
+
+
+CreateQuestion.prototype = new CreateRequest();
+
+
+/***********************************\
+           New Multi Choice
+\***********************************/
+
+CreateMultiChoice = function () { 
+	if (!(this instanceof CreateMultiChoice)) {
+		return new CreateMultiChoice();
+	}
+
+	this._attributes = { };
+};
+
+
+CreateMultiChoice.prototype = new CreateQuestion();
+
+
+CreateMultiChoice.prototype.isValid = function () {
+	var options = this.getOptions();
+
+	// Make sure that all the options have values and there are at least
+	// 4 options.
+	if (!options.reduce(function (hasOption, option) {return hasOption && option; }, true) &&
+		options.length >= 4) {
+		return false;
+	}
+
+	if (!this.get('ask') || !this.get('explanation') || !this.get('solution')) {
+		return false;
+	}
+
+	if (!this.get('topic')) {
+		return false;
+	}
+
+	return true;
+};
+
+
+CreateMultiChoice.prototype.getOptions = function (index, option) {
+	return (this.get('options')) ? (JSON.parse(this.get('options'))) : (["", "", "", ""]);
+};
+
+
+CreateMultiChoice.prototype.setOptionAtIndex = function (index, option) {
+	var options = this.getOptions();
+	options[index] = option;
+	this.set('options', JSON.stringify(options));
+};
+
+
+CreateMultiChoice.prototype.setSolutionToIndex = function (index) {
+	var options = this.getOptions();
+	this.set('solution', options[index]);
+};
+
+
+/***********************************\
+           	Edit Request
+\***********************************/
+
+EditRequest = function () { };
+
+
+EditRequest.prototype = new ChangeRequest();
+
+
+EditRequest.prototype.get = function (key) {
 	if (this._attributes[key] === undefined || this._attributes[key] === null) {
 		return this._object.get(key);
 	}
@@ -49,19 +163,6 @@ ChangeRequest.prototype.get = function (key) {
 	}
 	return value;
 };
-
-
-ChangeRequest.prototype.isValid = function () {
-	return true;
-};
-
-/***********************************\
-           	Change Request                    
-\***********************************/
-
-EditRequest = function () { };
-
-EditRequest.prototype = new ChangeRequest();
 
 
 EditRequest.prototype.getOriginalObject = function () {
@@ -84,6 +185,7 @@ EditRequest.prototype.forEachChange = function (callback) {
 	}
 };
 
+
 /***********************************\
            	Edit Question
 \***********************************/
@@ -102,7 +204,7 @@ EditQuestion.prototype = new EditRequest();
 
 
 /***********************************\
-             Multi Choice
+          Edit Multi Choice
 \***********************************/
 
 EditMultiChoice = function (question) {
@@ -190,6 +292,8 @@ EditMultiChoice.prototype.setOptionAtIndex = function (index, option) {
 
 
 module.exports = {
+	CreateQuestion: CreateQuestion,
+	CreateMultiChoice: CreateMultiChoice,
 	EditQuestion: EditQuestion,
 	EditMultiChoice: EditMultiChoice,
 	ObjectType: ObjectType
