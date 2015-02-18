@@ -88,23 +88,6 @@ var Dispatcher = require('shore').Dispatcher,
                                     });
             },
 
-            DELETE_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                // Done waiting for the exam store to delete
-                                // the question.
-                                 .then(
-                                    // Success.
-                                    function() {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.DELETE_QUESTION });
-                                    },
-                                    // Error.
-                                    function(error) {
-                                        throw error;
-                                    });
-            },
-
             EDIT_QUESTION: function (payload) {
                 var self = this;
                 return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])

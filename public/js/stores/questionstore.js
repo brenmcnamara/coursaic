@@ -195,6 +195,16 @@ var Stores = require('../stores'),
 
         actionHandler: {
 
+            DELETE_QUESTION: function (payload) {
+                var question = this._questionHash[payload.questionId];
+
+                return question.destroy().then(function (question) {
+                    delete this._questionHash[payload.questionId];
+                    this.emit(Constants.Event.DELETED_QUESTION);
+                }.bind(this));
+
+            },
+
             DISABLE_QUESTION: function (payload) {
                 var self = this;
                 return new Promise(function (resolve) {

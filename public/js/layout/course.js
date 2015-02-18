@@ -63,18 +63,27 @@ var React = require('react'),
             }
         },
 
-        onChangeDisableQuestionState: function () {
-            this.forceUpdate();
-        },
-
         componentWillMount: function () {
             QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE,
                              this.onChangeDisableQuestionState);
+
+            QuestionStore.on(Constants.Event.DELETED_QUESTION, this.onDeletedQuestion);
         },
 
         componentsDidUnmount: function () {
             QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE,
                                          this.onChangeDisableQuestionState);
+
+            QuestionStore.removeListener(Constants.Event.DELETED_QUESTION, this.onDeletedQuestion);
+        },
+
+        onChangeDisableQuestionState: function () {
+            this.forceUpdate();
+        },
+
+        onDeletedQuestion: function () {
+            console.log("QUestion just deleted. reloading page.");
+            this.forceUpdate();
         },
 
     }),
@@ -725,6 +734,25 @@ var React = require('react'),
         },
 
         /***********************************\
+                     Life Cycle
+        \***********************************/
+
+        componentDidMount: function () {
+            this.renderProgressBar();
+            window.addEventListener('resize', this.renderProgressBar);
+            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
+            PageStore.on(Constants.Event.CHANGED_MODE, this.renderProgressBar);
+            QuestionStore.on(Constants.Event.DELETED_QUESTION, this.renderProgressBar);
+        },
+
+        componentWillUnmount: function () {
+            window.removeEventListener('resize', this.renderProgressBar);
+            QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
+            PageStore.removeListener(Constants.Event.CHANGED_MODE, this.renderProgressBar);
+            QuestionStore.removeListener(Constants.Event.DELETED_QUESTION, this.renderProgressBar);
+        },
+
+        /***********************************\
                     Event Handling
         \***********************************/
  
@@ -771,23 +799,6 @@ var React = require('react'),
             state.bar.change({ selected: selected, current: selected }, { animate: true });
             this.setState(state);
         },
-
-        /***********************************\
-                     Life Cycle
-        \***********************************/
-
-        componentDidMount: function () {
-            this.renderProgressBar();
-            window.addEventListener('resize', this.renderProgressBar);
-            QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
-            PageStore.on(Constants.Event.CHANGED_MODE, this.renderProgressBar);
-        },
-
-        componentWillUnmount: function () {
-            window.removeEventListener('resize', this.renderProgressBar);
-            QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
-            PageStore.removeListener(Constants.Event.CHANGED_MODE, this.renderProgressBar);
-        }
 
     }),
 
@@ -915,7 +926,8 @@ var React = require('react'),
 
         onClickCreateQuestion: function () {
             Action.send(Constants.Action.TO_MODE_CREATE_QUESTION);
-        }
+        },
+
 
     }),
 
@@ -977,6 +989,10 @@ var React = require('react'),
             this.forceUpdate();
         },
 
+        onDeleteQuestion: function () {
+            this.forceUpdate();
+        },
+
         componentWillMount: function () {
             PageStore.on(Constants.Event.CHANGED_MODE, this.onChangedMode);
         },
@@ -1023,7 +1039,8 @@ var React = require('react'),
                     </div>
                     <div className="pure-u-1">
                         <div className="question-item__icon-set--2 pure-g">
-                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"><i className="fa fa-trash"></i></div>
+                            <div className="pure-u-1-2 question-item__icon-set__item--bad clickable"
+                                 onClick={ this.onClickDelete }><i className="fa fa-trash"></i></div>
                             <div className="pure-u-1-2 question-item__icon-set__item--good clickable"
                                  onClick={ this.onClickEdit }><i className="fa fa-pencil-square-o"></i></div>
                         </div>
@@ -1033,6 +1050,12 @@ var React = require('react'),
                     </div>
                 </li>
             );
+        },
+
+        onClickDelete: function (event) {
+            if (confirm("Are you sure you would like to delete this question?")) {
+                Action.send(Constants.Action.DELETE_QUESTION, { questionId: this.props.question.id });
+            }
         },
 
         onClickEdit: function () {
