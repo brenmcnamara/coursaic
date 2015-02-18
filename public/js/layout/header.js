@@ -11,7 +11,6 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
-    Router = require('shore').Router,
     Action = require('shore').Action,
     Constants = require('../constants.js'),
 
@@ -60,16 +59,17 @@ var React = require('react'),
 
 
         onClickLogo: function(event) {
-            Router.path("/");
+            Action().route("/").send();
         },
 
 
         onClickText: function(event) {
-            Router.path("/");
+            Action().route("/").send();
         },
 
 
         didBeginEditing: function(event) {
+
             this.setState({isEditing: true});
         },
 

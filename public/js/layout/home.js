@@ -17,7 +17,6 @@ var React = require('react'),
     UserStore = Stores.UserStore(),
     CourseStore = Stores.CourseStore(),
 
-    Router = require('shore').Router,
     Action = require('shore').Action,
     Constants = require('../constants.js'),
 
@@ -75,11 +74,8 @@ var React = require('react'),
 
 
         onClickLogout: function () {
-            Router.setPath("/", 
-                           {}, // No Arg map.
-                           {
-                             action: Constants.Action.LOGOUT
-                           });
+            Action(Constants.Action.LOGOUT)
+                .route("/").send();
         }
 
 
@@ -246,7 +242,7 @@ var React = require('react'),
 
         onClick: function(event) {
             Logger.log(Logger.Level.INFO, "Course selected: " + this.props.course.id);
-            Router.setPath("/course/<courseId>", { courseId: this.props.course.id });
+            Action().route("/course/<courseId>", { courseId: this.props.course.id }).send();
         }
 
     });

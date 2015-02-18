@@ -6,8 +6,7 @@
  * The layout for the splash page.
  */
 
-var router = require('shore').Router,
-    action = require('shore').Action
+var Action = require('shore').Action
     constants = require('../constants.js'),
     React = require('react'),
 
@@ -116,7 +115,7 @@ var router = require('shore').Router,
 
         onSignUpClicked: function () {
             if (this.isValid()) {
-                router.setPath("/signup", null, { payload: this.state });
+                Action(null, this.state).route("/signup").send()
             }
         }
 
@@ -191,19 +190,14 @@ var router = require('shore').Router,
 
         onLogin: function () {
             if (this.isValid()) {
-                router.setPath("/home",
-                               { }, // No arg map.
-                               {
-                                    payload: {
-                                       username: this.state.email,
-                                       password: this.state.password 
-                                    }
-                               });
+                Action(null, { username: this.state.email, password: this.state.password })
+                    .route("/home")
+                    .send();
             }
         },
 
         onForgotPassword: function () {
-            router.setPath("/resetpassword");
+            Action().route("/resetpassword").send();
         }
 
 
@@ -273,6 +267,7 @@ var router = require('shore').Router,
     Content = React.createClass({
  
         render: function () {
+            console.log("Rendering content.");
             return (
                 <div className="content-wrapper splash__content-wrapper">
                     <FeatureList />
@@ -287,6 +282,7 @@ var router = require('shore').Router,
     Root = React.createClass({
 
         render: function () {
+            console.log("Rendering root.");
             var menu = [
                 (<a href="#">Login</a>),
                 (<a href="#">Sign Up</a>)

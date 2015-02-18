@@ -28,7 +28,6 @@ var React = require('react'),
 
     Action = require('shore').Action,
     Constants = require('../constants.js'),
-    Router = require('shore').Router,
 
     Util = require('shore').Util,
 

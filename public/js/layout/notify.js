@@ -7,8 +7,7 @@
  */
 
 var React = require('react'),
-    Router = require('shore').Router,
-
+    Action = require('shore').Action,
 
     /**
      * Notifies that an email was sent for resetting
@@ -33,7 +32,7 @@ var React = require('react'),
         },
 
         onClickHome: function () {
-            Router.path("/");
+            Action().route("/").send();
         }
 
     }),
@@ -106,7 +105,7 @@ var React = require('react'),
 
         onSendEmailClicked: function () {
             if (this.isValid()) {
-                Router.setPathWithPayload("/resetpasswordemail", { email: this.state.email });
+                Action(null, { email: this.state.email }).route("/resetpasswordemail").send();
             }
         }
 
@@ -138,8 +137,7 @@ var React = require('react'),
         },
 
         onClickSplash: function () {
-            console.log("Clicking");
-            Router.path("/");
+            Action().route("/").send();
         }
 
     }),
@@ -169,7 +167,7 @@ var React = require('react'),
 
 
         onClickHome: function () {
-            Router.path("/");
+            Action().route("/").send();
         }
 
     });

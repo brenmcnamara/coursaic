@@ -217,6 +217,7 @@ var Stores = require('../stores'),
             },
 
             LOGIN: function (payload) {
+                console.log("LOGIN WAS CALLED");
                 // Check if the user is already logged in.
                 if (this._currentUser()) {
                     logger.log(logger.Level.INFO, "Skipping login. User already logged in.");
@@ -250,7 +251,6 @@ var Stores = require('../stores'),
                 user.set('username', payload.email);
                 user.set('email', payload.email);
                 user.set('password', payload.password);
-                console.log(JSON.stringify(payload));
 
                 return user.signUp(null);
             },
