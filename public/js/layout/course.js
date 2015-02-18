@@ -82,7 +82,6 @@ var React = require('react'),
         },
 
         onDeletedQuestion: function () {
-            console.log("QUestion just deleted. reloading page.");
             this.forceUpdate();
         },
 
@@ -105,7 +104,7 @@ var React = require('react'),
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
-                        <CourseDashboard course={ course } />
+                        <CourseDashboard course={ course } isOwner={ true } />
                         <Sections_Owner course={ course } />
                     </div>
                     
@@ -186,8 +185,17 @@ var React = require('react'),
             var user = UserStore.query().currentUser().getOne(),
                 course = this.props.course,
 
-                renderEnrollButton = (user.isEnrolled(course)) ? 
-                    (<UnenrollButton />) : (<EnrollButton />);
+                renderEnrollButton;
+
+            if (this.props.isOwner) {
+                renderEnrollButton = null;
+            } 
+            else if (user.isEnrolled(course)) {
+                renderEnrollButton = <UnenrollButton />;
+            }
+            else {
+                renderEnrollButton = <EnrollButton />;
+            }
 
             return (
                 <Dashboard>
