@@ -74,8 +74,7 @@ var React = require('react'),
 
 
         onClickLogout: function () {
-            Action(Constants.Action.LOGOUT)
-                .route("/").send();
+            Action(Constants.Action.LOGOUT).route("/").send();
         }
 
 
@@ -242,7 +241,9 @@ var React = require('react'),
 
         onClick: function(event) {
             Logger.log(Logger.Level.INFO, "Course selected: " + this.props.course.id);
-            Action().route("/course/<courseId>", { courseId: this.props.course.id }).send();
+            Action(Constants.Action.LOAD_COURSE)
+                .route("/course/<courseId>", { courseId: this.props.course.id })
+                .send();
         }
 
     });

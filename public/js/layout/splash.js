@@ -7,7 +7,7 @@
  */
 
 var Action = require('shore').Action
-    constants = require('../constants.js'),
+    Constants = require('../constants.js'),
     React = require('react'),
 
     headerLayout = require('./header.js'),
@@ -115,7 +115,7 @@ var Action = require('shore').Action
 
         onSignUpClicked: function () {
             if (this.isValid()) {
-                Action(null, this.state).route("/signup").send()
+                Action(Constants.Action.SIGNUP, this.state).route("/signup").send()
             }
         }
 
@@ -190,14 +190,14 @@ var Action = require('shore').Action
 
         onLogin: function () {
             if (this.isValid()) {
-                Action(null, { username: this.state.email, password: this.state.password })
+                Action(Constants.Action.LOGIN, { username: this.state.email, password: this.state.password })
                     .route("/home")
                     .send();
             }
         },
 
         onForgotPassword: function () {
-            Action().route("/resetpassword").send();
+            Action(Constants.Action.RESET_PASSWORD, { email: this.state.email }).route("/resetpassword").send();
         }
 
 
