@@ -1,3 +1,0 @@
-/**
- * actionPayload.spec.js
- */
