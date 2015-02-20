@@ -87,24 +87,6 @@ module.exports = {
             component: Layout.notifyLayout.PageNotFound
         });
 
-        // Add all the error handling here.
-        Router.errors([
-            {
-                errorType: Constants.ErrorType.NO_USER_CREDENTIALS,
-                handler: function () {
-                    console.log("No user credentials.");
-                }
-            },
-            {
-                errorType: Constants.ErrorType.INVALID_EXAM_RUN,
-                handler: Router.ErrorOperation.pageNotFound
-            }
-        ]);
-
-        Router.defaultError(function () {
-            console.log("Default error.");
-        });
-
         // Start watching for routing changes.
         Router.watch({ initialLoad: true });
     }
