@@ -80,6 +80,8 @@ var
 
         LOAD_COURSE: 'LOAD_COURSE',
 
+        LOAD_HOME: 'LOAD_HOME',
+
         LOAD_NOT_FOUND: 'LOAD_NOT_FOUND',
 
         LOGIN: 'LOGIN',

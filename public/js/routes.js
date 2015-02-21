@@ -25,26 +25,12 @@ module.exports = {
         Router.routes([
             {
                 route: "/",
-                component: Layout.splashLayout.Root,
-                preRouteCheck: function (request) {
-                    var UserStore = Stores.UserStore();
-
-                    if (request.getAction() !== Constants.Action.LOGOUT &&
-                        UserStore.query().currentUser().getOne()) {
-                        // Redirect to the home page if the
-                        // user is already logged in.
-                        request.redirect("/home");
-                    }
-                }
+                component: Layout.splashLayout.Root
             },
 
             {
-                // Note that you must extend the
-                // payload to include a username
-                // and password if you want to login
-                // a user that is not already logged
-                // into the app.
                 route: "/home",
+                action: Constants.Action.LOAD_HOME,
                 component: Layout.homeLayout.Root
             },
 

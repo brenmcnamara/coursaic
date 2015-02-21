@@ -216,8 +216,16 @@ var Stores = require('../stores'),
                 return this._didLogin(this._currentUser());
             },
 
+            LOAD_HOME: function (payload) {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var user = Parse.User.current();
+                    self._userHash[user.id] = user;
+                    resolve();
+                });
+            },
+
             LOGIN: function (payload) {
-                console.log("LOGIN WAS CALLED");
                 // Check if the user is already logged in.
                 if (this._currentUser()) {
                     logger.log(logger.Level.INFO, "Skipping login. User already logged in.");

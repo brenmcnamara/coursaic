@@ -330,6 +330,23 @@ var Stores = require('../stores'),
                                 function() {
                                     self.emit(Constants.Event.DID_FETCH_COURSES);
                                 });
+            },
+
+            LOAD_HOME: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                            // Done waiting for the User Store.
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchCourses();
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(Constants.Event.DID_FETCH_COURSES);
+                            });
             }
             
         }
