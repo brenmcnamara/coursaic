@@ -184,7 +184,8 @@ var React = require('react'),
             var user = UserStore.query().currentUser().getOne(),
                 course = this.props.course,
 
-                renderEnrollButton;
+                renderEnrollButton,
+                enrollCount = UserStore.query().usersForCourse(course).getAll().length;
 
             if (this.props.isOwner) {
                 renderEnrollButton = null;
@@ -207,7 +208,7 @@ var React = require('react'),
                             <div>
                                 Created { Formatter.Date.format(course.createdAt) }
                             </div>
-                            <div>27 enrolled</div>
+                            <div>{ enrollCount } enrolled</div>
                         </Dashboard.Summary.Details>
                     </Dashboard.Summary>
                     

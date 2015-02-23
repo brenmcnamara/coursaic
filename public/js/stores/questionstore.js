@@ -70,7 +70,7 @@ var Stores = require('../stores'),
                     })
                 });
             },
-
+ 
             questionsForCourse: function (course) {
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (question) {

@@ -14,6 +14,7 @@ var Stores = require('../stores'),
 
 
     User = require('./models.js').User,
+    Course = require('./models.js').Course,
 
     Query = require('./query.js'),
 
@@ -37,6 +38,14 @@ var Stores = require('../stores'),
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (user) {
                         return user.id === store._currentUser().id;
+                    })
+                });
+            },
+
+            usersForCourse: function (course) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (user) {
+                        return user.isEnrolled(course);
                     })
                 });
             }
@@ -202,7 +211,8 @@ var Stores = require('../stores'),
             },
 
             LOAD_COURSE: function (payload) {
-                var error;
+                var error,
+                    self = this;
                 if (!this._currentUser()) {
                     logger.log(logger.Level.ERROR,
                                "Not logged into the app, must be logged in for LOAD_COURSE.");
@@ -213,7 +223,25 @@ var Stores = require('../stores'),
                 }
 
                 // Otherwise, the user is logged in.
-                return this._didLogin(this._currentUser());
+                return this._didLogin(this._currentUser())
+                // Finished doing didLogin operation.
+                .then(function() {
+                    var courseId = payload.courseId,
+                        course = new Course(),
+                        query = new Parse.Query(User);
+
+                    course.id = courseId;
+                    query.equalTo("enrolled", course);
+			
+                    return query.find();
+			
+                })
+                // Called when the users for a course are fetched.
+                .then(function(users) {
+                    users.forEach(function (user) {
+                        self._userHash[user.id] = user;
+                    });
+                });
             },
 
             LOAD_HOME: function (payload) {
