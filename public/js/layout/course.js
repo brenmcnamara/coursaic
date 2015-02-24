@@ -69,7 +69,7 @@ var React = require('react'),
             QuestionStore.on(Constants.Event.DELETED_QUESTION, this.onDeletedQuestion);
         },
 
-        componentsDidUnmount: function () {
+        componentWillUnmount: function () {
             QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE,
                                          this.onChangeDisableQuestionState);
 
@@ -355,6 +355,7 @@ var React = require('react'),
         }
 
     }),
+
 
     Sections_Overview = React.createClass({
         
@@ -914,7 +915,9 @@ var React = require('react'),
 
         render: function () {
             var user = UserStore.query().currentUser().getOne(),
+                course = this.props.course,
                 questions = QuestionStore.query()
+                                         .questionsForCourse(course)
                                          .questionsByUser(user)
                                          .sortByDescendingCreationDate()
                                          .getAll();
@@ -1005,7 +1008,7 @@ var React = require('react'),
             PageStore.on(Constants.Event.CHANGED_MODE, this.onChangedMode);
         },
 
-        componentsDidUnmount: function () {
+        componentWillUnmount: function () {
             PageStore.removeListener(Constants.Event.CHANGED_MODE, this.onChangedMode);
         }
 
