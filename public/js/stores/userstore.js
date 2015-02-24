@@ -10,6 +10,8 @@ var Stores = require('../stores'),
     StoreBuilder = require('shore').StoreBuilder,
     Constants = require('../constants.js'),
 
+    ShoreError = require('shore').Error,
+
     logger = require('shore').logger,
 
 
@@ -249,6 +251,18 @@ var Stores = require('../stores'),
                 return new Promise(function (resolve) {
                     var user = Parse.User.current();
                     self._userHash[user.id] = user;
+                    resolve();
+                });
+            },
+
+            LOAD_SPLASH: function (payload) {
+                var self = this;
+
+                return new Promise(function (resolve) {
+                    var user = Parse.User.current();
+                    if (user) {
+                        throw ShoreError(Constants.ErrorType.EXISTING_USER_CREDENTIALS, "User already logged in.");
+                    }
                     resolve();
                 });
             },

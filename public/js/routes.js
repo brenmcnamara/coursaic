@@ -8,7 +8,8 @@ var
     Constants = require('./constants.js'),
     Layout = require('./layout'),
     Router = require('shore').Router,
-    Stores = require('./stores');
+    Stores = require('./stores'),
+    ErrorHandler = require('shore').ErrorHandler;
 
 module.exports = {
 
@@ -25,7 +26,8 @@ module.exports = {
         Router.routes([
             {
                 route: "/",
-                component: Layout.splashLayout.Root
+                action: Constants.Action.LOAD_SPLASH,
+                component: Layout.splashLayout.Root,
             },
 
             {
@@ -72,6 +74,15 @@ module.exports = {
             action: Constants.Action.LOAD_NOT_FOUND,
             component: Layout.notifyLayout.PageNotFound
         });
+
+        Router.errors([
+            ErrorHandler.Redirect({
+                errorType: Constants.ErrorType.EXISTING_USER_CREDENTIALS,
+                currentPath: '/',
+                targetPath: '/home'
+            })
+
+        ]);
 
         // Start watching for routing changes.
         Router.watch({ initialLoad: true });
