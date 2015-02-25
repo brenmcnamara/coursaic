@@ -76,10 +76,16 @@ module.exports = {
         });
 
         Router.errors([
+            
             ErrorHandler.Redirect({
                 errorType: Constants.ErrorType.EXISTING_USER_CREDENTIALS,
                 currentPath: '/',
                 targetPath: '/home'
+            }),
+
+            ErrorHandler.Redirect({
+                errorType: Constants.ErrorType.NO_USER_CREDENTIALS,
+                targetPath: '/'
             })
 
         ]);

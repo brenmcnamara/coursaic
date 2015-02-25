@@ -94,7 +94,7 @@ var React = require('react'),
     Root_Owner = React.createClass({
 
         render: function() {
-            var course = this.props.course
+            var course = this.props.course,
                 menu = [
                     (<a href="#">Logout</a>)
                 ];

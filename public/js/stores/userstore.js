@@ -75,6 +75,7 @@ var Stores = require('../stores'),
 
         /**
          * @method current
+         * @private
          *
          * @return {Parse.User} The current user.
          */
@@ -88,6 +89,7 @@ var Stores = require('../stores'),
          * in array form.
          *
          * @method _getUserList
+         * @private
          *
          * @return {Array} An array of all the
          *  users in the user store.
@@ -216,12 +218,8 @@ var Stores = require('../stores'),
                 var error,
                     self = this;
                 if (!this._currentUser()) {
-                    logger.log(logger.Level.ERROR,
-                               "Not logged into the app, must be logged in for LOAD_COURSE.");
-
-                    error = Error("Must be logged in to see course page.");
-                    error.type = Constants.ErrorType.NO_USER_CREDENTIALS;
-                    throw error;
+                    throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
+                                     "User is not logged in.");
                 }
 
                 // Otherwise, the user is logged in.
@@ -249,7 +247,11 @@ var Stores = require('../stores'),
             LOAD_HOME: function (payload) {
                 var self = this;
                 return new Promise(function (resolve) {
-                    var user = Parse.User.current();
+                    var user = self._currentUser();
+                    if (!user) {
+                        throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
+                                         "User is not logged in.");
+                    }
                     self._userHash[user.id] = user;
                     resolve();
                 });
