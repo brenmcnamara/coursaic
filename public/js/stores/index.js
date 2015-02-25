@@ -17,13 +17,6 @@ module.exports = {
         return cache.CourseStore;
     },
 
-    ExamStore: function () {
-        if (!cache.ExamStore) {
-            cache.ExamStore = require('./examstore.js');
-        }
-        return cache.ExamStore;
-    },
-
     PageStore: function () {
         if (!cache.PageStore) {
             cache.PageStore = require('./pagestore.js');

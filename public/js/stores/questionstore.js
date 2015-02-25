@@ -221,6 +221,10 @@ var Stores = require('../stores'),
 
             },
 
+            GENERATE_EXAM_RUN: function (payload) {
+                
+            },
+            
             LOAD_COURSE: function (payload) {
                 var self = this;
 

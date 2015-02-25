@@ -56,53 +56,6 @@ var Dispatcher = require('shore').Dispatcher,
                 return this._removeMode({ fromMode: this.Mode.CREATE_COURSE });
             },
 
-            CREATE_EXAM: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.CREATE_EXAM });
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
-            CREATE_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                // Wait for the Exam Store to create the new
-                                // question.
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.CREATE_QUESTION});
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
-            EDIT_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.EDIT_QUESTION });
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
             FROM_MODE_CANCEL_EXAM_RUN: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CANCEL_EXAM_RUN });
             },
@@ -121,15 +74,6 @@ var Dispatcher = require('shore').Dispatcher,
 
             FROM_MODE_DELETE_QUESTION: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.DELETE_QUESTION });
-            },
-
-            LOAD_EXAM_RUN: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex ])
-                                 .then(function () {
-                                    self._removeMode({fromMode: self.currentMode()});
-                                 });
             },
 
             LOAD_COURSE: function (payload) {

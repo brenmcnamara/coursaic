@@ -54,21 +54,22 @@ var React = require('react'),
 
         componentWillMount: function() {
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
-            Stores.ExamStore().on(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         },
 
         componentDidMount: function () {
             // Create the timer.
-            var self = this;
+            var self = this,
 
-            setInterval(function () {
+            timerId = setInterval(function () {
                 self.setState({ timeInSeconds: self.state.timeInSeconds + 1 });
             }, 1000);
+
+            this.setState({ timerId: timerId });
         },
 
         componentWillUnmount: function() {
+            clearInterval(this.state.timerId);
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
-            Stores.ExamStore().removeListener(Constants.Event.DID_GRADE_EXAM_RUN, this.onChange);
         }
 
     }),
@@ -142,7 +143,6 @@ var React = require('react'),
 
 
         render: function() {
-            var exam = Stores.ExamStore().current();
             return (
                 <SectionSet>
                     <SectionSet.Section>
@@ -200,14 +200,6 @@ var React = require('react'),
         onChangeQuestion: function(event, index) {
             this.props.onChange(event, index);
         },
-
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
-        },
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_CREATE_EXAM_RUN, this.onChange);
-        }
 
     }),
 

@@ -79,18 +79,6 @@ var React = require('react'),
         },
 
 
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().on(Constants.Event.DID_END_EDITING, this.didEndEditing);
-        },
-
-
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().removeListener(Constants.Event.DID_END_EDITING, this.didEndEditing);
-        }
-
-
     }),
 
     HeaderItem = React.createClass({
