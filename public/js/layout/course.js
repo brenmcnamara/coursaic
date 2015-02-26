@@ -22,7 +22,7 @@ var React = require('react'),
     TopicStore = Stores.TopicStore(),
     UserStore = Stores.UserStore(),
 
-    Request = require('../request.js'),
+    Request = require('../request'),
 
     Formatter = require('../formatter.js'),
 
@@ -1177,9 +1177,9 @@ var React = require('react'),
             // Set the currently selected topic on the change request.
             // request.
             this.state.request.set('topic',
-                                   request.ObjectType('Topic', selectedTopic.id));
+                                   Request.ObjectType('Topic', selectedTopic.id));
             this.state.request.set('course',
-                                   request.ObjectType('Course', courseId));
+                                   Request.ObjectType('Course', courseId));
         },
 
         onClickCancel: function (event) {
