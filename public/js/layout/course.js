@@ -22,7 +22,7 @@ var React = require('react'),
     TopicStore = Stores.TopicStore(),
     UserStore = Stores.UserStore(),
 
-    ChangeRequest = require('../changerequest.js'),
+    Request = require('../request.js'),
 
     Formatter = require('../formatter.js'),
 
@@ -1124,7 +1124,7 @@ var React = require('react'),
     QuestionItem_New = React.createClass({
 
         getInitialState: function () {
-            return { changeRequest: ChangeRequest.CreateMultiChoice() };
+            return { request: Request.CreateMultiChoice() };
         },
 
         render: function () {
@@ -1135,7 +1135,7 @@ var React = require('react'),
                 allTopics = TopicStore.query().topicsForCourse(course).getAll(),
                 selectedTopic = allTopics[0],
 
-                saveIconClassName = (this.state.changeRequest.isValid()) ?
+                saveIconClassName = (this.state.request.isValid()) ?
                     ("pure-u-1-2 question-item__icon-set__item--good clickable") :
                     ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
 
@@ -1176,10 +1176,10 @@ var React = require('react'),
 
             // Set the currently selected topic on the change request.
             // request.
-            this.state.changeRequest.set('topic',
-                                         ChangeRequest.ObjectType('Topic', selectedTopic.id));
-            this.state.changeRequest.set('course',
-                                         ChangeRequest.ObjectType('Course', courseId));
+            this.state.request.set('topic',
+                                   request.ObjectType('Topic', selectedTopic.id));
+            this.state.request.set('course',
+                                   request.ObjectType('Course', courseId));
         },
 
         onClickCancel: function (event) {
@@ -1187,38 +1187,38 @@ var React = require('react'),
         },
 
         onClickSave: function (event) {
-            if (this.state.changeRequest.isValid()) {
+            if (this.state.request.isValid()) {
                 Action(Constants.Action.RESOLVE_MODE_CREATE_QUESTION,
-                       { changeRequest: this.state.changeRequest }).send();
+                       { request: this.state.request }).send();
             }
 
         },
 
         onChangeTopic: function (event) {
             var topic = TopicStore.query().topicForName(event.target.value).getOne();
-            this.state.changeRequest.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
+            this.state.request.set('topic', Request.ObjectType('Topic', topic.id));
 
             this.forceUpdate();
         },
 
         onChangeCorrect: function (event) {
             var correctIndex = +(event.target.value);
-            this.state.changeRequest.setSolutionToIndex(correctIndex);
+            this.state.request.setSolutionToIndex(correctIndex);
             this.forceUpdate();
         },
 
         onChangeAsk: function (event) {
-            this.state.changeRequest.set('ask', event.target.value);
+            this.state.request.set('ask', event.target.value);
             this.forceUpdate();
         },
 
         onChangeExplain: function (event) {
-            this.state.changeRequest.set("explanation", event.target.value);
+            this.state.request.set("explanation", event.target.value);
             this.forceUpdate();
         },
 
         onChangeOption: function (event) {
-            this.state.changeRequest.setOptionAtIndex(event.index, event.target.value);
+            this.state.request.setOptionAtIndex(event.index, event.target.value);
             this.forceUpdate();
         }
 
@@ -1228,7 +1228,7 @@ var React = require('react'),
     QuestionItem_Edit = React.createClass({
 
         getInitialState: function () {
-            return { changeRequest: ChangeRequest.EditMultiChoice(this.props.question) };
+            return { request: Request.EditMultiChoice(this.props.question) };
         },
 
         render: function () {
@@ -1262,7 +1262,7 @@ var React = require('react'),
                      </QuestionItem_Issues>) :
                     (null),
 
-                saveIconClassName = (this.state.changeRequest.isValid()) ?
+                saveIconClassName = (this.state.request.isValid()) ?
                     ("pure-u-1-2 question-item__icon-set__item--good clickable") :
                     ("pure-u-1-2 question-item__icon-set__item--good clickable disabled");
 
@@ -1302,37 +1302,37 @@ var React = require('react'),
         },
 
         onClickSave: function (event) {
-            if (this.state.changeRequest.isValid()) {
+            if (this.state.request.isValid()) {
                 Action(Constants.Action.RESOLVE_MODE_EDIT_QUESTION,
-                       { changeRequest: this.state.changeRequest }).send();
+                       { request: this.state.request }).send();
             }
 
         },
 
         onChangeTopic: function (event) {
             var topic = TopicStore.query().topicForName(event.target.value).getOne();
-            this.state.changeRequest.set('topic', ChangeRequest.ObjectType('Topic', topic.id));
+            this.state.request.set('topic', Request.ObjectType('Topic', topic.id));
             this.forceUpdate();
         },
 
         onChangeCorrect: function (event) {
             var correctIndex = +(event.target.value);
-            this.state.changeRequest.setSolutionToIndex(correctIndex);
+            this.state.request.setSolutionToIndex(correctIndex);
             this.forceUpdate();
         },
 
         onChangeAsk: function (event) {
-            this.state.changeRequest.set('ask', event.target.value);
+            this.state.request.set('ask', event.target.value);
             this.forceUpdate();
         },
 
         onChangeExplain: function (event) {
-            this.state.changeRequest.set("explanation", event.target.value);
+            this.state.request.set("explanation", event.target.value);
             this.forceUpdate();
         },
 
         onChangeOption: function (event) {
-            this.state.changeRequest.setOptionAtIndex(event.index, event.target.value);
+            this.state.request.setOptionAtIndex(event.index, event.target.value);
             this.forceUpdate();
         }
 
@@ -1390,15 +1390,15 @@ var React = require('react'),
         },
 
         onClickDisable: function (event) {
-            var changeRequest = ChangeRequest.EditQuestion(this.props.question);
-            changeRequest.set('disabled', true);
-            Action(Constants.Action.DISABLE_QUESTION, { changeRequest: changeRequest }).send();
+            var request = Request.EditQuestion(this.props.question);
+            request.set('disabled', true);
+            Action(Constants.Action.DISABLE_QUESTION, { request: request }).send();
         },
 
         onClickUnDisable: function (event) {
-            var changeRequest = ChangeRequest.EditQuestion(this.props.question);
-            changeRequest.set('disabled', false);
-            Action(Constants.Action.UNDISABLE_QUESTION, { changeRequest: changeRequest }).send();
+            var request = Request.EditQuestion(this.props.question);
+            request.set('disabled', false);
+            Action(Constants.Action.UNDISABLE_QUESTION, { request: request }).send();
         }
 
     }),

@@ -208,7 +208,7 @@ var Stores = require('../stores'),
             DISABLE_QUESTION: function (payload) {
                 var self = this;
                 return new Promise(function (resolve) {
-                    var request = payload.changeRequest,
+                    var request = payload.request,
                         question = request.getOriginalObject();
 
                     question.set('disabled', request.get('disabled'));
@@ -244,9 +244,9 @@ var Stores = require('../stores'),
             RESOLVE_MODE_CREATE_QUESTION: function (payload) {
                 var user = Stores.UserStore().query().currentUser().getOne(),
                     question = new Question(),
-                    changeRequest = payload.changeRequest;
+                    request = payload.request;
 
-                changeRequest.forEachChange(function (key, val) {
+                request.forEachChange(function (key, val) {
                     question.set(key, val);
                 });
 
@@ -262,9 +262,9 @@ var Stores = require('../stores'),
 
             RESOLVE_MODE_EDIT_QUESTION: function (payload) {
                 // TODO: Move this change request handling to another layer.
-                var question = payload.changeRequest.getOriginalObject();
+                var question = payload.request.getOriginalObject();
 
-                payload.changeRequest.forEachChange(function (key, val) {
+                payload.request.forEachChange(function (key, val) {
                     question.set(key, val);
                 });
 
@@ -277,7 +277,7 @@ var Stores = require('../stores'),
             UNDISABLE_QUESTION: function (payload) {
                 var self = this;
                 return new Promise(function (resolve) {
-                    var request = payload.changeRequest,
+                    var request = payload.request,
                         question = request.getOriginalObject();
 
                     question.set('disabled', request.get('disabled'));
