@@ -12,10 +12,13 @@ var
 	CreateRequest;
 
 /***********************************\
-           	New Request                  
+           	 New Request                  
 \***********************************/
 
-CreateRequest = function () { 
+CreateRequest = function () {
+	if (!(this instanceof CreateRequest)) {
+		return new CreateRequest();
+	} 
 	// this._attribute should be a property of
 	// the subclass.
 };
@@ -54,6 +57,98 @@ CreateRequest.prototype.isValid = function () {
 
 /***********************************\
            	New Question
+\***********************************/
+
+CreateExamRun = function () {
+	if (!(this instanceof CreateExamRun)) {
+		return new CreateExamRun();
+	}
+	this._propogators = [];
+};
+
+
+CreateExamRun.prototype = CreateRequest();
+
+
+/**
+ * Set the query for the exam run. This query should contain
+ * all possible questions to query from.
+ *
+ * @method setQuery
+ *
+ * @param query { Query } The query object to filter out
+ *  questions.
+ */
+CreateExamRun.prototype.setQuery = function (query) {
+	this._query = query;
+};
+
+
+/**
+ * Add a query operation to use for filtering
+ * questions on an exam.
+ *
+ * @method addQuery
+ *
+ * @param queryPropogator { Function } A propogator operation
+ *  to execute that represents the query.
+ *
+ * @param params { Array } An array of parameters to call
+ *  for the propogator operation.
+ *
+ * @param context { Object } The context to call the
+ *  propogator in.
+ */
+CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
+	this._propogators.push({
+		propogator: queryPropogator,
+		params: params
+	});
+};
+
+
+/**
+ * Remove a query to use for filtering questions on an
+ * exam. If the query being removed was never added, this
+ * method does nothing.
+ *
+ * @method removeQuery 
+ *
+ * @param queryPropogator { Function } A query propogator to
+ *  remove from the exam run request.
+ */
+CreateExamRun.prototype.removeQuery = function (queryPropogator) {
+
+};
+
+
+/**
+ * Get the total number of questions that are available
+ * to the exam run.
+ *
+ * @return { Array } An array of all the questions that are to
+ *  be included.
+ */
+CreateExamRun.prototype.getAllQuestions = function () {
+	// Collapse the query.
+	return this._propogators.reduce(function (query, propMap) {
+		return propMap.propogator.apply(query, propMap.params);
+
+	}, this._query).getAll();
+};
+
+
+/**
+ * Iterate through the properties of the exam run that should be
+ * persisted to the server. These properties include: 
+ */
+CreateExamRun.prototype.forEachChange = function (callback) {
+
+};
+
+
+/***********************************\
+           	 New Question
 \***********************************/
 
 CreateQuestion = function () { 
@@ -160,6 +255,8 @@ module.exports = {
 
 	MultiChoice: CreateMultiChoice,
 
-	Question: CreateQuestion
+	Question: CreateQuestion,
+
+	ExamRun: CreateExamRun
 
 };

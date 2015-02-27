@@ -6,9 +6,12 @@
 
 module.exports = {
 
-	EditMultiChoice: require('./editrequest.js').MultiChoice,
+	CreateExamRun: require('./createrequest.js').ExamRun,
 
 	CreateMultiChoice: require('./createrequest.js').MultiChoice,
 
+	EditMultiChoice: require('./editrequest.js').MultiChoice,
+
 	ObjectType: require('./objecttype.js')
+
 };
