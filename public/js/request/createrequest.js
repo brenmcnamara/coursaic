@@ -118,7 +118,16 @@ CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
  *  remove from the exam run request.
  */
 CreateExamRun.prototype.removeQuery = function (queryPropogator) {
+	var i, n, foundIndex = -1;
+	for (i = 0, n = this._propogators.length; i < n && foundIndex < 0; ++i) {
+		if (queryPropogator === this._propogators[i].propogator) {
+			foundIndex = i;
+		}
+	}
 
+	// Found the index, so remove the item.
+	this._propogators = this._propogators.slice(0, foundIndex)
+										 .concat(this._propogators.slice(foundIndex + 1, n - foundIndex));
 };
 
 
@@ -143,7 +152,7 @@ CreateExamRun.prototype.getAllQuestions = function () {
  * persisted to the server. These properties include: 
  */
 CreateExamRun.prototype.forEachChange = function (callback) {
-
+	// TODO: Implement me!
 };
 
 

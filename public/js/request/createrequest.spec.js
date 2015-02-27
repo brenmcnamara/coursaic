@@ -72,4 +72,16 @@ describe("Create ExamRun Request", function () {
 		expect(request.getAllQuestions()).toEqual([ 4 ]);
 	});
 
+	it("should allow queries to be removed.", function () {
+		var request = CreateExamRun(),
+			query = new QueryConstructor([1, 2, 3, 4, 5]);
+
+		request.setQuery(query);
+		request.addQuery(query.filterEven);
+		request.addQuery(query.filterNumbersGreaterThan, [ 3 ]);
+		request.removeQuery(query.filterEven);
+
+		expect(request.getAllQuestions()).toEqual([4, 5]);
+	});
+
 });
