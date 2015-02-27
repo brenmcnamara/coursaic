@@ -57,11 +57,11 @@ _Query.prototype.contains = function (obj) {
  * Generate a query method that can be added to the
  * query object.
  */
-_generateQueryMethod = function (extendMap, prop) {
+_generateQueryMethod = function (Ctor, extendMap, prop) {
     return function () {
+        // Create a new Query.
         var newPipe = extendMap[prop].apply(this, arguments);
-        this.pipe = newPipe;
-        return this;
+        return new Ctor(newPipe.data);
     };
 };
 
@@ -94,7 +94,7 @@ queryBuilder = function (extendMap) {
             if (typeof extendMap[prop] === 'function') {
                 // Create a function wrapper that handled the context
                 // switching and chaining.
-                Subclass.prototype[prop] = _generateQueryMethod(extendMap, prop);
+                Subclass.prototype[prop] = _generateQueryMethod(Subclass, extendMap, prop);
             }
             else {
                 Subclass.prototype[prop] = extendMap[prop];

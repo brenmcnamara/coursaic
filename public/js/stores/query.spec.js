@@ -111,4 +111,31 @@ describe("Query Object", function () {
         expect(query.contains({ id: 4})).toBeFalsy();
     });
 
+    it("should be immutable.", function () {
+        var 
+            Ctor = Query.queryBuilder({
+               
+                filterEven: function () {
+                    return new Query.Pipe({
+                        data: this.pipe.data.filter(function (val) {
+                            return val % 2 === 0;
+                        })
+                    });
+                },
+
+                filterOdd: function () {
+                    return new Query.Pipe({
+                        data: this.pipe.data.filter(function (val) {
+                            return val % 2 === 1;
+                        })
+                    });
+                }
+            }),
+
+            query = new Ctor([1, 2, 3, 4]);
+
+        expect(query.filterEven().getAll()).toEqual([2, 4]);
+        expect(query.filterOdd().getAll()).toEqual([1, 3]);
+
+    });
 });
