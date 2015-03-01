@@ -72,15 +72,29 @@ CreateExamRun.prototype = CreateRequest();
 
 /**
  * Set the query for the exam run. This query should contain
- * all possible questions to query from.
+ * all possible questions to query from. This is the base query
+ * that other queries are added on to.
  *
- * @method setQuery
+ * @method setBaseQuery
  *
  * @param query { Query } The query object to filter out
  *  questions.
  */
-CreateExamRun.prototype.setQuery = function (query) {
+CreateExamRun.prototype.setBaseQuery = function (query) {
 	this._query = query;
+};
+
+
+/**
+ * Get the base query for the request.
+ *
+ * @method getBaseQuery
+ *
+ * @return { Query } The base query or null if
+ * no base query was set.
+ */
+CreateExamRun.prototype.getBaseQuery = function () {
+	return this._query || null;
 };
 
 

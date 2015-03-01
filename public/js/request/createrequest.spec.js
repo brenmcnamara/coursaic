@@ -37,7 +37,7 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
-		request.setQuery(query);
+		request.setBaseQuery(query);
 		expect(request.getAllQuestions()).toEqual([1, 2, 3]);
 	});
 
@@ -45,7 +45,7 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
-		request.setQuery(query);
+		request.setBaseQuery(query);
 		request.addQuery(query.filterEven);
 
 		expect(request.getAllQuestions()).toEqual([2]);
@@ -55,7 +55,7 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setQuery(query);
+		request.setBaseQuery(query);
 		request.addQuery(query.filterNumbersGreaterThan, [3]);
 
 		expect(request.getAllQuestions()).toEqual([4, 5]);
@@ -65,7 +65,7 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setQuery(query);
+		request.setBaseQuery(query);
 		request.addQuery(query.filterNumbersGreaterThan, [ 2 ]);
 		request.addQuery(query.filterEven);
 
@@ -76,7 +76,7 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setQuery(query);
+		request.setBaseQuery(query);
 		request.addQuery(query.filterEven);
 		request.addQuery(query.filterNumbersGreaterThan, [ 3 ]);
 		request.removeQuery(query.filterEven);
