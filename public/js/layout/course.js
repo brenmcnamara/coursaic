@@ -606,14 +606,15 @@ var React = require('react'),
 
             topicQuery = TopicStore.query();
             topics = topicQuery.topicsForCourse(course).topicsForIds.apply(topicQuery, topicIds).getAll();
-            questionQuery.questionsForTopics.apply(questionQuery, topics);
+            questionQuery = questionQuery.questionsForTopics.apply(questionQuery, topics);
 
             for (prop in otherFiltersHash) {
                 if (otherFiltersHash.hasOwnProperty(prop)) {
                     if (!otherFiltersHash[prop].isChecked) {
                         // Apply the query using the declarative otherFilter
                         // object.
-                        questionQuery[prop].apply(questionQuery, otherFiltersHash[prop].params);
+                        questionQuery = 
+                            questionQuery[prop].apply(questionQuery, otherFiltersHash[prop].params);
                     }
                 }
             }
