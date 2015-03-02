@@ -787,19 +787,16 @@ var React = require('react'),
         onClickOtherFilter: function (event) {
             var filterName = event.target.value,
                 state = this.state,
-                questionQuery = state.examRunRequest.getBaseQuery(),
                 selected;
 
             // Toggle "isChecked".
             state.otherFilters[filterName].isChecked = !state.otherFilters[filterName].isChecked;
 
-            
-
             if (state.otherFilters[filterName].isChecked) {
-                state.examRunRequest.removeQuery(questionQuery[filterName]);
+                state.examRunRequest.removeQuery(filterName);
             }
             else {
-                state.examRunRequest.addQuery(questionQuery[filterName],
+                state.examRunRequest.addQuery(filterName,
                                               state.otherFilters[filterName].params);
             }
 
