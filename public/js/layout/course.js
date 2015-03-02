@@ -557,13 +557,18 @@ var React = require('react'),
 
                     },
         
-                    // Add all the topics to the initial state, default as true.
-                    topics: topics.reduce(function (topicHash, topic) {
-                        topicHash[topic.id] = true;
-                        return topicHash;
-                    }, {})
+                    // An array of selected topic ids.
+                    topicIds: topics.map(function (topic) {return topic.id;})
 
-                };
+                },
+
+                questionQuery = QuestionStore.query().questionsNotDisabled().questionsForCourse(course),
+                examRunRequest = Request.CreateExamRun();
+
+            examRunRequest.setBaseQuery(questionQuery);
+            examRunRequest.addQuery(questionQuery.questionsForTopics, topics);
+
+            initialState.examRunRequest = examRunRequest;
 
             return initialState;
         },
@@ -580,45 +585,19 @@ var React = require('react'),
         },
 
         /**
+         * An array of all the questions before any filters
+         * are applied.
+         */
+        allQuestions: function () {
+            return this.state.examRunRequest.getBaseQuery().getAll();
+        },
+
+        /**
          * An array of all the questions that are left after all
          * the filters have been applies.
          */
         remainingQuestions: function () {
-            var course = this.props.course,
-                prop,
-                topicIds = [],
-                topicHash = this.state.topics,
-                otherFiltersHash = this.state.otherFilters,
-                topicQuery,
-                topics,
-                questionQuery = QuestionStore.query()
-                                             .questionsNotDisabled()
-                                             .questionsForCourse(course);
-
-            for (prop in topicHash) {
-                if (topicHash.hasOwnProperty(prop)) {
-                    // If the topic is selected, then add it to the array.
-                    if (topicHash[prop]) {
-                        topicIds.push(prop);
-                    }
-                }
-            }
-
-            topicQuery = TopicStore.query();
-            topics = topicQuery.topicsForCourse(course).topicsForIds.apply(topicQuery, topicIds).getAll();
-            questionQuery = questionQuery.questionsForTopics.apply(questionQuery, topics);
-
-            for (prop in otherFiltersHash) {
-                if (otherFiltersHash.hasOwnProperty(prop)) {
-                    if (!otherFiltersHash[prop].isChecked) {
-                        // Apply the query using the declarative otherFilter
-                        // object.
-                        questionQuery = 
-                            questionQuery[prop].apply(questionQuery, otherFiltersHash[prop].params);
-                    }
-                }
-            }
-            return questionQuery.getAll();
+            return this.state.examRunRequest.getAllQuestions();
         },
 
         /***********************************\
@@ -629,10 +608,7 @@ var React = require('react'),
             var state = this.state,
                 course = this.props.course,
                 
-                totalQuestionCount = QuestionStore.query()
-                                                  .questionsNotDisabled()
-                                                  .questionsForCourse(course)
-                                                  .getAll().length,
+                totalQuestionCount = this.allQuestions().length,
 
                 remainingQuestionCount = this.remainingQuestions().length,
                 selectedQuestionCount = this.getSelectedCount(),
@@ -648,7 +624,7 @@ var React = require('react'),
                     return (
                         <div key={ "topic-filter-" + topic.id } className="pure-u-1 pure-u-md-1-2">
                             <FormLayout.Checkbox name="topic-filter"
-                                                 checked={ state.topics[topic.id] }
+                                                 checked={ Util.contains(state.topicIds, topic.id) }
                                                  value={ topic.id }
                                                  onChange={ this.onClickTopicFilter } >
                                 { topic.get('name') }
@@ -771,24 +747,40 @@ var React = require('react'),
             this.setState({ selected: +(event.target.value) });
         },
 
-
         /**
          * Handles click event for if the user changes
          * which topics are selected for taking an exam.
          */
         onClickTopicFilter: function (event) {
             var topicId = event.target.value,
+                topics,
                 state = this.state,
+                topicQuery = TopicStore.query(),
+                questionQuery = this.state.examRunRequest.getBaseQuery(),
                 current;
 
-            // Toggle topic flag.
-            state.topics[topicId] = !state.topics[topicId];
-            // Query the remaining questions after changing the state.
-            current = this.remainingQuestions().length
+            if (Util.contains(state.topicIds, topicId)) {
+                // The topic id is in the array so it is included
+                // in the questions. Remove it from the array.
+                state.topicIds = Util.remove(state.topicIds, topicId);
+            }
+            else {
+                // The topic id is not in the array so toggle
+                // the topic on. Add it to the array.
+                state.topicIds.push(topicId);
+            }
+
+            topics = topicQuery.topicsForIds.apply(topicQuery, state.topicIds).getAll();
+            
             // The current value is less than the number
             // of questions the user has selected. Need to decrement the
             // questions the user has selected.
+            this.state.examRunRequest.removeQuery(questionQuery.questionsForTopics);
+            this.state.examRunRequest.addQuery(questionQuery.questionsForTopics, topics);
             this.setState(state);
+
+            // Query the remaining questions after changing the state.
+            current = this.remainingQuestions().length;
 
             state.bar.change({ current: current, selected: current }, { animate: true });
         },
@@ -800,10 +792,22 @@ var React = require('react'),
         onClickOtherFilter: function (event) {
             var filterName = event.target.value,
                 state = this.state,
+                questionQuery = state.examRunRequest.getBaseQuery(),
                 selected;
 
             // Toggle "isChecked".
             state.otherFilters[filterName].isChecked = !state.otherFilters[filterName].isChecked;
+
+            
+
+            if (state.otherFilters[filterName].isChecked) {
+                state.examRunRequest.removeQuery(questionQuery[filterName]);
+            }
+            else {
+                state.examRunRequest.addQuery(questionQuery[filterName],
+                                              state.otherFilters[filterName].params);
+            }
+
             // Get the remaining questions after making changes to the state.
             selected = this.remainingQuestions().length;
             state.bar.change({ selected: selected, current: selected }, { animate: true });
