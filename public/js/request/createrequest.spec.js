@@ -33,7 +33,7 @@ describe("Create ExamRun Request", function () {
 	});
 
 
-	it("should allow setting a query.", function () {
+	it("sets a base query to build other queries on.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
@@ -41,7 +41,7 @@ describe("Create ExamRun Request", function () {
 		expect(request.getAllQuestions()).toEqual([1, 2, 3]);
 	});
 
-	it("should allow adding queries.", function () {
+	it("adds queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
@@ -51,7 +51,7 @@ describe("Create ExamRun Request", function () {
 		expect(request.getAllQuestions()).toEqual([2]);
 	});
 
-	it("should allow adding queries with parameters.", function () {
+	it("adds queries with parameters.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
@@ -61,7 +61,7 @@ describe("Create ExamRun Request", function () {
 		expect(request.getAllQuestions()).toEqual([4, 5]);
 	});
 
-	it("should allow adding multiple queries.", function () {
+	it("adds multiple queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
@@ -72,7 +72,7 @@ describe("Create ExamRun Request", function () {
 		expect(request.getAllQuestions()).toEqual([ 4 ]);
 	});
 
-	it("should allow queries to be removed.", function () {
+	it("removes queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
@@ -83,5 +83,28 @@ describe("Create ExamRun Request", function () {
 
 		expect(request.getAllQuestions()).toEqual([4, 5]);
 	});
+
+	it("adds queries using the name of a query instead of the query itself", function () {
+		var request = CreateExamRun(),
+			query = new QueryConstructor([1, 2, 3, 4]);
+
+		request.setBaseQuery(query);
+		request.addQuery("filterNumbersGreaterThan", [ 3 ]);
+
+		expect(request.getAllQuestions()).toEqual([ 4 ]);
+	});
+
+	it("removes queries using the name of a query instead of the query itself", function () {
+		var request = CreateExamRun(),
+			query = new QueryConstructor([1, 2, 3, 4]);
+
+		request.setBaseQuery(query);
+		request.addQuery("filterNumbersGreaterThan", [ 3 ]);
+
+		request.removeQuery("filterNumbersGreaterThan");
+
+		expect(request.getAllQuestions()).toEqual([1, 2, 3, 4]);
+	});
+
 
 });

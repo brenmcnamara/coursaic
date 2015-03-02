@@ -114,10 +114,19 @@ CreateExamRun.prototype.getBaseQuery = function () {
  *  propogator in.
  */
 CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
-	this._propogators.push({
-		propogator: queryPropogator,
-		params: params
-	});
+	console.log("type of Propogator: " + typeof queryPropogator);
+
+	if (typeof queryPropogator === 'string') {
+		// Passing in the name of a query propogator.
+		// Resolve this recursively.
+		this.addQuery(this._query[queryPropogator], params);
+	}
+	else {
+		this._propogators.push({
+			propogator: queryPropogator,
+			params: params
+		});
+	}
 };
 
 
@@ -133,15 +142,21 @@ CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
  */
 CreateExamRun.prototype.removeQuery = function (queryPropogator) {
 	var i, n, foundIndex = -1;
-	for (i = 0, n = this._propogators.length; i < n && foundIndex < 0; ++i) {
-		if (queryPropogator === this._propogators[i].propogator) {
-			foundIndex = i;
+	if (typeof queryPropogator === 'string') {
+		this.removeQuery(this._query[queryPropogator]);
+	}
+	else {
+		for (i = 0, n = this._propogators.length; i < n && foundIndex < 0; ++i) {
+			if (queryPropogator === this._propogators[i].propogator) {
+				foundIndex = i;
+			}
+		}
+		// Found the index, so remove the item.
+		if (foundIndex >= 0) {
+			this._propogators.splice(foundIndex, 1);
 		}
 	}
-
-	// Found the index, so remove the item.
-	this._propogators = this._propogators.slice(0, foundIndex)
-										 .concat(this._propogators.slice(foundIndex + 1, n - foundIndex));
+	
 };
 
 
