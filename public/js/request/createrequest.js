@@ -114,8 +114,6 @@ CreateExamRun.prototype.getBaseQuery = function () {
  *  propogator in.
  */
 CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
-	console.log("type of Propogator: " + typeof queryPropogator);
-
 	if (typeof queryPropogator === 'string') {
 		// Passing in the name of a query propogator.
 		// Resolve this recursively.

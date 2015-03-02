@@ -47,10 +47,19 @@ var Stores = require('../stores'),
             },
 
             topicsForIds: function () {
-                var topicIds = arguments;
+                var topicIds;
+
+                if (Array.isArray(arguments[0])) {
+                    // Passed in an array of topic ids.
+                    topicIds = arguments[0];
+                }
+                else {
+                    // Passed in topics as variadic parameters.
+                    topicIds = arguments.slice();
+                }
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (topic) {
-                        return [].reduce.call(topicIds, function (hasTopicId, topicId) {
+                        return topicIds.reduce(function (hasTopicId, topicId) {
                             return hasTopicId || topicId === topic.id;
                         }, false);
                     })

@@ -753,10 +753,8 @@ var React = require('react'),
          */
         onClickTopicFilter: function (event) {
             var topicId = event.target.value,
-                topics,
                 state = this.state,
-                topicQuery = TopicStore.query(),
-                questionQuery = this.state.examRunRequest.getBaseQuery(),
+                topics,
                 current;
 
             if (Util.contains(state.topicIds, topicId)) {
@@ -770,13 +768,10 @@ var React = require('react'),
                 state.topicIds.push(topicId);
             }
 
-            topics = topicQuery.topicsForIds.apply(topicQuery, state.topicIds).getAll();
-            
-            // The current value is less than the number
-            // of questions the user has selected. Need to decrement the
-            // questions the user has selected.
-            this.state.examRunRequest.removeQuery(questionQuery.questionsForTopics);
-            this.state.examRunRequest.addQuery(questionQuery.questionsForTopics, topics);
+            topics = TopicStore.query().topicsForIds(state.topicIds).getAll();
+
+            this.state.examRunRequest.removeQuery("questionsForTopics");
+            this.state.examRunRequest.addQuery("questionsForTopics", topics);
             this.setState(state);
 
             // Query the remaining questions after changing the state.
