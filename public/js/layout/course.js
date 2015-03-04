@@ -691,20 +691,23 @@ var React = require('react'),
         renderProgressBar: function () {
             var
                 course = this.props.course,
-                questions = QuestionStore.query().questionsNotDisabled().questionsForCourse(course).getAll(),
-
                 canvas = document.getElementById('js-question-filter__bar'),
                 context = canvas.getContext('2d'),
-                data = {
-                    total: questions.length,
-                    current: this.remainingQuestions().length,
-                    selected: this.remainingQuestions().length
-                },
-
+                data,
                 bar = this.state.bar;
 
+            // Update the exam run request's base query.
+            this.state.examRunRequest.setBaseQuery(
+                QuestionStore.query().questionsNotDisabled().questionsForCourse(course));
+
+            data = {
+                total: this.allQuestions().length,
+                current: this.remainingQuestions().length,
+                selected: this.remainingQuestions().length
+            };
+
             // Lazy instantiation of the bar.
-            if (!this.state.bar) {
+            if (!bar) {
                 bar = new widgets.ProgressBar(context, data);
             }
             else {
