@@ -196,5 +196,6 @@ EditMultiChoice.prototype.setOptionAtIndex = function (index, option) {
 
 
 module.exports = {
+	Question: EditQuestion,
 	MultiChoice: EditMultiChoice
 };

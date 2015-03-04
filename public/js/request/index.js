@@ -12,6 +12,8 @@ module.exports = {
 
 	EditMultiChoice: require('./editrequest.js').MultiChoice,
 
+	EditQuestion: require('./editrequest.js').Question,
+	
 	ObjectType: require('./objecttype.js')
 
 };
