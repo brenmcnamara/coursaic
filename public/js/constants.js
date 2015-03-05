@@ -139,11 +139,24 @@ var
         // are provided.
         NO_USER_CREDENTIALS: "NO_USER_CREDENTIALS",
 
+    },
+
+    FlagType = {
+
+        NONSENSE: 'NONSENSE',
+
+        NOT_RELEVANT: 'NOT_RELEVANT',
+
+        OUTDATED: 'OUTDATED',
+
+        REPEATED_QUESTION: 'REPEATED_QUESTION',
+
     };
 
 
 module.exports = {
-    Event: Event,
     Action: Action,
-    ErrorType: ErrorType
+    ErrorType: ErrorType,
+    Event: Event,
+    FlagType: FlagType,
 };
