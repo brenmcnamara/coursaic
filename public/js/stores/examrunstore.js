@@ -109,11 +109,11 @@ var Stores = require('../stores'),
                             questions;
 
                         course.id = payload.courseId;
-                        questions = Stores.QuestionStore()
-                                          .query()
-                                          .questionsNotDisabled()
-                                          .questionsForCourse(course)
-                                          .getAll();
+                        questions = examRunRequest.getAllQuestions(
+                                        Stores.QuestionStore()
+                                              .query()
+                                              .questionsNotDisabled()
+                                              .questionsForCourse(course));
 
                         examRun.set('numOfQuestions', numOfQuestions);
                         examRun.set('author', Stores.UserStore().query().currentUser().getOne());

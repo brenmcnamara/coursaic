@@ -148,11 +148,12 @@ var React = require('react'),
 
 
         render: function() {
+            var examRun = this.props.examRun;
             return (
                 <SectionSet>
                     <SectionSet.Section>
                         <div className="exam">
-                            <ExamForm_QuestionList onChange={ this.onChangeQuestion } />
+                            <ExamForm_QuestionList examRun={ examRun } onChange={ this.onChangeQuestion } />
                             <ExamForm_Buttons onSubmit={ this.onSubmit } />
                         </div>
                     </SectionSet.Section>
@@ -184,16 +185,18 @@ var React = require('react'),
     ExamForm_QuestionList = React.createClass({
 
         render: function() {
+            var examRun = this.props.examRun;
+
             return (
                 <ul className="question-info-list">
-                    <ExamForm_QuestionList_MultiChoice index={ 1 } />
-                    <li><ComponentsLayout.Divide /></li>
-                    <ExamForm_QuestionList_MultiChoice index={ 2 } />
-                    <li><ComponentsLayout.Divide /></li>
-                    <ExamForm_QuestionList_MultiChoice index={ 3 } />
-                    <li><ComponentsLayout.Divide /></li>
-                    <ExamForm_QuestionList_MultiChoice index={ 4 } />
-                    <li><ComponentsLayout.Divide /></li>
+                    { examRun.getQuestions().reduce(function (list, question, index) {
+                        return list.concat([
+                            <ExamForm_QuestionList_MultiChoice key={"question-" + index }
+                                                               question={ question }
+                                                               index={ index + 1 } />,
+                            <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
+                        ]);
+                    }, []) }
                 </ul>
             );
         },
@@ -221,19 +224,25 @@ var React = require('react'),
         render: function() {
             var flagOptionsClass = 
                 ((this.state.showFlagOptions) ? "popover question-flag__options-list":
-                                                "popover--hide question-flag__options-list");
+                                                "popover--hide question-flag__options-list"),
+
+                question = this.props.question;
 
             return (
                 <li className="pure-g">
                     <div className="question-info pure-u-1 pure-u-md-1-2">
                         <div className="question-info__ask">
-                            <span>{ this.props.index }.</span> What is 2 + 2?
+                            <span>{ this.props.index }.</span> { question.get('ask') }
                         </div>
                         <ul className="multi-choice-info__options-list">
-                            <ExamForm_Question_MultiChoice_Item />
-                            <ExamForm_Question_MultiChoice_Item />
-                            <ExamForm_Question_MultiChoice_Item />
-                            <ExamForm_Question_MultiChoice_Item /> 
+                            { question.getOptions().map(function (option, index) {
+                                return (
+                                    <ExamForm_Question_MultiChoice_Item key={ question.id + "-option-" + index }
+                                                                        question={ question }
+                                                                        option={ option } />
+                                );
+                              })
+                            }
                         </ul>
                     </div>
                     <div className="question-flag pure-u-1 pure-u-md-1-2">
@@ -283,12 +292,13 @@ var React = require('react'),
 
         render: function() {
             var option = this.props.option,
-                name = this.props.name;
+                questionId = this.props.question.id;
+
             return (
                 <li className="multi-choice-info__options-list__item">
                     <input type="radio" onChange={ this.onChange }
-                                        name="question-here"
-                                        value="37" />37
+                                        name={ questionId }
+                                        value={ option } />{ option }
                 </li>
             );
         },
