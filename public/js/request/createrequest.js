@@ -71,34 +71,6 @@ CreateExamRun.prototype = CreateRequest();
 
 
 /**
- * Set the query for the exam run. This query should contain
- * all possible questions to query from. This is the base query
- * that other queries are added on to.
- *
- * @method setBaseQuery
- *
- * @param query { Query } The query object to filter out
- *  questions.
- */
-CreateExamRun.prototype.setBaseQuery = function (query) {
-	this._query = query;
-};
-
-
-/**
- * Get the base query for the request.
- *
- * @method getBaseQuery
- *
- * @return { Query } The base query or null if
- * no base query was set.
- */
-CreateExamRun.prototype.getBaseQuery = function () {
-	return this._query || null;
-};
-
-
-/**
  * Add a query operation to use for filtering
  * questions on an exam.
  *
@@ -114,17 +86,14 @@ CreateExamRun.prototype.getBaseQuery = function () {
  *  propogator in.
  */
 CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
-	if (typeof queryPropogator === 'string') {
-		// Passing in the name of a query propogator.
-		// Resolve this recursively.
-		this.addQuery(this._query[queryPropogator], params);
+	if (typeof queryPropogator !== 'string') {
+		throw Error("CreateExamRun 'addQuery' must be passed a propogator of type string.");
 	}
-	else {
-		this._propogators.push({
-			propogator: queryPropogator,
-			params: params
-		});
-	}
+
+	this._propogators.push({
+		propogator: queryPropogator,
+		params: params
+	});
 };
 
 
@@ -140,21 +109,16 @@ CreateExamRun.prototype.addQuery = function (queryPropogator, params) {
  */
 CreateExamRun.prototype.removeQuery = function (queryPropogator) {
 	var i, n, foundIndex = -1;
-	if (typeof queryPropogator === 'string') {
-		this.removeQuery(this._query[queryPropogator]);
-	}
-	else {
-		for (i = 0, n = this._propogators.length; i < n && foundIndex < 0; ++i) {
-			if (queryPropogator === this._propogators[i].propogator) {
-				foundIndex = i;
-			}
-		}
-		// Found the index, so remove the item.
-		if (foundIndex >= 0) {
-			this._propogators.splice(foundIndex, 1);
+
+	for (i = 0, n = this._propogators.length; i < n && foundIndex < 0; ++i) {
+		if (queryPropogator === this._propogators[i].propogator) {
+			foundIndex = i;
 		}
 	}
-	
+	// Found the index, so remove the item.
+	if (foundIndex >= 0) {
+		this._propogators.splice(foundIndex, 1);
+	}
 };
 
 
@@ -162,15 +126,26 @@ CreateExamRun.prototype.removeQuery = function (queryPropogator) {
  * Get the total number of questions that are available
  * to the exam run.
  *
+ * @param { Query } The base query to use when resolving all
+ *  the queries that were added.
+ *  
  * @return { Array } An array of all the questions that are to
  *  be included.
  */
-CreateExamRun.prototype.getAllQuestions = function () {
+CreateExamRun.prototype.getAllQuestions = function (baseQuery) {
 	// Collapse the query.
 	return this._propogators.reduce(function (query, propMap) {
-		return propMap.propogator.apply(query, propMap.params);
+		var propogator = propMap.propogator,
+			params = propMap.params;
 
-	}, this._query).getAll();
+		try {
+			return query[propogator].apply(query, propMap.params);
+		}
+		catch (e) {
+			throw Error("CreateExamRun was given unrecognized propogator: " + propogator);
+		}
+
+	}, baseQuery).getAll();
 };
 
 

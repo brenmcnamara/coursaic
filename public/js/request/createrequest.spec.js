@@ -37,73 +37,70 @@ describe("Create ExamRun Request", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
-		request.setBaseQuery(query);
-		expect(request.getAllQuestions()).toEqual([1, 2, 3]);
+		expect(request.getAllQuestions(query)).toEqual([1, 2, 3]);
 	});
 
 	it("adds queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3]);
 
-		request.setBaseQuery(query);
-		request.addQuery(query.filterEven);
+		request.addQuery("filterEven");
 
-		expect(request.getAllQuestions()).toEqual([2]);
+		expect(request.getAllQuestions(query)).toEqual([2]);
 	});
 
 	it("adds queries with parameters.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setBaseQuery(query);
-		request.addQuery(query.filterNumbersGreaterThan, [3]);
+		request.addQuery("filterNumbersGreaterThan", [3]);
 
-		expect(request.getAllQuestions()).toEqual([4, 5]);
+		expect(request.getAllQuestions(query)).toEqual([4, 5]);
 	});
 
 	it("adds multiple queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setBaseQuery(query);
-		request.addQuery(query.filterNumbersGreaterThan, [ 2 ]);
-		request.addQuery(query.filterEven);
+		request.addQuery("filterNumbersGreaterThan", [ 2 ]);
+		request.addQuery("filterEven");
 
-		expect(request.getAllQuestions()).toEqual([ 4 ]);
+		expect(request.getAllQuestions(query)).toEqual([ 4 ]);
 	});
 
 	it("removes queries.", function () {
 		var request = CreateExamRun(),
 			query = new QueryConstructor([1, 2, 3, 4, 5]);
 
-		request.setBaseQuery(query);
-		request.addQuery(query.filterEven);
-		request.addQuery(query.filterNumbersGreaterThan, [ 3 ]);
-		request.removeQuery(query.filterEven);
+		request.addQuery("filterEven");
+		request.addQuery("filterNumbersGreaterThan", [ 3 ]);
+		request.removeQuery("filterEven");
 
-		expect(request.getAllQuestions()).toEqual([4, 5]);
+		expect(request.getAllQuestions(query)).toEqual([4, 5]);
 	});
 
-	it("adds queries using the name of a query instead of the query itself", function () {
+	it("throws an error if running a query with an unrecognized propogator.", function () {
 		var request = CreateExamRun(),
-			query = new QueryConstructor([1, 2, 3, 4]);
+			query = new QueryConstructor([1, 2, 3, 4]),
 
-		request.setBaseQuery(query);
-		request.addQuery("filterNumbersGreaterThan", [ 3 ]);
+			getAllQuestions = function () {
+				request.getAllQuestion(query);
+			};
 
-		expect(request.getAllQuestions()).toEqual([ 4 ]);
+		request.addQuery("this is nonsense");
+
+		expect(getAllQuestions).toThrow();
 	});
 
-	it("removes queries using the name of a query instead of the query itself", function () {
+	it("throws an error if trying to add a query that is not of type string.", function () {
 		var request = CreateExamRun(),
-			query = new QueryConstructor([1, 2, 3, 4]);
+			query = new QueryConstructor([1, 2, 3, 4]),
+			addQuery = function () {
+				request.addQuery(1);
+			};
 
-		request.setBaseQuery(query);
-		request.addQuery("filterNumbersGreaterThan", [ 3 ]);
+		expect(addQuery).toThrow();
 
-		request.removeQuery("filterNumbersGreaterThan");
-
-		expect(request.getAllQuestions()).toEqual([1, 2, 3, 4]);
 	});
 
 

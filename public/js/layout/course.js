@@ -562,11 +562,9 @@ var React = require('react'),
 
                 },
 
-                questionQuery = QuestionStore.query().questionsNotDisabled().questionsForCourse(course),
                 examRunRequest = Request.CreateExamRun();
 
-            examRunRequest.setBaseQuery(questionQuery);
-            examRunRequest.addQuery(questionQuery.questionsForTopics, topics);
+            examRunRequest.addQuery("questionsForTopics", topics);
 
             initialState.examRunRequest = examRunRequest;
 
@@ -589,7 +587,10 @@ var React = require('react'),
          * are applied.
          */
         allQuestions: function () {
-            return this.state.examRunRequest.getBaseQuery().getAll();
+            return QuestionStore.query()
+                                .questionsNotDisabled()
+                                .questionsForCourse(this.props.course)
+                                .getAll();
         },
 
         /**
@@ -597,7 +598,10 @@ var React = require('react'),
          * the filters have been applies.
          */
         remainingQuestions: function () {
-            return this.state.examRunRequest.getAllQuestions();
+            return this.state.examRunRequest.getAllQuestions(
+                    QuestionStore.query()
+                                 .questionsNotDisabled()
+                                 .questionsForCourse(this.props.course));
         },
 
         /***********************************\
@@ -605,6 +609,8 @@ var React = require('react'),
         \***********************************/
 
         render: function () {
+            // TODO: STATE IS VERY DELICATE HERE! NEED TO MAKE SURE THAT THE
+            // EXAM RUN REQUEST ALWAYS HAS THE CORRECT BASE QUERY.
             var state = this.state,
                 course = this.props.course,
                 
@@ -695,10 +701,6 @@ var React = require('react'),
                 context = canvas.getContext('2d'),
                 data,
                 bar = this.state.bar;
-
-            // Update the exam run request's base query.
-            this.state.examRunRequest.setBaseQuery(
-                QuestionStore.query().questionsNotDisabled().questionsForCourse(course));
 
             data = {
                 total: this.allQuestions().length,
