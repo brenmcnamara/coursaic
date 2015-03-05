@@ -63,6 +63,7 @@ CreateExamRun = function () {
 	if (!(this instanceof CreateExamRun)) {
 		return new CreateExamRun();
 	}
+	this._attributes = {};
 	this._propogators = [];
 };
 

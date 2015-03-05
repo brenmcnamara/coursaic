@@ -508,7 +508,9 @@ var React = require('react'),
             // no questions. This also takes care of the case where
             // there are no topics.
             if (questions.length === 0) {
-                return (<Sections_Overview_TakeExam_Issue issue="You cannot take a practice exam because there are no questions for this course." />);
+                return (<Sections_Overview_TakeExam_Issue issue={ "You cannot take a practice exam " +
+                                                                  "because there are no questions for " +
+                                                                  "this course." } />);
             }
             else {
                 return (<Sections_Overview_TakeExam_Content course={ course } />);
@@ -564,6 +566,7 @@ var React = require('react'),
 
                 examRunRequest = Request.CreateExamRun();
 
+            examRunRequest.set('course', Request.ObjectType('Course', course.id));
             examRunRequest.addQuery("questionsForTopics", topics);
 
             initialState.examRunRequest = examRunRequest;
@@ -657,7 +660,7 @@ var React = require('react'),
                             <div>{ renderRemainingQuestionCount }</div>
                             <div>
                                 <strong>
-                                    <span className="inline-button">Click here</span>
+                                    <span className="inline-button" onClick={ this.onClickTakeExam } >Click here</span>
                                 </strong> to take a practice exam with
                                 <Sections_Overview_TakeExam_Content_SelectQuestionsInput onChange={ this.onChangeSelected }
                                                                                          maxValue={ remainingQuestionCount }
@@ -747,9 +750,21 @@ var React = require('react'),
                     Event Handling
         \***********************************/
  
+        onClickTakeExam: function () {
+            console.log("Action handler called");
+            var examRunRequest = this.state.examRunRequest,
+                courseId = this.props.course.id;
+
+            examRunRequest.set('numOfQuestions', this.state.selected);
+            Action(Constants.Action.LOAD_EXAM_RUN, { examRunRequest: examRunRequest })
+                .route("/course/<courseId>/exam", { courseId: courseId })
+                .send();
+        },
+
+
         onChangeSelected: function (event) {
             // Animate the changes to the selected bar value.
-            this.setState({ selected: +(event.target.value) });
+            this.setState({ selected: + (event.target.value) });
         },
 
         /**
