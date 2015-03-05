@@ -54,6 +54,7 @@ var Stores = require('../stores'),
 
         }),
 
+
         /**
          * Add a user to the collection.
          *
@@ -166,9 +167,11 @@ var Stores = require('../stores'),
             this._userHash = {};
         },
 
+
         query: function () {
             return new this._Query(this._getUserList());
         },
+
 
         /**
          * Get the author of the exam for the course.
@@ -195,6 +198,7 @@ var Stores = require('../stores'),
                 });
             });
         },
+
 
         /***********************************\
                       NAMESPACES
@@ -241,6 +245,19 @@ var Stores = require('../stores'),
                     users.forEach(function (user) {
                         self._userHash[user.id] = user;
                     });
+                });
+            },
+
+            LOAD_EXAM_RUN: function () {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var user = self._currentUser();
+                    if (!user) {
+                        throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
+                                         "User is not logged in.");
+                    }
+                    self._userHash[user.id] = user;
+                    resolve();
                 });
             },
 

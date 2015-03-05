@@ -9,7 +9,7 @@ window.onload = function () {
     shore.config({
         
         dispatcher: {
-            stores: [Stores.CourseStore(), Stores.QuestionStore(),
+            stores: [Stores.CourseStore(), Stores.QuestionStore(), Stores.ExamRunStore(),
                      Stores.PageStore(), Stores.UserStore(), Stores.TopicStore() ]
         },
 

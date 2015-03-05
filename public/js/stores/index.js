@@ -17,11 +17,25 @@ module.exports = {
         return cache.CourseStore;
     },
 
+    ExamRunStore: function () {
+        if (!cache.ExamRunStore) {
+            cache.ExamRunStore = require('./examrunstore.js');
+        }
+        return cache.ExamRunStore;
+    },
+
     PageStore: function () {
         if (!cache.PageStore) {
             cache.PageStore = require('./pagestore.js');
         }
         return cache.PageStore;
+    },
+
+    QuestionStore: function () {
+        if (!cache.QuestionStore) {
+            cache.QuestionStore = require('./questionstore.js');
+        }
+        return cache.QuestionStore;
     },
 
     TopicStore: function () {
@@ -36,13 +50,7 @@ module.exports = {
             cache.UserStore = require('./userstore.js');
         }
         return cache.UserStore;
-    },
-
-    QuestionStore: function () {
-        if (!cache.QuestionStore) {
-            cache.QuestionStore = require('./questionstore.js');
-        }
-        return cache.QuestionStore;
     }
+
 
 };

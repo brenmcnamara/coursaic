@@ -14,9 +14,11 @@ var Stores = require('../stores'),
 
     Query = require('./query.js'),
 
+    Util = require('shore').Util,
+
     /**
      * A Store containing all data related to
-     * courses.
+     * questions.
      *
      * @module Store
      * @class QuestionStore
@@ -221,10 +223,7 @@ var Stores = require('../stores'),
 
             },
 
-            GENERATE_EXAM_RUN: function (payload) {
-                
-            },
-            
+
             LOAD_COURSE: function (payload) {
                 var self = this;
 

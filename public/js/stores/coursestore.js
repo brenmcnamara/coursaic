@@ -296,24 +296,6 @@ var Stores = require('../stores'),
         
         actionHandler: {
 
-            LOAD_COURSE: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-
-                // After the user store has completed what it needs to do.
-                .then(function () {
-                    var course;
-                    // Get the course if the course does not
-                    // already exist.
-                    if (!self.courseWithId(payload.courseId)) {
-                        // Don't have the course, need to fetch it.
-                        course = new Course();
-                        course.id = payload.courseId;
-                        return self._fetchCourse(course);
-                    }
-                });
-            },
-
             LOGIN: function (payload) {
                 // When the user is logged in, we need to get course data.
                 var self = this;
@@ -330,6 +312,24 @@ var Stores = require('../stores'),
                                 function() {
                                     self.emit(Constants.Event.DID_FETCH_COURSES);
                                 });
+            },
+
+            LOAD_COURSE: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+
+                // After the user store has completed what it needs to do.
+                .then(function () {
+                    var course;
+                    // Get the course if the course does not
+                    // already exist.
+                    if (!self.courseWithId(payload.courseId)) {
+                        // Don't have the course, need to fetch it.
+                        course = new Course();
+                        course.id = payload.courseId;
+                        return self._fetchCourse(course);
+                    }
+                });
             },
 
             LOAD_HOME: function (payload) {

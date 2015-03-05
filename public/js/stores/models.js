@@ -209,13 +209,56 @@ var
 
 
     /**
-     * A class representing an exam that someone
-     * can take.
+     * A class representing a specific exam run that someone
+     * has taken or is taking.
      *
      * @module Models
-     * @class Exam
+     * @class ExamRun
      */
-    Exam = Parse.Object.extend("Exam");
+    ExamRun = Parse.Object.extend("ExamRun", {
+
+        /**
+         * Check if the exam run is being taken by someone at the moment.
+         *
+         * @method isInProgress
+         *
+         * @return { Boolean } True if the exam run is being taken, false
+         *  if the exam run has already been completed.
+         */
+        isInProgress: function () {
+            return this.isNew();
+        },
+
+
+        /**
+         * An array of questions that are part of the
+         * exam run. This will be null if the exam run is
+         * not in progress.
+         *
+         * @method getQuestions
+         *
+         * @return { Array } A list of questions.
+         */
+        getQuestions: function () {
+            return this._questions;
+        },
+
+
+        /**
+         * Set an array of questions to be the questions for
+         * the exam run.
+         *
+         * @method setQuestions
+         *
+         * @param questions { Array } The questions to set for
+         *  the exam run.
+         */
+        setQuestions: function (questions) {
+            this._questions = questions;
+        }
+
+
+    });
 
 
 /**
@@ -234,7 +277,7 @@ Question.Type = {
 module.exports = {
 
     Course: Course,
-    Exam: Exam,
+    ExamRun: ExamRun,
     Field: Field,
     Question: Question,
     Topic: Topic,

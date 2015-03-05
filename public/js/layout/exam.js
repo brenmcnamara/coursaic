@@ -4,6 +4,7 @@
 var React = require('react'),
     
     Stores = require('../stores'),
+    ExamRunStore = Stores.ExamRunStore(),
 
     HeaderLayout = require('./header.js'),
     ComponentsLayout = require('./components.js'),
@@ -36,13 +37,15 @@ var React = require('react'),
 
 
         render: function() {
+            var examRun = ExamRunStore.query().currentExamRun().getOne();
+
             return (
                 <div className="main">
                     <HeaderLayout.Header />
                     <Timer time={ Formatter.Time.format(this.state.timeInSeconds) } />
                     <div className="content-wrapper">
-                        <ExamDashboard />
-                        <Section_ExamForm />
+                        <ExamDashboard examRun={ examRun } />
+                        <Section_ExamForm examRun={ examRun } />
                     </div>
                 </div>
             );
@@ -111,12 +114,14 @@ var React = require('react'),
     ExamDashboard = React.createClass({
 
         render: function () {
+            var examRun = this.props.examRun;
+
             return (
                 <Dashboard>
                     <Dashboard.Summary>
                         <Dashboard.Summary.Header>Practice Exam</Dashboard.Summary.Header>
                         <Dashboard.Summary.Subheader>
-                            25 questions and 4 topics.
+                            { examRun.getQuestions().length } questions
                         </Dashboard.Summary.Subheader>
                     </Dashboard.Summary>
                 </Dashboard>
