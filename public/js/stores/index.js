@@ -24,6 +24,13 @@ module.exports = {
         return cache.ExamRunStore;
     },
 
+    FlagStore: function () {
+        if (!cache.FlagStore) {
+            cache.FlagStore = require('./flagstore.js');
+        }
+        return cache.FlagStore;
+    },
+
     PageStore: function () {
         if (!cache.PageStore) {
             cache.PageStore = require('./pagestore.js');

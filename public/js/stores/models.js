@@ -204,7 +204,6 @@ var
             return submission === this.get('solution');
         }
 
-
     }),
 
 

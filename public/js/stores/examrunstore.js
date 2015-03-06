@@ -1,7 +1,7 @@
 /**
  * examrunstore.js
  *
- * A store that manages all the course questions.
+ * A store that manages all the exam runs.
  */
 
 var Stores = require('../stores'),

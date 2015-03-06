@@ -10,7 +10,8 @@ window.onload = function () {
         
         dispatcher: {
             stores: [Stores.CourseStore(), Stores.QuestionStore(), Stores.ExamRunStore(),
-                     Stores.PageStore(), Stores.UserStore(), Stores.TopicStore() ]
+                     Stores.PageStore(), Stores.UserStore(), Stores.TopicStore(),
+                     Stores.FlagStore() ]
         },
 
         logger: {

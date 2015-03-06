@@ -58,8 +58,11 @@ var Stores = require('../stores'),
             questionsFlagged: function () {
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (question) {
-                        return store._flagsHash[question.id] &&
-                               store._flagsHash[question.id].length !== 0;
+                        return Stores.FlagStore()
+                                     .query()
+                                     .flagsForQuestion(question)
+                                     .getAll()
+                                     .length > 0;
                     })
                 });
             },
@@ -67,8 +70,11 @@ var Stores = require('../stores'),
             questionsNotFlagged: function () {
                 return new Query.Pipe({
                     data: this.pipe.data.filter(function (question) {
-                        return !store._flagsHash[question.id] ||
-                               store._flagsHash[question.id].length === 0;
+                        return Stores.FlagStore()
+                                     .query()
+                                     .flagsForQuestion(question)
+                                     .getAll()
+                                     .length === 0;
                     })
                 });
             },
@@ -119,8 +125,9 @@ var Stores = require('../stores'),
             sortByDescendingFlagCount: function () {
                 return new Query.Pipe({
                     data: this.pipe.data.sort(function (question1, question2) {
-                        var flag1Count = (store._flagsHash[question1.id]) ? store._flagsHash[question1.id].length : 0,
-                            flag2Count = (store._flagsHash[question2.id]) ? store._flagsHash[question2.id].length : 0;
+                        var query = Stores.FlagStore().query(),
+                            flag1Count = query.flagsForQuestion(question1).getAll().length,
+                            flag2Count = query.flagsForQuestion(question2).getAll().length;
                         return flag2Count - flag1Count;
 
                     })
@@ -140,24 +147,6 @@ var Stores = require('../stores'),
                 questions.forEach(function (question) {
                     self._questionHash[question.id] = question;
                 });
-                // Now load all the data we need from each question,
-                // and create a promise that completed when all question
-                // data has been loaded.
-                return Promise.all(questions.map(function (question) {
-                    return self._loadQuestion(question);
-                }));
-
-            });
-        },
-
-
-        _loadQuestion: function (question) {
-            var self = this,
-                query = new Parse.Query(Flag);
-
-            query.equalTo('question', question);
-            return query.find().then(function (flags) {
-                self._flagsHash[question.id] = flags;
             });
         },
 
@@ -181,10 +170,6 @@ var Stores = require('../stores'),
 
         initialize: function () {
             this._questionHash = {};
-            // The flag hash has keys as question ids,
-            // and the value is an array of flags for that
-            // question.
-            this._flagsHash = {};
         },
 
         query: function () {
