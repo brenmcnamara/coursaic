@@ -8,6 +8,8 @@
 
 var
 
+    Constants = require('../constants.js'),
+
     /**
      * Represents a single user.
      *
@@ -104,8 +106,30 @@ var
 
     /**
      * Represents a flag object.
+     *
+     * @module Models
+     * @class Flag
+     * @constructor
      */
-    Flag = Parse.Object.extend("Flag"),
+    Flag = Parse.Object.extend("Flag", {
+
+        getType: function () {
+            switch (this.get('type')) {
+
+            case 1:
+                return Constants.FlagType.NONSENSE;
+            case 2:
+                return Constants.FlagType.NOT_RELEVANT;
+            case 3:
+                return Constants.FlagType.OUTDATED;
+            case 4:
+                return Constants.FlagType.REPEATED_QUESTION;
+            default:
+                throw Error("Flag " + flag.id + " has unrecognized flag type.");
+            }
+        }
+
+    }),
 
     /**
      * Represents a Topic within a course.
