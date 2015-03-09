@@ -127,7 +127,30 @@ var
             default:
                 throw Error("Flag " + flag.id + " has unrecognized flag type.");
             }
-        }
+        },
+
+        setType: function (type) {
+            var flagValue;
+            switch (type) {
+
+            case Constants.FlagType.NONSENSE:
+                flagValue = 1;
+                break;
+            case Constants.FlagType.NOT_RELEVANT:
+                flagValue = 2;
+                break;
+            case Constants.FlagType.OUTDATED:
+                flagValue = 3;
+                break;
+            case Constants.FlagType.REPEATED_QUESTION:
+                flagValue = 4;
+                break;
+            default:
+                throw Error("Trying to set flag type to unrecognized type: " + type);
+            }
+
+            this.set('type', flagValue);
+        },
 
     }),
 

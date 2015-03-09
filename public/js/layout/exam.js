@@ -5,6 +5,8 @@ var React = require('react'),
     
     Stores = require('../stores'),
     ExamRunStore = Stores.ExamRunStore(),
+    FlagStore = Stores.FlagStore(),
+    UserStore = Stores.UserStore(),
 
     HeaderLayout = require('./header.js'),
     ComponentsLayout = require('./components.js'),
@@ -56,7 +58,7 @@ var React = require('react'),
         },
 
         componentWillMount: function() {
-            Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
+            // Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
         componentDidMount: function () {
@@ -72,7 +74,7 @@ var React = require('react'),
 
         componentWillUnmount: function() {
             clearInterval(this.state.timerId);
-            Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
+            // Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
         }
 
     }),
@@ -146,7 +148,6 @@ var React = require('react'),
             return { guesses: {} };
         },
 
-
         render: function() {
             var examRun = this.props.examRun;
             return (
@@ -217,16 +218,28 @@ var React = require('react'),
      */
     ExamForm_QuestionList_MultiChoice = React.createClass({
 
-        getInitialState: function () {
-            return { showFlagOptions: false };
-        },
-
         render: function() {
-            var flagOptionsClass = 
-                ((this.state.showFlagOptions) ? "popover question-flag__options-list":
-                                                "popover--hide question-flag__options-list"),
+            var
+                question = this.props.question,
+                user = UserStore.query().currentUser().getOne(),
+                // This will be null if the user has
+                // not flagged this question.
+                userFlag = FlagStore.query().flagsForQuestion(question).flagsForUser(user).getOne(),
 
-                question = this.props.question;
+                renderFlagElement = (userFlag) ?
+                    (<ExamForm_QuestionList_MultiChoice_AlreadyFlagged />) :
+                    (<ExamForm_QuestionList_MultiChoice_FlagOptions onFlag={ this.onFlag }
+                                                                    question={ question } />),
+
+                renderFlagActionList = (userFlag) ?
+                    (
+                        <ul className="question-flag__action-list">
+                            <li className="inline-button">Swap this question for another question.</li>
+                            <li className="inline-button">Remove this question.</li>
+                        </ul>
+                    ) :
+                    // Do not render the action list if the user has not flagged the question.
+                    (null);
 
             return (
                 <li className="pure-g">
@@ -244,37 +257,40 @@ var React = require('react'),
                               })
                             }
                         </ul>
-                    </div>
-                    <div className="question-flag pure-u-1 pure-u-md-1-2">
-                        <div className="popover-wrapper question-flag__button"
-                             onClick={ this.onClickFlagButton } >
 
-                            <div className="popover-target question-flag__button">
-                                <i className="fa fa-flag"></i>Flag this question.
-                            </div>
-                            <ul className={ flagOptionsClass } >
-                                <li>Not relevant to the material</li>
-                                <li>Does not make sense</li>
-                                <li>Similar to another question I have seen</li>
-                            </ul>
-                        </div>
-                            
-                        <ul className="question-flag__action-list">
-                            <li className="inline-button">Swap this question for another question.</li>
-                            <li className="inline-button">Remove this question.</li>
-                        </ul>
                     </div>
+                    
+                    <div className="question-flag pure-u-1 pure-u-md-1-2">
+                        { renderFlagElement }
+                        { renderFlagActionList }
+                    </div>
+
                 </li>
             );
         },
 
-        onClickFlagButton: function (event) {
-            // Toggle the show flag options element.
-            this.setState({ showFlagOptions: !this.state.showFlagOptions });
+        componentDidMount: function () {
+            FlagStore.on(Constants.Event.FLAGGED_QUESTION, this.onFlaggedQuestion);
         },
 
-        onChangeItem: function(event) {
+        componentWillUnmount: function () {
+            FlagStore.removeListener(Constants.Event.FLAGGED_QUESTION, this.onFlaggedQuestion);
+        },
+
+        onChangeItem: function (event) {
             this.props.onChange(event, this.props.index);
+        },
+
+        onFlag: function (flagType, event) {
+            Action(Constants.Action.FLAG_QUESTION,
+                   {
+                        questionId: this.props.question.id,
+                        flagType: flagType
+                    }).send();
+        },
+
+        onFlaggedQuestion: function (event) {
+            this.forceUpdate();
         }
 
     }),
@@ -306,6 +322,79 @@ var React = require('react'),
         onChange: function(event) {
             this.props.onChangeItem(event);
         }
+
+    }),
+
+
+    /**
+     * An element informing the user that a question is already flagged.
+     */
+    ExamForm_QuestionList_MultiChoice_AlreadyFlagged = React.createClass({
+
+        render: function () {
+            return (
+                <div>
+                    <div className="question-flag__button--disabled">
+                        <i className="fa fa-flag-o"></i>You have flagged this question
+                    </div>
+                </div>
+            );
+        }
+
+    }),
+
+
+    /**
+     * An element to flag a particular question.
+     */
+    ExamForm_QuestionList_MultiChoice_FlagOptions = React.createClass({
+
+        getInitialState: function () {
+            return { showFlagOptions: false };
+        },
+
+        render: function () {
+            var flagOptionsClass = 
+                ((this.state.showFlagOptions) ? "popover question-flag__options-list":
+                                                "popover--hide question-flag__options-list");
+
+            return (
+                <div className="popover-wrapper"
+                     onClick={ this.onClickFlagButton } >
+
+                    <div className="popover-target question-flag__button">
+                        <i className="fa fa-flag"></i>Flag this question.
+                    </div>
+                    <ul className={ flagOptionsClass } >
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.NOT_RELEVANT) }>
+                            Not relevant to the material
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.NONSENSE) }>
+                            Does not make sense
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.REPEATED_QUESTION) }>
+                            Similar to another question I have seen
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.OUTDATED) }>
+                            The question is out-dated.
+                        </li>
+                    </ul>
+                </div>
+            );
+
+        },
+
+        onClickFlagButton: function (event) {
+            // Toggle the show flag options element.
+            this.setState({ showFlagOptions: !this.state.showFlagOptions });
+        },
+
+        onFlagQuestion: function (flagType) {
+            // Curried function.
+            return function (event) {
+                this.props.onFlag(flagType, event);
+            }.bind(this);
+        },
 
     }),
 

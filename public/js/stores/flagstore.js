@@ -35,8 +35,15 @@ var Stores = require('../stores'),
     					return flag.get('question').id === question.id;
     				})
     			});
-    		}
+    		},
 
+            flagsForUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (flag) {
+                        return flag.get('author').id === user.id;
+                    })
+                });
+            }
 
     	}),
 
@@ -111,6 +118,33 @@ var Stores = require('../stores'),
         \***********************************/
 
         actionHandler: {
+
+            FLAG_QUESTION: function (payload) {
+                // Need to perform some sort of checks to see if the user has
+                // already flagged this question.
+                var self = this,
+                    flag = new Flag(),
+
+                    user = Stores.UserStore()
+                                 .query()
+                                 .currentUser()
+                                 .getOne(),
+
+                    question = Stores.QuestionStore()
+                                     .query()
+                                     .questionWithId(payload.questionId)
+                                     .getOne();
+
+                flag.setType(payload.flagType);
+                flag.set('question', question);
+                flag.set('author', user);
+
+                return flag.save().then(function (flag) {
+                    // Successfully saved the question.
+                    self._flagHash[flag.id] = flag;
+                    self.emit(Constants.Event.FLAGGED_QUESTION);
+                });
+            },
 
         	LOAD_COURSE: function (payload) {
         		var self = this;

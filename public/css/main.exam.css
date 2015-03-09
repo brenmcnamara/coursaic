@@ -111,7 +111,9 @@
 
 }
 
-.question-flag__button i {
+
+.question-flag__button i,
+.question-flag__button--disabled i {
     margin-right: .5em;
 }
 
@@ -120,6 +122,10 @@
     color: #EC0000;
 }
 
+.question-flag__button--disabled,
+.question-flag__button--disabled {
+    color: rgb(74, 144, 226);
+}
 /* 
  * Style for a list of options of what to flag
  * the question for.

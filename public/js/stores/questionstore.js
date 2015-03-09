@@ -32,12 +32,19 @@ var Stores = require('../stores'),
         _Query: Query.queryBuilder({
 
             // Overridden Methods
-
             isEqual: function (question1, question2) {
                 return question1.id === question2.id;
             },
 
             // Query chain methods.
+
+            questionWithId: function (questionId) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (question) {
+                        return question.id === questionId;
+                    })
+                });    
+            },
 
             questionsDisabled: function () {
                 return new Query.Pipe({
