@@ -274,6 +274,19 @@ var Stores = require('../stores'),
                 });
             },
 
+            LOAD_RESULTS: function (payload) {
+                var self = this;
+                return new Promise(function (resolve) {
+                    var user = self._currentUser();
+                    if (!user) {
+                        throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
+                                         "User is not logged in.");
+                    }
+                    self._userHash[user.id] = user;
+                    resolve();
+                });
+            },
+
             LOAD_SPLASH: function (payload) {
                 var self = this;
 

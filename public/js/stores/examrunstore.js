@@ -106,7 +106,6 @@ var Stores = require('../stores'),
             return this._backupQuestions && this._backupQuestions.length > 0;
         },
 
-
         /***********************************\
                      NAMESPACES
         \***********************************/
@@ -140,6 +139,14 @@ var Stores = require('../stores'),
                         self._backupQuestions = Util.difference(questions, examRun.getQuestions());
 
                         self._currentExamRun = examRun;
+                    });
+            },
+
+            LOAD_RESULTS: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                    .then(function () {
+                        self._currentExamRun.setSubmission(payload.examRunSubmission);
                     });
             },
 

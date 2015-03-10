@@ -301,6 +301,7 @@ var
          */
         setQuestions: function (questions) {
             this._questions = questions;
+            this.set('numOfQuestions', questions.length);
         },
 
         /**
@@ -332,6 +333,41 @@ var
          */
         insertQuestionAtIndex: function (question, index) {
             this._questions.splice(index, 0, question);
+        },
+
+        /**
+         * Set an exam submission for this particular exam run.
+         *
+         * @method setSubmission
+         *
+         * @param submission { ExamRunSubmission } A submission for
+         *  the exam run.
+         */
+        setSubmission: function (submission) {
+            this._guesses = [];
+
+            var numCorrect = this._questions.reduce(function (count, question, index) {
+                var solution = submission.getSolutionAtIndex(index);
+                this._guesses.push(solution);
+                return (question.isCorrect(solution)) ? (count + 1) : (count);
+
+            }.bind(this), 0);
+
+
+            this.set('numCorrect', numCorrect);
+            this.set('timeCompleted', submission.getTime());
+        },
+
+        /**
+         * Get a list of guesses that the user submitted for the exam run.
+         *
+         * @method getGuesses
+         *
+         * @return { Array } An array of guesses for the exam or null if no
+         *  submission was made.
+         */
+        getGuesses: function () {
+            return this._guesses || null;
         },
 
     });

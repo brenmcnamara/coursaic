@@ -85,27 +85,19 @@ var Dispatcher = require('shore').Dispatcher,
             },
 
             LOAD_EXAM_RUN: function (payload) {
-                var self = this;
-                return new Promise(function (resolve) {
-                    self._removeMode({ fromMode: self.currentMode() });
-                    resolve();
-                });
+                return this._removeMode({ fromMode: this.currentMode() });
             },
 
             LOAD_HOME: function (payload) {
-                var self = this;
-                return new Promise(function (resolve) {
-                    self._removeMode({ fromMode: self.currentMode() });
-                    resolve();
-                });
+                return this._removeMode({ fromMode: this.currentMode() });
+            },
+
+            LOAD_RESULTS: function (payload) {
+                return this._removeMode({ fromMode: this.currentMode() });
             },
 
             LOAD_SPLASH: function (payload) {
-                var self = this;
-                return new Promise(function (resolve) {
-                    self._removeMode({ fromMode: self.currentMode() });
-                    resolve();
-                });
+                return this._removeMode({ fromMode: this.currentMode() });
             },
 
             LOGIN: function (payload) {
