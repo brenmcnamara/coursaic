@@ -6,6 +6,7 @@ var React = require('react'),
     Stores = require('../stores'),
     ExamRunStore = Stores.ExamRunStore(),
     FlagStore = Stores.FlagStore(),
+    PageStore = Stores.PageStore(),
     UserStore = Stores.UserStore(),
 
     HeaderLayout = require('./header.js'),
@@ -15,6 +16,8 @@ var React = require('react'),
     Action = require('shore').Action,
     Constants = require('../constants.js'),
     Router = require('shore').Router,
+
+    Request = require('../request'),
 
     Formatter = require('../formatter.js'),
 
@@ -34,7 +37,13 @@ var React = require('react'),
     Root = React.createClass({
 
         getInitialState: function () {
-            return { timeInSeconds: 0 };
+            var examRun = ExamRunStore.query().currentExamRun().getOne(),
+                numOfQuestions = examRun.getQuestions().length;
+
+            return { 
+                timeInSeconds: 0,
+                examRunSubmission: Request.CreateExamSubmission({ numOfQuestions: numOfQuestions })
+            };
         },
 
         render: function() {
@@ -46,7 +55,9 @@ var React = require('react'),
                     <Timer time={ Formatter.Time.format(this.state.timeInSeconds) } />
                     <div className="content-wrapper">
                         <ExamDashboard examRun={ examRun } />
-                        <Section_ExamForm examRun={ examRun } />
+                        <Section_ExamForm examRun={ examRun }
+                                          examRunSubmission={ this.state.examRunSubmission }
+                                          onSubmit={ this.onSubmit } />
                     </div>
                 </div>
             );
@@ -85,6 +96,13 @@ var React = require('react'),
             this.forceUpdate();
         },
 
+        onSubmit: function (event) {
+            this.state.examRunSubmission.setTime(this.state.timeInSeconds);
+            Action(Constants.Action.LOAD_RESULTS, { examRunSubmission: this.state.examRunSubmission })
+                .route("/course/<courseId>/exam/results", { courseId: PageStore.courseId() })
+                .send();
+        },
+
     }),
 
 
@@ -116,7 +134,7 @@ var React = require('react'),
 
         onClickTimerText: function () {
             this.setState({ show: false });
-        }
+        },
     
     }),
 
@@ -162,7 +180,8 @@ var React = require('react'),
                 <SectionSet>
                     <SectionSet.Section>
                         <div className="exam">
-                            <ExamForm_QuestionList examRun={ examRun } onChange={ this.onChangeQuestion } />
+                            <ExamForm_QuestionList examRun={ examRun } onChange={ this.onChangeQuestion }
+                                                   examRunSubmission={ this.props.examRunSubmission } />
                             <ExamForm_Buttons onSubmit={ this.onSubmit } />
                         </div>
                     </SectionSet.Section>
@@ -177,8 +196,9 @@ var React = require('react'),
         },
 
         onSubmit: function(event) {
+            this.props.onSubmit(event);
             // Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
-        }
+        },
 
     }),
 
@@ -203,7 +223,8 @@ var React = require('react'),
                             <ExamForm_QuestionList_MultiChoice key={"question-" + index }
                                                                question={ question }
                                                                index={ index }
-                                                               onChangeItem={ this.onChangeItem } />,
+                                                               onChangeItem={ this.onChangeItem }
+                                                               examRunSubmission={ this.props.examRunSubmission } />,
                             <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
                         ]);
                     }.bind(this), []) }
@@ -220,8 +241,7 @@ var React = require('react'),
         },
 
         onChangeItem: function (event, index) {
-            // TODO: IMPLEMENT ME!
-            console.log("Item at index: " + index + " was changed!");
+
         },
 
 
@@ -310,19 +330,35 @@ var React = require('react'),
         },
 
         onChangeItem: function (event) {
+            this.props.examRunSubmission.setSolutionAtIndex(event.target.value,
+                                                            this.props.index);
             this.props.onChangeItem(event, this.props.index);
         },
 
         onClickRemoveQuestion: function (event) {
             Action(Constants.Action.REMOVE_EXAM_RUN_QUESTION, {
                 questionIndex: this.props.index
-            }).send();
+            })
+
+            .send()
+
+            // Action completed successfully.
+            .then(function () {
+                this.props.examRunSubmission.removeIndex(this.props.index);
+            }.bind(this));
         },
 
         onClickSwapQuestion: function (event) {
             Action(Constants.Action.SWAP_EXAM_RUN_QUESTION, {
                 questionIndex: this.props.index
-            }).send();
+            })
+
+            .send()
+
+            // Action completed successfully.
+            .then(function () {
+                this.props.examRunSubmission.clearIndex(this.props.index);
+            }.bind(this));
         },
 
         // TODO: Swap order of parameters!
@@ -459,11 +495,14 @@ var React = require('react'),
             return (
                 <div className="pure-g">
                     <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
-                        <button type="button" className="pure-button blue-button">Submit</button>
+                        <button onClick={ this.props.onSubmit }
+                                type="button" className="pure-button blue-button">
+                            Submit
+                        </button>
                     </div>
 
                     <div className="exam-button-wrapper pure-u-1 pure-u-md-1-2">
-                        <button onClick={ this.onClickCancel }
+                        <button onClick={ this.props.onCancel }
                                 type="button" className="pure-button">
                             Cancel
                         </button>
@@ -471,10 +510,6 @@ var React = require('react'),
 
                 </div>
             );
-        },
-
-        onClickCancel: function() {
-           // Action.send(Constants.Action.TO_MODE_CANCEL_EXAM_RUN, { examId: Stores.ExamStore().current().id });
         }
 
     });

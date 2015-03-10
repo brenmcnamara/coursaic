@@ -174,6 +174,33 @@ CreateExamSubmission = function (inputMap) {
 };
 
 
+/**
+ * Set the number of seconds it took to complete this
+ * exam.
+ *
+ * @method setTime
+ *
+ * @param timeInSeconds { Number } The number of seconds
+ *  it took to complete the exam.
+ */
+CreateExamSubmission.prototype.setTime = function (timeInSeconds) {
+	this._timeInSeconds = timeInSeconds;
+};
+
+
+/**
+ * Get the number of seconds the submission took to complete.
+ *
+ * @method getTime
+ *
+ * @return { Number } The number of seconds for the exam to
+ *  be submitted. Null if this was never set.
+ */
+CreateExamSubmission.prototype.getTime = function () {
+	return this._timeInSeconds || null;
+};
+
+
 CreateExamSubmission.prototype.getSolutionAtIndex = function (index) {
 	return this._submissions[index] || null;
 };

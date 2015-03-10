@@ -92,6 +92,8 @@ var
 
         LOAD_NOT_FOUND: 'LOAD_NOT_FOUND',
 
+        LOAD_RESULTS: 'LOAD_RESULTS',
+
         LOAD_SPLASH: 'LOAD_SPLASH',
 
         LOGIN: 'LOGIN',
