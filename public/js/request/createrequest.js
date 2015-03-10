@@ -7,6 +7,8 @@ var
 
 	CreateExamRun,
 	
+	CreateExamSubmission,
+
 	CreateQuestion,
 
 	CreateRequest;
@@ -160,6 +162,49 @@ CreateExamRun.prototype.forEachChange = function (callback) {
 
 
 /***********************************\
+           Exam Submission
+\***********************************/
+
+CreateExamSubmission = function (inputMap) {
+	if (!(this instanceof CreateExamSubmission)) {
+		return new CreateExamSubmission(inputMap);
+	}
+
+	this._submissions = new Array(inputMap.numOfQuestions);
+};
+
+
+CreateExamSubmission.prototype.getSolutionAtIndex = function (index) {
+	return this._submissions[index] || null;
+};
+
+
+CreateExamSubmission.prototype.setSolutionAtIndex = function (solution, index) {
+	this._submissions[index] = solution;
+};
+
+
+CreateExamSubmission.prototype.removeIndex = function (index) {
+	this._submissions.splice(index, 1);
+};
+
+CreateExamSubmission.prototype.clearIndex = function (index) {
+	this._submissions[index] = null;
+};
+
+CreateExamSubmission.prototype.getQuestionCount = function () {
+	return this._submissions.length;
+};
+
+CreateExamSubmission.prototype.forEach = function (callback) {
+	var i, n;
+	for (i = 0, n = this._submissions.length; i < n; ++i) {
+		callback(this._submissions[i] || null, i);
+	}
+
+};
+
+/***********************************\
            	 New Question
 \***********************************/
 
@@ -269,6 +314,8 @@ module.exports = {
 
 	Question: CreateQuestion,
 
-	ExamRun: CreateExamRun
+	ExamRun: CreateExamRun,
+
+	ExamSubmission: CreateExamSubmission,
 
 };

@@ -203,15 +203,13 @@ var React = require('react'),
                             <ExamForm_QuestionList_MultiChoice key={"question-" + index }
                                                                question={ question }
                                                                index={ index }
-                                                               onSetAnswer={ this.onSetAnswer } />,
+                                                               onChangeItem={ this.onChangeItem } />,
                             <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
                         ]);
-                    }, []) }
+                    }.bind(this), []) }
                 </ul>
             );
         },
-
-
 
         onChange: function (event) {
             this.forceUpdate();
@@ -221,8 +219,9 @@ var React = require('react'),
             this.props.onChange(event, index);
         },
 
-        onSetAnswer: function (event, index) {
+        onChangeItem: function (event, index) {
             // TODO: IMPLEMENT ME!
+            console.log("Item at index: " + index + " was changed!");
         },
 
 
@@ -284,9 +283,10 @@ var React = require('react'),
                                 return (
                                     <ExamForm_Question_MultiChoice_Item key={ question.id + "-option-" + index }
                                                                         question={ question }
-                                                                        option={ option } />
+                                                                        option={ option }
+                                                                        onChangeItem={ this.onChangeItem } />
                                 );
-                              })
+                              }.bind(this))
                             }
                         </ul>
 
@@ -310,7 +310,7 @@ var React = require('react'),
         },
 
         onChangeItem: function (event) {
-            this.props.onChange(event, this.props.index);
+            this.props.onChangeItem(event, this.props.index);
         },
 
         onClickRemoveQuestion: function (event) {
@@ -325,6 +325,7 @@ var React = require('react'),
             }).send();
         },
 
+        // TODO: Swap order of parameters!
         onFlag: function (flagType, event) {
             Action(Constants.Action.FLAG_QUESTION,
                    {

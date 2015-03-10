@@ -8,6 +8,8 @@ module.exports = {
 
 	CreateExamRun: require('./createrequest.js').ExamRun,
 
+	CreateExamSubmission: require('./createrequest.js').ExamSubmission,
+
 	CreateMultiChoice: require('./createrequest.js').MultiChoice,
 
 	EditMultiChoice: require('./editrequest.js').MultiChoice,

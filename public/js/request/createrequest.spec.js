@@ -5,7 +5,84 @@
  */
 
 var Query = require('../stores/query'),
-	CreateExamRun = require('./createrequest.js').ExamRun;
+
+	CreateExamRun = require('./createrequest.js').ExamRun,
+
+	CreateExamSubmission = require('./createrequest.js').ExamSubmission;
+
+describe("Create Exam Submission Request", function () {
+
+	// NOTE: Not testing getSolutionAtIndex and not testing
+	// the getQuestionCount
+
+	it("constructs an exam submission with the correct number of questions.", function () {
+		var submission = CreateExamSubmission({ numOfQuestions: 2 });
+
+		expect(submission.getQuestionCount()).toBe(2);
+	});
+
+	it("sets a solution for a particular index.", function () {
+		var submission = CreateExamSubmission({ numOfQuestions: 1 });
+
+		expect(submission.getSolutionAtIndex(0)).toBe(null);
+		submission.setSolutionAtIndex("blah", 0);
+		expect(submission.getSolutionAtIndex(0)).toBe("blah");
+	});
+
+	it("removes an index from the submission.", function () {
+		var submission = CreateExamSubmission({ numOfQuestions: 2 });
+
+		submission.setSolutionAtIndex("first", 0);
+		submission.setSolutionAtIndex("second", 1);
+		submission.removeIndex(0);
+
+		expect(submission.getQuestionCount()).toBe(1);
+		expect(submission.getSolutionAtIndex(0)).toBe("second");
+
+	});
+
+	it("clears the solution at a particular index.", function () {
+		var submission = CreateExamSubmission({ numOfQuestions: 2 });
+
+		submission.setSolutionAtIndex("first", 0);
+		submission.clearIndex(0);
+
+		expect(submission.getSolutionAtIndex(0)).toBe(null);
+		expect(submission.getQuestionCount()).toBe(2);
+	});
+
+	it("iterates submissions.", function () {
+		var submission = CreateExamSubmission({ numOfQuestions: 3 }),
+			iterationCount = 0;
+
+		submission.setSolutionAtIndex("first", 0);
+		submission.setSolutionAtIndex("second", 1);
+
+		submission.forEach(function (solution, index) {
+			++iterationCount;
+			switch (index) {
+
+			case 0:
+				expect(solution).toBe("first");
+				break;
+			case 1:
+				expect(solution).toBe("second");
+				break;
+			case 2:
+				expect(solution).toBe(null);
+				break;
+			default:
+				throw Error("Iterating index that does not exist.");
+			}
+		});
+
+		expect(iterationCount).toBe(3);
+
+	});
+
+
+
+});
 
 describe("Create ExamRun Request", function () {
 
@@ -102,6 +179,5 @@ describe("Create ExamRun Request", function () {
 		expect(addQuery).toThrow();
 
 	});
-
 
 });
