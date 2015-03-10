@@ -37,7 +37,6 @@ var React = require('react'),
             return { timeInSeconds: 0 };
         },
 
-
         render: function() {
             var examRun = ExamRunStore.query().currentExamRun().getOne();
 
@@ -53,10 +52,6 @@ var React = require('react'),
             );
         },
 
-        onChange: function(event) {
-            this.forceUpdate();
-        },
-
         componentWillMount: function() {
             // Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
@@ -69,13 +64,26 @@ var React = require('react'),
                 self.setState({ timeInSeconds: self.state.timeInSeconds + 1 });
             }, 1000);
 
+            ExamRunStore.on(Constants.Event.REMOVED_EXAM_RUN_QUESTION,
+                            this.onRemovedExamRunQuestion);
+
             this.setState({ timerId: timerId });
         },
 
         componentWillUnmount: function() {
             clearInterval(this.state.timerId);
+            ExamRunStore.removeListener(Constants.Event.REMOVED_EXAM_RUN_QUESTION,
+                                        this.onRemovedExamRunQuestion);
             // Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
-        }
+        },
+
+        onChange: function(event) {
+            this.forceUpdate();
+        },
+
+        onRemovedExamRunQuestion: function () {
+            this.forceUpdate();
+        },
 
     }),
 
@@ -194,7 +202,7 @@ var React = require('react'),
                         return list.concat([
                             <ExamForm_QuestionList_MultiChoice key={"question-" + index }
                                                                question={ question }
-                                                               index={ index + 1 }
+                                                               index={ index }
                                                                onSetAnswer={ this.onSetAnswer } />,
                             <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
                         ]);
@@ -203,11 +211,13 @@ var React = require('react'),
             );
         },
 
-        onChange: function(event) {
+
+
+        onChange: function (event) {
             this.forceUpdate();
         },
 
-        onChangeQuestion: function(event, index) {
+        onChangeQuestion: function (event, index) {
             this.props.onChange(event, index);
         },
 
@@ -244,7 +254,8 @@ var React = require('react'),
                 renderFlagActionList = (
                     <ul className="question-flag__action-list">
                         <li className="inline-button">Swap this question for another question.</li>
-                        <li className="inline-button">Remove this question.</li>
+                        <li className="inline-button"
+                            onClick={ this.onClickRemoveQuestion } >Remove this question.</li>
                     </ul>
                 );
             } 
@@ -252,7 +263,8 @@ var React = require('react'),
                 // No backup questions available.
                 renderFlagActionList = (
                     <ul className="question-flag__action-list">
-                        <li className="inline-button">Remove this question.</li>
+                        <li className="inline-button"
+                            onClick={ this.onClickRemoveQuestion } >Remove this question.</li>
                     </ul>
                 );
             }
@@ -264,7 +276,7 @@ var React = require('react'),
                 <li className="pure-g">
                     <div className="question-info pure-u-1 pure-u-md-1-2">
                         <div className="question-info__ask">
-                            <span>{ this.props.index }.</span> { question.get('ask') }
+                            <span>{ this.props.index + 1 }.</span> { question.get('ask') }
                         </div>
                         <ul className="multi-choice-info__options-list">
                             { question.getOptions().map(function (option, index) {
@@ -298,6 +310,12 @@ var React = require('react'),
 
         onChangeItem: function (event) {
             this.props.onChange(event, this.props.index);
+        },
+
+        onClickRemoveQuestion: function (event) {
+            Action(Constants.Action.REMOVE_EXAM_RUN_QUESTION, {
+                questionIndex: this.props.index
+            }).send();
         },
 
         onFlag: function (flagType, event) {

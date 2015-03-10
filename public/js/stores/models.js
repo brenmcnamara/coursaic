@@ -301,7 +301,22 @@ var
          */
         setQuestions: function (questions) {
             this._questions = questions;
-        }
+        },
+
+        /**
+         * Remove the question at the given index from
+         * the exam run. Undefined behavior if the index
+         * is out-of-bounds from the exam run.
+         *
+         * @method removeQuestionAtIndex
+         *
+         * @param index { Number } The index of the
+         *  question in the exam run. 
+         *
+         */
+        removeQuestionAtIndex: function (index) {
+            this._questions.splice(index, 1);
+        },
 
 
     });
