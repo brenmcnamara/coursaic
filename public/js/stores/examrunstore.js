@@ -89,6 +89,24 @@ var Stores = require('../stores'),
         },
 
 
+        /**
+         * Check if there are backup questions for the
+         * current exam run. Backup questions are questions
+         * that are available to be substituted in for
+         * other questions currently in the exam run.
+         *
+         * @method hasBackupQuestions
+         *
+         * @return { Boolean } True if there are backup questions
+         *  for the current exam run. False if there is no current
+         *  exam run or if there are no backup questions available
+         *  for the current exam run.
+         */
+        hasBackupQuestions: function () {
+            return this._backupQuestions && this._backupQuestions.length > 0;
+        },
+
+
         /***********************************\
                      NAMESPACES
         \***********************************/
@@ -119,6 +137,8 @@ var Stores = require('../stores'),
                         examRun.set('author', Stores.UserStore().query().currentUser().getOne());
 
                         examRun.setQuestions(Util.randomSubset(questions, numOfQuestions));
+                        self._backupQuestions = Util.difference(questions, examRun.getQuestions());
+
                         self._currentExamRun = examRun;
                     });
             }

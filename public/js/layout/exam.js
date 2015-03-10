@@ -194,7 +194,8 @@ var React = require('react'),
                         return list.concat([
                             <ExamForm_QuestionList_MultiChoice key={"question-" + index }
                                                                question={ question }
-                                                               index={ index + 1 } />,
+                                                               index={ index + 1 }
+                                                               onSetAnswer={ this.onSetAnswer } />,
                             <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
                         ]);
                     }, []) }
@@ -209,6 +210,11 @@ var React = require('react'),
         onChangeQuestion: function(event, index) {
             this.props.onChange(event, index);
         },
+
+        onSetAnswer: function (event, index) {
+            // TODO: IMPLEMENT ME!
+        },
+
 
     }),
 
@@ -231,15 +237,28 @@ var React = require('react'),
                     (<ExamForm_QuestionList_MultiChoice_FlagOptions onFlag={ this.onFlag }
                                                                     question={ question } />),
 
-                renderFlagActionList = (userFlag) ?
-                    (
-                        <ul className="question-flag__action-list">
-                            <li className="inline-button">Swap this question for another question.</li>
-                            <li className="inline-button">Remove this question.</li>
-                        </ul>
-                    ) :
-                    // Do not render the action list if the user has not flagged the question.
-                    (null);
+                renderFlagActionList;
+
+            if (userFlag && ExamRunStore.hasBackupQuestions()) {
+                // Backup questions available.
+                renderFlagActionList = (
+                    <ul className="question-flag__action-list">
+                        <li className="inline-button">Swap this question for another question.</li>
+                        <li className="inline-button">Remove this question.</li>
+                    </ul>
+                );
+            } 
+            else if (userFlag) {
+                // No backup questions available.
+                renderFlagActionList = (
+                    <ul className="question-flag__action-list">
+                        <li className="inline-button">Remove this question.</li>
+                    </ul>
+                );
+            }
+            else {
+                renderFlagActionList = null;
+            }
 
             return (
                 <li className="pure-g">
@@ -376,7 +395,7 @@ var React = require('react'),
                             Similar to another question I have seen
                         </li>
                         <li onClick={ this.onFlagQuestion(Constants.FlagType.OUTDATED) }>
-                            The question is out-dated.
+                            The question is outdated.
                         </li>
                     </ul>
                 </div>
