@@ -162,7 +162,7 @@ var Stores = require('../stores'),
         				return self._fetchFlagsForQuestions(questions);
 
         			});
-        	}
+        	},
 
         }
 

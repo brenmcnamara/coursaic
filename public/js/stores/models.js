@@ -332,7 +332,7 @@ var
          */
         insertQuestionAtIndex: function (question, index) {
             this._questions.splice(index, 0, question);
-        }
+        },
 
     });
 

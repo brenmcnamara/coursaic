@@ -151,7 +151,23 @@ var Stores = require('../stores'),
                     self.emit(Constants.Event.UPDATED_EXAM_RUN);
                     resolve();
                 });
-            }
+            },
+
+            SWAP_EXAM_RUN_QUESTION: function (payload) {
+                var self = this;
+
+                return new Promise(function (resolve) {
+                    // TODO: Assert that htere is an exam run.
+                    // Pick a question to swap out.
+                    var question = self._backupQuestions.pop();
+
+                    self._currentExamRun.removeQuestionAtIndex(payload.questionIndex);
+                    self._currentExamRun.insertQuestionAtIndex(question, payload.questionIndex);
+
+                    self.emit(Constants.Event.UPDATED_EXAM_RUN);
+                    resolve();
+                });
+            },
 
         }
 

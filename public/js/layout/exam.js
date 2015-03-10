@@ -253,7 +253,8 @@ var React = require('react'),
                 // Backup questions available.
                 renderFlagActionList = (
                     <ul className="question-flag__action-list">
-                        <li className="inline-button">Swap this question for another question.</li>
+                        <li className="inline-button"
+                            onClick={ this.onClickSwapQuestion } >Swap this question for another question.</li>
                         <li className="inline-button"
                             onClick={ this.onClickRemoveQuestion } >Remove this question.</li>
                     </ul>
@@ -314,6 +315,12 @@ var React = require('react'),
 
         onClickRemoveQuestion: function (event) {
             Action(Constants.Action.REMOVE_EXAM_RUN_QUESTION, {
+                questionIndex: this.props.index
+            }).send();
+        },
+
+        onClickSwapQuestion: function (event) {
+            Action(Constants.Action.SWAP_EXAM_RUN_QUESTION, {
                 questionIndex: this.props.index
             }).send();
         },
