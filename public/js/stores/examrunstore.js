@@ -148,7 +148,7 @@ var Stores = require('../stores'),
                 return new Promise(function (resolve) {
                     // TODO: Assert that there is an exam run.
                     self._currentExamRun.removeQuestionAtIndex(payload.questionIndex);
-                    self.emit(Constants.Event.REMOVED_EXAM_RUN_QUESTION);
+                    self.emit(Constants.Event.UPDATED_EXAM_RUN);
                     resolve();
                 });
             }

@@ -318,6 +318,21 @@ var
             this._questions.splice(index, 1);
         },
 
+        /**
+         * Add a question at a particular index of the
+         * exam run.
+         *
+         * @method insertQuestionAtIndex
+         *
+         * @param question { Question } The question to add
+         *  to the exam run.
+         *
+         * @param index { Number } The index of the exam run
+         *  to add it to.
+         */
+        insertQuestionAtIndex: function (question, index) {
+            this._questions.splice(index, 0, question);
+        }
 
     });
 

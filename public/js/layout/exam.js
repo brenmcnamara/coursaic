@@ -64,16 +64,16 @@ var React = require('react'),
                 self.setState({ timeInSeconds: self.state.timeInSeconds + 1 });
             }, 1000);
 
-            ExamRunStore.on(Constants.Event.REMOVED_EXAM_RUN_QUESTION,
-                            this.onRemovedExamRunQuestion);
+            ExamRunStore.on(Constants.Event.UPDATED_EXAM_RUN,
+                            this.onUpdatedExamRun);
 
             this.setState({ timerId: timerId });
         },
 
         componentWillUnmount: function() {
             clearInterval(this.state.timerId);
-            ExamRunStore.removeListener(Constants.Event.REMOVED_EXAM_RUN_QUESTION,
-                                        this.onRemovedExamRunQuestion);
+            ExamRunStore.removeListener(Constants.Event.UPDATED_EXAM_RUN,
+                                        this.onUpdatedExamRun);
             // Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
         },
 
@@ -81,7 +81,7 @@ var React = require('react'),
             this.forceUpdate();
         },
 
-        onRemovedExamRunQuestion: function () {
+        onUpdatedExamRun: function () {
             this.forceUpdate();
         },
 
