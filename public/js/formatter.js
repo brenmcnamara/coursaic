@@ -204,7 +204,6 @@ var
 
                 }
 
-                console.log("Formatted is " + formatted);
                 return formatted;
             },
 

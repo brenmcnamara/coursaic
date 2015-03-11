@@ -9,8 +9,12 @@ var
     ComponentsLayout = require('./components.js'),
     headerLayout = require('./header.js'),
 
+    Action = require('shore').Action,
+
     Stores = require('../stores'),
+    CourseStore = Stores.CourseStore(),
     ExamRunStore = Stores.ExamRunStore(),
+    PageStore = Stores.PageStore(),
 
     Dashboard = ComponentsLayout.Dashboard,
 
@@ -126,12 +130,20 @@ var
     BackToCourseButton = React.createClass({
 
         render: function () {
+            var course = CourseStore.query().courseWithId(PageStore.courseId()).getOne();
+
             return (
-                <button className="pure-button blue-button large-button">
-                    Back to CS 101
+                <button className="pure-button blue-button large-button"
+                        onClick={ this.onClickBack } >
+                    Back to { course.get('alias') }
                 </button>
             );
-        }
+        },
+
+        onClickBack: function (event) {
+            var courseId = PageStore.courseId();
+            Action().route("/course/<courseId>", { courseId: courseId }).send();
+        },
 
     }),
 
