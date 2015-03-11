@@ -147,6 +147,8 @@ var Stores = require('../stores'),
                 return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
                     .then(function () {
                         self._currentExamRun.setSubmission(payload.examRunSubmission);
+                        // Save the exam run after it has been graded.
+                        return self._currentExamRun.save();
                     });
             },
 
