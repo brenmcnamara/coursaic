@@ -9,20 +9,27 @@ var
     ComponentsLayout = require('./components.js'),
     headerLayout = require('./header.js'),
 
+    Stores = require('../stores'),
+    ExamRunStore = Stores.ExamRunStore(),
+
     Dashboard = ComponentsLayout.Dashboard,
 
     SectionSet = ComponentsLayout.SectionSet,
 
+    Formatter = require('../formatter.js'),
+
     Root = React.createClass({
 
         render: function () {
+            var examRun = ExamRunStore.query().currentExamRun().getOne();
+
             return (
                 <div className="main">
                     <headerLayout.Header />
                     <div className="content-wrapper">
-                        <ResultDashboard />
+                        <ResultDashboard examRun={ examRun } />
                         <SectionSet>
-                            <Section_ExamResults />
+                            <Section_ExamResults examRun={ examRun } />
                         </SectionSet>
                     </div>
                 </div>
@@ -35,14 +42,16 @@ var
     ResultDashboard = React.createClass({
 
         render: function () {
+            var examRun = this.props.examRun,
+                score = examRun.get('numCorrect') / examRun.get('numOfQuestions');
 
             return (
                 <Dashboard>
 
                     <Dashboard.Summary>
-                        <Dashboard.Summary.Header>Wow, You Suck!</Dashboard.Summary.Header>
+                        <Dashboard.Summary.Header><ScoreMessage score={ score } /></Dashboard.Summary.Header>
                         <Dashboard.Summary.Subheader>
-                            <span className="exam-score--bad">Overall Score: 43%</span>
+                            <Score score={ score } />
                         </Dashboard.Summary.Subheader>
                     </Dashboard.Summary>
 
@@ -52,6 +61,63 @@ var
 
                 </Dashboard>
             );
+        }
+
+    }),
+
+
+    ScoreMessage = React.createClass({
+
+        render: function () {
+            var score = this.props.score;
+
+            if (score >= 90) {
+                return (
+                    <span>Awesome job!</span>
+                );
+            }
+            else if (score >= 75) {
+                return (
+                    <span>Pretty Good!</span>
+                );
+            }
+            else {
+                return (
+                    <span>Keep Improving</span>
+                );
+            }
+
+        }
+
+    }),
+
+
+    Score = React.createClass({
+
+        render: function () {
+            var score = this.props.score * 100;
+            if (score  >= 90) {
+                return (
+                    <span className="exam-score--great">
+                        Overall Score: { Formatter.Number.format(score, { placesAfterDecimal: 1 })}%
+                    </span>
+                );
+            }
+            else if (score >= 75) {
+                return (
+                    <span className="exam-score--good">
+                        Overall Score: { Formatter.Number.format(score, { placesAfterDecimal: 1 })}%
+                    </span>
+                );
+            }
+            else {
+                return (
+                    <span className="exam-score--bad">
+                        Overall Score: { Formatter.Number.format(score, { placesAfterDecimal: 1 })}%
+                    </span>
+                );
+            }
+
         }
 
     }),
