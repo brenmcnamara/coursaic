@@ -43,7 +43,7 @@ var
 
         render: function () {
             var examRun = this.props.examRun,
-                score = examRun.get('numCorrect') / examRun.get('numOfQuestions');
+                score = examRun.get('numCorrect') / examRun.get('numOfQuestions') * 100;
 
             return (
                 <Dashboard>
@@ -95,7 +95,7 @@ var
     Score = React.createClass({
 
         render: function () {
-            var score = this.props.score * 100;
+            var score = this.props.score;
             if (score  >= 90) {
                 return (
                     <span className="exam-score--great">
@@ -139,15 +139,28 @@ var
     Section_ExamResults = React.createClass({
 
         render: function () {
+            var examRun = this.props.examRun;
+
             return (
                 <SectionSet.Section>
                     <ul className="question-info-list">
-                        <QuestionItem_Incorrect />
-                        <QuestionItem_Incorrect />
-                        <QuestionItem_Correct />
-                        <QuestionItem_Incorrect />
-                        <QuestionItem_Correct />
-                        <QuestionItem_Correct />
+                        {
+                            examRun.getQuestions().map(function (question, index) {
+                                var guess = examRun.getGuesses()[index];
+                                if (question.isCorrect(guess)) {
+                                    return (
+                                        <QuestionItem_Correct key={ "question-" + index }
+                                                              question={ question } />
+                                    );
+                                }
+                                // Not a correct guess.
+                                return (
+                                    <QuestionItem_Incorrect key={ "question-" + index }
+                                                            question={ question }
+                                                            guess={ guess } />
+                                );
+                            })
+                        }
                     </ul>
                 </SectionSet.Section>
             );
@@ -163,6 +176,8 @@ var
     QuestionItem_Correct = React.createClass({
 
         render: function() {
+            var question = this.props.question;
+
             return (
                 <li>
                     <div className="question-item">
@@ -172,7 +187,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo />
+                            <QuestionInfo question={ question } />
                         </div>
                     </div>
                 </li>
@@ -185,6 +200,9 @@ var
     QuestionItem_Incorrect = React.createClass({
 
         render: function () {
+            var question = this.props.question,
+                guess = this.props.guess;
+
             return (
                 <li>
                     <div className="question-item">
@@ -194,7 +212,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo />
+                            <QuestionInfo question={ question } guess={ guess } />
                         </div>
                     </div>
                 </li>
@@ -207,17 +225,45 @@ var
     QuestionInfo = React.createClass({
 
         render: function () {
+            var question = this.props.question,
+                // Note that 'guess' may not be defined.
+                guess = this.props.guess;
+
             return (
                 <div className="question-info">
-                    <div className="question-info__ask">What is 2 + 2?</div>
+                    <div className="question-info__ask">{ question.get('ask') }</div>
                     <ul className="multi-choice-info__options-list--lettered">
-                        <MultiChoiceItem_OptionItem>22</MultiChoiceItem_OptionItem>
-                        <MultiChoiceItem_OptionItem>25</MultiChoiceItem_OptionItem>
-                        <MultiChoiceItem_OptionItem_Correct>4</MultiChoiceItem_OptionItem_Correct>
-                        <MultiChoiceItem_OptionItem_Incorrect>12</MultiChoiceItem_OptionItem_Incorrect>                                                                                    
+                        {
+                            question.getOptions().map(function (option) {
+                                if (question.isCorrect(option)) {
+                                    return (
+                                        <MultiChoiceItem_OptionItem_Correct>
+                                            { option }
+                                        </MultiChoiceItem_OptionItem_Correct>
+                                    );
+                                }
+                                else if (option === guess) {
+                                    return (
+                                        <MultiChoiceItem_OptionItem_Incorrect>
+                                            { option }
+                                        </MultiChoiceItem_OptionItem_Incorrect>
+                                    );
+                                }
+                                else {
+                                    return (
+                                        <MultiChoiceItem_OptionItem>
+                                            { option }
+                                        </MultiChoiceItem_OptionItem>
+                                    );
+                                }
+                                return (
+                                    <MultiChoiceItem_OptionItem>{ option }</MultiChoiceItem_OptionItem>
+                                );
+                            })
+                        }                                                                                  
                     </ul>
                     <div className="question-info__explanation">
-                        Just because!!
+                        { question.get('explanation') }
                     </div>
                 </div>
             );
