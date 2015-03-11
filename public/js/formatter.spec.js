@@ -4,6 +4,28 @@
 
 var Formatter = require('./formatter.js');
 
+describe("Number Formatter", function () {
+
+    "use strict";
+
+    it("removes extra digits after the decimal.", function () {
+        expect(Formatter.Number.format(12.1223, { placesAfterDecimal: 2 })).toBe("12.12");
+    });
+
+    it("removes all digits after the decimal with 0 places after decimal.", function () {
+        expect(Formatter.Number.format(12.2, { placesAfterDecimal: 0 })).toBe("12");
+    });
+
+    it("should not add a decimal to an integer with 0 places after decimal", function () {
+        expect(Formatter.Number.format(12, { placesAfterDecimal: 0 })).toBe("12");
+    });
+
+    it("should add zeros with decimal point to integers.", function () {
+        expect(Formatter.Number.format(12, { placesAfterDecimal: 3 })).toBe("12.000");
+    });
+
+});
+
 describe("Time Formatter", function () {
 
     "use strict";

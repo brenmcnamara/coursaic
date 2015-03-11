@@ -165,6 +165,68 @@ var
                 }
                 return text;
             }
+        },
+
+        Number: {
+
+            format: function (number, options) {
+                var formatted = number.toString(),
+                    decimalIndex;
+
+                options = (options || {});
+
+                if (options.placesAfterDecimal === 0) {
+                    formatted = Math.floor(number).toString();
+                }
+                else if (options.placesAfterDecimal > 0) {
+                    decimalIndex = formatted.search(/\./);
+                    if (decimalIndex >= 0) {
+                        // Found the decimal place.
+                        if ((formatted.length - decimalIndex - 1) < options.placesAfterDecimal) {
+                            formatted = 
+                                Formatter.Number._addZeros(formatted,
+                                                           decimalIndex - 1 - options.placesAfterDecimal);
+                        }
+                        else if ((formatted.length - decimalIndex - 1) > options.placesAfterDecimal) {
+                            // Remove zeros.
+                            formatted = formatted.substr(0, decimalIndex + 1 + options.placesAfterDecimal);
+                        }
+                        // If it is equal, nothing needs to be done.
+                    }
+                    else if (options.placesAfterDecimal > 0) {
+                        // Did not find a decimal in the number,
+                        // this is an integer. Only need to add
+                        // zeros to the integer if the number of
+                        // zeros at the end is greater than 0.
+                        formatted = Formatter.Number._addZeros(formatted + ".", options.placesAfterDecimal);
+                    }
+
+
+                }
+
+                console.log("Formatted is " + formatted);
+                return formatted;
+            },
+
+            /**
+             * Add zeros to the end of a string and return
+             * the new string.
+             *
+             * @method _addZeros
+             * @private
+             *
+             * @param string { String } The string to add zeros to.
+             *
+             * @return { String } A new string with zeros appended.
+             */
+            _addZeros: function (string, numberOfZeros) {
+                while (numberOfZeros > 0) {
+                    string = string + "0";
+                    --numberOfZeros;
+                }
+                return string;
+            }
+
         }
 
     };
