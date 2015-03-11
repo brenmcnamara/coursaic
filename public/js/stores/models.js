@@ -8,13 +8,159 @@
 
 var
 
+    Constants = require('../constants.js'),
+
     /**
      * Represents a single user.
      *
      * @module Models
      * @class User
      */
-    User = Parse.User,
+    User = Parse.User.extend({
+
+        /**
+         * Check if a user is enrolled in a course.
+         *
+         * @method isEnrolled
+         *
+         * @param course {Course} The course to check if the
+         *  user is enrolled in.
+         *
+         * @return {Boolean} True if the user is enrolled in the
+         *  course, false otherwise.
+         */
+        isEnrolled: function (course) {
+            var enrolled = this.get('enrolled') || [];
+
+            return enrolled.reduce(function (isEnrolled, enrolledCourse) {
+                return isEnrolled || enrolledCourse.id === course.id;
+            }, false);
+        },
+
+        /**
+         * Check if a user is the owner of a particular course.
+         *
+         * @method isOwner
+         *
+         * @param course {Course} The course to check for ownership.
+         *
+         * @return {Boolean} True if the user is an owner, false otherwise.
+         */
+        isOwner: function (course) {
+            return course.get('owner') && course.get('owner').id === this.id;
+        },
+
+        /**
+         * Enroll a user in a particular course.
+         *
+         * @method enroll
+         *
+         * @param course { Course } The course to enroll the
+         *  user in.
+         */
+        enroll: function (course) {
+            var enrolled = this.get('enrolled') || [];
+
+            if (this.isEnrolled(course)) {
+                throw Error("The User is already enrolled in the course " + course.id);
+            }
+
+            enrolled.push(course);
+
+            // Reset the enrolled property. If the enrolled property is null,
+            // it won't get updated just by pushing the course to the array.
+            this.set('enrolled', enrolled);
+        },
+
+        /**
+         * Unenroll a user from a particular course.
+         *
+         * @method unenroll
+         *
+         * @param course { Course } The course to unenroll the
+         *  user from.
+         */
+         unenroll: function (course) {
+            var enrolled = this.get('enrolled') || [],
+                courseIndex;
+
+            if (!this.isEnrolled(course)) {
+                throw Error("The user cannot be unenrolled from the course " + course.id);
+            }
+
+            enrolled.forEach(function (enrolledCourse, index) {
+                if (enrolledCourse.id === course.id) {
+                    courseIndex = index;
+                }
+            });
+
+            enrolled = enrolled.slice(0, courseIndex)
+                               .concat(enrolled.slice(courseIndex + 1,
+                                                      enrolled.length - courseIndex - 1));
+
+            this.set('enrolled', enrolled);
+
+         }
+
+    }),
+
+    /**
+     * Represents a flag object.
+     *
+     * @module Models
+     * @class Flag
+     * @constructor
+     */
+    Flag = Parse.Object.extend("Flag", {
+
+        getType: function () {
+            switch (this.get('type')) {
+
+            case 1:
+                return Constants.FlagType.NONSENSE;
+            case 2:
+                return Constants.FlagType.NOT_RELEVANT;
+            case 3:
+                return Constants.FlagType.OUTDATED;
+            case 4:
+                return Constants.FlagType.REPEATED_QUESTION;
+            default:
+                throw Error("Flag " + flag.id + " has unrecognized flag type.");
+            }
+        },
+
+        setType: function (type) {
+            var flagValue;
+            switch (type) {
+
+            case Constants.FlagType.NONSENSE:
+                flagValue = 1;
+                break;
+            case Constants.FlagType.NOT_RELEVANT:
+                flagValue = 2;
+                break;
+            case Constants.FlagType.OUTDATED:
+                flagValue = 3;
+                break;
+            case Constants.FlagType.REPEATED_QUESTION:
+                flagValue = 4;
+                break;
+            default:
+                throw Error("Trying to set flag type to unrecognized type: " + type);
+            }
+
+            this.set('type', flagValue);
+        },
+
+    }),
+
+    /**
+     * Represents a Topic within a course.
+     *
+     * @module Models
+     * @class 
+     */
+    Topic = Parse.Object.extend("Topic"),
 
     /**
      * Represents a single field.
@@ -24,115 +170,14 @@ var
      */
     Field = Parse.Object.extend("Field"),
 
+
     /**
      * Represents a single course.
      *
      * @module Models
      * @class Course
      */
-    Course = Parse.Object.extend("Course", {
-
-        /**
-         * Check the number of people enrolled in a particular
-         * course.
-         *
-         * @method enrollCount
-         *
-         * @return {Number} The enroll count of the course.
-         */
-        enrollCount: function() {
-            return (this.get('enrolled') || []).length;        
-        },
-
-
-        /**
-         * See if a user is enrolled in a particular
-         * course.
-         *
-         * @method isEnrolled
-         *
-         * @param user {User} The user to check for
-         *  enrollment.
-         *
-         * @return {Boolean} True if the user is enrolled in
-         *  the course, false otherwise.
-         */
-        isEnrolled: function(user) {
-            var enrolled = (this.get('enrolled') || []),
-                i, n;
-
-            for (i = 0, n = enrolled.length; i < n; ++i) {
-                if (user.id === enrolled[i].id) {
-                    return true;
-                }
-            }
-            return false;
-        },
-
-
-        /**
-         * Add a user to the course so that he/she is
-         * now enrolled. This method does not perform
-         * any persistence.
-         *
-         * @method addUser
-         *
-         * @param user {User} The user to add.
-         *
-         * @throw An error if the user is already added
-         *  to this course.
-         */
-        addUser: function(user) {
-            var enrolled;
-            if (this.isEnrolled(user)) {
-                throw new Error("Could not find user " + user.id + " while" +
-                                "adding to course " + this.id);
-            }
-            enrolled = this.get('enrolled') || [];
-            enrolled.push(user);
-            this.set('enrolled', enrolled);
-        },
-
-
-        /**
-         * Remove a user from the course so that he/she
-         * is no longer enrolled. THis method does not
-         * perform any persistence.
-         *
-         * @method removeUser
-         *
-         * @param user {User} The user to remove.
-         *
-         * @throw An erro if the user is not already
-         *  enrolled in the course.
-         */
-        removeUser: function(user) {
-            var enrolled = this.get('enrolled') || [],
-                i, n, indexOfUser = -1;
-            for (i = 0, n = enrolled.length; i < n && indexOfUser < 0; ++i) {
-                if (enrolled[i].id === user.id) {
-                    indexOfUser = i;
-                }
-            }
-            if (indexOfUser < 0) {
-                throw new Error("Could not find user " + user.id + " while " +
-                                "removing from course " + this.id);
-            }
-            enrolled = enrolled.slice(0, indexOfUser)
-                               .concat(enrolled.slice(indexOfUser + 1, n));
-            this.set('enrolled', enrolled);
-        }
-
-
-    }),
-
-    /**
-     * Represents a single school.
-     *
-     * @module Models
-     * @class School
-     */
-    School = Parse.Object.extend("School"),
+    Course = Parse.Object.extend("Course"),
 
 
     /**
@@ -142,7 +187,6 @@ var
      * @class Question
      */
     Question = Parse.Object.extend("Question", {
-
 
         /**
          * This method is meant to be used after a new
@@ -161,11 +205,19 @@ var
 
         // TODO: Document this.
         getOptions: function() {
+            var parsed;
             // NOTE: This is assuming that the type
             // of the question is multiple choice. Should
             // change this when adding other types of
             // questions.  
-            return JSON.parse(this.get('options'));
+            try {
+                parsed = JSON.parse(this.get('options'));
+            }
+            catch (e) {
+                throw Error("Error while parsing question options from backend: " + this.get('option') + " .");
+            }
+            return parsed;
+
         },
 
         // TODO: Document this.
@@ -199,109 +251,126 @@ var
             return submission === this.get('solution');
         }
 
-
     }),
 
 
     /**
-     * A class representing an exam that someone
-     * can take.
-     *
-     * @module Models
-     * @class Exam
-     */
-    Exam = Parse.Object.extend("Exam"),
-
-
-    /**
-     * A class that represents an instance of
-     * an exam that someone can take.
+     * A class representing a specific exam run that someone
+     * has taken or is taking.
      *
      * @module Models
      * @class ExamRun
-     * @constructor
-     *
-     * @param questions {Array} An array of questions
-     *  to be added to the current exam run.
      */
-    ExamRun = function(questions) {
-        this._questions = questions;
-        // A psuedo-array representing the
-        // guesses that the user submits. Note
-        // that the user is not required to submit
-        // a guess for each question, but any questions
-        // without a guess will evaluate to incorrect.
-        this._guesses = {length: this._questions.length};
-    };
+    ExamRun = Parse.Object.extend("ExamRun", {
+
+        /**
+         * Check if the exam run is being taken by someone at the moment.
+         *
+         * @method isInProgress
+         *
+         * @return { Boolean } True if the exam run is being taken, false
+         *  if the exam run has already been completed.
+         */
+        isInProgress: function () {
+            return this.isNew();
+        },
 
 
-/**
- * Get the list of questions associated with the
- * exam.
- *
- * @method questions
- *
- * @return {Array} An array of question objects
- *  that are part of the ExamRun.
- */
-ExamRun.prototype.questions = function() {
-    return this._questions;
-};
+        /**
+         * An array of questions that are part of the
+         * exam run. This will be null if the exam run is
+         * not in progress.
+         *
+         * @method getQuestions
+         *
+         * @return { Array } A list of questions.
+         */
+        getQuestions: function () {
+            return this._questions;
+        },
 
 
-/**
- * Get the guess for a question at a particular
- * index.
- *
- * @method guessAtIndex
- *
- * @return {String} The guess for a particular question,
- *  or null if no guess was submited.
- */
-ExamRun.prototype.guessAtIndex = function(index) {
-    return this._guesses[index] || null;
-};
+        /**
+         * Set an array of questions to be the questions for
+         * the exam run.
+         *
+         * @method setQuestions
+         *
+         * @param questions { Array } The questions to set for
+         *  the exam run.
+         */
+        setQuestions: function (questions) {
+            this._questions = questions;
+            this.set('numOfQuestions', questions.length);
+        },
+
+        /**
+         * Remove the question at the given index from
+         * the exam run. Undefined behavior if the index
+         * is out-of-bounds from the exam run.
+         *
+         * @method removeQuestionAtIndex
+         *
+         * @param index { Number } The index of the
+         *  question in the exam run. 
+         *
+         */
+        removeQuestionAtIndex: function (index) {
+            this._questions.splice(index, 1);
+        },
+
+        /**
+         * Add a question at a particular index of the
+         * exam run.
+         *
+         * @method insertQuestionAtIndex
+         *
+         * @param question { Question } The question to add
+         *  to the exam run.
+         *
+         * @param index { Number } The index of the exam run
+         *  to add it to.
+         */
+        insertQuestionAtIndex: function (question, index) {
+            this._questions.splice(index, 0, question);
+        },
+
+        /**
+         * Set an exam submission for this particular exam run.
+         *
+         * @method setSubmission
+         *
+         * @param submission { ExamRunSubmission } A submission for
+         *  the exam run.
+         */
+        setSubmission: function (submission) {
+            this._guesses = [];
+
+            var numCorrect = this._questions.reduce(function (count, question, index) {
+                var solution = submission.getSolutionAtIndex(index);
+                this._guesses.push(solution);
+                return (question.isCorrect(solution)) ? (count + 1) : (count);
+
+            }.bind(this), 0);
 
 
-/**
- * Set a guess for a particular question in the exam
- * run.
- *
- * @method setGuess
- *
- * @param questionIndex {Number} The index of the question
- *  to set a guess for. This is the index of the question
- *  inside the questions array.
- *
- * @param guess {String} The guess to the solution for the
- *  question.
- */
-ExamRun.prototype.setGuess = function(questionIndex, guess) {
-    this._guesses[questionIndex] = guess;
-};
+            this.set('numCorrect', numCorrect);
+            this.set('timeCompleted', submission.getTime());
+        },
 
+        /**
+         * Get a list of guesses that the user submitted for the exam run.
+         *
+         * @method getGuesses
+         *
+         * @return { Array } An array of guesses for the exam or null if no
+         *  submission was made.
+         */
+        getGuesses: function () {
+            return this._guesses || null;
+        },
 
-/**
- * Grade the submissions for the current exam run.
- *
- * @method grade
- *
- * @return {Number} A grade on the ExamRun, as a decimal
- *  number from 0 to 1. 0 indicates everything is incorrect,
- *  1 indicates everything is correct. If there are no questions
- *  in the exam run, this will always return 0.
- */
-ExamRun.prototype.grade = function() {
-    var questions = this.questions(),
-        questionCount = questions.length,
-        correctCount = [].reduce.call(this._guesses, function(memo, guess, index) {
-            return (questions[index].isCorrect(guess)) ? memo + 1 : memo;
-        }, 0);
-    if (questionCount === 0) {
-        return 0;
-    }
-    return correctCount / questionCount;
-};
+    });
 
 
 /**
@@ -320,11 +389,10 @@ Question.Type = {
 module.exports = {
 
     Course: Course,
-    Exam: Exam,
     ExamRun: ExamRun,
     Field: Field,
     Question: Question,
-    School: School,
-    User: User
-
+    Topic: Topic,
+    User: User,
+    Flag: Flag
 };

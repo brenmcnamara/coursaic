@@ -52,129 +52,53 @@ var Dispatcher = require('shore').Dispatcher,
 
         actionHandler: {
 
-
             CREATE_COURSE: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CREATE_COURSE });
             },
-
-
-            CREATE_EXAM: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.CREATE_EXAM });
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
-
-            CREATE_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                // Wait for the Exam Store to create the new
-                                // question.
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.CREATE_QUESTION});
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
-
-            DELETE_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                // Done waiting for the exam store to delete
-                                // the question.
-                                 .then(
-                                    // Success.
-                                    function() {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.DELETE_QUESTION });
-                                    },
-                                    // Error.
-                                    function(error) {
-                                        throw error;
-                                    });
-            },
-
-
-            EDIT_QUESTION: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.ExamStore().dispatcherIndex ])
-                                 .then(
-                                    // Success.
-                                    function () {
-                                        return self._removeMode(
-                                                    { fromMode: self.Mode.EDIT_QUESTION });
-                                    },
-                                    // Error.
-                                    function (error) {
-                                        throw error;
-                                    });
-            },
-
 
             FROM_MODE_CANCEL_EXAM_RUN: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CANCEL_EXAM_RUN });
             },
 
-
             FROM_MODE_CREATE_COURSE: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CREATE_COURSE });
             },
-
 
             FROM_MODE_CREATE_EXAM: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CREATE_EXAM });
             },
 
-
             FROM_MODE_CREATE_QUESTION: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.CREATE_QUESTION });
             },
-
 
             FROM_MODE_DELETE_QUESTION: function (payload) {
                 return this._removeMode({ fromMode: this.Mode.DELETE_QUESTION });
             },
 
-
-            FROM_MODE_EDIT_QUESTION: function (payload) {
-                return this._removeMode({ fromMode: this.Mode.EDIT_QUESTION });
-            },
-
-
-            LOAD_EXAM_RUN: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex ])
-                                 .then(function () {
-                                    self._removeMode({fromMode: self.currentMode()});
-                                 });
-            },
-
-
             LOAD_COURSE: function (payload) {
                 var self = this;
-                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex,
-                                            Stores.ExamStore().dispatcherIndex ])
+                return Dispatcher.waitFor([ Stores.CourseStore().dispatcherIndex ])
                                  .then(function () {
                                     self._removeMode({fromMode: self.currentMode()});
                                  });
             },
 
+            LOAD_EXAM_RUN: function (payload) {
+                return this._removeMode({ fromMode: this.currentMode() });
+            },
+
+            LOAD_HOME: function (payload) {
+                return this._removeMode({ fromMode: this.currentMode() });
+            },
+
+            LOAD_RESULTS: function (payload) {
+                return this._removeMode({ fromMode: this.currentMode() });
+            },
+
+            LOAD_SPLASH: function (payload) {
+                return this._removeMode({ fromMode: this.currentMode() });
+            },
 
             LOGIN: function (payload) {
                 var self = this;
@@ -185,50 +109,68 @@ var Dispatcher = require('shore').Dispatcher,
                                  });
             },
 
-            
+            RESOLVE_MODE_CREATE_QUESTION: function (payload) {
+                var self = this;
+
+                return Dispatcher.waitFor([ Stores.QuestionStore().dispatcherIndex ])
+                        .then(function () {
+                            self._removeMode({ fromMode: self.Mode.CREATE_QUESTION });
+                        });
+            },
+
+            RESOLVE_MODE_EDIT_QUESTION: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.QuestionStore().dispatcherIndex ])
+                        .then(function () {
+                            self._removeMode({ fromMode: self.Mode.EDIT_QUESTION });
+                        });
+            },
+
             SUBMIT_EXAM_RUN: function (payload) {
                 return this._addMode({ toMode: this.Mode.VIEW_EXAM_RESULTS,
                                        toPayload: payload });
             },
-
 
             TO_MODE_CANCEL_EXAM_RUN: function (payload) {
                 return this._addMode({ toMode: this.Mode.CANCEL_EXAM_RUN,
                                        toPayload: payload });
             },
 
-
             TO_MODE_CREATE_COURSE: function (payload) {
                 return this._addMode({ toMode: this.Mode.CREATE_COURSE,
                                        toPayload: payload });
             },
-
 
             TO_MODE_CREATE_QUESTION: function (payload) {
                 return this._addMode({ toMode: this.Mode.CREATE_QUESTION,
                                        toPayload: payload });
             },
 
-
             TO_MODE_CREATE_EXAM: function (payload) {
                 return this._addMode({ toMode: this.Mode.CREATE_EXAM,
                                        toPayload: payload });
             },
-
 
             TO_MODE_DELETE_QUESTION: function (payload) {
                 return this._addMode({ toMode: this.Mode.DELETE_QUESTION,
                                        toPayload: payload });
             },
 
-
             TO_MODE_EDIT_QUESTION: function (payload) {
                 return this._addMode({ toMode: this.Mode.EDIT_QUESTION,
                                        toPayload: payload });
+            },
+
+            QUIT_MODE_EDIT_QUESTION: function (payload) {
+                return this._removeMode({ fromMode: this.Mode.EDIT_QUESTION });
+            },
+
+            QUIT_MODE_CREATE_QUESTION: function (payload) {
+                return this._removeMode({ fromMode: this.Mode.CREATE_QUESTION });
             }
 
-
         },
+
 
         /**
          * Get the current mode for the page.
@@ -266,19 +208,6 @@ var Dispatcher = require('shore').Dispatcher,
          */
         courseId: function () {
             return Router.matchArguments("/course/<courseId>").courseId || null;
-        },
-
-
-        /**
-         * The exam id for the current page.
-         *
-         * @method examId
-         *
-         * @return {String} The exam id for the current page,
-         *  or null if the page has no exam id.
-         */
-        examId: function () {
-            return Router.matchArguments("/course/<_>/exam/<examId>").examId || null;
         },
 
 

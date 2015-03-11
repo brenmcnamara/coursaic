@@ -4,6 +4,54 @@
 
 var Formatter = require('./formatter.js');
 
+describe("Number Formatter", function () {
+
+    "use strict";
+
+    it("removes extra digits after the decimal.", function () {
+        expect(Formatter.Number.format(12.1223, { placesAfterDecimal: 2 })).toBe("12.12");
+    });
+
+    it("removes all digits after the decimal with 0 places after decimal.", function () {
+        expect(Formatter.Number.format(12.2, { placesAfterDecimal: 0 })).toBe("12");
+    });
+
+    it("should not add a decimal to an integer with 0 places after decimal", function () {
+        expect(Formatter.Number.format(12, { placesAfterDecimal: 0 })).toBe("12");
+    });
+
+    it("should add zeros with decimal point to integers.", function () {
+        expect(Formatter.Number.format(12, { placesAfterDecimal: 3 })).toBe("12.000");
+    });
+
+});
+
+describe("Time Formatter", function () {
+
+    "use strict";
+
+    it("should format the time correctly when seconds is less than 10.", function () {
+        expect(Formatter.Time.format(8)).toBe("00:08");
+    });
+
+
+    it("should format the time correctly when seconds is between 10 and 60.", function () {
+        expect(Formatter.Time.format(43)).toBe("00:43");
+    });
+
+
+    it("should format the time correctly when seconds is between 60 and 600.", function () {
+        // This case is when minutes are between 1 and 10.
+        expect(Formatter.Time.format(134)).toBe("02:14");
+    });
+
+    it("should format the time correctly when seconds is greater than 600.", function () {
+        expect(Formatter.Time.format(721)).toBe("12:01");
+    });
+
+});
+
+
 describe("Date Formatter", function() {
 
     "use strict";

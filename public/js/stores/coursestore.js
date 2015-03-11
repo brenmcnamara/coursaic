@@ -9,6 +9,8 @@ var Stores = require('../stores'),
 
     Course = require('./models.js').Course,
 
+    Query = require('./query.js'),
+
     /**
      * A Store containing all data related to
      * courses.
@@ -18,229 +20,37 @@ var Stores = require('../stores'),
      */
     CourseStore = StoreBuilder.createStore({
 
-        initialize: function () {
-            this._isFetching = false;
-            this._page = 0;
-            this._limit = 30;
+        /***********************************\
+                   PRIVATE METHODS
+        \***********************************/
 
-            this._courses = [];
-        },
+        _Query: Query.queryBuilder({
 
-        actionHandler: {
-
-            CREATE_COURSE: function (payload) {
-                var self = this;
-                // TODO: Note that if this fails,
-                // createCourse mode will be exited since this
-                // is getting called after the config store.
-                // Not strongly exception-safe.
-                return Dispatcher.waitFor([ Stores.PageStore().dispatcherIndex ])
-                       // Wait for the config store to update the hash.
-                       .then(
-                        // Success.
-                        function() {
-                            var course = new Course();
-                            // Enroll the current user into the course.
-                            payload.enrolled = [ Stores.UserStore().current() ];
-
-                            course.set(payload);
-                            return new Promise(function(resolve, reject) {
-                                // TODO: Modify this using the
-                                // promise syntax.
-                                course.save({
-                                    success: function(course) {
-                                        self._courses.push(course);
-                                        // Pass along the course.
-                                        resolve(course);
-                                    },
-
-                                    error: function(error) {
-                                        throw error;
-                                    }
-                                });
-                            });
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
-                        // Wait for the course to be saved.
-                        .then(
-                        // Success.
-                        function(course) {
-                            return self._loadCourse(course);
-                        },
-                        // Error.
-                        function(error) {
-                            throw error;
-                        })
-                        // Wait for the course to be saved.
-                        .then(
-                        // Success.
-                        function() {
-                            // TODO: Maybe pass the course as a parameter
-                            // to this event.
-                            self.emit(Constants.Event.DID_CREATE_COURSE);
-                        },
-                        // Error.
-                        function(error) {
-                            // TODO: Should I cancel create course mode?
-                            throw error;
-                        });
-            },
-
-
-            ENROLL_CURRENT_USER: function (payload) {
-                var self = this,
-                    course = self.courseWithId(payload.courseId);
-                // Note that this call will cause an error to occur
-                // if the user is already enrolled in the course.
-                course.addUser(Stores.UserStore().current());
-                return course.save()
-                             .then(
-                                // Success.
-                                function() {
-                                    self.emit(Constants.Event.DID_CHANGE_ENROLLMENT);
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-            },
-
-
-            LOAD_COURSE: function (payload) {
-                var self = this;
-                // Wait for the User to be loaded.
-                // Load all the information for the course.
-                // NOTE: This is needed by the exam page key so that
-                // the exam store can load the exam and question related
-                // to the single exam of the course.
-                // Just make sure the single course is loaded.
-                return new Promise(function (resolve, reject) {
-                    var course;
-                    // Get the course if the course does not
-                    // already exist.
-                    if (!self.courseWithId(payload.courseId)) {
-                        // Don't have the course, need to fetch it.
-                        course = new Course();
-                        course.id = payload.courseId;
-                        self._fetchCourse(course)
-                            .then(
-                                function () {
-                                    resolve();
-                                },
-
-                                function (error) {
-                                    reject(error);
-                                });
-                    }
-                    else {
-                        resolve();
-                    }
+            courseWithId: function (courseId) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return courseId === course.id;
+                    })
                 });
             },
 
-
-            LOAD_EXAM_RUN: function (payload) {
-                var self = this;
-                // Load all the information for the course.
-                // NOTE: This is needed by the exam page key so that
-                // the exam store can load the exam and question related
-                // to the single exam of the course.
-                // Just make sure the single course is loaded.
-                return new Promise(function (resolve, reject) {
-                    var course;
-                    // Get the course if the course does not
-                    // already exist.
-                    if (!self.courseWithId(payload.courseId)) {
-                        // Don't have the course, need to fetch it.
-                        course = new Course();
-                        course.id = payload.courseId;
-                        self._fetchCourse(course)
-                            .then(
-                                function () {
-                                    resolve();
-                                },
-
-                                function (error) {
-                                    reject(error);
-                                });
-                    }
-                    else {
-                        resolve();
-                    }
+            coursesForUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return user.isEnrolled(course);
+                    })
                 });
             },
 
-
-            LOGIN: function (payload) {
-                var self = this;
-                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
-                            // Done waiting for the User Store.
-                           .then(
-                            // Success.
-                            function() {
-                                return self.fetchPage();
-                            },
-                            // Error.
-                            function(error) {
-                                throw error;
-                            })
-                           // Finished getting the next set of courses.
-                           .then(
-                                // Success.
-                                function() {
-                                    self.emit(Constants.Event.DID_FETCH_COURSES);
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
-            },
-
-
-            UNENROLL_CURRENT_USER: function (payload) {
-                var self = this,
-                    course = self.courseWithId(payload.courseId);
-                    course.removeUser(Stores.UserStore().current());
-                return course.save()
-                             .then(
-                                // Success.
-                                function() {
-                                    self.emit(Constants.Event.DID_CHANGE_ENROLLMENT);
-                                },
-                                // Error.
-                                function(error) {
-                                    throw error;
-                                });
+            coursesNotForUser: function (user) {
+                return new Query.Pipe({
+                    data: this.pipe.data.filter(function (course) {
+                        return !user.isEnrolled(course);
+                    })
+                });
             }
 
-            
-        },
-
-
-        /**
-         * Create a query object used to fetch courses. This method
-         * should only be called after a User has been logged in.
-         *
-         * @method _createQuery
-         * @private
-         *
-         * @param requestMap {Object} The request parameters
-         *  to configure the requests.
-         *
-         * @return {Parse.Query} The query to perform
-         *  a network request.
-         */
-        _createCourseQuery: function(requestMap) {
-            var query = new Parse.Query(Course);
-            query.limit(requestMap.limit);
-            query.skip(requestMap.skip);
-
-            return query;
-        },
-
+        }),
 
         /**
          * Fetch all the data for a course and all the course's
@@ -266,6 +76,8 @@ var Stores = require('../stores'),
                             function() {
                                 // Add the course to the course array.
                                 var i, n, foundCourse;
+                                // If the course already exists in the _courses
+                                // array, then replace the element with this course.
                                 for (i = 0, n = self._courses.length && !foundCourse; i < n; ++i) {
                                     if (course.id === self._courses[i].id) {
                                         // Refresh the course in the collection.
@@ -293,7 +105,6 @@ var Stores = require('../stores'),
             });
         },
 
-
         /**
          * Load all the data for a single course.
          * This loading may occur asynchronously. This method
@@ -315,34 +126,81 @@ var Stores = require('../stores'),
          *  the error describing the failure.
          */
         _loadCourse: function(course) {
-            // TODO: Is there anything I need to do in here?
-            return new Promise(function (resolve) {
-                resolve();
+            return this._loadTagsForCourse(course);
+        },
+
+        /**
+         * Load all the tags in the course and add them
+         * to the course object.
+         */
+        _loadTagsForCourse: function (course) {
+            var self = this;
+            return Promise.all(
+                (course.get('tags') || [])
+                    // Filter out all the tags that have
+                    // already been added to the tag hash.
+                    .filter(function (tag, index) {
+                        return !self._tagHash[tag.id];
+                    })
+
+                    .map(function (tag) {
+                        return new Promise(function (resolve) {
+                            tag.fetch({
+                                success: function (tag) {
+                                    self._tagHash[tag.id] = tag;
+                                    resolve();
+                                },
+                                error: function (error) {
+                                    throw error;
+                                }
+                            });
+                        });
+                    })
+            )
+            // After all the tags for all the courses
+            // have been loaded.
+            .then(function () {
+                // Add the tags to the course.
+                var tagList = course.get('tags') || [];
+
+                // Replace the tags with the updated ones from
+                // the hash. Note that some of these tags might
+                // already be updated from the tag hash but there
+                // are some that need to be force updated here.
+                course.set('tags', tagList.map(function (tag) {
+                    return self._tagHash[tag.id];
+                }));
             });
         },
 
+        /***********************************\
+                    PUBLIC METHODS
+        \***********************************/
+
+        initialize: function () {
+            this._courses = [];
+            // A set of all the tags for any courses.
+            this._tagHash = {};
+        },
+
+        query: function () {
+            return new this._Query(this._courses);
+        },
 
         /**
          * Fetch the courses.
          *
-         * @method fetch
+         * @method fetchCourses
          *
          * @return {Promise} A promise that executed when the
          *  asynchronous call has returned.
          */
-        fetchPage: function() {
+        fetchCourses: function() {
             var self = this;
-            if (this._isFetching) {
-                throw new Error("Cannot fetch courses while a fetch is in progress.");
-            }
 
-            this._isFetching = true;
             return new Promise(function (resolve, reject) {
-                var query = self._createCourseQuery(
-                {
-                    limit: self._limit,
-                    skip: self._page * self._limit
-                });
+                var query = new Parse.Query(Course);
+
                 query.find({
                     success: function(results) {
                         // Reduce the list of results to courses
@@ -363,7 +221,6 @@ var Stores = require('../stores'),
                         self._courses.push.apply(self._courses, results);
 
                         // Increment the paging value for the next fetch.
-                        self._page += 1;
 
                         // Get the promises that are mapped
                         // from all the _loadCourses calls.
@@ -372,20 +229,23 @@ var Stores = require('../stores'),
                         })).then(
                             // Success
                             function() {
-                                self._isFetching = false;
-                                resolve();
-                            },
-                            // Error
-                            function() {
-                                throw new Error("Failed to fetch data for courses");
+                                // Pass on the courses to the next promise.
+                                resolve(results);
                             }
                         );
                     },
                     error: function(error) {
-                        self._isFetching = false;
                         throw error;
                     }
                 });
+            })
+
+            // Done fetching all the courses from the backend.
+            // Now time to load the tags for each of those courses.
+            .then(function (courses) {
+                return Promise.all(courses.map(function (course) {
+                    return self._loadCourse(course);
+                }));
             });
         },
 
@@ -430,36 +290,73 @@ var Stores = require('../stores'),
         },
 
 
-        /**
-         * Get the current course for the page.
-         *
-         * @method current
-         *
-         * @return {Course} The current course. If the pageKey
-         *  is not 'course', this will return null.
-         */
-        current: function() {
-            // TODO: Maybe make this throw an
-            // error if the current key is not called on
-            // the correct page.
-            return (Stores.PageStore().courseId()) ?
-                    this.courseWithId(Stores.PageStore().courseId()) :
-                    null;
-        },
+        /***********************************\
+                      NAMESPACES
+        \***********************************/
+        
+        actionHandler: {
 
+            LOGIN: function (payload) {
+                // When the user is logged in, we need to get course data.
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                            // Done waiting for the User Store.
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchCourses();
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(Constants.Event.DID_FETCH_COURSES);
+                                });
+            },
 
-        forEach: function(callback) {
-            this._courses.forEach(callback);
-        },
+            LOAD_COURSE: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
 
+                // After the user store has completed what it needs to do.
+                .then(function () {
+                    var course;
+                    // Get the course if the course does not
+                    // already exist.
+                    if (!self.courseWithId(payload.courseId)) {
+                        // Don't have the course, need to fetch it.
+                        course = new Course();
+                        course.id = payload.courseId;
+                        return self._fetchCourse(course);
+                    }
+                });
+            },
 
-        map: function(callback) {
-            return this._courses.map(callback);
+            LOAD_HOME: function (payload) {
+                var self = this;
+                return Dispatcher.waitFor([ Stores.UserStore().dispatcherIndex ])
+                            // Done waiting for the User Store.
+                           .then(
+                            // Success.
+                            function() {
+                                return self.fetchCourses();
+                            })
+                           // Finished getting the next set of courses.
+                           .then(
+                                // Success.
+                                function() {
+                                    self.emit(Constants.Event.DID_FETCH_COURSES);
+                            });
+            }
+            
         }
 
+    }),
 
-    });
+    // Create an instance of the course store
+    // to use as a local reference.
+    store = new CourseStore();
 
 
-module.exports = new CourseStore();
+module.exports = store;
 

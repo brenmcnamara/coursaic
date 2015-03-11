@@ -11,6 +11,14 @@
  * on an individual basis
  */
 
+.clickable {
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: .4;
+    cursor: default;
+}
 .emphasis {
     font-weight: bold;
     color: #666;
@@ -39,26 +47,45 @@
 }
 
 /* -------------------- *\
-         Triangle
+         Popover
 \* -------------------- */
 
-/* A small trianlge element that can be used
- * as some kind of pointer.
- *
- * NOTE: This should be placed inside an element that
- * does not have a position: static;
+.popover-wrapper {
+    position: relative;
+}
+
+.popover-target {
+    cursor: pointer;
+}
+
+.popover--hide,
+.popover {
+    font-size: .8em;
+    margin: 1em 0 0 0;
+    width: 20em;
+
+    position: absolute;
+    background: black;
+    color: white;
+}
+
+.popover--hide {
+    display: none;
+}
+
+/* Create a triangle at the top right
+ * corner of the popover box
  */
-.black-triangle,
-.triangle {
-    top: -1em;
+.popover:before {
+    content: "";
+    display: block;
+    top: -.95em;
     left: 0;
     position: absolute;
 
     border-left: solid transparent .5em;
     border-right: solid transparent .5em;
-}
 
-.black-triangle {
     border-bottom: solid black 1em;
 }
 
@@ -67,6 +94,7 @@
 \* -------------------- */
 
 .section-wrapper {
+    margin-top: 4em;
     max-width: 100%;
     width: 100%;
 }
@@ -86,12 +114,8 @@
     margin-left: 1em;
 }
 
-.section__subheader {
+.section__subsection__header {
     color: #999;
-}
-
-.section__course-grid {
-    margin-top: 2em;
 }
 
 /* A message that should show when
@@ -114,9 +138,11 @@
     /* Same a subheader text-indent */
     margin-left: 1em;
     position: relative;
+    font-size: 1.3em;
 }
 
     .section__error i {
+        color: #EC0000;
         position: absolute;
         font-size: 1.5em;
     }
@@ -129,6 +155,10 @@
 /* SMALL SCREEN FOR SECTION */
 @media screen and (max-width: 48em) {
     
+    .section-wrapper {
+        margin-top: 0;
+    }
+
     /* Change the padding of some of the
      * section elements so that things can
      * become more centered on smaller screens.
@@ -145,7 +175,7 @@
         margin-left: 0em;
     }
 
-    .section__subheader {
+    .section__subsection__header {
         text-align: center;
         text-indent: 0em;
     }
@@ -170,6 +200,23 @@
         margin: 0;
         text-align: center;
     }
+}
+
+/* -------------------- *\
+         Buttons
+\* -------------------- */
+
+.form-text-input {
+    padding: .3em;
+    width: 20em;
+}
+
+.form-textarea-input {
+    line-height: 1.2em;
+    padding: .3em;
+    resize: none;
+    width: 20em;
+    height: 4.8em;
 }
 
 /* -------------------- *\
@@ -250,12 +297,79 @@
     padding: .25em .5em;
 }
 
+
+/*
+ * The dashboard summary is the element
+ * that sticks out of the dashboard, displaying
+ * any important information that the user should
+ * be aware of.
+ */
+.dashboard__summary {
+    min-height: 10em;
+    position: relative;
+}
+
+.dashboard__summary__content {
+    width: 100%;
+    height: 12em;
+
+    background: white;
+}
+
+.dashboard__summary__content:before {
+    display: block;
+    float: left;
+    width: 2em;
+    height: 100%;
+    background: #4A90E2;
+
+    content: "";
+}
+
+.dashboard__summary__content__header,
+.dashboard__summary__content__subheader {
+    margin: 20px 10px 10px 50px;
+}
+
+.dashboard__summary__content__details {
+    list-style: none;
+    padding: 0;
+    margin: 30px 10px 10px 50px;
+}
+
+    .dashboard__summary__content__details li {
+        margin-bottom: .5em;
+        color: #888;
+        font-weight: bold;
+    }
+
+/* SMALL SCREENS FOR COURSE DASHBOARD */
 @media only screen and (max-width: 48em) {
 
     .dashboard-buttons__item {
         padding-top: 1em;
         padding-bottom: 1em;
         text-align: center;
+    }
+
+    .dashboard__summary__content {
+        border-top: solid #666 1px;
+        border-bottom: solid #666 1px;
+    }
+
+}
+
+/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
+@media only screen and (min-width: 48em) {
+
+    .dashboard__summary__content {
+        position: absolute;
+        bottom: -2em;
+
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 2px 3px 3px .5px #999;
+        
     }
 
 }
@@ -289,6 +403,175 @@
       Question Info
 \* -------------------- */
 
+.question-topic {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+}
+
+.question-topic__head {
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
+.question-topic__content:before {
+    content: 'Topic:';
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
+.question-topic__content {
+    color: rgb(245, 166, 35);
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-topic {
+        text-align: center;
+    }
+
+}
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+/* Note that the question-info element sits
+ * inside the question-edit element */
+
+.question-item__issue-list {
+    font-size: .8em;
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    list-style: none;
+}
+
+.question-item_issue-list__item,
+.question-item__issue-list__item--error,
+.question-item__issue-list__item--warning {
+    position: relative;
+    font-size: 1.1em;
+    margin-bottom: .75em;
+}
+
+    .question-item__issue-list__item i,
+    .question-item__issue-list__item--error i,
+    .question-item__issue-list__item--warning i {
+        position: absolute;
+    }
+
+.question-item__issue-list__item__message,
+.question-item__issue-list__item--error__message,
+.question-item__issue-list__item--warning__message {
+    margin-left: 1.5em;
+}
+
+.question-item__issue-list__item--error i,
+.question-item__issue-list__item--error__message {
+    color: #EC0000;
+}
+
+.question-item__issue-list__item--warning i,
+.question-item__issue-list__item--warning__message {
+    color: #EC0000;
+}
+
+.question-item__icon-set,
+.question-item__icon-set--1,
+.question-item__icon-set--2 {
+    position: absolute;
+}
+
+.question-item__icon-set__item i,
+.question-item__icon-set__item--bad i,
+.question-item__icon-set__item--good i {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-right: .5em;
+}
+
+/* A dangerous icon is one that causes
+ * dangerous actions to occur when clicked,
+ * such as deleting something 
+ */
+.question-item__icon-set__item--bad i {
+    color: #EC0000;
+}
+
+.question-item__icon-set__item--good i {
+    color: #4A90E2;
+}
+
+/* A safe icon is one that is not dangerous */
+
+/* Style the content of a question item next to an
+ * icon-set class. The styling should make it so
+ * that the content does not overlap the icon set.
+ */
+.question-item__icon-set--1 + .question-item__content {
+    margin-left: 4em;
+}
+
+.question-item__icon-set--2 + .question-item__content {
+    margin-left: 6em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    /* Bring the icon set back into
+     * the flow of the page so that it
+     * can be placed above the question.
+     */
+    .question-item__icon-set--1,
+    .question-item__icon-set--2,
+    .question-item__icon-set {
+        position: static;
+        margin: auto;
+    }
+
+    /* Remove the margin that is created
+     * for the icon set overlap, since on small
+     * screens, the icon set is in the flow of the
+     * page (above styling).
+     */
+    .question-item__icon-set__item,
+    .question-item__icon-set__item--bad,
+    .question-item__icon-set__item--good {
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 0 .5em;
+    }
+
+    .question-item__icon-set__item i,
+    .question-item__icon-set__item--bad i,
+    .question-item__icon-set__item--good i {
+        border-radius: 4px;
+    }
+    
+    .question-item__icon-set__item--bad i {
+        /* Same color as icon */
+        border: solid #EC0000 1px;
+    }
+
+    .question-item__icon-set__item--good i {
+        /* Same color as icon */
+        border: solid #4A90E2 1px;
+    }
+
+    .question-item__icon-set--1 + .question-item__content,
+    .question-item__icon-set--2 + .question-item__content {
+        margin-left: 0;
+    }
+
+}
+
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
 .question-info-list {
     margin: 2em 0 0 0;
     padding: 0;
@@ -307,13 +590,29 @@
 }
 
 .question-info__ask,
-.question-info__explanation {
+.question-info__explanation,
+.question-info__explanation--edit {
     font-weight: bold;
     color: #444;
 }
 
-.question-info__explanation {
-    margin: 1.5em 1em 0 1em;
+.question-info__ask {
+    line-height: 1.3em;
+    max-width: 35em;
+}
+
+.question-info__explanation:before {
+    content: 'Explanation:';
+    margin-right: .5em;
+    text-decoration: underline;
+}
+
+
+.question-info__explanation,
+.question-info__explanation--edit {
+    margin: 1.5em 1em 0 0;
+    line-height: 1.3em;
+    max-width: 35em;
 }
 
 /* -------------------- *\
@@ -329,12 +628,12 @@
  */
 .multi-choice-info__options-list--lettered,
 .multi-choice-info__options-list {
-    margin: 1em 0 0 3em;
+    margin: 1em 0 0 1em;
     padding: 0;
 }
 
 /* Styling for the list of multiple choice options. */
-.multi-choice-info__options-list {
+.multi-choice-info__options-list--lettered {
     list-style-type: upper-alpha;
 }
 
@@ -342,12 +641,15 @@
  * it is designed for the user to select an
  * options from a radio button
  */
-.multi-choice-info__options-list--lettered {
+.multi-choice-info__options-list {
     list-style-type: none;
 }
 
 .multi-choice-info__options-list__item,
-.multi-choice-info__options-list__item--correct {
+.multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list__item--incorrect {
+    line-height: 1.3em;
+    max-width: 35em;
     margin-bottom: .5em;
 }
 
@@ -358,6 +660,22 @@
 .multi-choice-info__options-list__item--correct {
     font-weight: bold;
     color: #4A90E2;
+}
+
+.multi-choice-info__options-list__item--incorrect {
+    font-weight: bold;
+    color: #EC0000;
+}
+
+/*
+ * For multi-choice options inside the lettered
+ * list, increase the padding to account for the letter
+ * that precedes the list item.
+ */
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item,
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--incorrect {
+    margin-left: 1.5em;
 }
 
     /* 
@@ -378,6 +696,7 @@
     margin-bottom: 3em;
     
     top: 50%;
+    /*Maybe reduce top value based on reduced width */
     
     max-width: 100%;
     width: 100%;
@@ -400,7 +719,7 @@
 .notify__subhead {
     text-align: center;
     font-size: 1.3em;
-    margin: 1em 5em;
+    margin: 1em 5em; 
 }
 
 
@@ -411,9 +730,35 @@
 }
 
 @media screen and (max-width: 48em) {
+  
+    .notify {
+        top: 45%;
+    }
 
     .notify__form {
-        width: 10em;
+        font-size: 1.1em;
+        width: 41.67%;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+  }
+
+}
+
+@media screen and (max-width: 36em) {
+
+    .notify {
+        top: 40%;
+    }
+    
+    .notify__form {
+        font-size: 1.2em;
+        width: 12.5em;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
     }
 
 }

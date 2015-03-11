@@ -5,10 +5,11 @@
  */
 
 var 
-    constants = require('./constants.js'),
-    layout = require('./layout'),
-    router = require('shore').Router,
-    stores = require('./stores');
+    Constants = require('./constants.js'),
+    Layout = require('./layout'),
+    Router = require('shore').Router,
+    Stores = require('./stores'),
+    ErrorHandler = require('shore').ErrorHandler;
 
 module.exports = {
 
@@ -22,107 +23,75 @@ module.exports = {
 
         // Add the routes.
 
-        router.routes([
+        Router.routes([
             {
                 route: "/",
-                component: layout.splashLayout.Root,
-                preRouteCheck: function (request) {
-                    if (stores.UserStore().current()) {
-                        // Redirect to the home page if the
-                        // user is already logged in.
-                        request.redirect("/home");
-                    }
-                }
+                action: Constants.Action.LOAD_SPLASH,
+                component: Layout.splashLayout.Root,
             },
 
             {
-                // Note that you must extend the
-                // payload to include a username
-                // and password if you want to login
-                // a user that is not already logged
-                // into the app.
                 route: "/home",
-                action: constants.Action.LOGIN,
-                component: layout.homeLayout.Root
-            },
-
-            {
-                route: "/course",
-                component: layout.courseLayout.Root
-            },
-
-            {
-                route: "/exam",
-                component: layout.examLayout.Root
-            },
-
-            {
-                route: "/result",
-                component: layout.resultLayout.Root
+                action: Constants.Action.LOAD_HOME,
+                component: Layout.homeLayout.Root
             },
 
             {
                 route: "/course/<courseId>",
-                action: constants.Action.LOAD_COURSE,
-                component: layout.courseLayout.Root
+                action: Constants.Action.LOAD_COURSE,
+                component: Layout.courseLayout.Root
             },
 
             {
-                route: "/course/<courseId>/exam/<examId>",
-                action: constants.Action.LOAD_COURSE,
-                component: layout.courseLayout.Root
+                route: "/course/<courseId>/exam",
+                component: Layout.examLayout.Root
             },
 
             {
-                route: "/course/<courseId>/exam/<examId>/take",
-                action: constants.Action.LOAD_EXAM_RUN,
-                component: layout.examLayout.Root
+                route: "/course/<courseId>/exam/results",
+                component: Layout.resultLayout.Root
             },
 
             {
                 route: "/signup",
-                action: constants.Action.SIGNUP,
-                component: layout.notifyLayout.SignUpComplete
+                component: Layout.notifyLayout.SignUpComplete
             },
 
             {
                 route: '/resetpassword',
-                component: layout.notifyLayout.ResetPassword
+                component: Layout.notifyLayout.ResetPassword
             },
 
             {
                 route: '/resetpasswordemail',
-                action: constants.Action.RESET_PASSWORD,
-                component: layout.notifyLayout.ResetPasswordEmail
+                component: Layout.notifyLayout.ResetPasswordEmail
             }
+
         ]);
 
         // Add a default route.
-        router.defaultRoute({
-            action: constants.Action.LOAD_NOT_FOUND,
-            component: layout.notifyLayout.PageNotFound
+        Router.defaultRoute({
+            action: Constants.Action.LOAD_NOT_FOUND,
+            component: Layout.notifyLayout.PageNotFound
         });
 
-        // Add all the error handling here.
-        router.errors([
-            {
-                errorType: constants.ErrorType.NO_USER_CREDENTIALS,
-                handler: function () {
-                    console.log("No user credentials.");
-                }
-            },
-            {
-                errorType: constants.ErrorType.INVALID_EXAM_RUN,
-                handler: router.ErrorOperation.pageNotFound
-            }
+        Router.errors([
+            
+            ErrorHandler.Redirect({
+                errorType: Constants.ErrorType.EXISTING_USER_CREDENTIALS,
+                currentPath: '/',
+                targetPath: '/home'
+            }),
+
+            ErrorHandler.Redirect({
+                errorType: Constants.ErrorType.NO_USER_CREDENTIALS,
+                targetPath: '/'
+            })
+
         ]);
 
-        router.defaultError(function () {
-            console.log("Default error.");
-        });
-
         // Start watching for routing changes.
-        router.watch({ initialLoad: true });
+        Router.watch({ initialLoad: true });
     }
 
 };

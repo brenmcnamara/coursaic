@@ -11,7 +11,6 @@ var React = require('react'),
     
     Stores = require('../stores'),
 
-    Router = require('shore').Router,
     Action = require('shore').Action,
     Constants = require('../constants.js'),
 
@@ -31,13 +30,12 @@ var React = require('react'),
 
         
         render: function() {
-            var user = Stores.UserStore().current(),
                 // Modify the menu items and add them into the header.
-                menu;
+                var menu;
 
             if (this.props.menu) {
-                menu = this.props.menu.map(function (item) {
-                    return <li>{ item }</li>;
+                menu = this.props.menu.map(function (item, index) {
+                    return <HeaderItem key={ index.toString() }>{ item }</HeaderItem>;
                 });
             }
             else {
@@ -61,16 +59,17 @@ var React = require('react'),
 
 
         onClickLogo: function(event) {
-            Router.path("/");
+            Action().route("/").send();
         },
 
 
         onClickText: function(event) {
-            Router.path("/");
+            Action().route("/").send();
         },
 
 
         didBeginEditing: function(event) {
+
             this.setState({isEditing: true});
         },
 
@@ -80,17 +79,13 @@ var React = require('react'),
         },
 
 
-        componentWillMount: function() {
-            Stores.ExamStore().on(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().on(Constants.Event.DID_END_EDITING, this.didEndEditing);
-        },
+    }),
 
+    HeaderItem = React.createClass({
 
-        componentWillUnmount: function() {
-            Stores.ExamStore().removeListener(Constants.Event.DID_BEGIN_EDITING, this.didBeginEditing);
-            Stores.ExamStore().removeListener(Constants.Event.DID_END_EDITING, this.didEndEditing);
+        render: function () {
+            return (<li>{ this.props.children } </li>);
         }
-
 
     });
 

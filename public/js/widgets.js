@@ -131,12 +131,29 @@ PieChart.prototype = {
         var self = this,
             centerX = this._context.canvas.width / 2,
             centerY = this._context.canvas.height / 2,
-            radius = Math.min(centerX, centerY);
+            radius = Math.min(centerX, centerY),
 
-        this._data.forEach(function (segMap, index) {
-            self._drawSegment(index);
-        });
+            totalSize = this._data.reduce(function (memo, segMap) {
+                return memo + segMap.value;
+            }, 0);
 
+        if (totalSize === 0) {
+            // The value of all elements is 0, just fill in the pie
+            // chart with a black color.
+            this._context.beginPath();
+            this._context.moveTo(centerX, centerY);
+            this._context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+            this._context.closePath();
+
+            this._context.fillStyle = "black";
+            this._context.fill();
+        }
+        else {
+            this._data.forEach(function (segMap, index) {
+                self._drawSegment(index);
+            });
+        }
+    
         // Clear the middle of the circle.
         this._context.save();
         this._context.beginPath();
@@ -253,10 +270,23 @@ PieChart.prototype = {
 ProgressBar = function (context, data) {
     this._context = context;
     this._data = data;
+    this._xPadding = 20;
 };
 
 
 ProgressBar.prototype = {
+
+    getTotal: function () {
+        return this._data.total;
+    },
+
+    getSelected: function () {
+        return this._data.selected;
+    },
+
+    getCurrent: function () {
+        return this._data.current;
+    },
 
     /**
      * Render the progress bar in the
@@ -265,69 +295,79 @@ ProgressBar.prototype = {
      * @method render
      */
     render: function () {
-        this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+        this._context.clearRect(0,
+                                0,
+                                this._context.canvas.width,
+                                this._context.canvas.height);
+
         this._renderWithData(this._data);
     },
 
 
     /**
-     * Change the "current" value of the progress bar.
+     * Reset the progress bar with new data.
      *
-     * @method changeCurrent
+     * @method reset
      *
-     * @param val {Number} The value to set "current" to.
-     *
-     * @param options {Object} Any options to configure the
-     *  setting.
+     * @param data { Object } The data that goes into
+     *  the progress bar.
      */
-    changeCurrent: function (val, options) {
-
-        options = options || {};
-
-        if (!options.silent) {
-
-            if (options.animate) {
-                this._animateChange({ total: this._data.total,
-                                      current: val,
-                                      selected: Math.min(this._data.selected, val) },
-                                    EasingFunctions.easeOutQuad);
-            }
-            else {
-                this._data.current = val;
-                this._data.selected = Math.min(this._data.selected, val);
-                this.render();
-            }
-
-        }
+    reset: function (data) {
+        this._data = data;
+        this.render();
     },
 
 
     /**
-     * Change the "selected" value of the progress bar.
+     * Change the values of the progress bar. This can be
+     * animated.
      *
-     * @method changeSelected
+     * @method change
      *
-     * @param val {Number} The value to change the "selected"
-     *  value to.
+     * @param changeMap {Object} The set of changes to make
+     *  to the data.
      *
-     * @param options {Object} Any options used to configure the
-     *  setting of selected.
+     * @param options {Object} Any extra options to add to the
+     *  change of the element. This may include a silent change
+     *  or an animated change.
      */
-    changeSelected: function (val, options) {
+    change: function (changeMap, options) {
+        var current = changeMap.current,
+            selected = changeMap.selected;
+
         options = options || {};
 
-        if (!options.silent) {
-
-            if (options.animate) {
-                this._animateChange({ total: this._data.total, selected: val, current: this._data.current },
-                                    EasingFunctions.easeOutQuad);
-            }
-            else {
-                this._data.selected = val;
-                this.render();
-            }
-
+        if (+current !== +current) {
+            // Current value was not added to the
+            // change map.
+            current = this._data.current;
         }
+
+        if (+selected !== +selected) {
+            selected = this._data.selected;
+        }
+
+        if (options.silent) {
+            // Change the state without re-rendering the bar.
+            this._data.current = current;
+            this._data.selected = selected;
+            return;
+        }
+
+        if (options.animate) {
+            this._animateChange({ 
+                total: this._data.total,
+                selected: selected,
+                current: current
+            },
+            EasingFunctions.easeOutQuad);
+        }
+        else {
+            this._data.current = current;
+            this._data.selected = selected;
+            this.render();
+        }
+
     },
 
 
@@ -338,34 +378,69 @@ ProgressBar.prototype = {
             ANIMATION_STEPS = 60,
             DELTA = ANIMATION_DURATION / ANIMATION_STEPS,
 
-            startCurrent,
-            endCurrent,
-            watchId,
             steps = 0;
 
-        watchId = setInterval(function () {
+        if (this._animationId) {
 
-            var
-                nextCurrent = easingFunction(steps * DELTA,
-                                             self._data.current,
-                                             newData.current - self._data.current,
-                                             ANIMATION_DURATION),
+            // End the current animation.            
+            clearInterval(this._animationId);
+            this._animationId = null;
 
-                nextSelected = easingFunction(steps * DELTA,
-                                              self._data.selected,
-                                              newData.selected - self._data.selected,
-                                              ANIMATION_DURATION);
+            // Update the data to reflect how far the last
+            // animation got, then let the new animation move the
+            // values their new locations.
+            this._data = this._animationProgress;
+            self._animationProgress = null;
+        }
+
+        this._animationId = setInterval(function () {
+
+            // Cache the animation progress in an
+            // instance variable. The purpose of
+            // this is so that animations can be
+            // properly handled in the case that
+            // a user causes a new animation to
+            // begin while an animation is in
+            // progress.
+            self._animationProgress = {
+
+                current: easingFunction(steps * DELTA,
+                                        self._data.current,
+                                        newData.current - self._data.current,
+                                        ANIMATION_DURATION),
+
+                selected: easingFunction(steps * DELTA,
+                                         self._data.selected,
+                                         newData.selected - self._data.selected,
+                                         ANIMATION_DURATION),
+
+                total: newData.total
+            };
 
             self._context.clearRect(0, 0, self._context.canvas.width, self._context.canvas.height);
-            self._renderWithData({ total: newData.total,
-                                   selected: nextSelected,
-                                   current: nextCurrent });
+            // If there is any error with rendering the data, then
+            // we need to end the animation and render the
+            // progress bar using the state prior to the
+            // animation.
+            try {
+                self._renderWithData(self._animationProgress);
+            }
+            catch (e) {
+                clearInterval(self._animationId);
+                self._animationId = null;
+                self.render();
+                throw e;
+            }
+
 
             // Clear the interval once the duration has been completed.
             if (steps * DELTA >= ANIMATION_DURATION) {
-                clearInterval(watchId);
+                // Clear the animation id and set it to null,
+                // indicating that no animation is executing.
+                clearInterval(self._animationId);
+                self._animationId = null;
                 // Set the current data to the new data now
-                // that the animation has finished..
+                // that the animation has finished.
                 self._data = newData;
             }
             ++steps;
@@ -384,17 +459,23 @@ ProgressBar.prototype = {
      */
     _renderWithData: function (data) {
         var
+            RATIO_OFFSET = 0.01,
             BAR_PORTION = 0.35,
             TOOLTIP_PADDING = 2,
 
+            NORMALIZED_RATIO_OFFSET = RATIO_OFFSET / (1 - RATIO_OFFSET),
+
             canvasHeight = this._context.canvas.height,
             barHeight = Math.min(canvasHeight * BAR_PORTION, 40),
-            width = this._context.canvas.width,
-            startX = 0,
+            width = this._context.canvas.width - 2 * this._xPadding,
+            startX = this._xPadding,
             startY = (canvasHeight - barHeight) / 2,
             
-            currentRatio = data.current / data.total,
-            selectedRatio = data.selected / data.total;
+            // Add a bit of extra value to the ratio
+            // so that the bar still shows when the
+            // current or selected value is 0.
+            currentRatio = ((data.current / data.total) + NORMALIZED_RATIO_OFFSET) / (1 + NORMALIZED_RATIO_OFFSET),
+            selectedRatio = ((data.selected / data.total) + NORMALIZED_RATIO_OFFSET) / (1 + NORMALIZED_RATIO_OFFSET);
 
         if (data.total < data.current || data.total < data.selected) {
             throw Error("The total value of the progress bar cannot " +
@@ -416,7 +497,6 @@ ProgressBar.prototype = {
 
         this._context.save();
 
-
         this._context.fillStyle = "rgb(216, 216, 216)";
         fillRoundedRect(this._context, startX, startY, width, barHeight, 5, true, false);
 
@@ -430,21 +510,18 @@ ProgressBar.prototype = {
         // Set the color and stroke of the tool tip.
         this._context.fillStyle = "#4A90E2";
         this._context.strokeStyle = "#4A90E2";
-        
 
-        this._renderTooltip(width * selectedRatio,
+        this._renderTooltip(startX + width * selectedRatio,
                             startY - TOOLTIP_PADDING,
                             Math.floor(data.selected),
                             { direction: "up" });
 
         // Only render the tooltip for "current" if it is not the same as selected.
         if (Math.floor(data.selected) !== Math.floor(data.current)) {
-            this._renderTooltip(width * currentRatio,
+            this._renderTooltip(startX + width * currentRatio,
                                 barHeight + startY + TOOLTIP_PADDING,
                                 Math.floor(data.current));
         }
-    
-        
 
         this._context.restore();
     },

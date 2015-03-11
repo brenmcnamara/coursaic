@@ -9,6 +9,10 @@
        Course Box
 \* -------------------- */
 
+.course-grid {
+    margin-top: 2em;
+}
+
 /* NOTE THAT THE COURSE BOX ELEMENT
    SHOULD BE INSIDE THE section__course-grid
    element */
@@ -20,6 +24,9 @@
 .course-box__content {
     display: flex;
     display: -webkit-flex;
+
+    cursor: pointer;
+
     flex-direction: column;
     -webkit-flex-direction: column;
     margin: .5em;

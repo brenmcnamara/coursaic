@@ -16,6 +16,7 @@
     position: fixed;
     right: 2em;
     top: 6em;
+    width: 7em;
     z-index: 2;
 }
 
@@ -76,7 +77,24 @@
     .exam-form {
         margin-left: 1em;
     }
+}
 
+/* -------------------- *\
+        Exam Score
+\* -------------------- */
+
+/* Styling for showing the score that the user got */
+
+.exam-score--great {
+    color: #11BC44;
+}
+
+.exam-score--good {
+    color: #CA7C0E;
+}
+
+.exam-score--bad {
+    color: #EC0000;
 }
 
 /* -------------------- *\
@@ -105,31 +123,31 @@
 
 }
 
-.question-flag__button {
-    cursor: pointer;
+
+.question-flag__button i,
+.question-flag__button--disabled i {
+    margin-right: .5em;
 }
 
-    .question-flag__button i {
-        margin-right: .5em;
-    }
+.question-flag__button,
+.question-flag__button i {
+    color: #EC0000;
+}
 
-    .question-flag__button,
-    .question-flag__button i {
-        color: #EC0000;
-    }
-
+.question-flag__button--disabled,
+.question-flag__button--disabled {
+    color: rgb(74, 144, 226);
+}
 /* 
  * Style for a list of options of what to flag
  * the question for.
  */
 .question-flag__options-list {
-    font-size: .8em;
-    position: absolute;
-
     list-style: none;
-    margin: 1em 0 0 0;
     padding: 0;
-    width: 20em;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
 .question-flag__options-list--hide {
@@ -138,9 +156,7 @@
 
     .question-flag__options-list > li {
         cursor: pointer;
-        color: white;
         padding: .5em .5em;
-        background: black;
     }
 
     .question-flag__options-list > li:hover {
@@ -188,102 +204,3 @@
         margin-top: 2em;
     }
 }
-
-/*  OLD STYLES */
-
-.exam,
-.exam-run-results {
-  margin: 0 50px 0 30px;  
-}
-
-.exam-result-back {
-  position: absolute;
-  top: 90px;
-  right: 50px;
-}
-
-
-.exam__title {
-  font-weight: bold;
-  font-size: 2em;
-}
-
-.exam__button-wrapper {
-  margin-bottom: 50px;
-}
-
-.exam-run-results__list,
-.exam__question-list {
-  margin: 25px 0 0 20px;
-  padding: 0;
-}
-
-ul.exam-run-results__list,
-ul.exam__question-list {
-  list-style: decimal;
-}
-
-.exam-run-results__score {
-  font-weight: bold;
-  color: #888;
-}
-
-.exam-run-results__score__percent {
-  color: #4A90E2;
-}
-
-.solution-item,
-.solution-item--multi-choice,
-.question-item,
-.question-item--multi-choice {
-  margin: 0 0 30px 10px;
-}
-
-.solution-item__question,
-.question-item__question {
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-.solution-item__explanation {
-  margin-top: 20px;
-}
-
-.solution-item__explanation > span:nth-child(1) {
-  text-decoration: underline;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.question-item--multi-choice__options {
-   padding-left: 30px;
-}
-
-ul.solution-item--multi-choice__options {
-  list-style: upper-alpha;  
-}
-
-ul.question-item--multi-choice__options {
-  list-style: none;
-}
-
-.solution-item--multi-choice__options__item--correct,
-.solution-item--multi-choice__options__item--incorrect,
-.solution-item--multi-choice__options__item,
-.question-item--multi-choice__options__item {
-  margin: 10px 0px;
-}
-
-.solution-item--multi-choice__options__item--correct {
-  color: #4A90E2;
-}
-
-.solution-item--multi-choice__options__item--incorrect {
-  color: #e34d2f;  
-}
-
-.question-item--multi-choice__options__item > input {
-  margin-right: 10px;
-}
-

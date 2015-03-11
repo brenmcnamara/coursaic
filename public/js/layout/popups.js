@@ -157,17 +157,17 @@ var React = require('react'),
             // State is the payload.
             // Copy the course map from the state and add the
             // current user's school.
-            Action.send(Constants.Action.CREATE_COURSE, this.state.courseMap);
+            Action(Constants.Action.CREATE_COURSE, this.state.courseMap).send();
         },
 
 
         onClickCancel: function() {
-            Action.send(Constants.Action.FROM_MODE_CREATE_COURSE);
+            Action(Constants.Action.FROM_MODE_CREATE_COURSE).send();
         },
 
 
         onClickBackground: function() {
-            Action.send(Constants.Action.FROM_MODE_CREATE_COURSE);
+            Action(Constants.Action.FROM_MODE_CREATE_COURSE).send();
         }
 
 
@@ -275,12 +275,12 @@ var React = require('react'),
             }
             var map = Util.copy(this.state.examMap);
             map.courseId = Stores.CourseStore().current().id;
-            Action.send(Constants.Action.CREATE_EXAM, { examMap: map });
+            Action(Constants.Action.CREATE_EXAM, { examMap: map }).send();
         },
 
 
         onClickCancel: function(event) {
-            Action.send(Constants.Action.FROM_MODE_CREATE_EXAM);
+            Action(Constants.Action.FROM_MODE_CREATE_EXAM).send();
         }
 
 
@@ -306,12 +306,12 @@ var React = require('react'),
 
 
         onYes: function(event) {
-            Action.send(Constants.Action.DELETE_QUESTION);
+            Action(Constants.Action.DELETE_QUESTION).send();
         },
 
 
         onNo: function(event) {
-            Action.send(Constants.Action.FROM_MODE_DELETE_QUESTION);
+            Action(Constants.Action.FROM_MODE_DELETE_QUESTION).send();
         }
 
 
@@ -346,7 +346,7 @@ var React = require('react'),
 
 
         onNo: function(event) {
-            Action.send(Constants.Action.FROM_MODE_CANCEL_EXAM_RUN);
+            Action(Constants.Action.FROM_MODE_CANCEL_EXAM_RUN).send();
         }
 
 

@@ -9,17 +9,25 @@
 
 var React = require('react'),
     
-    WidgetsLayout = require('./widgets.js'),
+    ComponentsLayout = require('./components.js'),
     PopupsLayout = require('./popups.js'),
     HeaderLayout = require('./header.js'),
 
     Stores = require('../stores'),
+    UserStore = Stores.UserStore(),
+    CourseStore = Stores.CourseStore(),
 
-    Router = require('shore').Router,
     Action = require('shore').Action,
     Constants = require('../constants.js'),
 
     Formatter = require('../formatter.js'),
+
+    Dashboard = ComponentsLayout.Dashboard,
+
+    SectionSet = ComponentsLayout.SectionSet,
+    TagSet = ComponentsLayout.TagSet,
+
+    Logger = require('shore').logger,
 
     /**
      * The root element for the home page. All other
@@ -34,14 +42,14 @@ var React = require('react'),
 
         render: function() {
             var menu = [
-                (<a href="#">Logout</a>)
+                (<a onClick={ this.onClickLogout } >Logout</a>)
             ];
 
             return (
                 <div className="main">
                     <HeaderLayout.Header menu={ menu } />
                     <div className="content-wrapper">
-                        <Dashboard />
+                        <HomeDashboard />
                         <Content />
                     </div>
 
@@ -62,19 +70,27 @@ var React = require('react'),
 
         componentWillUnmount: function() {
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.changedMode);
+        },
+
+
+        onClickLogout: function () {
+            Action(Constants.Action.LOGOUT).route("/").send();
         }
 
 
     }),
 
 
-    Dashboard = React.createClass({
+    HomeDashboard = React.createClass({
 
         render: function () {
+            var user = UserStore.query().currentUser().getOne();
             return (
-                <div className="dashboard">
-                    <div className="dashboard__content"></div>
-                </div>
+                <Dashboard>
+                    <Dashboard.Summary>
+                        <Dashboard.Summary.Header>Welcome, { user.get('firstName') }!</Dashboard.Summary.Header>
+                    </Dashboard.Summary>
+                </Dashboard>
             );
         }
 
@@ -94,119 +110,13 @@ var React = require('react'),
     Content = React.createClass({
 
         render: function() {
+
             return (
-                <div className="pure-g section-wrapper">
+                <SectionSet>
+                    <MyCourses />
+                    <PopularCourses />
+                </SectionSet>
 
-                    <section className="pure-u-1 section">
-                        <h2 className="section__header">My Courses</h2>
-                        <div className="divide"></div>
-                        
-                        <div className="section__empty">
-                            There are no courses here yet.
-                        </div>
-                    </section>
-
-                    <section className="pure-u-1 section">
-                        <h2 className="section__header">Popular Courses</h2>
-                        <div className="divide"></div>
-                        
-                        <div className="pure-g section__course-grid">
-                            
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
-
-
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
-                            
-                            <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box">
-                                <div className="course-box__content">
-                                    <header className="course-box__content__header">CS 101</header>
-                                    <div className="course-box__content__body">
-                                        <div>
-                                            Learn the basics of programming and algorithm design.
-                                            Understand the basics of the Java programming language
-                                            to create simple software with simple applications.
-                                        </div>
-                                        <div className="tag-list">
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e93a0a", color: "white"} }>
-                                                 Java
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#087a34", color: "white"} }>
-                                                 Vanderbilt
-                                            </div>
-                                            <div className="tag tag-list__item"
-                                                 style={ { backgroundColor: "#e25a58", color: "white"} }>
-                                                 Computer Science
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer className="course-box__content__footer">
-                                        10 enrolled
-                                    </footer>
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                    </section>
-                </div>
             );
         }
 
@@ -214,6 +124,78 @@ var React = require('react'),
     }),
 
 
+    MyCourses = React.createClass({
+
+        render: function () {
+            var user = UserStore.query().currentUser().getOne(),
+                courses = CourseStore.query().coursesForUser(user).getAll();
+
+                courseBoxes = courses.map(function (course) {
+                    return <CourseBox key={ course.id } course={ course } />
+                }),
+
+                // If there are no courses, then render a message saying there
+                // are no courses in this section.
+                renderContent = (courseBoxes.length === 0) ?
+                             (<SectionSet.Section.Empty>
+                                There are no courses here yet.
+                             </SectionSet.Section.Empty>) :
+
+                             (<div className="pure-g course-grid">
+                                { courseBoxes }
+                              </div>);
+            
+            return (
+                <SectionSet.Section>
+                    <SectionSet.Section.Header>My Courses</SectionSet.Section.Header>
+                    <div className="divide"></div>
+                    
+                    { renderContent }
+
+                </SectionSet.Section>
+            );
+        }
+
+    }),
+
+
+    /**
+     * A section containing the popular courses to present
+     * to the user.
+     */
+    PopularCourses = React.createClass({
+
+        render: function () {
+            var user = UserStore.query().currentUser().getOne(),
+                courses = CourseStore.query().coursesNotForUser(user).getAll();
+
+                courseBoxes = courses.map(function (course) {
+                    return <CourseBox key={ course.id } course={ course } />
+                }),
+
+                // If there are no courses, then render a message saying there
+                // are no courses in this section.
+                renderContent = (courseBoxes.length === 0) ?
+                             (<SectionSet.Section.Empty>
+                                There are no courses here yet.
+                             </SectionSet.Section.Empty>) :
+
+                             (<div className="pure-g course-grid">
+                                { courseBoxes }
+                              </div>);
+            
+            return (
+                <SectionSet.Section>
+                    <SectionSet.Section.Header>Popular Courses</SectionSet.Section.Header>
+                    <div className="divide"></div>
+                    
+                    { renderContent }
+
+                </SectionSet.Section>
+            );
+        }
+
+    }),
 
 
     /**
@@ -230,29 +212,39 @@ var React = require('react'),
         
         render: function() {
             var course = this.props.course,
-                enrollMessage = course.enrollCount() + ' enrolled';
-            return (
-                <div onClick= { this.handleClick }
-                     className="home-content__courses__grid__course course-info">
+                tags = course.get('tags'),
 
-                    <header className="course-info__header">
-                        { course.get('code') }
-                    </header>
-                    <div className="course-info__body">
-                        <div className="course-info__body__text">
-                            { Formatter.Text.truncate(course.get('description'), { maxlen: 75 }) }
+                // The list of tags for the course. 
+                tagListEl = (tags.length === 0) ?
+                            (null) :
+                            (<TagSet>
+                                { tags.map(function (tag) {
+                                    return (<TagSet.Tag key={ tag.id } tag={ tag } />);
+                                  })
+                                }
+                             </TagSet>);
+
+
+            return (
+                <div className="pure-u-1 pure-u-md-1-3 pure-u-lg-1-4 course-box"
+                     onClick={ this.onClick }>
+                    <div className="course-box__content">
+                        <header className="course-box__content__header">{ course.get('alias') }</header>
+                        <div className="course-box__content__body">
+                            <div>{ course.get('description') }</div>
+                            { tagListEl }
                         </div>
                     </div>
-                    <footer className="course-info__footer">{ enrollMessage }</footer>
                 </div>
             );
         },
 
-
-        handleClick: function(event) {
-            Router.path("/course/<courseId>", { courseId: this.props.course.id });
+        onClick: function(event) {
+            Logger.log(Logger.Level.INFO, "Course selected: " + this.props.course.id);
+            Action(Constants.Action.LOAD_COURSE)
+                .route("/course/<courseId>", { courseId: this.props.course.id })
+                .send();
         }
-
 
     });
 

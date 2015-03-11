@@ -17,14 +17,19 @@ module.exports = {
         return cache.CourseStore;
     },
 
-
-    ExamStore: function () {
-        if (!cache.ExamStore) {
-            cache.ExamStore = require('./examstore.js');
+    ExamRunStore: function () {
+        if (!cache.ExamRunStore) {
+            cache.ExamRunStore = require('./examrunstore.js');
         }
-        return cache.ExamStore;
+        return cache.ExamRunStore;
     },
 
+    FlagStore: function () {
+        if (!cache.FlagStore) {
+            cache.FlagStore = require('./flagstore.js');
+        }
+        return cache.FlagStore;
+    },
 
     PageStore: function () {
         if (!cache.PageStore) {
@@ -33,6 +38,19 @@ module.exports = {
         return cache.PageStore;
     },
 
+    QuestionStore: function () {
+        if (!cache.QuestionStore) {
+            cache.QuestionStore = require('./questionstore.js');
+        }
+        return cache.QuestionStore;
+    },
+
+    TopicStore: function () {
+        if (!cache.TopicStore) {
+            cache.TopicStore = require('./topicstore.js');
+        }
+        return cache.TopicStore;
+    },
 
     UserStore: function () {
         if (!cache.UserStore) {
@@ -40,5 +58,6 @@ module.exports = {
         }
         return cache.UserStore;
     }
+
 
 };
