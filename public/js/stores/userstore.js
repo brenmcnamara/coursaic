@@ -159,6 +159,12 @@ var Stores = require('../stores'),
         },
 
 
+        _isCurrentUserSetup: function () {
+            var user = Parse.User.current();
+
+            return user && user.get('emailVerified');
+        },
+
         /***********************************\
                     PUBLIC METHODS
         \***********************************/
@@ -252,7 +258,7 @@ var Stores = require('../stores'),
                 var self = this;
                 return new Promise(function (resolve) {
                     var user = self._currentUser();
-                    if (!user) {
+                    if (!self._isCurrentUserSetup()) {
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
@@ -265,7 +271,7 @@ var Stores = require('../stores'),
                 var self = this;
                 return new Promise(function (resolve) {
                     var user = self._currentUser();
-                    if (!user) {
+                    if (!self._isCurrentUserSetup()) {
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
@@ -278,7 +284,7 @@ var Stores = require('../stores'),
                 var self = this;
                 return new Promise(function (resolve) {
                     var user = self._currentUser();
-                    if (!user) {
+                    if (!self._isCurrentUserSetup()) {
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
@@ -292,7 +298,7 @@ var Stores = require('../stores'),
 
                 return new Promise(function (resolve) {
                     var user = Parse.User.current();
-                    if (user) {
+                    if (self._isCurrentUserSetup()) {
                         throw ShoreError(Constants.ErrorType.EXISTING_USER_CREDENTIALS, "User already logged in.");
                     }
                     resolve();
@@ -300,17 +306,9 @@ var Stores = require('../stores'),
             },
 
             LOGIN: function (payload) {
-                // Check if the user is already logged in.
-                if (this._currentUser()) {
-                    logger.log(logger.Level.INFO, "Skipping login. User already logged in.");
-
-                    return this._didLogin(this._currentUser());
-                }
-                else {
-                    logger.log(logger.Level.INFO, "Logging in user " + payload.username + ".");
-                    // Need to login the user.
-                    return this._login(payload.username, payload.password);
-                }
+                logger.log(logger.Level.INFO, "Logging in user " + payload.username + ".");
+                // Need to login the user.
+                return this._login(payload.username, payload.password);
             },
 
             LOGOUT: function (payload) {
