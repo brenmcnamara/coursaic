@@ -120,7 +120,7 @@ var Stores = require('../stores'),
                     // question store.
                     .then(function () {
                         var examRunRequest = payload.examRunRequest,
-                            course = Stores.CourseStore().query().courseWithId(payload.courseId),
+                            course = Stores.CourseStore().query().courseWithId(payload.courseId).getOne(),
                             examRun = new ExamRun(),
                             numOfQuestions = examRunRequest.get('numOfQuestions'),
                             questions = examRunRequest.getAllQuestions(
