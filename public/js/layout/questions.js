@@ -14,10 +14,14 @@ var
 
 	Stores = require('../stores'),
 	CourseStore = Stores.CourseStore(),
+    ExamRunStore = Stores.ExamRunStore(),
+	FlagStore = Stores.FlagStore(),
 	PageStore = Stores.PageStore(),
 	QuestionStore = Stores.QuestionStore(),
 	TopicStore = Stores.TopicStore(),
+    UserStore = Stores.UserStore(),
 
+    ComponentsLayout = require('./components.js'),
 	FormLayout = require('./form.js'),
 	HeaderLayout = require('./header.js'),
 
@@ -94,6 +98,287 @@ var
 			);
 		}
 	}),
+
+
+	/**
+     * The list of questions in the form of an
+     * exam. This must be passed an exam run
+     * and an exam run submission object.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_Question_List
+     * @public
+     */
+    ExamQuestionList = React.createClass({
+
+        render: function() {
+            var examRun = this.props.examRun,
+            	examRunSubmission = this.props.examRunSubmission;
+
+            return (
+                <ul className="question-info-list">
+                    { examRun.getQuestions().reduce(function (list, question, index) {
+                        return list.concat([
+                            <ExamQuestionList_MultiChoice key={"question-" + index }
+                                                      	  question={ question }
+                                                      	  index={ index }
+                                                      	  onChangeItem={ this.onChangeItem }
+                                                      	  examRunSubmission={ examRunSubmission } />,
+                            <li key={ "divide-" + index }><ComponentsLayout.Divide /></li>
+                        ]);
+                    }.bind(this), []) }
+                </ul>
+            );
+        },
+
+        onChange: function (event) {
+            this.forceUpdate();
+        },
+
+        onChangeQuestion: function (event, index) {
+            this.props.onChange(event, index);
+        },
+
+        onChangeItem: function (event, index) {
+
+        },
+
+
+    }),
+
+
+	/**
+     * A multiple choice question for an exam.
+     */
+    ExamQuestionList_MultiChoice = React.createClass({
+
+        render: function() {
+            var
+                question = this.props.question,
+                user = UserStore.query().currentUser().getOne(),
+                // This will be null if the user has
+                // not flagged this question.
+                userFlag = FlagStore.query().flagsForQuestion(question).flagsForUser(user).getOne(),
+
+                renderFlagElement = (userFlag) ?
+                    (<ExamQuestionList_MultiChoice_AlreadyFlagged />) :
+                    (<ExamQuestionList_MultiChoice_FlagOptions onFlag={ this.onFlag }
+                                                               question={ question } />),
+
+                renderFlagActionList;
+
+            if (userFlag && ExamRunStore.hasBackupQuestions()) {
+                // Backup questions available.
+                renderFlagActionList = (
+                    <ul className="question-flag__action-list">
+                        <li className="inline-button"
+                            onClick={ this.onClickSwapQuestion } >Swap this question for another question.</li>
+                        <li className="inline-button"
+                            onClick={ this.onClickRemoveQuestion } >Remove this question.</li>
+                    </ul>
+                );
+            } 
+            else if (userFlag) {
+                // No backup questions available.
+                renderFlagActionList = (
+                    <ul className="question-flag__action-list">
+                        <li className="inline-button"
+                            onClick={ this.onClickRemoveQuestion } >Remove this question.</li>
+                    </ul>
+                );
+            }
+            else {
+                renderFlagActionList = null;
+            }
+
+            return (
+                <li className="pure-g">
+                    <div className="question-info pure-u-1 pure-u-md-1-2">
+                        <div className="question-info__ask">
+                            <span>{ this.props.index + 1 }.</span> { question.get('ask') }
+                        </div>
+                        <ul className="multi-choice-info__options-list">
+                            { question.getOptions().map(function (option, index) {
+                                return (
+                                    <ExamQuestionList_MultiChoice_Item key={ question.id + "-option-" + index }
+                                                                       question={ question }
+                                                                       option={ option }
+                                                                       onChangeItem={ this.onChangeItem } />
+                                );
+                              }.bind(this))
+                            }
+                        </ul>
+
+                    </div>
+                    
+                    <div className="question-flag pure-u-1 pure-u-md-1-2">
+                        { renderFlagElement }
+                        { renderFlagActionList }
+                    </div>
+
+                </li>
+            );
+        },
+
+        componentDidMount: function () {
+            FlagStore.on(Constants.Event.FLAGGED_QUESTION, this.onFlaggedQuestion);
+        },
+
+        componentWillUnmount: function () {
+            FlagStore.removeListener(Constants.Event.FLAGGED_QUESTION, this.onFlaggedQuestion);
+        },
+
+        onChangeItem: function (event) {
+            this.props.examRunSubmission.setSolutionAtIndex(event.target.value,
+                                                            this.props.index);
+            this.props.onChangeItem(event, this.props.index);
+        },
+
+        onClickRemoveQuestion: function (event) {
+            Action(Constants.Action.REMOVE_EXAM_RUN_QUESTION, {
+                questionIndex: this.props.index
+            })
+
+            .send()
+
+            // Action completed successfully.
+            .then(function () {
+                this.props.examRunSubmission.removeIndex(this.props.index);
+            }.bind(this));
+        },
+
+        onClickSwapQuestion: function (event) {
+            Action(Constants.Action.SWAP_EXAM_RUN_QUESTION, {
+                questionIndex: this.props.index
+            })
+
+            .send()
+
+            // Action completed successfully.
+            .then(function () {
+                this.props.examRunSubmission.clearIndex(this.props.index);
+            }.bind(this));
+        },
+
+        // TODO: Swap order of parameters!
+        onFlag: function (flagType, event) {
+            Action(Constants.Action.FLAG_QUESTION,
+                   {
+                        questionId: this.props.question.id,
+                        flagType: flagType
+                    }).send();
+        },
+
+        onFlaggedQuestion: function (event) {
+            this.forceUpdate();
+        },
+
+    }),
+
+
+    /**
+     * A single option in a multiple choice question of an
+     * exam that is in the the question list.
+     *
+     * @module Layout
+     * @submodule Exam
+     * @class ExamForm_Question_MultiChoice_Item
+     */
+    ExamQuestionList_MultiChoice_Item = React.createClass({
+
+        render: function() {
+            var option = this.props.option,
+                questionId = this.props.question.id;
+
+            return (
+                <li className="multi-choice-info__options-list__item">
+                    <input type="radio" onChange={ this.onChange }
+                                        name={ questionId }
+                                        value={ option } />{ option }
+                </li>
+            );
+        },
+
+        onChange: function(event) {
+            this.props.onChangeItem(event);
+        },
+
+    }),
+
+
+
+    /**
+     * An element informing the user that a question is already flagged.
+     */
+    ExamQuestionList_MultiChoice_AlreadyFlagged = React.createClass({
+
+        render: function () {
+            return (
+                <div>
+                    <div className="question-flag__button--disabled">
+                        <i className="fa fa-flag-o"></i>You have flagged this question
+                    </div>
+                </div>
+            );
+        }
+
+    }),
+
+
+    /**
+     * An element to flag a particular question.
+     */
+    ExamQuestionList_MultiChoice_FlagOptions = React.createClass({
+
+        getInitialState: function () {
+            return { showFlagOptions: false };
+        },
+
+        render: function () {
+            var flagOptionsClass = 
+                ((this.state.showFlagOptions) ? "popover question-flag__options-list":
+                                                "popover--hide question-flag__options-list");
+
+            return (
+                <div className="popover-wrapper"
+                     onClick={ this.onClickFlagButton } >
+
+                    <div className="popover-target question-flag__button">
+                        <i className="fa fa-flag"></i>Flag this question.
+                    </div>
+                    <ul className={ flagOptionsClass } >
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.NOT_RELEVANT) }>
+                            Not relevant to the material
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.NONSENSE) }>
+                            Does not make sense
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.REPEATED_QUESTION) }>
+                            Similar to another question I have seen
+                        </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.OUTDATED) }>
+                            The question is outdated.
+                        </li>
+                    </ul>
+                </div>
+            );
+
+        },
+
+        onClickFlagButton: function (event) {
+            // Toggle the show flag options element.
+            this.setState({ showFlagOptions: !this.state.showFlagOptions });
+        },
+
+        onFlagQuestion: function (flagType) {
+            // Curried function.
+            return function (event) {
+                this.props.onFlag(flagType, event);
+            }.bind(this);
+        },
+
+    }),
 
 
     QuestionItem = React.createClass({
@@ -715,6 +1000,7 @@ var
 
 
 module.exports = {
+    ExamQuestionList: ExamQuestionList,
 	OwnerQuestionList: OwnerQuestionList,
 	UserQuestionList: UserQuestionList,
 };
