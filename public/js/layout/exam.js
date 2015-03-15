@@ -5,9 +5,7 @@ var React = require('react'),
     
     Stores = require('../stores'),
     ExamRunStore = Stores.ExamRunStore(),
-    FlagStore = Stores.FlagStore(),
     PageStore = Stores.PageStore(),
-    UserStore = Stores.UserStore(),
 
     ComponentsLayout = require('./components.js'),
     HeaderLayout = require('./header.js'),
