@@ -138,4 +138,32 @@ describe("Query Object", function () {
         expect(query.filterOdd().getAll()).toEqual([1, 3]);
 
     });
+
+    it("slices the data that is organized by the query.", function () {
+        var 
+            Ctor = Query.queryBuilder({
+               
+                filterEven: function () {
+                    return new Query.Pipe({
+                        data: this.pipe.data.filter(function (val) {
+                            return val % 2 === 0;
+                        })
+                    });
+                },
+
+                filterOdd: function () {
+                    return new Query.Pipe({
+                        data: this.pipe.data.filter(function (val) {
+                            return val % 2 === 1;
+                        })
+                    });
+                }
+            }),
+
+            query = new Ctor([1, 2, 3, 4, 5, 6, 7, 8]);
+
+        expect(query.filterEven().getSlice(0, 2)).toEqual([2, 4]);
+        expect(query.filterEven().getSlice(1, 3)).toEqual([4, 6]);
+    });
+
 });
