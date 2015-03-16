@@ -781,7 +781,7 @@ var
     }),
 
 
-    ResultQuestionInfo = React.createClass({
+    QuestionInfo = React.createClass({
 
         render: function () {
             var
@@ -998,6 +998,9 @@ var
 
     }),
 
+
+    /* HERE AND BELOW IS FOR QUESTIONS ASSOCIATED WITH THE RESULTS LIST */
+
     /**
      * A single mutliple choice solution to the results
      * of an exam
@@ -1016,7 +1019,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo question={ question } />
+                            <ResultQuestionInfo question={ question } />
                         </div>
                     </div>
                 </li>
@@ -1054,6 +1057,7 @@ var
     ResultsQuestionList = React.createClass({
 
         render: function () {
+            console.log("Rendering list!");
             var examRun = this.props.examRun;
 
             return (
@@ -1081,9 +1085,11 @@ var
 
     }),
 
+
     ResultQuestionInfo = React.createClass({
 
         render: function () {
+            console.log("Rendering question info");
             var question = this.props.question,
                 // Note that 'guess' may not be defined.
                 guess = this.props.guess;

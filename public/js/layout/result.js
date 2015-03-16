@@ -157,7 +157,7 @@ var
 
             return (
                 <SectionSet.Section>
-                    <QuestionLayout.ResultsQuestionInfo examRun={ examRun } />
+                    <QuestionLayout.ResultsQuestionList examRun={ examRun } />
                 </SectionSet.Section>
             );
         }
