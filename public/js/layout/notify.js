@@ -8,6 +8,7 @@
 
 var React = require('react'),
     Action = require('shore').Action,
+    Constants = require('../constants.js'),
 
     /**
      * Notifies that an email was sent for resetting
@@ -105,7 +106,9 @@ var React = require('react'),
 
         onSendEmailClicked: function () {
             if (this.isValid()) {
-                Action(null, { email: this.state.email }).route("/resetpasswordemail").send();
+                Action(Constants.Action.RESET_PASSWORD, { email: this.state.email })
+                    .route("/resetpasswordemail")
+                    .send();
             }
         }
 

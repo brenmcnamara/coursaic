@@ -197,7 +197,7 @@ var Action = require('shore').Action
         },
 
         onForgotPassword: function () {
-            Action(Constants.Action.RESET_PASSWORD, { email: this.state.email }).route("/resetpassword").send();
+            Action().route("/resetpassword").send();
         }
 
 
@@ -267,7 +267,6 @@ var Action = require('shore').Action
     Content = React.createClass({
  
         render: function () {
-            console.log("Rendering content.");
             return (
                 <div className="content-wrapper splash__content-wrapper">
                     <FeatureList />
@@ -282,7 +281,6 @@ var Action = require('shore').Action
     Root = React.createClass({
 
         render: function () {
-            console.log("Rendering root.");
             var menu = [
                 (<a href="#">Login</a>),
                 (<a href="#">Sign Up</a>)
