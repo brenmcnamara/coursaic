@@ -120,20 +120,20 @@ var Stores = require('../stores'),
                     // question store.
                     .then(function () {
                         var examRunRequest = payload.examRunRequest,
-                            course = new Course(),
+                            course = Stores.CourseStore().query().courseWithId(payload.courseId).getOne(),
                             examRun = new ExamRun(),
                             numOfQuestions = examRunRequest.get('numOfQuestions'),
-                            questions;
+                            questions = examRunRequest.getAllQuestions(
+                                            // Base query for the exam run request.
+                                            Stores.QuestionStore()
+                                                  .query()
+                                                  .questionsNotDisabled()
+                                                  .questionsForCourse(course));
 
-                        course.id = payload.courseId;
-                        questions = examRunRequest.getAllQuestions(
-                                        Stores.QuestionStore()
-                                              .query()
-                                              .questionsNotDisabled()
-                                              .questionsForCourse(course));
 
                         examRun.set('numOfQuestions', numOfQuestions);
                         examRun.set('author', Stores.UserStore().query().currentUser().getOne());
+                        examRun.set('course', course);
 
                         examRun.setQuestions(Util.randomSubset(questions, numOfQuestions));
                         self._backupQuestions = Util.difference(questions, examRun.getQuestions());

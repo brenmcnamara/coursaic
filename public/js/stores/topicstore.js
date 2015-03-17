@@ -64,7 +64,35 @@ var Stores = require('../stores'),
                         }, false);
                     })
                 });
-            }
+            },
+
+            topicsSortedByQuestionCount: function () {
+                var QuestionStore = Stores.QuestionStore(),
+                    data = this.pipe.data.slice();
+                // TODO: IMPLEMENT ME
+
+                // Use the "topicsForCourse" method above as an example
+                // of how to do this.
+
+                // You must return a Pipe like how it is done in the above method.
+
+                // The pipe takes a single argument, which is an object "{}" and 
+                // the object has a single key that you need to passed called "data"
+                // Instead of using "this.pipe.data.filter" call "data.sort".
+
+                // Go online to look at the documentation for how to use the
+                // "sort" method of an array.
+
+                // You will need to get the questions from the QuestionStore to
+                // implement this correctly. Use the QuestionStore reference
+                // that is setup to query the question store for all questions
+                // with a particular topic. You must call QuestionStore.query()
+                // and chain the relevant callbacks on top of it. To see which
+                // queries are needed, go to the QuestionStore and look at the queries
+                // that are implemented. DON'T FORGET TO ADD A "getAll()" terminator
+                // to the end of the query call to get an array. Check how many questions
+                // are in that array..
+            },
 
         }),
 

@@ -43,6 +43,10 @@ _Query.prototype.getAll = function () {
     return this.pipe.data;
 };
 
+_Query.prototype.getSlice = function () {
+    return this.pipe.data.slice.apply(this.pipe.data, arguments);
+};
+
 // NOTE: Implement the method isEqual() to
 // add custom equality checks. Otherwise, this
 // will use ===.

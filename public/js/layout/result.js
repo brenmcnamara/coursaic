@@ -7,7 +7,9 @@
 var
     React = require('react'),
     ComponentsLayout = require('./components.js'),
+
     headerLayout = require('./header.js'),
+    QuestionLayout = require('./questions.js'),
 
     Action = require('shore').Action,
 
@@ -155,171 +157,8 @@ var
 
             return (
                 <SectionSet.Section>
-                    <ul className="question-info-list">
-                        {
-                            examRun.getQuestions().map(function (question, index) {
-                                var guess = examRun.getGuesses()[index];
-                                if (question.isCorrect(guess)) {
-                                    return (
-                                        <QuestionItem_Correct key={ "question-" + index }
-                                                              question={ question } />
-                                    );
-                                }
-                                // Not a correct guess.
-                                return (
-                                    <QuestionItem_Incorrect key={ "question-" + index }
-                                                            question={ question }
-                                                            guess={ guess } />
-                                );
-                            })
-                        }
-                    </ul>
+                    <QuestionLayout.ResultsQuestionList examRun={ examRun } />
                 </SectionSet.Section>
-            );
-        }
-
-    }),
-
-
-    /**
-     * A single mutliple choice solution to the results
-     * of an exam
-     */
-    QuestionItem_Correct = React.createClass({
-
-        render: function() {
-            var question = this.props.question;
-
-            return (
-                <li>
-                    <div className="question-item">
-                        <div className="question-item__icon-set--1">
-                            <div className="question-item__icon-set__item--good">
-                                <i className="fa fa-check" />
-                            </div>
-                        </div>
-                        <div className="question-item__content">
-                            <QuestionInfo question={ question } />
-                        </div>
-                    </div>
-                </li>
-            );
-        }
-
-    }),
-
-    
-    QuestionItem_Incorrect = React.createClass({
-
-        render: function () {
-            var question = this.props.question,
-                guess = this.props.guess;
-
-            return (
-                <li>
-                    <div className="question-item">
-                        <div className="question-item__icon-set--1">
-                            <div className="question-item__icon-set__item--bad">
-                                <i className="fa fa-times" />
-                            </div>
-                        </div>
-                        <div className="question-item__content">
-                            <QuestionInfo question={ question } guess={ guess } />
-                        </div>
-                    </div>
-                </li>
-            );
-        }
-
-    }),
-
-
-    QuestionInfo = React.createClass({
-
-        render: function () {
-            var question = this.props.question,
-                // Note that 'guess' may not be defined.
-                guess = this.props.guess;
-
-            return (
-                <div className="question-info">
-                    <div className="question-info__ask">{ question.get('ask') }</div>
-                    <ul className="multi-choice-info__options-list--lettered">
-                        {
-                            question.getOptions().map(function (option) {
-                                if (question.isCorrect(option)) {
-                                    return (
-                                        <MultiChoiceItem_OptionItem_Correct>
-                                            { option }
-                                        </MultiChoiceItem_OptionItem_Correct>
-                                    );
-                                }
-                                else if (option === guess) {
-                                    return (
-                                        <MultiChoiceItem_OptionItem_Incorrect>
-                                            { option }
-                                        </MultiChoiceItem_OptionItem_Incorrect>
-                                    );
-                                }
-                                else {
-                                    return (
-                                        <MultiChoiceItem_OptionItem>
-                                            { option }
-                                        </MultiChoiceItem_OptionItem>
-                                    );
-                                }
-                                return (
-                                    <MultiChoiceItem_OptionItem>{ option }</MultiChoiceItem_OptionItem>
-                                );
-                            })
-                        }                                                                                  
-                    </ul>
-                    <div className="question-info__explanation">
-                        { question.get('explanation') }
-                    </div>
-                </div>
-            );
-        }
-
-    }),
-
-
-    /**
-     * A single multiple choice item for a multiple choice
-     * question in the results of taking an exam.
-     */
-    MultiChoiceItem_OptionItem = React.createClass({
-
-        render: function() {
-            return (
-                <li className="multi-choice-info__options-list__item">{ this.props.children }</li>
-            );
-        }
-
-    }),
-
-    /**
-     * A single multiple choice option that is styled to be correct.
-     */
-    MultiChoiceItem_OptionItem_Correct = React.createClass({
-
-        render: function () {
-            return (
-                <li className="multi-choice-info__options-list__item--correct">{ this.props.children }</li>
-            );
-        }
-
-    }),
-
-
-    /**
-     * A single multiple choice option that is styled to be incorrect.
-     */
-    MultiChoiceItem_OptionItem_Incorrect = React.createClass({
-
-        render: function () {
-            return (
-                <li className="multi-choice-info__options-list__item--incorrect">{ this.props.children }</li>
             );
         }
 
