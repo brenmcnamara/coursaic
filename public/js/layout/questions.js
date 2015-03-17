@@ -77,6 +77,38 @@ var
     }),
 
 
+    ResultsQuestionList = React.createClass({
+
+        render: function () {
+            console.log("Rendering list!");
+            var examRun = this.props.examRun;
+
+            return (
+                <ul className="question-info-list">
+                    {
+                        examRun.getQuestions().map(function (question, index) {
+                            var guess = examRun.getGuesses()[index];
+                            if (question.isCorrect(guess)) {
+                                return (
+                                    <QuestionItem_Correct key={ "question-" + index }
+                                                          question={ question } />
+                                );
+                            }
+                            // Not a correct guess.
+                            return (
+                                <QuestionItem_Incorrect key={ "question-" + index }
+                                                        question={ question }
+                                                        guess={ guess } />
+                            );
+                        })
+                    }
+                </ul>
+            );
+        }
+
+    }),
+
+
 	/**
 	 * A list of questions for the owner of the course
 	 * that the questions were made for. This will have
@@ -1054,42 +1086,20 @@ var
     }),
 
 
-    ResultsQuestionList = React.createClass({
+    ResultQuestionInfo = React.createClass({
 
         render: function () {
-            console.log("Rendering list!");
-            var examRun = this.props.examRun;
-
             return (
-                <ul className="question-info-list">
-                    {
-                        examRun.getQuestions().map(function (question, index) {
-                            var guess = examRun.getGuesses()[index];
-                            if (question.isCorrect(guess)) {
-                                return (
-                                    <QuestionItem_Correct key={ "question-" + index }
-                                                          question={ question } />
-                                );
-                            }
-                            // Not a correct guess.
-                            return (
-                                <QuestionItem_Incorrect key={ "question-" + index }
-                                                        question={ question }
-                                                        guess={ guess } />
-                            );
-                        })
-                    }
-                </ul>
+                <MultiChoiceInfo guess={ this.props.guess } question={ this.props.question } />
             );
         }
 
     }),
 
 
-    ResultQuestionInfo = React.createClass({
+    MultiChoiceInfo = React.createClass({
 
         render: function () {
-            console.log("Rendering question info");
             var question = this.props.question,
                 // Note that 'guess' may not be defined.
                 guess = this.props.guess;
@@ -1102,27 +1112,27 @@ var
                             question.getOptions().map(function (option) {
                                 if (question.isCorrect(option)) {
                                     return (
-                                        <MultiChoiceItem_OptionItem_Correct>
+                                        <MultiChoiceInfo_OptionItem_Correct>
                                             { option }
-                                        </MultiChoiceItem_OptionItem_Correct>
+                                        </MultiChoiceInfo_OptionItem_Correct>
                                     );
                                 }
                                 else if (option === guess) {
                                     return (
-                                        <MultiChoiceItem_OptionItem_Incorrect>
+                                        <MultiChoiceInfo_OptionItem_Incorrect>
                                             { option }
-                                        </MultiChoiceItem_OptionItem_Incorrect>
+                                        </MultiChoiceInfo_OptionItem_Incorrect>
                                     );
                                 }
                                 else {
                                     return (
-                                        <MultiChoiceItem_OptionItem>
+                                        <MultiChoiceInfo_OptionItem>
                                             { option }
-                                        </MultiChoiceItem_OptionItem>
+                                        </MultiChoiceInfo_OptionItem>
                                     );
                                 }
                                 return (
-                                    <MultiChoiceItem_OptionItem>{ option }</MultiChoiceItem_OptionItem>
+                                    <MultiChoiceInfo_OptionItem>{ option }</MultiChoiceInfo_OptionItem>
                                 );
                             })
                         }                                                                                  
@@ -1135,13 +1145,11 @@ var
         }
 
     }),
-
-
     /**
      * A single multiple choice item for a multiple choice
      * question in the results of taking an exam.
      */
-    MultiChoiceItem_OptionItem = React.createClass({
+    MultiChoiceInfo_OptionItem = React.createClass({
 
         render: function() {
             return (
@@ -1154,7 +1162,7 @@ var
     /**
      * A single multiple choice option that is styled to be correct.
      */
-    MultiChoiceItem_OptionItem_Correct = React.createClass({
+    MultiChoiceInfo_OptionItem_Correct = React.createClass({
 
         render: function () {
             return (
@@ -1168,7 +1176,7 @@ var
     /**
      * A single multiple choice option that is styled to be incorrect.
      */
-    MultiChoiceItem_OptionItem_Incorrect = React.createClass({
+    MultiChoiceInfo_OptionItem_Incorrect = React.createClass({
 
         render: function () {
             return (
