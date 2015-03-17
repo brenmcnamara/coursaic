@@ -812,7 +812,7 @@ var
 
     }),
 
-
+/*
     QuestionInfo = React.createClass({
 
         render: function () {
@@ -847,7 +847,7 @@ var
 
     }),
 
-
+*/
     QuestionInfo_New = React.createClass({
 
         render: function () {
@@ -1051,7 +1051,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <ResultQuestionInfo question={ question } />
+                            <QuestionInfo question={ question } />
                         </div>
                     </div>
                 </li>
@@ -1076,7 +1076,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <ResultQuestionInfo question={ question } guess={ guess } />
+                            <QuestionInfo question={ question } guess={ guess } />
                         </div>
                     </div>
                 </li>
@@ -1086,7 +1086,7 @@ var
     }),
 
 
-    ResultQuestionInfo = React.createClass({
+    QuestionInfo = React.createClass({
 
         render: function () {
             return (
@@ -1110,7 +1110,15 @@ var
                     <ul className="multi-choice-info__options-list--lettered">
                         {
                             question.getOptions().map(function (option) {
-                                if (question.isCorrect(option)) {
+                                if (guess === null || guess === undefined) {
+                                    // A guess was never passed as a parameter.
+                                    return (
+                                        <MultiChoiceInfo_OptionItem>
+                                            { option }
+                                        </MultiChoiceInfo_OptionItem>
+                                    );
+                                }
+                                else if (question.isCorrect(option)) {
                                     return (
                                         <MultiChoiceInfo_OptionItem_Correct>
                                             { option }
@@ -1131,9 +1139,6 @@ var
                                         </MultiChoiceInfo_OptionItem>
                                     );
                                 }
-                                return (
-                                    <MultiChoiceInfo_OptionItem>{ option }</MultiChoiceInfo_OptionItem>
-                                );
                             })
                         }                                                                                  
                     </ul>
