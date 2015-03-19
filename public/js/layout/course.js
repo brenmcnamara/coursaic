@@ -97,7 +97,7 @@ var React = require('react'),
         render: function() {
             var course = this.props.course,
                 menu = [
-                    (<a href="#">Logout</a>)
+                    (<a onClick={ this.onClickLogout }>Logout</a>)
                 ];
 
             return (
@@ -114,6 +114,11 @@ var React = require('react'),
 
         onChange: function() {
             this.forceUpdate();
+        },
+
+        onClickLogout: function () {
+
+            Action(Constants.Action.LOGOUT).route("/").send();
         },
 
         componentWillMount: function() {
