@@ -281,14 +281,9 @@ var Action = require('shore').Action
     Root = React.createClass({
 
         render: function () {
-            var menu = [
-                (<a href="#">Login</a>),
-                (<a href="#">Sign Up</a>)
-            ];
-
             return (
                 <div className="main splash">
-                    <headerLayout.Header menu={ menu } />
+                    <headerLayout.Header />
                     <Splash />
                     <Content />
                 </div>
