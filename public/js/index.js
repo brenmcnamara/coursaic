@@ -20,9 +20,8 @@ window.onload = function () {
         },
 
         router: {
-            // Give the location to look for the hash when checking for
-            // changes.
-            location: window.location
+            window: window,
+            root: document.getElementsByTagName('body')[0]
         }
 
     });
