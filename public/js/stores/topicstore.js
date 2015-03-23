@@ -91,9 +91,15 @@ var Stores = require('../stores'),
                 // queries are needed, go to the QuestionStore and look at the queries
                 // that are implemented. DON'T FORGET TO ADD A "getAll()" terminator
                 // to the end of the query call to get an array. Check how many questions
-                // are in that array..
+                // are in that array..                
+                    return new Query.Pipe({
+                        data: data.sort (function (topic) {
+                            var query = QuestionStore.query(),
+                                questioncount = query.questionsForTopics(topic).getAll().length;
+                            return questioncount;
+                        })
+                });
             },
-
         }),
 
         _topicsForCourse: function (course) {
