@@ -657,9 +657,6 @@
 .question-info-list {
     margin: 2em 0 0 0;
     padding: 0;
-}
-
-.question-info-list {
     list-style: none;
 }
 
@@ -688,7 +685,6 @@
     margin-right: .5em;
     text-decoration: underline;
 }
-
 
 .question-info__explanation,
 .question-info__explanation--edit {

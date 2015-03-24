@@ -190,5 +190,6 @@
      */
     .question-flag {
         margin-top: 2em;
+        text-align: center;
     }
 }

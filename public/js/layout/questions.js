@@ -180,9 +180,6 @@ var
     }),
 
 
-
-
-
     QuestionItem = React.createClass({
 
         render: function () {
@@ -335,7 +332,7 @@ var
 
             return (
                 <li className="pure-g">
-                    <div className="question-info pure-u-1 pure-u-md-1-2">
+                    <div className="question-info pure-u-1 pure-u-md-2-3">
                         <div className="question-info__ask">
                             <span>{ this.props.index + 1 }.</span> { question.get('ask') }
                         </div>
@@ -353,7 +350,7 @@ var
 
                     </div>
                     
-                    <div className="question-flag pure-u-1 pure-u-md-1-2">
+                    <div className="question-flag pure-u-1 pure-u-md-1-3">
                         { renderFlagElement }
                         { renderFlagActionList }
                     </div>
@@ -462,7 +459,7 @@ var
                     </div>
                 </div>
             );
-        }
+        },
 
     }),
 
