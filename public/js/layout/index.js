@@ -9,6 +9,7 @@ var React = require('react'),
 
     Constants = require('../constants.js'),
     
+    componentsLayout = require('./components.js'),
     splashLayout = require('./splash.js'),
     homeLayout = require('./home.js'),
     courseLayout = require('./course.js'),
@@ -17,6 +18,8 @@ var React = require('react'),
     resultLayout = require('./result.js');
 
 module.exports = {
+
+    componentsLayout: componentsLayout,
 
     splashLayout: splashLayout,
 

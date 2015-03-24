@@ -1,7 +1,10 @@
 
 var shore = require('shore'),
     Stores = require('./stores'),
+    React = require('react'),
+    Layout = require('./layout'),
     routes = require('./routes.js');
+
 
 Parse.initialize(Env.parseAppId, Env.parseJavascriptId);
 
@@ -21,7 +24,8 @@ window.onload = function () {
 
         router: {
             window: window,
-            root: document.getElementsByTagName('body')[0]
+            $root: document.getElementsByTagName('body')[0],
+            loaderClass: Layout.componentsLayout.Loader
         }
 
     });

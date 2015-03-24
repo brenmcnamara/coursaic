@@ -283,9 +283,22 @@ var React = require('react'),
             );
         }
 
-    });
+    }),
+
+    Loader = React.createClass({
+
+                render: function () {
+                    return (
+                        <div className="loader">
+                            <div className="spinner"></div>
+                        </div>
+                    );
+                }
+            });
 
 module.exports = {
+
+    Loader: Loader,
 
     Divide: Divide,
     DivideFull: DivideFull,
