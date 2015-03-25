@@ -43,15 +43,20 @@ var
                 <ul className="question-info-list">
                     { newQuestion }
                     {
-                        this.props.questions.map(function (question) {
+                        this.props.questions.reduce(function (list, question) {
                             if (PageStore.currentMode() === PageStore.Mode.EDIT_QUESTION &&
                                 PageStore.currentPayload().questionId === question.id) {
                                 // Render the question in edit mode.
-                                return (<QuestionItem_Edit key={ question.id } question={ question} />);
+                                return list.concat(
+                                    [(<QuestionItem_Edit key={ question.id } question={ question} />),
+                                     (<QuestionDivideOrange />)]);
                             }
                             // Not in edit mode for this question.
-                            return (<QuestionItem key={ question.id } question={ question } />);
-                        })
+                            return list.concat(
+                                [(<QuestionItem key={ question.id } question={ question } />),
+                                 (<QuestionDivideOrange />)]);
+
+                        }, [])
 
                     }
                 </ul>
@@ -86,21 +91,18 @@ var
             return (
                 <ul className="question-info-list">
                     {
-                        examRun.getQuestions().map(function (question, index) {
+                        examRun.getQuestions().reduce(function (list, question, index) {
                             var guess = examRun.getGuesses()[index];
                             if (question.isCorrect(guess)) {
-                                return (
-                                    <QuestionItem_Correct key={ "question-" + index }
-                                                          question={ question } />
-                                );
+                                return list.concat(
+                                    [(<QuestionItem_Correct key={ "question-" + index } question={ question } />),
+                                     (<QuestionDivideOrange />)]);
                             }
                             // Not a correct guess.
-                            return (
-                                <QuestionItem_Incorrect key={ "question-" + index }
-                                                        question={ question }
-                                                        guess={ guess } />
-                            );
-                        })
+                            return list.concat(
+                                [(<QuestionItem_Incorrect key={ "question-" + index } question={ question } guess={ guess } />),
+                                 (<QuestionDivideOrange />)]);
+                        }, [])
                     }
                 </ul>
             );
@@ -122,9 +124,11 @@ var
 			return (
 				<ul className="question-info-list">
 	                {
-	                    questions.map(function (question) {
-	                        return (<FlaggedQuestionItem key={ question.id } question={ question } />);
-	                    })
+	                    questions.reduce(function (list, question) {
+	                        return list.concat(
+                                [(<FlaggedQuestionItem key={ question.id } question={ question } />),
+                                 (<QuestionDivideOrange />)]);
+	                    }, [])
 	                }
 	            </ul>
 			);
@@ -803,8 +807,20 @@ var
 
     }),
 
+    
 
-    QuestionDivide = React.createClass({
+    QuestionDivideOrange = React.createClass({
+
+        render: function () {
+            return (
+                <li className="divide"></li>
+            );
+        },
+
+    }),
+
+
+    QuestionDivideGray = React.createClass({
 
         render: function () {
             return (
