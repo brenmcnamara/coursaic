@@ -68,13 +68,20 @@ var Stores = require('../stores'),
 
             topicsSortedByQuestionCount: function () {
                 var QuestionStore = Stores.QuestionStore(),
-                    data = this.pipe.data.slice();               
-                    return new Query.Pipe({
-                        data: data.sort (function (topic1, topic2) {
-                            var query = QuestionStore.query(),
-                                questionCount1 = query.questionsForTopics(topic1).getAll().length;
-                                questionCount2 = query.questionsForTopics(topic2).getAll().length;
-                            return questionCount2 - questionCount1;
+                    data = this.pipe.data.slice();
+                return new Query.Pipe({
+                    data: data.sort (function (topic1, topic2) {
+                        var query = QuestionStore.query(),
+                            questionCount1 = query.questionsForTopics(topic1)
+                                                  .questionsNotDisabled()
+                                                  .getAll()
+                                                  .length,
+                            questionCount2 = query.questionsForTopics(topic2)
+                                                  .questionsNotDisabled()
+                                                  .getAll()
+                                                  .length;
+                        return questionCount2 - questionCount1;
+
                     })
                 });
             },
