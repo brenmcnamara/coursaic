@@ -68,6 +68,18 @@
     }
 
 /* -------------------- *\
+      Question Flag
+\* -------------------- */
+
+@media only screen and (max-width: 48em) {
+
+    /* Add some distance from left side on smaller screens */
+    .exam-form {
+        margin-left: 1em;
+    }
+}
+
+/* -------------------- *\
         Exam Score
 \* -------------------- */
 
