@@ -72,9 +72,9 @@ var Stores = require('../stores'),
                     return new Query.Pipe({
                         data: data.sort (function (topic1, topic2) {
                             var query = QuestionStore.query(),
-                                questioncount1 = query.questionsForTopics(topic1).getAll().length;
-                                questioncount2 = query.questionsForTopics(topic2).getAll().length;
-                            return questioncount2 - questioncount1;
+                                questionCount1 = query.questionsForTopics(topic1).getAll().length;
+                                questionCount2 = query.questionsForTopics(topic2).getAll().length;
+                            return questionCount2 - questionCount1;
                     })
                 });
             },
