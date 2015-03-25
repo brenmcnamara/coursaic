@@ -39,7 +39,6 @@ describe("Time Formatter", function () {
         expect(Formatter.Time.format(43)).toBe("00:43");
     });
 
-
     it("should format the time correctly when seconds is between 60 and 600.", function () {
         // This case is when minutes are between 1 and 10.
         expect(Formatter.Time.format(134)).toBe("02:14");
@@ -48,6 +47,34 @@ describe("Time Formatter", function () {
     it("should format the time correctly when seconds is greater than 600.", function () {
         expect(Formatter.Time.format(721)).toBe("12:01");
     });
+
+    it("should do a text format correctly when there are 0 seconds.", function () {
+        expect(Formatter.Time.format(0, { textFormat: true })).toBe("0 seconds");
+    });
+
+    it("should do a text format correctly when the seconds are less than 60.", function () {
+        expect(Formatter.Time.format(54, { textFormat: true })).toBe("54 seconds");
+    });
+
+    it("should do a text format correctly when the seconds modulo 60 is 1", function () {
+        // Singular second.
+        expect(Formatter.Time.format(121, { textFormat: true })).toBe("2 minutes, 1 second");
+    });
+
+    it("should do a text format correctly when the seconds are in between 60 and 120", function () {
+        // Singular minute.
+        expect(Formatter.Time.format(110, { textFormat: true})).toBe("1 minute, 50 seconds");
+    });
+
+    it("should do a text format correctly when the seconds are greater than 120.", function () {
+        // Plural minute.
+        expect(Formatter.Time.format(592, { textFormat: true })).toBe("9 minutes, 52 seconds");
+    });
+
+    it("should omit seconds when seconds modulo 60 is 0", function () {
+        expect(Formatter.Time.format(120, { textFormat: true })).toBe("2 minutes");
+    });
+
 
 });
 

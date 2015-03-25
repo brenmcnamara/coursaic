@@ -41,13 +41,43 @@ var
              * time.
              */
             format: function (time, options) {
-                var minutes = Math.floor(time / 60),
+                
+
+                var
+                    minutes = Math.floor(time / 60),
                     seconds = Math.floor(time % 60),
+                    minutesText,
+                    secondsText;
 
-                    minutesText = (minutes < 10) ? '0' + minutes.toString() : minutes.toString(),
-                    secondsText = (seconds < 10) ? '0' + seconds.toString() : seconds.toString();
+                options = options || {};
+                
+                if (options.textFormat) {
+                    // Time description in words.
+                    minutesText = (minutes === 1) ? "1 minute" : (minutes.toString() + " minutes");
+                    secondsText = (seconds === 1) ? "1 second" : (seconds.toString() + " seconds");
 
-                return minutesText + ':' + secondsText;
+                    // This will print out "0 seconds" if the time is 0.
+                    if (minutes === 0) {
+                        return secondsText;
+                    }
+                    else if (seconds === 0) {
+                        return minutesText;
+                    }
+                    else {
+                        // Neither are 0.
+                        return minutesText + ", " + secondsText;
+                    }
+
+                }
+                else {
+                    // Do it in time format.
+
+                    minutesText = (minutes < 10) ? ('0' + minutes.toString()): minutes.toString();
+                    secondsText = (seconds < 10) ? ('0' + seconds.toString()) : seconds.toString();
+
+                    return minutesText + ':' + secondsText;
+                }
+                    
             }
 
         },

@@ -49,7 +49,8 @@ var
 
         render: function () {
             var examRun = this.props.examRun,
-                score = examRun.get('numCorrect') / examRun.get('numOfQuestions') * 100;
+                score = examRun.get('numCorrect') / examRun.get('numOfQuestions') * 100,
+                time = examRun.get('timeCompleted');
 
             return (
                 <Dashboard>
@@ -58,6 +59,9 @@ var
                         <Dashboard.Summary.Header><ScoreMessage score={ score } /></Dashboard.Summary.Header>
                         <Dashboard.Summary.Subheader>
                             <Score score={ score } />
+                        </Dashboard.Summary.Subheader>
+                        <Dashboard.Summary.Subheader>
+                            <Time time={ time } />
                         </Dashboard.Summary.Subheader>
                     </Dashboard.Summary>
 
@@ -125,6 +129,19 @@ var
             }
 
         }
+
+    }),
+
+
+    Time = React.createClass({
+
+        render: function () {
+            return (
+                <div>
+                    Time Completed: { Formatter.Time.format(this.props.time, {textFormat: true }) }
+                </div>
+            );
+        },
 
     }),
 
