@@ -386,29 +386,61 @@ var React = require('react'),
             return { colors: ['#0001d6', '#EC0000', '#FFFF00', '#01af00', '#681eab' ] };
         },
 
+        getTopicsHash: function () {
+            var questionQuery = QuestionStore.query()
+                                             .questionsNotDisabled(),
+                topics = TopicStore.query()
+                                   .topicsForCourse(this.props.course)
+                                   .topicsSortedByQuestionCount()
+                                   .getSlice(0, 7),
+                // Takes a topic and returns a map of relevant values.
+                mapTopic = function (topic) {
+                    return {
+                        'name': topic.get('name'),
+                        'count': questionQuery.questionsForTopics(topic).getAll().length,
+                        'id': topic.id,
+                    };
+                };
+            // We have space to render at most 5 topics.
+            if (topics.length <= 5) {
+                // We can render all the topics that exist.
+                return topics.map(mapTopic);
+            }
+            else {
+                // We cannot render all the topics.
+                // We want to render 4 topics and an 'other' section.
+                return topics.slice(0, 4).map(mapTopic).concat([
+                    {
+                        'name': 'Other',
+                        'count': topics.slice(4, topics.length).reduce(function (sum, topic) {
+                            return sum + questionQuery.questionsForTopics(topic).getAll().length;
+                        }, 0)
+                    }]);
+            }
+        },
+
         render: function () {
-            var course = this.props.course,
+            var
                 // An array of colors, each topic is assigned a color.
                 colors = this.state.colors,
-                topics = TopicStore.query().topicsForCourse(course).getAll(),
-
-                renderTopicLegend = (topics.length) ? (
+                topicsHash = this.getTopicsHash(),
+                renderTopicLegend = (topicsHash.length) ? (
                         <div className="question-data__legend pure-u-1 pure-u-md-3-5 pure-u-lg-3-4">
                             {
-                                topics.map(function (topic, index) {
+                                topicsHash.map(function (topicMap, index) {
                                     return (
-                                        <Sections_Overview_ByTopic_LegendItem key={ topic.id }
+                                        <Sections_Overview_ByTopic_LegendItem key={ topicMap.id }
                                                                               color={ colors[index] }
-                                                                              topic={ topic } />
+                                                                              topicMap={ topicMap } />
                                     );
                                 })
                             }
                         </div>
                     ) : (null),
 
-                renderTopicCount = (topics.length === 1) ?
+                renderTopicCount = (topicsHash.length === 1) ?
                     (<span>There is <span className="emphasis">1 topic</span> of questions</span>) :
-                    (<span>There are <span className="emphasis">{ topics.length } topics</span> of questions</span>);
+                    (<span>There are <span className="emphasis">{ topicsHash.length } topics</span> of questions</span>);
 
             return (
                 <SectionSet.Section.Subsection>
@@ -429,10 +461,12 @@ var React = require('react'),
 
         componentDidMount: function () {
             this.renderPieChart();
+            PageStore.on(Constants.Event.CHANGED_MODE, this.renderPieChart);
             window.addEventListener("resize", this.renderPieChart);
         },
 
         componentWillUnmount: function () {
+            PageStore.removeListener(Constants.Event.CHANGED_MODE, this.renderPieChart);
             window.removeEventListener("resize", this.renderPieChart);
         },
 
@@ -440,16 +474,11 @@ var React = require('react'),
             // TODO: If there are too many topics, should render
             // "other" section. Limiting to 5 topics max.
             var colors = this.state.colors,
-                course = this.props.course,
-                topics = TopicStore.query().topicsForCourse(course).getAll(),
-                data = topics.map(function (topic, index) {
-                    var questions = QuestionStore.query()
-                                                 .questionsNotDisabled()
-                                                 .questionsForTopics(topic)
-                                                 .getAll();
+                topicsHash = this.getTopicsHash(),
+                data = topicsHash.map(function (topicMap, index) {
                     return {
                         color: colors[index],
-                        value: questions.length
+                        value: topicMap.count
                     };
 
                 }),
@@ -470,17 +499,11 @@ var React = require('react'),
     Sections_Overview_ByTopic_LegendItem = React.createClass({
 
         render: function () {
-            var topic = this.props.topic,
+            var topicMap = this.props.topicMap,
                 color = this.props.color,
-                questions = QuestionStore.query()
-                                          .questionsNotDisabled()
-                                          .questionsForTopics(topic)
-                                          .getAll(),
 
-                questionCount = questions.length,
-
-                renderQuestionCount = (questionCount === 1)
-                    ? "1 question" : questionCount + " questions";
+                renderQuestionCount = (topicMap.count === 1)
+                    ? "1 question" : topicMap.count + " questions";
 
             return (
                 <div className="question-data__legend__item">
@@ -488,7 +511,7 @@ var React = require('react'),
                           style= { { backgroundColor: color } } ></div>
                     <div className="question-data__legend__item__text">
                         <span className="question-data__legend__item__text__topic">
-                            { topic.get('name') }
+                            { topicMap.name }
                         </span>
                         <span className="question-data__legend__item__text__question">
                             { renderQuestionCount }
@@ -757,7 +780,6 @@ var React = require('react'),
         \***********************************/
  
         onClickTakeExam: function () {
-            console.log("Action handler called");
             var examRunRequest = this.state.examRunRequest,
                 courseId = this.props.course.id;
 
