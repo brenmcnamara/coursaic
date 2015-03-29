@@ -786,7 +786,9 @@ var
                             <div className="question-item__icon-set--1 pure-g">
                                 { renderIcon }
                             </div>
-                            <div className="question-item__content"><QuestionInfo question={ question } /></div>
+                            <div className="question-item__content">
+                                <QuestionInfo question={ question } showSolution={ true } />
+                            </div>
                         </div>
                     </div>
                 </li>
