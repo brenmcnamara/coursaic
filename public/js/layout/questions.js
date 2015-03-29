@@ -225,7 +225,7 @@ var
                                  onClick={ this.onClickEdit }><i className="fa fa-pencil-square-o"></i></div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo question={ question } />
+                            <QuestionInfo question={ question } showSolution={ true } />
                         </div>
                     </div>
                 </li>
@@ -1073,7 +1073,9 @@ var
 
         render: function () {
             return (
-                <MultiChoiceInfo guess={ this.props.guess } question={ this.props.question } />
+                <MultiChoiceInfo guess={ this.props.guess }
+                                 question={ this.props.question }
+                                 showSolution={ this.props.showSolution } />
             );
         }
 
@@ -1085,7 +1087,9 @@ var
         render: function () {
             var question = this.props.question,
                 // Note that 'guess' may not be defined.
-                guess = this.props.guess;
+                guess = this.props.guess,
+
+                showSolution = this.props.showSolution;
 
             return (
                 <div className="question-info">
@@ -1093,7 +1097,7 @@ var
                     <ul className="multi-choice-info__options-list--lettered">
                         {
                             question.getOptions().map(function (option) {
-                                if (guess === null || guess === undefined) {
+                                if (!showSolution && (guess === null || guess === undefined)) {
                                     // A guess was never passed as a parameter.
                                     return (
                                         <MultiChoiceInfo_OptionItem>
