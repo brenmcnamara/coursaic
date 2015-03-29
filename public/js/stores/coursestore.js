@@ -183,9 +183,11 @@ var Stores = require('../stores'),
             this._tagHash = {};
         },
 
+
         query: function () {
             return new this._Query(this._courses);
         },
+
 
         /**
          * Fetch the courses.

@@ -31,7 +31,6 @@ var React = require('react'),
     Constants = require('../constants.js'),
 
     Util = require('shore').Util,
-
     widgets = require('../widgets.js'),
 
     Dashboard = ComponentsLayout.Dashboard,
@@ -527,7 +526,8 @@ var React = require('react'),
     Sections_Overview_TakeExam = React.createClass({
 
         render: function () {
-            var course = this.props.course,
+            var user = UserStore.query().currentUser().getOne(),
+                course = this.props.course,
                 questions = QuestionStore.query()
                                          .questionsNotDisabled()
                                          .questionsForCourse(course)
@@ -541,10 +541,30 @@ var React = require('react'),
                                                                   "because there are no questions for " +
                                                                   "this course." } />);
             }
+            else if (!Util.contains(UserStore.getPermissions(user, course), Constants.CoursePermissions.TAKE_EXAMS)) {
+                return (<Sections_Overview_TakeExam_Issue issue={ "You cannot take a practice exam " + 
+                                                                  "until you have enrolled in the course and " +
+                                                                  "have provided at least 3 practice questions." } />)
+            }
             else {
                 return (<Sections_Overview_TakeExam_Content course={ course } />);
             }
-        }
+        },
+
+        onChangedEnrollment: function () {
+            // Rerender the view to check if the user is still allowed
+            // to take an exam. Users not enrolled in the course cannot
+            // take exams.
+            this.forceUpdate();
+        },
+
+        componentDidMount: function () {
+            UserStore.on(Constants.Event.CHANGED_ENROLLMENT, this.onChangedEnrollment);
+        },
+
+        componentWillUnmount: function () {
+            UserStore.removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChangedEnrollment);
+        },
 
     }),
 

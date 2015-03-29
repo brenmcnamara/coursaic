@@ -84,8 +84,12 @@ var
             var enrolled = this.get('enrolled') || [],
                 courseIndex;
 
+            if (this.isOwner(course)) {
+                throw Error("A user cannot unenroll from a course for which they are the owner.");
+            }
             if (!this.isEnrolled(course)) {
-                throw Error("The user cannot be unenrolled from the course " + course.id);
+                throw Error("The user cannot be unenrolled from the course " + course.id +
+                            " because they are not enrolled.");
             }
 
             enrolled.forEach(function (enrolledCourse, index) {

@@ -180,6 +180,48 @@ var Stores = require('../stores'),
 
 
         /**
+         * Get all the course permissions that a user
+         * has for a particular course. Note that this
+         * method depends on all the relevant data
+         * for the user and the course to be pulled
+         * down from the server (this method is synchronous).
+         *
+         * @method getPermissions
+         *
+         * @param user { User } The user to check the permissions
+         *  for.
+         *
+         * @param course { Course } The course for which the user
+         *  has permissions.
+         *
+         * @return { Array } An array of CoursePermission (from the
+         *  constants) that describe all the permissions a user has for
+         *  a particular course.
+         */
+        getPermissions: function (user, course) {
+            var permissions = [];
+            if (user.isEnrolled(course)) {
+                permissions.push(Constants.CoursePermissions.ENROLLED);
+            }
+
+            if (user.isOwner(course)) {
+                permissions.push(Constants.CoursePermissions.OWNER);
+            }
+
+            if (user.isEnrolled(course) && 
+                Stores.QuestionStore().query()
+                                      .questionsForCourse(course)
+                                      .questionsByUser(user)
+                                      .getAll()
+                                      .length >= 3) {
+                permissions.push(Constants.CoursePermissions.TAKE_EXAMS);
+            }
+
+            return permissions;
+        },
+
+
+        /**
          * Get the author of the exam for the course.
          *
          * @method fetchAuthorOfExam

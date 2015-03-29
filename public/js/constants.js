@@ -51,7 +51,6 @@ var
 
     },
 
-
     Action = {
 
         CREATE_COURSE: 'CREATE_COURSE',
@@ -136,7 +135,6 @@ var
 
     },
 
-
     ErrorType = { 
 
         // For trying to navigate to a page that
@@ -163,11 +161,22 @@ var
 
         REPEATED_QUESTION: 'REPEATED_QUESTION',
 
+    },
+
+    CoursePermissions = {
+
+        ENROLLED: 'ENROLLED',
+
+        OWNER: 'OWNER',
+
+        TAKE_EXAMS: 'TAKE_EXAMS',
+
     };
 
 
 module.exports = {
     Action: Action,
+    CoursePermissions: CoursePermissions,
     ErrorType: ErrorType,
     Event: Event,
     FlagType: FlagType,
