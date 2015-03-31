@@ -121,12 +121,12 @@ var React = require('react'),
         },
 
         componentWillMount: function() {
-            Stores.CourseStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.UserStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.UserStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
         }
 
@@ -163,12 +163,12 @@ var React = require('react'),
         },
 
         componentWillMount: function() {
-            Stores.CourseStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.UserStore().on(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().on(Constants.Event.CHANGED_MODE, this.onChange);
         },
 
         componentWillUnmount: function() {
-            Stores.CourseStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
+            Stores.UserStore().removeListener(Constants.Event.CHANGED_ENROLLMENT, this.onChange);
             Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);
         }
 
@@ -186,6 +186,7 @@ var React = require('react'),
     CourseDashboard = React.createClass({
         
         render: function() {
+
             var user = UserStore.query().currentUser().getOne(),
                 course = this.props.course,
 

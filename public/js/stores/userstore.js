@@ -56,25 +56,6 @@ var Stores = require('../stores'),
 
 
         /**
-         * Add a user to the collection.
-         *
-         * @method _addUser
-         * @private
-         *
-         * @param user {Parse.User} The user to add to
-         *  the store.
-         */
-        _addUser: function(user) {
-            // Avoid updating the user if it is the current
-            // user. This may cause consistency issues with
-            // Parse.
-            if (user.id !== this.currentUser().id) {
-                this._userHash[user.id] = user;
-            }
-        },
-
-
-        /**
          * @method current
          * @private
          *
@@ -104,9 +85,27 @@ var Stores = require('../stores'),
                     list.push(this._userHash[prop]);
                 }
             }
-            return list;
+            // Concatenate the current user.
+            return list.concat([ this._currentUser() ]);
         },
 
+
+        /**
+         * Add a user to the cache. To get the cached users,
+         * use the _getUserList operation.
+         *
+         * @method _cacheUser
+         * @private
+         *
+         * user { User } The user to cache.
+         */
+        _cacheUser: function (user) {
+            // Do not cache the current user, this is cached
+            // by parse.
+            if (user.id !== this._currentUser().id) {
+                this._userHash[user.id] = user;
+            }
+        },
 
         /**
          * Perform any operations after the user has been
@@ -125,7 +124,6 @@ var Stores = require('../stores'),
 
             // Combine all the promises into one promise.
             return new Promise(function (resolve, reject) {
-                self._userHash[user.id] = user;
                 resolve();
             });
         },
@@ -236,7 +234,7 @@ var Stores = require('../stores'),
             return new Promise(function(resolve, reject) {
                 exam.get('author').fetch({
                     success: function (user) {
-                        self._addUser(user);
+                        self._cacheUser(user);
                         resolve();
                     },
 
@@ -291,7 +289,7 @@ var Stores = require('../stores'),
                 // Called when the users for a course are fetched.
                 .then(function(users) {
                     users.forEach(function (user) {
-                        self._userHash[user.id] = user;
+                        self._cacheUser(user);
                     });
                 });
             },
@@ -304,7 +302,7 @@ var Stores = require('../stores'),
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
-                    self._userHash[user.id] = user;
+                    self._cacheUser(user);
                     resolve();
                 });
             },
@@ -317,7 +315,7 @@ var Stores = require('../stores'),
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
-                    self._userHash[user.id] = user;
+                    self._cacheUser(user);
                     resolve();
                 });
             },
@@ -330,7 +328,7 @@ var Stores = require('../stores'),
                         throw ShoreError(Constants.ErrorType.NO_USER_CREDENTIALS,
                                          "User is not logged in.");
                     }
-                    self._userHash[user.id] = user;
+                    self._cacheUser(user);
                     resolve();
                 });
             },

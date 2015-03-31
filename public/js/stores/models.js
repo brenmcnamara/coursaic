@@ -81,7 +81,7 @@ var
          *  user from.
          */
          unenroll: function (course) {
-            var enrolled = this.get('enrolled') || [],
+            var enrolled = (this.get('enrolled') || []).slice(),
                 courseIndex;
 
             if (this.isOwner(course)) {
@@ -98,9 +98,7 @@ var
                 }
             });
 
-            enrolled = enrolled.slice(0, courseIndex)
-                               .concat(enrolled.slice(courseIndex + 1,
-                                                      enrolled.length - courseIndex - 1));
+            enrolled.splice(courseIndex, 1);
 
             this.set('enrolled', enrolled);
 
