@@ -116,7 +116,7 @@ var React = require('react'),
         },
 
         onClickLogout: function () {
-
+            console.log("LOGING OUT");
             Action(Constants.Action.LOGOUT).route("/").send();
         },
 
@@ -143,7 +143,7 @@ var React = require('react'),
         render: function() {
             var course = this.props.course,
                 menu = [
-                    (<a href="#">Logout</a>)
+                    (<a onClick={ this.onClickLogout }>Logout</a>)
                 ];
 
             return (
@@ -156,6 +156,10 @@ var React = require('react'),
                     
                 </div>
             );
+        },
+
+        onClickLogout: function () {
+            Action(Constants.Action.LOGOUT).route("/").send();
         },
 
         onChange: function() {
