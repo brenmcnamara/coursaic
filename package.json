@@ -24,7 +24,7 @@
     "jsonschema": "~1.0.0",
     "precommit-hook": "~1.0.7",
     "promise": "~6.0.1",
-    "react": "~0.13.1",
+    "react": "~0.12.2",
     "shore": "0.4.1"
   },
   "precommit": [
