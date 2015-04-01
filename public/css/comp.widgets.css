@@ -314,6 +314,14 @@
     text-decoration: underline;       
 }
 
+.inline-button.disabled {
+    cursor: default;
+}
+
+.inline-button.disabled:hover {
+    text-decoration: none
+}
+
 .inline-input--small,
 .inline-input {
     margin: 0 .25em;

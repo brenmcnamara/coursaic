@@ -596,6 +596,10 @@ var React = require('react'),
                 // to a boolean flag indicating if the filter is selected.
                 initialState = {
 
+                    // A flag to determine if the "Click here to take exam"
+                    // option should be enabled.
+                    enableTakeExam: true,
+
                     // Set the defaults of these filters to false,
                     // indicating that these questions should not be
                     // removed from the set. Note that checking the filter
@@ -635,8 +639,21 @@ var React = require('react'),
         getSelectedCount: function () {
             // If the user has not explicitly set the number of
             // questions they would like their exam to take, then
-            // let the exam be all the questions that are available.
-            return this.state.selected || this.remainingQuestions().length;
+            // let the exam be all the questions that are available,
+            // capped at 20.
+            var remainingQuestions;
+            if (this.state.selected) {
+                return this.state.selected;
+            }
+
+            remainingQuestions = this.remainingQuestions().length;
+            if (remainingQuestions < 20) {
+                return remainingQuestions;
+
+            }
+            else {
+                return 20;
+            }
         },
 
         /**
@@ -696,6 +713,10 @@ var React = require('react'),
                     );
                 }.bind(this)),
 
+                renderTakeExamButton = (this.state.enableTakeExam) ?
+                    (<span className="inline-button" onClick={ this.onClickTakeExam } >Click here</span>) :
+                    (<span className="inline-button disabled">Click here</span>),
+
                 renderRemainingQuestionCount = (remainingQuestionCount === 1) ?
                     (<span><span className="emphasis">Only 1 question</span> after applying filters.</span>) :
                     (<span><span className="emphasis">{ remainingQuestionCount } questions</span> after applying filters.</span>);
@@ -713,9 +734,7 @@ var React = require('react'),
                         <div className="question-filter__section question-filter__description">
                             <div>{ renderRemainingQuestionCount }</div>
                             <div>
-                                <strong>
-                                    <span className="inline-button" onClick={ this.onClickTakeExam } >Click here</span>
-                                </strong> to take a practice exam with
+                                <strong>{ renderTakeExamButton }</strong> to take a practice exam with
                                 <Sections_Overview_TakeExam_Content_SelectQuestionsInput onChange={ this.onChangeSelected }
                                                                                          maxValue={ remainingQuestionCount }
                                                                                          value={ selectedQuestionCount } />questions.
@@ -814,10 +833,14 @@ var React = require('react'),
                 .send();
         },
 
-
-        onChangeSelected: function (event) {
+        onChangeSelected: function (event, isValid) {
             // Animate the changes to the selected bar value.
-            this.setState({ selected: + (event.target.value) });
+            if (isValid) {
+                this.setState({ selected: + (event.target.value), enableTakeExam: true });
+            }
+            else {
+                this.setState({ enableTakeExam: false });
+            }
         },
 
         /**
@@ -949,8 +972,13 @@ var React = require('react'),
             this.setState({ value: event.target.value });
             if (this.isValid(event.target.value) && this.props.onChange) {
                 // Notify the parent of input changing to a
-                // valid value.
-                this.props.onChange(event);
+                // valid value. Second parameter is true to notify that
+                // the input is valid.
+                this.props.onChange(event, true);
+            }
+            else {
+                // The input is not valid.
+                this.props.onChange(event, false);
             }
         }
 
