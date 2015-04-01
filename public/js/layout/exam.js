@@ -55,7 +55,8 @@ var React = require('react'),
                         <ExamDashboard examRun={ examRun } />
                         <Section_ExamForm examRun={ examRun }
                                           examRunSubmission={ this.state.examRunSubmission }
-                                          onSubmit={ this.onSubmit } />
+                                          onSubmit={ this.onSubmit }
+                                          onCancel={ this.onCancel } />
                     </div>
                 </div>
             );
@@ -83,7 +84,6 @@ var React = require('react'),
             clearInterval(this.state.timerId);
             ExamRunStore.removeListener(Constants.Event.UPDATED_EXAM_RUN,
                                         this.onUpdatedExamRun);
-            // Stores.PageStore().removeListener(Constants.Event.CHANGED_MODE, this.onChange);        
         },
 
         onChange: function(event) {
@@ -99,6 +99,14 @@ var React = require('react'),
             Action(Constants.Action.LOAD_RESULTS, { examRunSubmission: this.state.examRunSubmission })
                 .route("/course/<courseId>/exam/results", { courseId: PageStore.courseId() })
                 .send();
+        },
+
+        onCancel: function (event) {
+            if (confirm("Are you sure you would like to cancel the exam?")) {
+                Action().route("/course/<courseId>", { courseId: PageStore.courseId() })
+                        .send();
+
+            }
         },
 
     }),
@@ -180,7 +188,7 @@ var React = require('react'),
                         <div className="exam">
                             <QuestionLayout.ExamQuestionList examRun={ examRun } onChange={ this.onChangeQuestion }
                                                              examRunSubmission={ this.props.examRunSubmission } />
-                            <ExamForm_Buttons onSubmit={ this.onSubmit } />
+                            <ExamForm_Buttons onSubmit={ this.props.onSubmit } onCancel={ this.props.onCancel } />
                         </div>
                     </SectionSet.Section>
                 </SectionSet>
@@ -191,11 +199,6 @@ var React = require('react'),
             var guesses = Util.copy(this.state.guesses);
             guesses[index] = event.target.value;
             this.setState({ guesses: guesses });
-        },
-
-        onSubmit: function(event) {
-            this.props.onSubmit(event);
-            // Action.send(Constants.Action.SUBMIT_EXAM_RUN, { guesses: this.state.guesses });
         },
 
     }),
