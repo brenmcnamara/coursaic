@@ -95,7 +95,7 @@ var
                             var guess = examRun.getGuesses()[index];
                             if (question.isCorrect(guess)) {
                                 return list.concat(
-                                    [(<QuestionItem_Correct key={ "question-" + index } question={ question } />),
+                                    [(<QuestionItem_Correct key={ "question-" + index } question={ question } guess={ guess } />),
                                      (<QuestionDivideOrange />)]);
                             }
                             // Not a correct guess.
@@ -1036,7 +1036,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo question={ question } />
+                            <QuestionInfo question={ question } guess={ this.props.guess } showSolution={ true } />
                         </div>
                     </div>
                 </li>
@@ -1061,7 +1061,7 @@ var
                             </div>
                         </div>
                         <div className="question-item__content">
-                            <QuestionInfo question={ question } guess={ guess } />
+                            <QuestionInfo question={ question } guess={ guess } showSolution={ true } />
                         </div>
                     </div>
                 </li>
@@ -1091,22 +1091,28 @@ var
                 // Note that 'guess' may not be defined.
                 guess = this.props.guess,
 
-                showSolution = this.props.showSolution;
+                // Show the solution to the question if provided with a
+                // guess for the solution or if explicitly requested to
+                // show the solution.
+                showSolution = this.props.showSolution || ((guess !== null && guess !== undefined)),
+                showIncorrectGuess = !!guess;
 
+            console.log("UPDATED!!!");
             return (
                 <div className="question-info">
                     <div className="question-info__ask">{ question.get('ask') }</div>
                     <ul className="multi-choice-info__options-list--lettered">
                         {
                             question.getOptions().map(function (option) {
-                                if (!showSolution && (guess === null || guess === undefined)) {
-                                    // A guess was never passed as a parameter.
+
+                                if (!showSolution) {
                                     return (
                                         <MultiChoiceInfo_OptionItem>
                                             { option }
                                         </MultiChoiceInfo_OptionItem>
                                     );
                                 }
+                                // Below here, requesting to show solution.
                                 else if (question.isCorrect(option)) {
                                     return (
                                         <MultiChoiceInfo_OptionItem_Correct>
@@ -1114,14 +1120,17 @@ var
                                         </MultiChoiceInfo_OptionItem_Correct>
                                     );
                                 }
-                                else if (option === guess) {
+                                // Question here is not correct.
+                                else if (option === guess && showIncorrectGuess) {
                                     return (
                                         <MultiChoiceInfo_OptionItem_Incorrect>
                                             { option }
                                         </MultiChoiceInfo_OptionItem_Incorrect>
                                     );
                                 }
+
                                 else {
+                                    // Not correct or incorrect.
                                     return (
                                         <MultiChoiceInfo_OptionItem>
                                             { option }
