@@ -40,7 +40,7 @@ var Action = require('shore').Action
 
 
         isValid: function () {
-            var isEmailRegExp = /^[^\/\@]+@[^\.\/\@]+\.[^\.\/\@]+$/i;
+            var isEmailRegExp = /^([\w\-\.]+)@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([\w\-]+\.)+)([a-zA-Z]{2,4}))$/i;
             return this.state.firstName.length && this.state.lastName.length &&
                    isEmailRegExp.test(this.state.email) && this.state.password.length;
         },
@@ -130,7 +130,7 @@ var Action = require('shore').Action
         },
 
         isValid: function () {
-            var isEmailRegExp = /^[^\/\@]+@[^\.\/\@]+\.[^\.\/\@]+$/i;
+            var isEmailRegExp = /^([\w\-\.]+)@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([\w\-]+\.)+)([a-zA-Z]{2,4}))$/i;
 
             return isEmailRegExp.test(this.state.email) && this.state.password.length > 0;
 
