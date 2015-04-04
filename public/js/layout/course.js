@@ -178,6 +178,7 @@ var React = require('react'),
 
     }),
 
+
     /**
      * The dashboard under the header element
      * containing any other aside information
@@ -809,14 +810,14 @@ var React = require('react'),
             window.addEventListener('resize', this.renderProgressBar);
             QuestionStore.on(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
             PageStore.on(Constants.Event.CHANGED_MODE, this.renderProgressBar);
-            QuestionStore.on(Constants.Event.DELETED_QUESTION, this.renderProgressBar);
+            QuestionStore.on(Constants.Event.DELETED_QUESTION, this.onDeletedQuestion);
         },
 
         componentWillUnmount: function () {
             window.removeEventListener('resize', this.renderProgressBar);
             QuestionStore.removeListener(Constants.Event.CHANGED_DISABLE_QUESTION_STATE, this.renderProgressBar);
             PageStore.removeListener(Constants.Event.CHANGED_MODE, this.renderProgressBar);
-            QuestionStore.removeListener(Constants.Event.DELETED_QUESTION, this.renderProgressBar);
+            QuestionStore.removeListener(Constants.Event.DELETED_QUESTION, this.onDeletedQuestion);
         },
 
         /***********************************\
@@ -900,6 +901,21 @@ var React = require('react'),
             selected = this.remainingQuestions().length;
             state.bar.change({ selected: selected, current: selected }, { animate: true });
             this.setState(state);
+        },
+
+        onDeletedQuestion: function (event) {
+            console.log("CALLING ON DELETED QUESTION!");
+            // Make sure that after the question is deleted, we are still rendering
+            // the progress bar. May delete a question and now be under the number
+            // of questions required to take an exam.
+            var user = UserStore.query().currentUser().getOne(),
+                course = this.props.course;
+
+            if (Util.contains(
+                    UserStore.getPermissions(user, course),
+                    Constants.CoursePermissions.TAKE_EXAMS)) {
+                this.renderProgressBar();
+c            }
         },
 
     }),
