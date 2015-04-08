@@ -502,6 +502,9 @@ var
                         <li onClick={ this.onFlagQuestion(Constants.FlagType.OUTDATED) }>
                             The question is outdated.
                         </li>
+                        <li onClick={ this.onFlagQuestion(Constants.FlagType.AMBIGUOUS_QUESTION) }>
+                            The question is ambiguous.
+                        </li>
                     </ul>
                 </div>
             );

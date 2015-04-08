@@ -126,6 +126,8 @@ var
                 return Constants.FlagType.OUTDATED;
             case 4:
                 return Constants.FlagType.REPEATED_QUESTION;
+            case 5:
+                return Constants.FlagType.AMBIGUOUS_QUESTION;
             default:
                 throw Error("Flag " + flag.id + " has unrecognized flag type.");
             }
@@ -136,22 +138,25 @@ var
             switch (type) {
 
             case Constants.FlagType.NONSENSE:
-                flagValue = 1;
-                break;
+                this.set('type', 1);
+                return;
             case Constants.FlagType.NOT_RELEVANT:
-                flagValue = 2;
-                break;
+                this.set('type', 2);
+                return;
             case Constants.FlagType.OUTDATED:
-                flagValue = 3;
-                break;
+                this.set('type', 3);
+                return;
             case Constants.FlagType.REPEATED_QUESTION:
-                flagValue = 4;
-                break;
+                this.set('type', 4);
+                return;
+            case Constants.FlagType.AMBIGUOUS_QUESTION:
+                this.set('type', 5);
+                return;
             default:
                 throw Error("Trying to set flag type to unrecognized type: " + type);
             }
 
-            this.set('type', flagValue);
+            
         },
 
     }),

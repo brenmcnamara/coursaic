@@ -153,6 +153,8 @@ var
 
     FlagType = {
 
+        AMBIGUOUS_QUESTION: 'AMBIGUOUS_QUESTION',
+
         NONSENSE: 'NONSENSE',
 
         NOT_RELEVANT: 'NOT_RELEVANT',
