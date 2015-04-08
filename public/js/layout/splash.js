@@ -264,6 +264,22 @@ var Action = require('shore').Action
     }),
 
 
+    Video = React.createClass({
+
+        render: function () {
+            return (
+                <section>
+                    <div style={ { color: '#4A90E2', margin: '1em 0', textAlign: 'center', fontSize: '2em'} }>Using Coursaic Is Easy!</div>
+                    <video style={ { display: 'block', margin: "2em auto" } } width="50%" controls>
+                        <source src="/video/coursaic.mp4"></source>
+                    </video>
+                </section>
+            );
+        },
+
+    }),
+
+
     Content = React.createClass({
  
         render: function () {
@@ -271,6 +287,7 @@ var Action = require('shore').Action
                 <div className="content-wrapper splash__content-wrapper">
                     <FeatureList />
                     <UserForms />
+                    <Video />
                 </div>
             );
         }
