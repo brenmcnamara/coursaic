@@ -1,57 +1,57 @@
-
-/**
- * Module dependencies.
- */
-
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var express = require('express');
-var http = require('http');
-var path = require('path');
+var favicon = require('serve-favicon');
 var fs = require('fs');
+var logger = require('morgan');
+var path = require('path');
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 var app = express();
+var configObj =
+  JSON.parse(fs.readFileSync('config.json').toString())[app.get('env')];
 
-var facebookId,
-    parseAppId,
-    parseJavascriptId;
+configObj.NODE_ENV = app.get('env');
+routes.config(configObj);
 
-// all environments
-app.set('port', process.env.PORT || 3000);
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', routes.router);
 
-if ('production' == app.get('env')) {
-    parseAppId = "4mcPYbWGU0hIVcVCW5XKMgY5Gtr7UuPlRZkPnWj1";
-    parseJavascriptId = "Bl2qeQ6LdbhLpgi8B2a7nCpeITBs8QBeDsQQlGd8";
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
 }
 
-if ('development' == app.get('env')) {
-    parseAppId = "bqOzIc6tRKSBgQ3rxnQUqimHD0j9ltXtr1UtJNDW";
-    parseJavascriptId = "TEYdxshX9sPiqLqmYOQi3pLEALRhxnhip9Cd7DAl";
-}
-
-// Routes
-
-app.get('/', function(req, res) {
-    res.render('index', { parse_app_id: parseAppId,
-                          parse_javascript_id: parseJavascriptId,
-                          NODE_ENV: app.get('env') });
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
-app.get('/course', function(req, res) {
-    res.render('course');
-});
-
-app.get("/fatal", function (req, res) {
-  res.render('fatal');
-});
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+module.exports = app;

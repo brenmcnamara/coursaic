@@ -1,84 +1,9 @@
 <!DOCTYPE html>
-
 <html>
-
-<head>
-    <title>Coursaic</title>
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!-- Third-party Stylesheets -->
-    <link href='http://fonts.googleapis.com/css?family=Orbitron:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/css/normalize.css" />
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
-    <link rel="stylesheet" href="/css/pure.css">
-
-    <!-- Coursaic Stylesheets -->
-
-    <!-- Component Styles -->
-    <link rel="stylesheet" type="text/css" href="/css/comp.text.css" />
-    <link rel="stylesheet" type="text/css" href="/css/comp.widgets.css" />
-    <link rel="stylesheet" type="text/css" href="/css/comp.popups.css" />
-    
-    <!-- Main Styles -->
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.header.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.splash.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.home.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.course.css" />
-    <link rel="stylesheet" type="text/css" href="/css/main.exam.css" />
-
-    <!-- Scripts -->
-    <script type="text/javascript" src="https://www.promisejs.org/polyfills/promise-6.0.0.min.js"></script>
-    <script type="text/javascript" src="lib/parse/parse.1.4.0.min.js"></script>
-
-    <script type="text/javascript">
-
-        (function (global) {
-
-            var
-                fatalError = function () {
-                    // Navigate to the fatal page.
-                    window.location.href = window.location.href + "fatal";
-                },
-
-                NODE_ENV = "<%= NODE_ENV %>",
-                parseAppId = "<%= parse_app_id %>",
-                parseJavascriptId = "<%= parse_javascript_id %>"
-
-                Env = {
-                    parseAppId: parseAppId,
-                    parseJavascriptId: parseJavascriptId,
-                    NODE_ENV: NODE_ENV
-                };
-
-            // Watch the config object and make sure nothing bad happens
-            // to it.
-
-            setInterval(function () {
-                if (global.Env !== Env ||
-                    Env.NODE_ENV !== NODE_ENV ||
-                    Env.parseAppId !== parseAppId ||
-                    Env.parseJavascriptId !== parseJavascriptId) {
-
-                    fatalError();
-                }
-            }, 300);
-
-            global.Env = Env;
-
-        }(window));
-
-    </script>
-
-    <script type="text/javascript" src="build/bundle.js"></script>
-
-</head>
-
-<body>
-
-</body>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Hello <%= NODE_ENV %></h1>
+  </body>
 </html>
