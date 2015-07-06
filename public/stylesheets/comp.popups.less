@@ -1,0 +1,166 @@
+/**
+ * comp.popups.css
+ *
+ * Style for all the popup components.
+ */
+
+/* -------------------- *\
+       Main Popup
+\* -------------------- */
+
+.popup {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  
+  min-width: 300px;
+  min-height: 300px;
+
+  z-index: 3;
+}
+
+.popup__background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: black;
+  opacity: .4;
+}
+
+.popup-window--small,
+.popup-window--medium {
+  position: absolute;
+  border-radius: 3px;
+  overflow: hidden;
+  background: white;
+}
+
+.popup-window--small {
+  margin-top: -120px;
+  margin-left: -150px;
+  top: 50%;
+  left: 50%;
+  
+  height: 150px;
+  width: 300px;
+}
+
+.popup-window--medium {
+  margin-top: -200px;
+  margin-left: -200px;
+  top: 50%;
+  left: 50%;
+  
+  width: 400px;
+  height: 400px;
+}
+
+.popup-window__header {
+  width: 100%;
+  background: #DDD;
+  color: #4A90E2;
+
+  text-align: center;
+  font-weight: bold;
+}
+
+.popup-window--medium > .popup-window__header {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.2em;
+}
+
+.popup-window--small > .popup-window__header {
+   height: 35px;
+   line-height: 35px;
+   font-size: 1em;
+}
+
+/* -------------------- *\
+      Create Course
+\* -------------------- */
+
+.create-course__button-wrapper {
+  margin: 10px auto;
+  width: 162px; /* This shouldn't be hard-coded in */
+  /* TODO: Fix this!! */
+  /* Trying to make this button wrapper wrap just around
+   * the css elements inside it, while also centering the
+   * element horizontally inside its parent using margin auto */
+}
+
+.create-course__button-wrapper > button {
+  margin: 15px 5px;
+  text-align: center;
+}
+
+.create-course__name,
+.create-course__code,
+.create-course__field,
+.create-course__description {
+  margin-top: 15px;
+}
+
+.create-course__name,
+.create-course__code,
+.create-course__description {
+  text-align: center;
+}
+
+.create-course__field {
+  margin-left: 15px; 
+}
+
+.create-course__name > input,
+.create-course__code > input,
+.create-course__description > textarea {
+  width: 85%;  
+}
+
+.create-course__description > textarea {
+  resize: none;
+  height: 3.5em;
+}
+
+/* -------------------- *\
+       Create Exam
+\* -------------------- */
+
+.create-exam__name,
+.create-exam__description {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.create-exam__name > input,
+.create-exam__description > textarea {
+  width: 85%;
+}
+
+.create-exam__description > textarea {
+  resize: none;
+  height: 4.5em;
+}
+
+.create-exam__button-wrapper {
+  margin-top: 20px;
+}
+
+/* -------------------- *\
+      Confirm-Popup
+\* -------------------- */
+
+.confirm-popup__button-wrapper {
+  text-align: center;
+}
+
+.confirm-popup__message {
+  margin: 15px;
+  text-align: center;
+  font-size: .8em;
+}
+
+.confirm-popup__button-wrapper > button {
+  margin: 0px 10px;
+  font-size: .8em;
+}

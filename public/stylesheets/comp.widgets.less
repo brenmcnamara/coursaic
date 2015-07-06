@@ -1,0 +1,851 @@
+/**
+ * widgets.css
+ *
+ * Styling for widgets used across
+ * the website
+ */
+
+/* UNIQUE TEXT */
+
+/* This is for text styling
+ * on an individual basis
+ */
+
+.clickable {
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: .4;
+    cursor: default;
+}
+.emphasis {
+    font-weight: bold;
+    color: #666;
+    text-decoration: underline;
+}
+/* -------------------- *\
+          Divide
+\* -------------------- */
+
+.divide,
+.divide--full {
+    background: #F5A623;
+    height: 1px;
+}
+
+.divide {
+    margin: auto 2em;    
+}
+
+.divide--full {
+    margin: 0 auto;
+}
+
+.gray-divide {
+    background: #888;
+}
+
+/* -------------------- *\
+         Popover
+\* -------------------- */
+
+.popover-wrapper {
+    position: relative;
+}
+
+.popover-target {
+    cursor: pointer;
+}
+
+.popover--hide,
+.popover {
+    font-size: .8em;
+    margin: 1em 0 0 0;
+    width: 20em;
+
+    position: absolute;
+    background: black;
+    color: white;
+}
+
+.popover--hide {
+    display: none;
+}
+
+/* Create a triangle at the top right
+ * corner of the popover box
+ */
+.popover:before {
+    content: "";
+    display: block;
+    top: -.95em;
+    left: 0;
+    position: absolute;
+
+    border-left: solid transparent .5em;
+    border-right: solid transparent .5em;
+
+    border-bottom: solid black 1em;
+}
+
+/* -------------------- *\
+          Loader
+\* -------------------- */
+
+@keyframes loader {
+    from { background-color: rgb(0,0,0, 0); }
+    to { background-color: rgba(0, 0, 0, .6); }
+}
+
+@-webkit-keyframes loader {
+    from { background-color: rgb(0,0,0, 0); }
+    to { background-color: rgba(0, 0, 0, .6); }
+}
+
+@-moz-keyframes loader {
+    from { background-color: rgba(0, 0, 0, 0); }
+    to { background-color: rgba(0, 0, 0, .6); }
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000;
+
+    animation-name: loader;
+    -moz-animation-name: loader;
+    -webkit-animation-name: loader;
+
+    animation-duration: 0.2s;
+    -moz-animation-duration: 0.2s;
+    -webkit-animation-duration: 0.2s;
+
+    animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+
+}
+
+.spinner {
+    top: 50%;
+    margin: -10em auto;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 1.1em solid rgba(245, 166, 35, 0.2);
+    border-right: 1.1em solid rgba(245, 166, 35, 0.2);
+    border-bottom: 1.1em solid rgba(245, 166, 35, 0.2);
+    border-left: 1.1em solid rgb(245, 166, 35);
+    -webkit-animation: load8 0.5s infinite linear;
+    animation: load8 0.5s infinite linear;
+}
+.spinner,
+.spinner:after {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
+}
+
+
+/* -------------------- *\
+         Section
+\* -------------------- */
+
+.section-wrapper {
+    margin-top: 4em;
+    max-width: 100%;
+    width: 100%;
+}
+
+.section {
+    padding: 1em 1em 1em 2em;
+}
+
+.section__header {
+    /* Same margin-left as the divide element */
+    font-weight: normal;
+    color: rgb(245, 166, 35);
+}
+
+.section__subsection {
+    margin-top: 2em;
+    margin-left: 1em;
+}
+
+.section__subsection__header {
+    color: #999;
+}
+
+/* A message that should show when
+ * a section is empty explaining why
+ * the section has no content */
+.section__empty {
+    font-size: 1.2em;
+    margin: 2em 3em;
+    text-align: center;
+    color: #999;
+}
+
+.section__paragraph {
+    font-size: 1.2em;
+    margin: 2em 3em;
+    color: #444;
+}
+
+.section__error {
+    /* Same a subheader text-indent */
+    margin-left: 1em;
+    position: relative;
+    font-size: 1.3em;
+}
+
+    .section__error i {
+        color: #EC0000;
+        position: absolute;
+        font-size: 1.5em;
+    }
+
+    .section__error div {
+        margin-left: 2.25em;
+        color: #EC0000;
+    }
+
+/* SMALL SCREEN FOR SECTION */
+@media screen and (max-width: 48em) {
+    
+    .section-wrapper {
+        margin-top: 0;
+    }
+
+    /* Change the padding of some of the
+     * section elements so that things can
+     * become more centered on smaller screens.
+     */
+    .section {
+        padding: 1em;
+    }
+
+    .section__header {
+        text-align: center;
+    }
+
+    .section__subsection {
+        margin-left: 0em;
+    }
+
+    .section__subsection__header {
+        text-align: center;
+        text-indent: 0em;
+    }
+
+    .section__empty {
+        margin: 2em .5em;
+    }
+
+    .section__paragraph {
+        text-align: center;
+        margin: 2em .5em;
+    }
+
+    .section__error i {
+        position: static;
+        display: block;
+        text-align: center;
+        margin-bottom: .5em;
+    }
+
+    .section__error div {
+        margin: 0;
+        text-align: center;
+    }
+}
+
+/* -------------------- *\
+         Buttons
+\* -------------------- */
+
+.form-text-input {
+    padding: .3em;
+    width: 20em;
+}
+
+.form-textarea-input {
+    line-height: 1.2em;
+    padding: .3em;
+    resize: none;
+    width: 20em;
+    height: 4.8em;
+}
+
+/* -------------------- *\
+         Buttons
+\* -------------------- */
+
+.inline-button {
+    color: #4A90E2;
+    cursor: pointer;
+}
+
+.inline-button:hover {
+    text-decoration: underline;       
+}
+
+.inline-button.disabled {
+    cursor: default;
+}
+
+.inline-button.disabled:hover {
+    text-decoration: none
+}
+
+.inline-input--small,
+.inline-input {
+    margin: 0 .25em;
+    text-align: center;
+}
+
+.inline-input--small {
+    width: 3em;
+}
+
+.pure-button-disabled,
+.pure-button {
+    padding: 0.5em 2em;
+    border-radius: 5px;
+}
+
+.pure-button-disabled.large-button,
+.pure-button.large-button {
+    min-width: 15em;
+}
+
+.pure-button.blue-button {
+    background-color: #1f8dd6;
+    color: white;
+}
+
+.pure-button-disabled.blue-button {
+    background-color: #135a8a;
+    color: rgb(216, 216, 216);
+}
+
+.pure-button.red-button {
+    background-color: #ff3a4c;
+    color: white;
+}
+
+.pure-button-disabled.red-button {
+    background-color: #a32530;
+    color: rgb(216, 216, 216);
+}
+
+/* -------------------- *\
+        Dashboard
+\* -------------------- */
+
+.dashboard {
+    position: relative;
+    min-height: 15em;
+    background: rgb(216, 216, 216);
+}
+
+.dashboard__content {
+    /* Same as parent */
+    min-height: 15em;
+    padding: 7em 0 0 0;
+}
+
+.dashboard-buttons {
+
+}
+
+.dashboard-buttons__item {
+    padding: .25em .5em;
+}
+
+
+/*
+ * The dashboard summary is the element
+ * that sticks out of the dashboard, displaying
+ * any important information that the user should
+ * be aware of.
+ */
+.dashboard__summary {
+    min-height: 10em;
+    position: relative;
+}
+
+.dashboard__summary__content {
+    width: 100%;
+    height: 12em;
+
+    background: white;
+}
+
+.dashboard__summary__content:before {
+    display: block;
+    float: left;
+    width: 2em;
+    height: 100%;
+    background: #4A90E2;
+
+    content: "";
+}
+
+.dashboard__summary__content__header,
+.dashboard__summary__content__subheader {
+    margin: 20px 10px 10px 50px;
+}
+
+.dashboard__summary__content__details {
+    list-style: none;
+    padding: 0;
+    margin: 30px 10px 10px 50px;
+}
+
+    .dashboard__summary__content__details li {
+        margin-bottom: .5em;
+        color: #888;
+        font-weight: bold;
+    }
+
+/* SMALL SCREENS FOR COURSE DASHBOARD */
+@media only screen and (max-width: 48em) {
+
+    .dashboard-buttons__item {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+    .dashboard__summary__content {
+        border-top: solid #666 1px;
+        border-bottom: solid #666 1px;
+    }
+
+}
+
+/* MEDIUM/LARGE SCREENS FOR COURSE DASHBOARD */
+@media only screen and (min-width: 48em) {
+
+    .dashboard__summary__content {
+        position: absolute;
+        bottom: -2em;
+
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 2px 3px 3px .5px #999;
+        
+    }
+
+}
+
+/* -------------------- *\
+           Tags
+\* -------------------- */
+
+.tag {
+    font-size: .8em;
+    padding: 0em .3em;
+    border-radius: 3px;
+}
+
+.tag-list {
+
+}
+
+.tag-list:after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+}
+
+.tag-list__item {
+    float: left;
+    margin: 0 0 .3em .3em;
+}
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+.question-topic {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+}
+
+.question-topic__head {
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
+.question-topic__content:before {
+    content: 'Topic:';
+    font-weight: bold;
+    color: #666;
+    margin-right: .5em;
+}
+
+.question-topic__content {
+    color: rgb(245, 166, 35);
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-topic {
+        text-align: center;
+    }
+
+}
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+/* Note that the question-info element sits
+ * inside the question-edit element */
+
+.question-item__issue-list {
+    font-size: .8em;
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    list-style: none;
+}
+
+.question-item_issue-list__item,
+.question-item__issue-list__item--error,
+.question-item__issue-list__item--warning {
+    position: relative;
+    font-size: 1.1em;
+    margin-bottom: .75em;
+}
+
+    .question-item__issue-list__item i,
+    .question-item__issue-list__item--error i,
+    .question-item__issue-list__item--warning i {
+        position: absolute;
+    }
+
+.question-item__issue-list__item__message,
+.question-item__issue-list__item--error__message,
+.question-item__issue-list__item--warning__message {
+    margin-left: 1.5em;
+}
+
+.question-item__issue-list__item--error i,
+.question-item__issue-list__item--error__message {
+    color: #EC0000;
+}
+
+.question-item__issue-list__item--warning i,
+.question-item__issue-list__item--warning__message {
+    color: #EC0000;
+}
+
+.question-item__icon-set,
+.question-item__icon-set--1,
+.question-item__icon-set--2 {
+    position: absolute;
+}
+
+.question-item__icon-set__item i,
+.question-item__icon-set__item--bad i,
+.question-item__icon-set__item--good i {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-right: .5em;
+}
+
+/* A dangerous icon is one that causes
+ * dangerous actions to occur when clicked,
+ * such as deleting something 
+ */
+.question-item__icon-set__item--bad i {
+    color: #EC0000;
+}
+
+.question-item__icon-set__item--good i {
+    color: #4A90E2;
+}
+
+/* A safe icon is one that is not dangerous */
+
+/* Style the content of a question item next to an
+ * icon-set class. The styling should make it so
+ * that the content does not overlap the icon set.
+ */
+.question-item__icon-set--1 + .question-item__content {
+    margin-left: 4em;
+}
+
+.question-item__icon-set--2 + .question-item__content {
+    margin-left: 6em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    /* Bring the icon set back into
+     * the flow of the page so that it
+     * can be placed above the question.
+     */
+    .question-item__icon-set--1,
+    .question-item__icon-set--2,
+    .question-item__icon-set {
+        position: static;
+        margin: auto;
+    }
+
+    /* Remove the margin that is created
+     * for the icon set overlap, since on small
+     * screens, the icon set is in the flow of the
+     * page (above styling).
+     */
+    .question-item__icon-set__item,
+    .question-item__icon-set__item--bad,
+    .question-item__icon-set__item--good {
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 0 .5em;
+    }
+
+    .question-item__icon-set__item i,
+    .question-item__icon-set__item--bad i,
+    .question-item__icon-set__item--good i {
+        border-radius: 4px;
+    }
+    
+    .question-item__icon-set__item--bad i {
+        /* Same color as icon */
+        border: solid #EC0000 1px;
+    }
+
+    .question-item__icon-set__item--good i {
+        /* Same color as icon */
+        border: solid #4A90E2 1px;
+    }
+
+    .question-item__icon-set--1 + .question-item__content,
+    .question-item__icon-set--2 + .question-item__content {
+        margin-left: 0;
+    }
+
+}
+
+
+/* -------------------- *\
+      Question Info
+\* -------------------- */
+
+.question-info-list {
+    margin: 2em 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .question-info-list > li {
+        margin-bottom: 2em;
+    }
+
+.question-info {
+    position: relative;
+}
+
+.question-info__ask,
+.question-info__explanation,
+.question-info__explanation--edit {
+    font-weight: bold;
+    color: #444;
+}
+
+.question-info__ask {
+    line-height: 1.3em;
+    max-width: 35em;
+}
+
+.question-info__explanation:before {
+    content: 'Explanation:';
+    margin-right: .5em;
+    text-decoration: underline;
+}
+
+.question-info__explanation,
+.question-info__explanation--edit {
+    margin: 1.5em 1em 0 0;
+    line-height: 1.3em;
+    max-width: 35em;
+}
+
+/* -------------------- *\
+       Multi Choice
+\* -------------------- */
+
+/*
+ * For questions that are formatted as
+ * multiple choice questions, this is the
+ * set of options that are available for
+ * the question (the choices you can pick
+ * from in a multi choice question)
+ */
+.multi-choice-info__options-list--lettered,
+.multi-choice-info__options-list {
+    margin: 1em 0 0 1em;
+    padding: 0;
+}
+
+/* Styling for the list of multiple choice options. */
+.multi-choice-info__options-list--lettered {
+    list-style-type: upper-alpha;
+}
+
+/* Styling for the multiple choice list when
+ * it is designed for the user to select an
+ * options from a radio button
+ */
+.multi-choice-info__options-list {
+    list-style-type: none;
+}
+
+.multi-choice-info__options-list__item,
+.multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list__item--incorrect {
+    line-height: 1.3em;
+    max-width: 35em;
+    margin-bottom: .5em;
+}
+
+.multi-choice-info__options-list__item {
+    color: #444;
+}
+
+.multi-choice-info__options-list__item--correct {
+    font-weight: bold;
+    color: #4A90E2;
+}
+
+.multi-choice-info__options-list__item--incorrect {
+    font-weight: bold;
+    color: #EC0000;
+}
+
+/*
+ * For multi-choice options inside the lettered
+ * list, increase the padding to account for the letter
+ * that precedes the list item.
+ */
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item,
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--correct,
+.multi-choice-info__options-list--lettered .multi-choice-info__options-list__item--incorrect {
+    margin-left: 1.5em;
+}
+
+    /* 
+     * Styling if there is an input element for a multi-choice
+     * options.
+     */
+    .multi-choice-info__options-list__item input {
+        margin-right: .5em;
+    }
+/* -------------------- *\
+         Notify
+\* -------------------- */
+
+.notify {
+    position: absolute;
+
+    margin-top: -8em;
+    margin-bottom: 3em;
+    
+    top: 50%;
+    /*Maybe reduce top value based on reduced width */
+    
+    max-width: 100%;
+    width: 100%;
+    min-height: 10em;
+}
+
+.notify-icon {
+    font-size: 4em;
+    margin-bottom: .25em;
+    display: block;
+    text-align: center;
+}
+
+.notify__head {
+    text-align: center;
+    font-size: 2.1em;
+    margin: 5px 0;
+}
+
+.notify__subhead {
+    text-align: center;
+    font-size: 1.3em;
+    margin: 1em 5em; 
+}
+
+
+.notify__form {
+    text-align: center;
+    margin: auto;
+    width: 20em;
+}
+
+@media screen and (max-width: 48em) {
+  
+    .notify {
+        top: 45%;
+    }
+
+    .notify__form {
+        font-size: 1.1em;
+        width: 41.67%;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+  }
+
+}
+
+@media screen and (max-width: 36em) {
+
+    .notify {
+        top: 40%;
+    }
+    
+    .notify__form {
+        font-size: 1.2em;
+        width: 12.5em;
+    }
+    
+    .notify__subhead {
+        margin: 1em 3em; /*Change to scale with smaller widths, left and right only */
+    }
+
+}
+

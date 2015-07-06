@@ -1,0 +1,318 @@
+/**
+ * course.details.css
+ */
+
+.course-content {
+    margin: 70px 0 30px 0;
+    min-width: 800px;
+}
+
+/* -------------------- *\
+       Question Data
+\* -------------------- */
+
+.question-data {
+    margin-top: 2em;
+}
+
+.question-data__pie-chart-wrapper {
+
+}
+
+.question-data__legend {
+
+}
+
+.question-data__legend__item {
+    position: relative;
+    margin-top: .1em;
+    min-height: 2em;
+}
+
+.question-data__legend__item__color {
+    position: absolute;
+    top: .5em;
+    left: 0;
+    height: 1em;
+    width: 1em;
+    border-radius: .5em;
+}
+
+.question-data__legend__item__text {
+    margin-left: 2em;
+}
+
+.question-data__legend__item__text__topic {
+    font-size: .8em;
+    /* 2 / .8 = 2.5 */
+    line-height: 2.5em;
+    color: #444;
+    font-weight: bold;
+}
+
+.question-data__legend__item__text__question {
+    margin-left: .5em;
+    font-size: .8em;
+    line-height: 2.5em;
+    font-style: italic;
+    color: #999;
+}
+
+.question-data__pie-chart {
+    width: 100%;
+    max-height: 12em;
+}
+
+@media only screen and (max-width: 48em) {
+
+    .question-data__legend__item {
+        margin-left: 2em;
+    }
+}
+
+/* -------------------- *\
+     Question Filter
+\* -------------------- */
+
+.question-filter {
+
+}
+
+.question-filter__section {
+    margin-bottom: 2em;
+}
+
+.question-filter__bar-wrapper {
+
+}
+
+.question-filter__bar {
+    width: 70%;
+    /* Fixed height for the progress bar */
+    height: 130px;
+    margin-left: 15%;
+}
+
+.question-filter__description {
+    color: #888;
+    margin-left: 2em;
+    font-size: 1.1em;
+}
+
+.question-filter__description > div {
+    margin-top: .5em;
+}
+
+.question-filter__form > div:nth-child(1) {
+    border-right: solid #BBB 1px;
+}
+
+.question-filter__form h4 {
+    text-align: center;
+}
+
+.question-filter__form__filters label {
+    padding: 0 1em 1em 1em;
+}
+
+    .question-filter__form__filters label input {
+        position: absolute;
+    }
+    
+    .question-filter__form__filters label div {
+        padding-left: 1.5em;
+        line-height: 1.1em;
+        color: #666;
+    }
+
+@media only screen and (max-width: 48em) {
+
+    .question-filter__bar {
+        width: 94%;
+        margin-left: 3%;
+    }
+
+    .question-filter__description {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .question-filter__form > div:nth-child(1) {
+        border-right: none;
+        border-bottom: solid #BBB 1px;
+    }
+
+}
+
+
+
+/* -------------------- *\
+      Question-list
+\* -------------------- */
+
+.question-list {
+    margin: 20px 0px;
+    padding: 0;
+
+    /* Don't hard-code this */
+    font-size: 14px;
+}
+
+ul.question-list {
+    list-style: none;
+}
+
+/* -------------------- *\
+         Question
+\* -------------------- */
+
+.question {
+    position: relative;
+}
+
+.question:not(:last-child) {
+    margin: 5px 20px 30px 0px;
+}
+
+.question:last-child {
+    margin: 5px 20px 50px 0px;
+}
+
+.question__ask {
+    vertical-align: middle;
+}
+
+input.question__ask {
+    width: 450px;
+}
+
+.question__explain > textarea {
+    vertical-align: top;
+    resize: none;
+    margin-left: 10px;
+}
+
+/* Note: Icons are laid out with assumption
+ * that there will be exactly 2 icons */
+.question__icon--delete,
+.question__icon--edit,
+.question__icon--save,
+.question__icon--cancel {
+    cursor: pointer;
+    position: absolute;
+
+}
+
+.question__icon--edit {
+    left: 5px;
+}
+
+.question__icon--delete {
+    left: 35px;
+}
+
+.question__icon--save {
+    left: 0px;
+}
+
+.question__icon--cancel {
+    left: 33px;
+}
+
+.question__content {
+    margin: 0px 20px 0px 70px;
+}
+
+
+/* -------------------- *\
+          Exam
+\* -------------------- */
+
+.take-exam-button {
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.exam-info {
+    margin-top: 5px;
+}
+
+.exam-info__creator-info__pic {
+    float: left;
+}
+
+.exam-info__creator-info::after {
+    content: '.';
+    visibility: hidden;
+    clear: both;
+    display: block;
+    width: 0px;
+    height: 0px;
+}
+
+.exam-info__creator-info { }
+
+.exam-info__creator-info__text {
+    display: inline-block;
+    margin-left: 5px;
+    /* Note: This is dependent on the height of the picture */
+    margin-top: 15px;
+
+}
+
+.exam-info__my-questions {
+    margin: 40px 0px 0px 0px;
+}
+
+.exam-info__my-questions__add-button {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+
+/* -------------------- *\
+       Multi-Choice
+\* -------------------- */
+
+ul.multi-choice {
+    list-style: upper-alpha;
+}
+
+ul.multi-choice--editing {
+    list-style: none;
+}
+
+.multi-choice--editing,
+.multi-choice {
+    margin: 0 80px 0 50px;
+    padding: 0;
+}
+
+
+.multi-choice__item,
+.multi-choice__item--correct {
+    margin: 10px 0px;
+
+}
+
+.multi-choice__item--correct {
+    color: #4A90E2
+}
+
+.multi-choice__item--correct > input[type="radio"],
+.multi-choice__item > input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Undo the color for correct answers when the style
+ * is set for editing */
+.multi-choice__item--correct input[type="text"],
+.multi-choice__item input[type="text"] {
+    width: 350px;
+    color: black;
+}
+
+.question__explain {
+    margin: 20px 10px 10px 10px;
+    font-weight: bold;
+}
